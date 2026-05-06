@@ -1,0 +1,26 @@
+# Spring Boot
+backend/target/
+backend/*.log
+
+# React
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# FastAPI
+service/venv/
+service/__pycache__/
+service/*.pyc
+service/.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Global env
+.env
