@@ -1,9 +1,11 @@
-# Koupreng-invitation_project
+# Koupreng Invitation Project
 
-## Tech Stack
+E-invitation project with a Spring Boot backend, React + TypeScript frontend, MySQL database, and FastAPI service.
 
-- Spring Boot
-- ReactJS + TypeScript + Vite
-- MySQL
-- FastAPI
-- Git/GitHub
+After cloning, install ignored local dependencies with:
+
+```powershell
+.\setup.ps1
+```
+
+For full clone, install, database, and run instructions, see [REQUIREMENTS.md](./REQUIREMENTS.md).
