@@ -6,7 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Require-Command {
+function Test-RequiredCommand {
     param([string]$Name)
 
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
@@ -21,43 +21,93 @@ function Write-Step {
     Write-Host "==> $Message" -ForegroundColor Cyan
 }
 
-function Test-Jdk25 {
-    $javacVersion = (& javac -version 2>&1) -join " "
+function Get-JavacVersion {
+    param([string]$JavacPath)
 
-    if ($javacVersion -notmatch "25\.") {
-        throw "This backend requires JDK 25. Current javac version: $javacVersion"
+    if (-not (Test-Path $JavacPath)) {
+        return $null
     }
+
+    return (& $JavacPath -version 2>&1) -join " "
+}
+
+function Find-Jdk25Home {
+    $candidateHomes = @()
 
     if ($env:JAVA_HOME) {
-        $javaHomeJavac = Join-Path $env:JAVA_HOME "bin\javac.exe"
+        $candidateHomes += $env:JAVA_HOME.TrimEnd("\")
+    }
 
-        if (Test-Path $javaHomeJavac) {
-            $javaHomeVersion = (& $javaHomeJavac -version 2>&1) -join " "
+    $candidateHomes += "C:\Program Files\Java\jdk-25"
 
-            if ($javaHomeVersion -notmatch "25\.") {
-                throw "JAVA_HOME must point to JDK 25. Current JAVA_HOME is '$env:JAVA_HOME' and reports '$javaHomeVersion'."
-            }
+    $searchRoots = @(
+        "C:\Program Files\Java",
+        "C:\Program Files\Eclipse Adoptium",
+        "C:\Program Files\Microsoft",
+        "C:\Program Files\Zulu"
+    )
+
+    foreach ($root in $searchRoots) {
+        if (Test-Path $root) {
+            $candidateHomes += Get-ChildItem $root -Directory -Filter "*25*" -ErrorAction SilentlyContinue |
+                Select-Object -ExpandProperty FullName
         }
     }
+
+    $candidateHomes = $candidateHomes | Where-Object { $_ } | Select-Object -Unique
+
+    foreach ($candidateHome in $candidateHomes) {
+        $javacPath = Join-Path $candidateHome "bin\javac.exe"
+        $version = Get-JavacVersion $javacPath
+
+        if ($version -match "25\.") {
+            return $candidateHome
+        }
+    }
+
+    return $null
+}
+
+function Use-Jdk25 {
+    $jdkHome = Find-Jdk25Home
+
+    if (-not $jdkHome) {
+        $currentJavaHome = if ($env:JAVA_HOME) { $env:JAVA_HOME } else { "<not set>" }
+        throw "This backend requires JDK 25. Install JDK 25 or set JAVA_HOME to it. Current JAVA_HOME is '$currentJavaHome'."
+    }
+
+    $env:JAVA_HOME = $jdkHome
+    $env:Path = "$env:JAVA_HOME\bin;$env:Path"
+
+    $mavenJavaVersion = (& "$env:JAVA_HOME\bin\java.exe" -version 2>&1) -join " "
+    Write-Host "Using JAVA_HOME=$env:JAVA_HOME ($mavenJavaVersion)"
 }
 
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $ProjectRoot
 
+$EnvExample = Join-Path $ProjectRoot ".env.example"
+$EnvFile = Join-Path $ProjectRoot ".env"
+
+if ((Test-Path $EnvExample) -and -not (Test-Path $EnvFile)) {
+    Write-Step "Creating local .env from .env.example"
+    Copy-Item $EnvExample $EnvFile
+}
+
 Write-Step "Checking required tools"
 if (-not $SkipBackend) {
-    Require-Command java
-    Require-Command javac
-    Test-Jdk25
+    Test-RequiredCommand java
+    Test-RequiredCommand javac
+    Use-Jdk25
 }
 
 if (-not $SkipFrontend) {
-    Require-Command node
-    Require-Command npm
+    Test-RequiredCommand node
+    Test-RequiredCommand npm
 }
 
 if (-not $SkipService) {
-    Require-Command python
+    Test-RequiredCommand python
 }
 
 if (-not $SkipBackend) {

@@ -13,9 +13,9 @@ The project ignores generated and local-only files:
 | `frontend/dist/` | frontend build output | Run `npm run build` in `frontend/` |
 | `service/venv/` | Python virtual environment | Run `python -m venv venv` and `pip install -r requirements.txt` in `service/` |
 | `service/__pycache__/` | Python cache files | Created automatically by Python |
-| `.env` files | local secrets/config | Create locally if needed |
+| `.env` files | local secrets/config | Copy from `.env.example` and edit locally |
 
-These files should not be committed. They are recreated from committed files like `backend/pom.xml`, `frontend/package-lock.json`, and `service/requirements.txt`.
+These files should not be committed. They are recreated from committed files like `backend/pom.xml`, `frontend/package-lock.json`, root `requirements.txt`, `service/requirements.txt`, and `.env.example`.
 
 ## Quick Setup After Clone
 
@@ -33,6 +33,7 @@ Run the setup script:
 ```
 
 This recreates the local files ignored by Git, including `frontend/node_modules/` and `service/venv/`. It also downloads backend Maven dependencies.
+If `.env` does not exist, the script copies `.env.example` to `.env`.
 
 If PowerShell blocks the script, run:
 
@@ -118,12 +119,12 @@ COLLATE utf8mb4_unicode_ci;
 The backend currently uses:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/koupreng_db?useSSL=false&serverTimezone=Asia/Phnom_Penh&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=school
+DB_URL=jdbc:mysql://localhost:3306/koupreng_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Phnom_Penh&allowPublicKeyRetrieval=true
+DB_USERNAME=root
+DB_PASSWORD=change_me
 ```
 
-If your local MySQL username or password is different, update `backend/src/main/resources/application.properties`.
+These values live in local `.env`, which is ignored by Git. If your local MySQL username or password is different, edit `.env`.
 
 ## Run The Project
 
@@ -188,6 +189,14 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 cd ..
+```
+
+From the project root, you can also install the FastAPI dependencies with:
+
+```powershell
+python -m venv service\venv
+.\service\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
 ## Useful Commands
