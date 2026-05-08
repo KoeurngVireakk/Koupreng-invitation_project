@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 
+app = FastAPI(
+    title="E-Invitation FastAPI Service",
+    version="1.0.0"
+)
 
-app = FastAPI(title="Koupreng Invitation Service")
-
-
+@app.get("/")
 @app.get("/health")
-def health_check() -> dict[str, str]:
-    return {"status": "ok"}
+@app.get("/api/fastapi/health")
+def health():
+    return {
+        "status": "OK",
+        "service": "FastAPI Microservice"
+    }
