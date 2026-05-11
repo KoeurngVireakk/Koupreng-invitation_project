@@ -40,7 +40,11 @@ Create local environment config from the example if it does not already exist:
 Copy-Item .env.example .env
 ```
 
-Update `.env` with your local MySQL username and password.
+Update `.env` with your local MySQL username and password, and set `JWT_SECRET` to a strong random value with at least 32 characters.
+
+Password reset links are sent through SMTP by default. For local-only testing without SMTP, set `PASSWORD_RESET_LOG_TOKEN_IN_DEVELOPMENT=true` and read the reset link from the backend logs.
+
+New registrations are normal `USER` accounts by default. Only set `FIRST_USER_ADMIN_ENABLED=true` for a controlled local/bootstrap setup, then turn it back off.
 
 ## Run
 
