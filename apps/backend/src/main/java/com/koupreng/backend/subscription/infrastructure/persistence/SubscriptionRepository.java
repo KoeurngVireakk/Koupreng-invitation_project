@@ -92,6 +92,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
                                 BigDecimal getPackagePrice();
                 }
 
+    // Retain candidates inside the bank minute so an ambiguous competing checkout still blocks settlement.
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
             select s from Subscription s

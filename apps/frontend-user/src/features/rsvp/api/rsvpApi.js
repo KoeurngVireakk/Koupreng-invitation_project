@@ -63,6 +63,9 @@ export const rsvpService = {
         { skipAuth: true },
       )
       .then(unwrap),
+  beginGuestTelegramReminders: (slug, inviteToken) =>
+    api.post(`/v1/public/invitations/${encodeURIComponent(slug)}/telegram-reminders/link`,
+      { inviteToken }, { skipAuth: true }).then(unwrap),
   publicWishes: (slug, params) =>
     api.get(`/v1/public/invitations/${encodeURIComponent(slug)}/wishes${toQuery(publicParams(params))}`, { skipAuth: true }).then(unwrap),
   wishes: (invitationId) => {

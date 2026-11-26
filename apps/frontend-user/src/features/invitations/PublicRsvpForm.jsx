@@ -40,6 +40,9 @@ const englishLabels = {
     seat: "Seat",
     copied: "Link copied!",
     copyLink: "Copy Pass Link",
+    reminder: "Get a Telegram RSVP reminder",
+    reminderOpen: "Open Telegram and press Start",
+    reminderError: "Telegram reminders are unavailable. Try again later.",
 };
 
 const khmerLabels = {
@@ -70,6 +73,9 @@ const khmerLabels = {
     seat: "កៅអី",
     copied: "បានចម្លងតំណភ្ជាប់!",
     copyLink: "ចម្លងតំណភ្ជាប់ QR Pass",
+    reminder: "ទទួលការរំលឹក RSVP តាម Telegram",
+    reminderOpen: "បើក Telegram ហើយចុច Start",
+    reminderError: "ការរំលឹកតាម Telegram មិនអាចប្រើបានទេ។ សូមព្យាយាមពេលក្រោយ។",
 };
 
 export default function PublicRsvpForm(props) {
@@ -99,6 +105,8 @@ function GuestRsvpSession({
     const [isEditing, setIsEditing] = useState(false);
     const [copied, setCopied] = useState(false);
     const [wishes, setWishes] = useState([]);
+    const [guestVerified, setGuestVerified] = useState(false);
+    const [reminder, setReminder] = useState({ busy: false, error: false, url: "" });
     const sessionActive = useRef(true);
     useEffect(() => {
         sessionActive.current = true;
@@ -126,6 +134,7 @@ function GuestRsvpSession({
             invitationService.publicGuestView(slug, { token: inviteToken })
                 .then((data) => {
                     if (!active || !data) return;
+                    setGuestVerified(true);
                     if (data.rsvpStatus && data.rsvpStatus !== "PENDING") {
                         const existingData = {
                             guestName: data.guestName || "",
@@ -184,6 +193,19 @@ function GuestRsvpSession({
 
     const update = (field, value) => {
         setForm((current) => ({ ...current, [field]: value }));
+    };
+
+    const beginReminder = async () => {
+        setReminder({ busy: true, error: false, url: "" });
+        try {
+            const link = await rsvpService.beginGuestTelegramReminders(slug, inviteToken);
+            if (!sessionActive.current) return;
+            const url = new URL(link.url);
+            if (url.origin !== "https://t.me") throw new Error("Invalid Telegram URL");
+            setReminder({ busy: false, error: false, url: url.href });
+        } catch {
+            if (sessionActive.current) setReminder({ busy: false, error: true, url: "" });
+        }
     };
 
     const submit = async (event) => {
@@ -449,6 +471,21 @@ function GuestRsvpSession({
                     <button className="inv-primary-btn" type="submit" disabled={loading} style={{ minHeight: "48px" }}>
                         {loading ? labels.submitting : labels.submit}
                     </button>
+                    {guestVerified && !submitted && (
+                        <div>
+                            {reminder.url ? (
+                                <a className="inv-secondary-btn" href={reminder.url} target="_blank" rel="noreferrer">
+                                    {labels.reminderOpen}
+                                </a>
+                            ) : (
+                                <button className="inv-secondary-btn" type="button" disabled={reminder.busy}
+                                    onClick={beginReminder}>
+                                    {labels.reminder}
+                                </button>
+                            )}
+                            {reminder.error && <p role="status">{labels.reminderError}</p>}
+                        </div>
+                    )}
                 </form>
             )}
 

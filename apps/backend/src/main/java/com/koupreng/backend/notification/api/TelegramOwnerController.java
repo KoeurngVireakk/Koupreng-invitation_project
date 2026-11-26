@@ -2,9 +2,12 @@ package com.koupreng.backend.notification.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import com.koupreng.backend.notification.application.TelegramOwnerService;
 import com.koupreng.backend.shared.response.ApiResponse;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +34,10 @@ public class TelegramOwnerController {
     }
 
     @DeleteMapping("/link")
-    public ResponseEntity<Void> disconnect(Authentication authentication) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Disconnect Telegram account", security = @SecurityRequirement(name = "bearerAuth"))
+    public void disconnect(Authentication authentication) {
         owners.disconnect(authentication);
-        return ResponseEntity.noContent().build();
     }
 
     @Hidden
