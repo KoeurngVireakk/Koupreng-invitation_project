@@ -1748,3 +1748,17 @@
     color: var(--app-on-accent);
 }
 
+:root[data-color-mode="dark"] .dash-wrapper .events-mobile-fab:hover,
+:root[data-color-mode="dark"] .dash-wrapper .events-mobile-fab:active {
+    background: var(--app-accent-hover);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-color-mode="dark"] .dash-wrapper .events-period-tab:hover {
+    background: var(--app-hover);
+}
+
+:root[data-color-mode="dark"] .dash-wrapper .events-period-tab.is-active {
+    box-shadow: none;
+}
+

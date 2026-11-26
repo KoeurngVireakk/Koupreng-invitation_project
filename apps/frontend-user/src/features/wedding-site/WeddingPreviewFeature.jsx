@@ -47,15 +47,22 @@ export default function WeddingPreviewPage() {
 
         if (!loadedDraft) {
             setGallery([]);
-            return;
+            return undefined;
         }
 
+        let active = true;
         loadGallery(draftId)
-            .then(setGallery)
+            .then((items) => {
+                if (active) setGallery(items);
+            })
             .catch((err) => {
                 console.error("Failed to load gallery", err);
-                setGallery([]);
+                if (active) setGallery([]);
             });
+
+        return () => {
+            active = false;
+        };
     }, [draftId, loadDraft]);
 
     useEffect(() => {
@@ -102,7 +109,7 @@ export default function WeddingPreviewPage() {
 
     if (gallery === null || draftMedia === null) {
         return (
-            <div role="main" style={{ padding: 80, textAlign: "center", color: "#7d6443" }}>
+            <div role="main" style={{ padding: 80, textAlign: "center", color: "var(--ui-theme-muted, #7d6443)" }}>
                 កំពុងផ្ទុក...
             </div>
         );

@@ -69,6 +69,8 @@ export async function installRouteContractFixtures(page, contract, {lang='en'}={
     if (p==='/api/v1/organizations/11') return reply(route,organization);
     if (p==='/api/v1/notifications') return reply(route,[{id:1201,title:'Batch12 unread notice',message:'Fictional notification',read:false,isRead:false,status:'SENT',createdAt:'2026-11-05T08:00:00Z'}]);
     if (p==='/api/v1/notifications/summary') return reply(route,{unread:1,sent:1,delivered:0,failed:0});
+    // TelegramNotificationSettings reads response.data and renders nothing when unavailable.
+    if (p==='/api/v1/telegram/user/settings') return reply(route,{available:false,connected:false});
     if (p==='/api/v1/templates/paid' || p==='/api/v1/me/templates/paid') return reply(route,[{templateId:30,templateCode:'event-essential',templateName:'Event Essential',accessType:'PURCHASED',createdAt:'2026-11-05T08:10:00Z'}]);
     if (p==='/api/v1/profile') return reply(route,account);
     if (p==='/api/v1/invitations/101/access') return reply(route,access);
@@ -215,7 +217,7 @@ export async function assertRouteContract(page, contract, state) {
     case 'legacy-unsaved-editor': await heading('Invitation studio'); await visible('.pe-editor-column input:not([type="checkbox"]):not([type="file"])'); await button('Save'); break;
     case 'not-found': await heading('404'); await expect(page.getByRole('link',{name:'Back to home'})).toHaveAttribute('href','/'); break;
     case 'admin-not-found': await text('404'); await expect(page.getByRole('link', { name: copy('Return to Dashboard', 'ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង') })).toHaveAttribute('href', '/dashboard'); break;
-    case 'admin-dashboard': await text(copy('Stored attendance and operations','វត្តមាន និងប្រតិបត្តិការដែលបានកត់ត្រា')); await text('Dara & Sophea'); await text('batch11@example.test'); break;
+    case 'admin-dashboard': await heading('Dashboard'); await text(copy('An overview of your platform and recent activity.','ទិដ្ឋភាពទូទៅនៃប្រព័ន្ធ និងសកម្មភាពថ្មីៗ។')); await text(copy('Recent invitations','សំបុត្រអញ្ជើញថ្មីៗ')); await text('Dara & Sophea'); await text('batch11@example.test'); break;
     case 'admin-users': await text('Batch 11 fictional account'); await text('batch11@example.test'); await visible('a[href="/users/1101"]'); break;
     case 'admin-user-detail': await heading('Batch 11 fictional account'); await text('batch11@example.test'); await text('Dara & Sophea'); break;
     case 'admin-templates': await text('Batch 11 fixture template'); await expect(page.getByTitle(/\(Edit\)/)).toBeVisible(); await button('+ New Template'); break;

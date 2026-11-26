@@ -57,8 +57,8 @@ test("public invitation route fails gracefully without a backend", async ({ page
 test("admin login renders and protected routes redirect", async ({ page }) => {
   await page.goto("http://127.0.0.1:4174/users");
   await expect(page).toHaveURL(/127\.0\.0\.1:4174\/login\?next=%2Fusers$/);
-  await expect(page.getByRole("heading", { name: "គូព្រេង", exact: true })).toBeVisible();
-  await expect(page.getByText("Admin Portal v1.0", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /គូព្រេង · ទំព័រដើម|Koupreng · Home/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /សូមស្វាគមន៍មកវិញ|Welcome Back/ })).toBeVisible();
   await expect(page.locator('input[type="password"]')).toBeVisible();
 });
 

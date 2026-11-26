@@ -16,6 +16,7 @@ import FloatingAudioPlayer from "../shared/AudioPlayer/FloatingAudioPlayer";
 import defaultMusicUrl from "../../../assets/music/Instrumental Wedding Music (VioSounds Cover).m4a";
 import CoverBackground from "../shared/Openings/CoverBackground";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
+import BlissEditorialOpening from "./BlissEditorialOpening";
 import "./bliss-editorial.css";
 
 export default function BlissEditorialLayout({
@@ -393,6 +394,9 @@ export default function BlissEditorialLayout({
           </form>
         ))}
       </Modal>
+
+      {/* Opt-in ceremony opening; bypassed under reduced motion / preview. */}
+      <BlissEditorialOpening content={effectiveContent} preview={preview} />
     </div>
   );
 }

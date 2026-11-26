@@ -297,3 +297,33 @@ html:has(.dash-wrapper--studio), body:has(.dash-wrapper--studio), #root:has(.das
 .studio-scene-preview { padding: 12px; font-size: 12px; line-height: 1.8; border-bottom: 1px solid var(--ui-border); }
 .studio-scene-preview button { min-height: 44px; padding: 6px 10px; border: 1px solid var(--ui-border); border-radius: 8px; background: var(--ui-surface); color: var(--ui-text); }
 .studio-scene-preview button:disabled { opacity: .5; cursor: default; }
+
+/* Obsidian x Champagne Gold: bind legacy studio roles to the theme even when the
+   studio mounts outside the .dash-wrapper remap (focused authoring). Invitation
+   artwork inside the preview iframe keeps its authored palette. */
+:root[data-color-mode="dark"] :is(.invitation-studio, .studio-toolbar-mount),
+.dark :is(.invitation-studio, .studio-toolbar-mount) {
+  --ui-canvas: var(--ui-theme-canvas);
+  --ui-surface: var(--ui-theme-surface);
+  --ui-surface-subtle: var(--ui-theme-subtle);
+  --ui-ink: var(--ui-theme-ink);
+  --ui-muted: var(--ui-theme-muted);
+  --ui-border: var(--ui-theme-border);
+  --ui-control-border: var(--ui-theme-control-border);
+  --ui-action: var(--ui-theme-action);
+  --ui-action-hover: var(--ui-theme-action-hover);
+  --ui-action-soft: var(--ui-theme-action-soft);
+  --ui-on-action: var(--ui-theme-on-action);
+  --ui-focus: var(--ui-theme-focus);
+  --ui-ink-muted: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .studio-toolbar-mount,
+.dark .studio-toolbar-mount {
+  background: var(--ui-theme-canvas);
+}
+
+:root[data-color-mode="dark"] .studio-font-preview figcaption,
+.dark .studio-font-preview figcaption {
+  color: var(--ui-theme-muted);
+}

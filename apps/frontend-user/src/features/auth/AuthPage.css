@@ -1069,3 +1069,55 @@
         transition: none !important;
     }
 }
+
+/* Obsidian x Champagne Gold: bind legacy auth roles to the dark token set.
+   Light mode keeps the original cream/forest values untouched. */
+:root[data-color-mode="dark"] .auth-shell,
+.dark .auth-shell {
+  --ui-canvas: var(--ui-theme-canvas);
+  --ui-surface: var(--ui-theme-surface);
+  --ui-surface-subtle: var(--ui-theme-subtle);
+  --ui-ink: var(--ui-theme-ink);
+  --ui-muted: var(--ui-theme-muted);
+  --ui-border: var(--ui-theme-border);
+  --ui-control-border: var(--ui-theme-control-border);
+  --ui-action: var(--ui-theme-action);
+  --ui-action-hover: var(--ui-theme-action-hover);
+  --ui-action-soft: var(--ui-theme-action-soft);
+  --ui-on-action: var(--ui-theme-on-action);
+  --ui-focus: var(--ui-theme-focus);
+  --ui-danger: var(--ui-theme-danger);
+  --ui-success: var(--ui-theme-success);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .auth-shell .auth-page,
+.dark .auth-shell .auth-page {
+  background: var(--ui-theme-canvas);
+}
+
+:root[data-color-mode="dark"] .auth-shell .auth-card,
+.dark .auth-shell .auth-card {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .auth-shell :is(.auth-input, .auth-social-btn),
+.dark .auth-shell :is(.auth-input, .auth-social-btn) {
+  background: var(--ui-theme-subtle);
+  border-color: var(--ui-theme-control-border);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .auth-shell :is(.auth-input, .auth-social-btn)::placeholder,
+.dark .auth-shell :is(.auth-input, .auth-social-btn)::placeholder {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .auth-shell .auth-submit,
+.dark .auth-shell .auth-submit {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+}

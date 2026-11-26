@@ -152,7 +152,11 @@ test("guest list filters intersect and reset; invitation and tools remain usable
   await expect(rows).toHaveCount(6);
   await expect(page.locator(".guest-table tbody > tr").first()).toHaveClass("guest-inline-form-row");
   await expect(page.locator(".guest-list-panel")).toHaveCSS("opacity", "1");
-  await expect(page.locator(".guest-header-actions").getByRole("button", { name: "Add guest", exact: true })).toHaveCount(0);
+  // v2.0 always renders the header action; it resets to a new guest and focuses the inline row's name field.
+  const addGuest = page.locator(".guest-header-actions").getByRole("button", { name: "Add guest", exact: true });
+  await expect(addGuest).toBeVisible();
+  await addGuest.click();
+  await expect(page.locator("#guestForm-name")).toBeFocused();
   await expect(page.getByRole("link", { name: "Guest check-in" })).toHaveAttribute("href", "/dashboard/invitations/42/check-in");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".guest-invite-button").first()).toHaveCSS("white-space", "nowrap");

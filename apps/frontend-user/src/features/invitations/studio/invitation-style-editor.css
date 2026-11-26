@@ -179,3 +179,27 @@
   width: 22px;
   height: 22px;
 }
+
+/* Obsidian x Champagne Gold: only the editor chrome text follows the theme.
+   .studio-style-mini and .kp-* previews are authored invitation art and keep
+   their cream identity. */
+:root[data-color-mode="dark"] .studio-invitation-styles :is(.studio-style-picker legend, .studio-style-label, .studio-floral-settings > summary),
+.dark .studio-invitation-styles :is(.studio-style-picker legend, .studio-style-label, .studio-floral-settings > summary) {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .studio-invitation-styles :is(.studio-style-example, .studio-floral-settings-body > legend),
+.dark .studio-invitation-styles :is(.studio-style-example, .studio-floral-settings-body > legend) {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .studio-floral-settings,
+.dark .studio-floral-settings {
+  border-block-start-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .studio-style-image,
+.dark .studio-style-image {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+}

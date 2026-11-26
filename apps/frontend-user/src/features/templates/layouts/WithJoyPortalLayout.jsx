@@ -25,6 +25,7 @@ import {
 import defaultMusicUrl from "../../../assets/music/ថ្ងៃដែលរង់ចាំ.mp3";
 import CoverBackground from "../shared/Openings/CoverBackground";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
+import WithJoyPortalOpening from "./WithJoyPortalOpening";
 import "./withjoy-portal.css";
 
 export default function WithJoyPortalLayout({
@@ -565,6 +566,9 @@ export default function WithJoyPortalLayout({
         )}
         <InvitationBranding content={effectiveContent} />
       </footer>
+
+      {/* Opt-in ceremony opening; bypassed under reduced motion / preview. */}
+      <WithJoyPortalOpening content={effectiveContent} preview={preview} />
     </div>
   );
 }

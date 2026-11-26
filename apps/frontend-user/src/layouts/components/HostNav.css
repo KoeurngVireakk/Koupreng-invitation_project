@@ -696,3 +696,26 @@
     animation: none;
   }
 }
+
+/* Obsidian x Champagne Gold: the logo tooltip and its arrow consume the neutral
+   raised/ink roles instead of the legacy forest variable (which remaps to ink,
+   leaving white-on-white text in dark mode). */
+:root[data-color-mode="dark"] .host-logo-tip,
+.dark .host-logo-tip {
+  background: var(--ui-theme-raised);
+  color: var(--ui-theme-ink);
+  border: 1px solid var(--ui-theme-border);
+  box-shadow: var(--ui-theme-shadow-elevated);
+}
+
+:root[data-color-mode="dark"] .host-logo-tip::before,
+.dark .host-logo-tip::before {
+  border-bottom-color: var(--ui-theme-raised);
+}
+
+:root[data-color-mode="dark"] .host-profile-menu,
+.dark .host-profile-menu {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-ink);
+}

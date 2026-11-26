@@ -1,7 +1,7 @@
 import { PageSkeleton } from '@/shared/ui/LoadingState';
 import { guestLocale, localeContent, projectLocale } from '../templates/shared/localizedContent';
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { IoHomeOutline, IoLockClosedOutline, IoSearchOutline } from "react-icons/io5";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useLanguageStore } from "@/stores/useLanguageStore";
@@ -14,9 +14,6 @@ import { registerDynamicTemplates } from "@/features/templates/data/templatesDat
 import { templateCatalogService } from "@/features/templates/api/templateCatalogApi";
 import { draftToTemplate } from "../wedding-builder/utils/draftToTemplate";
 import { publicInvitationToDraft } from "../wedding-builder/utils/invitationDraftAdapter";
-import { useWeddingStore } from "../../stores/useWeddingStore";
-import { getDraft, getDraftBySlug, listDrafts } from "../../shared/storage/weddingStorage";
-import { loadGallery } from "../../shared/storage/galleryStorage";
 import { invitationService } from "@/features/invitations/api/invitationApi";
 import { mediaService } from "@/features/invitations/api/mediaApi";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -69,13 +66,25 @@ function publicStateCopy(languageMode, stateType = "UNPUBLISHED") {
     };
 }
 
+function readStoredAccessToken(slug) {
+    if (!slug) return "";
+    try {
+        return sessionStorage.getItem(`koupreng_invitation_access_${slug}`) || "";
+    } catch {
+        return "";
+    }
+}
+
 export default function PublicInvitationPage() {
     const { slug } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation();
     const { user, isAuthenticated } = useAuth();
-    const currentUserId = user?.id || user?.userId;
+    const currentUserId = user?.id || user?.userId || "";
     const inviteToken = resolveInviteToken(searchParams);
+    const queryAccessToken = searchParams.get("accessToken") || "";
+    const queryLang = searchParams.get("lang") || "";
+    const accessStorageKey = slug ? `koupreng_invitation_access_${slug}` : "";
+
     const [invitation, setInvitation] = useState(null);
     const [media, setMedia] = useState(null);
     const [remoteLoading, setRemoteLoading] = useState(true);
@@ -83,92 +92,99 @@ export default function PublicInvitationPage() {
     const [errorType, setErrorType] = useState(null);
     const [userOwnsInvitation, setUserOwnsInvitation] = useState(false);
     const [protectedMode, setProtectedMode] = useState(false);
-    const [verifiedAccessToken, setVerifiedAccessToken] = useState("");
     const [verifyingAccess, setVerifyingAccess] = useState(false);
-    const draft = useWeddingStore((state) => state.draft);
-    const [gallery, setGallery] = useState(null);
-    const activeDraft = useMemo(() => {
-        if (!slug) return null;
-        const norm = slug.trim().toLowerCase();
-        if (draft && (
-            draft.slug?.toLowerCase() === norm ||
-            draft.id?.toLowerCase() === norm ||
-            draft.title?.trim().toLowerCase() === norm ||
-            draft.title?.trim().toLowerCase().replace(/\s+/g, "-") === norm
-        )) {
-            return draft;
-        }
-        return getDraftBySlug(slug);
-    }, [draft, slug]);
-    const shouldBackToDashboard = location.state?.backTo === "/dashboard";
-    const queryAccessToken = searchParams.get("accessToken") || "";
-    const queryLang = searchParams.get("lang") || "";
-    const accessStorageKey = slug ? `koupreng_invitation_access_${slug}` : "";
-    const effectiveAccessToken = queryAccessToken || verifiedAccessToken;
-    const loadCinematicVideo = useCallback(signal => mediaService.publicCinematicContent(slug, invitation?.cinematicOpening?.videoMediaId,
-        { accessToken: effectiveAccessToken || null, inviteToken: inviteToken || null }, signal), [slug, invitation?.cinematicOpening?.videoMediaId, effectiveAccessToken, inviteToken]);
+    const [accessAttempt, setAccessAttempt] = useState(0);
+    // Access grants are namespaced by slug so a token minted for one invitation
+    // can never be presented to another slug during a route switch.
+    const [accessGrant, setAccessGrant] = useState(() => ({
+        slug: slug || "",
+        token: readStoredAccessToken(slug),
+    }));
+    // The identity that produced the currently painted payload. Anything the
+    // guest sees must match the live slug/token identity, never a prior one.
+    const [loadedIdentity, setLoadedIdentity] = useState("");
+
+    const queryLangRef = useRef(queryLang);
+    const requestGeneration = useRef(0);
+    const invitationShellRef = useRef(null);
+    const restoreFocusRef = useRef(false);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        queryLangRef.current = queryLang;
+    }, [queryLang]);
+
+    const verifiedAccessToken = accessGrant.slug === slug ? accessGrant.token : "";
+    const effectiveAccessToken = queryAccessToken || verifiedAccessToken;
+    // Server-owned identity. Only a slug/invite-token/access-token change may
+    // trigger a re-fetch; a locale change is a pure view transform.
+    const requestIdentity = `${slug || ""}\u0000${inviteToken || ""}\u0000${effectiveAccessToken || ""}`;
+
+    // Owner chrome is granted only by the authenticated account's own server
+    // list. A navigation hint, a slug/id heuristic or an ownerless local draft
+    // is never authority.
+    useEffect(() => {
+        if (!isAuthenticated || !slug) {
             setUserOwnsInvitation(false);
-            return;
+            return undefined;
         }
         let active = true;
+        setUserOwnsInvitation(false);
         invitationService.listMine()
             .then((items) => {
                 if (!active) return;
                 const list = Array.isArray(items) ? items : items?.data || [];
-                const owns = list.some((i) => {
-                    const s = String(i.slug || "").toLowerCase();
-                    const id = String(i.id || i.invitationId || "");
-                    const target = String(slug || "").toLowerCase();
-                    return s === target || id === target;
+                const target = String(slug || "").toLowerCase();
+                const owns = list.some((item) => {
+                    const itemSlug = String(item?.slug || "").toLowerCase();
+                    const itemId = String(item?.id || item?.invitationId || "");
+                    const itemBackendId = String(item?.backendInvitationId || "");
+                    return itemSlug === target || itemId === target || itemBackendId === target;
                 });
-                if (owns) setUserOwnsInvitation(true);
+                setUserOwnsInvitation(owns);
             })
-            .catch(() => {});
+            .catch(() => {
+                if (active) setUserOwnsInvitation(false);
+            });
         return () => {
             active = false;
         };
-    }, [isAuthenticated, slug]);
-
-    const isOwner = Boolean(
-        isAuthenticated && (
-            userOwnsInvitation ||
-            (activeDraft && (activeDraft.ownerUserId == null || String(activeDraft.ownerUserId) === String(currentUserId))) ||
-            (slug && listDrafts(currentUserId).some((d) => {
-                const s = String(d.slug || "").toLowerCase();
-                const id = String(d.id || "");
-                const bId = String(d.backendInvitationId || "");
-                const target = String(slug || "").toLowerCase();
-                return s === target || id === target || bId === target;
-            })) ||
-            shouldBackToDashboard
-        )
-    );
+    }, [isAuthenticated, slug, currentUserId]);
 
     useEffect(() => {
-        setVerifiedAccessToken(slug ? sessionStorage.getItem(`koupreng_invitation_access_${slug}`) || "" : "");
+        // Reload the grant that belongs to the active slug only; a prior slug's
+        // grant must never survive the switch.
+        setAccessGrant({ slug: slug || "", token: readStoredAccessToken(slug) });
         setProtectedMode(false);
     }, [slug]);
 
+    const loadCinematicVideo = useCallback(signal => mediaService.publicCinematicContent(slug, invitation?.cinematicOpening?.videoMediaId,
+        { accessToken: effectiveAccessToken || null, inviteToken: inviteToken || null }, signal), [slug, invitation?.cinematicOpening?.videoMediaId, effectiveAccessToken, inviteToken]);
+
     useEffect(() => {
         if (!slug) {
+            requestGeneration.current += 1;
             setInvitation(null);
             setMedia(null);
             setErrorType("NOT_FOUND");
-            setRemoteError(publicStateCopy(null, "NOT_FOUND").message);
+            setRemoteError(publicStateCopy(queryLangRef.current || useLanguageStore.getState().lang, "NOT_FOUND").message);
             setRemoteLoading(false);
-            return;
+            setLoadedIdentity(requestIdentity);
+            return undefined;
         }
 
-        let active = true;
+        const generation = requestGeneration.current + 1;
+        requestGeneration.current = generation;
+        const isCurrent = () => generation === requestGeneration.current;
+
+        // Clear the prior identity before any request starts so a slow response
+        // can never repaint the previous guest/owner payload.
         setRemoteLoading(true);
         setRemoteError("");
         setErrorType(null);
         setProtectedMode(false);
         setInvitation(null);
         setMedia(null);
+
         const publicParams = {
             accessToken: effectiveAccessToken,
             token: inviteToken,
@@ -183,74 +199,88 @@ export default function PublicInvitationPage() {
             }).catch(() => {}),
         ])
             .then(([invitationData, mediaData]) => {
-                if (active) {
-                    setInvitation(invitationData);
-                    setMedia(mediaData);
-                    setRemoteError("");
-                    setErrorType(null);
-                    setProtectedMode(false);
-                }
+                if (!isCurrent()) return;
+                setInvitation(invitationData || null);
+                setMedia(mediaData || null);
+                setRemoteError("");
+                setErrorType(null);
+                setProtectedMode(false);
+                setLoadedIdentity(requestIdentity);
             })
             .catch((err) => {
-                if (active) {
-                    const protectedError = err?.status === 403;
-                    if (protectedError && accessStorageKey && sessionStorage.getItem(accessStorageKey)) {
+                if (!isCurrent()) return;
+                const protectedError = err?.status === 403;
+                const storedToken = accessStorageKey ? readStoredAccessToken(slug) : "";
+                if (protectedError && storedToken) {
+                    try {
                         sessionStorage.removeItem(accessStorageKey);
-                        setVerifiedAccessToken("");
+                    } catch {
+                        // Storage may be disabled; authority still derives from the server.
                     }
-                    const is404 = err?.status === 404 || String(err?.message || "").toLowerCase().includes("not found");
-                    const detectedType = is404 ? "NOT_FOUND" : "UNPUBLISHED";
-                    const fallbackLang = String(queryLang || useLanguageStore.getState().lang || "km").toUpperCase();
-                    setErrorType(detectedType);
-                    setProtectedMode(protectedError);
-                    setRemoteError(protectedError
-                        ? formatPublicAccessError(err, fallbackLang === "EN")
-                        : (err?.message || publicStateCopy(fallbackLang, detectedType).message));
+                    setAccessGrant({ slug: slug || "", token: "" });
                 }
+                const is404 = err?.status === 404 || String(err?.message || "").toLowerCase().includes("not found");
+                const detectedType = is404 ? "NOT_FOUND" : "UNPUBLISHED";
+                const fallbackLang = String(queryLangRef.current || useLanguageStore.getState().lang || "km").toUpperCase();
+                setErrorType(detectedType);
+                setProtectedMode(protectedError);
+                setRemoteError(protectedError
+                    ? formatPublicAccessError(err, fallbackLang === "EN")
+                    : (err?.message || publicStateCopy(fallbackLang, detectedType).message));
+                setLoadedIdentity(requestIdentity);
             })
             .finally(() => {
-                if (active) {
-                    setRemoteLoading(false);
-                }
+                if (isCurrent()) setRemoteLoading(false);
             });
 
         return () => {
-            active = false;
+            requestGeneration.current += 1;
         };
-    }, [slug, inviteToken, effectiveAccessToken, accessStorageKey, queryLang]);
+    }, [requestIdentity, slug, accessStorageKey, inviteToken, effectiveAccessToken]);
 
-    const activeDraftId = activeDraft?.id;
-
+    // Move focus into the unlocked invitation once it has actually painted.
     useEffect(() => {
-        if (!activeDraftId) {
-            setGallery([]);
-            return;
-        }
+        if (!restoreFocusRef.current || remoteLoading || !invitation) return undefined;
+        restoreFocusRef.current = false;
+        const target = invitationShellRef.current;
+        if (!target) return undefined;
+        const schedule = typeof window !== "undefined" && typeof window.requestAnimationFrame === "function"
+            ? window.requestAnimationFrame
+            : (callback) => window.setTimeout(callback, 0);
+        const cancel = typeof window !== "undefined" && typeof window.cancelAnimationFrame === "function"
+            ? window.cancelAnimationFrame
+            : window.clearTimeout;
+        const frame = schedule(() => {
+            if (document.activeElement === document.body || document.activeElement == null) {
+                target.focus();
+            }
+        });
+        return () => cancel(frame);
+    }, [invitation, remoteLoading]);
 
-        let active = true;
-        setGallery(null);
-        loadGallery(activeDraftId)
-            .then((items) => {
-                if (active) setGallery(items || []);
-            })
-            .catch(() => {
-                if (active) setGallery([]);
-            });
+    const rawDraft = useMemo(
+        () => (invitation ? publicInvitationToDraft(invitation, media) : null),
+        [invitation, media]
+    );
+    // Locale is a view-only projection over the already fetched payload. It must
+    // never clear the payload or flip the remote loading state.
+    const displayLocale = useMemo(
+        () => (rawDraft ? guestLocale(rawDraft, queryLang) : "km"),
+        [rawDraft, queryLang]
+    );
+    const publicDraft = useMemo(() => {
+        if (!rawDraft) return null;
+        return rawDraft.localizedContentV1 ? projectLocale(rawDraft, displayLocale) : rawDraft;
+    }, [rawDraft, displayLocale]);
+    const mergedPublicGarden = useMemo(
+        () => (publicDraft ? draftToTemplate(publicDraft, publicDraft.gallery) : null),
+        [publicDraft]
+    );
 
-        return () => {
-            active = false;
-        };
-    }, [activeDraftId]);
+    const isOwner = Boolean(isAuthenticated && userOwnsInvitation);
 
-    const merged = useMemo(() => {
-        if (!activeDraft?.id || gallery === null) return null;
-
-        const templateId = activeDraft.templateId;
-        return draftToTemplate({ ...activeDraft, templateId }, gallery);
-    }, [activeDraft, gallery]);
-
-    if (remoteLoading) {
-        const effectiveLang = invitation?.languageMode || activeDraft?.languageMode || searchParams.get("lang");
+    if (remoteLoading || loadedIdentity !== requestIdentity) {
+        const effectiveLang = invitation?.languageMode || queryLang || useLanguageStore.getState().lang;
         return <PageSkeleton layout="public" label={publicStateCopy(effectiveLang).loading} />;
     }
 
@@ -264,13 +294,20 @@ export default function PublicInvitationPage() {
                 accessToken: effectiveAccessToken,
             });
             if (response?.accessToken) {
-                sessionStorage.setItem(accessStorageKey, response.accessToken);
-                setVerifiedAccessToken(response.accessToken);
+                try {
+                    sessionStorage.setItem(accessStorageKey, response.accessToken);
+                } catch {
+                    // Storage may be disabled; the in-memory grant still authorizes this view.
+                }
+                setAccessGrant({ slug: slug || "", token: response.accessToken });
             }
             setProtectedMode(false);
+            restoreFocusRef.current = true;
         } catch (err) {
-            const fallbackLang = String(invitation?.languageMode || activeDraft?.languageMode || searchParams.get("lang") || useLanguageStore.getState().lang || "km").toUpperCase();
+            const fallbackLang = String(invitation?.languageMode || queryLang || useLanguageStore.getState().lang || "km").toUpperCase();
             setRemoteError(formatPublicAccessError(err, fallbackLang === "EN"));
+            // A rejected attempt must clear the field and never echo the secret.
+            setAccessAttempt((value) => value + 1);
         } finally {
             setVerifyingAccess(false);
         }
@@ -287,68 +324,44 @@ export default function PublicInvitationPage() {
                 />
             );
         }
-        const rawDraft = publicInvitationToDraft(invitation, media);
-        const displayLocale = guestLocale(rawDraft, searchParams.get("lang"));
-        const publicDraft = rawDraft.localizedContentV1 ? projectLocale(rawDraft, displayLocale) : rawDraft;
-
-        // Fallback / merge KHQR and local draft data if remote backend draft is missing them
-        if (!publicDraft.khqrDollar?.qrUrl || !publicDraft.khqrRiel?.qrUrl) {
-            const drafts = listDrafts();
-            const localCandidate =
-                (activeDraft && (activeDraft.slug === slug || activeDraft.id === slug || String(activeDraft.backendInvitationId) === String(invitation.id)))
-                ? activeDraft
-                : (getDraftBySlug(slug) || (invitation.id ? getDraft(invitation.id) : null) || getDraft(slug) ||
-                   drafts.find((d) => d.slug === slug || (invitation.id && String(d.backendInvitationId) === String(invitation.id)) || d.id === slug));
-
-            if (localCandidate) {
-                if (!publicDraft.khqrDollar?.qrUrl && localCandidate.khqrDollar?.qrUrl) {
-                    publicDraft.khqrDollar = localCandidate.khqrDollar;
-                    if (!publicDraft.enabledSections) publicDraft.enabledSections = {};
-                    publicDraft.enabledSections.gift = true;
-                }
-                if (!publicDraft.khqrRiel?.qrUrl && localCandidate.khqrRiel?.qrUrl) {
-                    publicDraft.khqrRiel = localCandidate.khqrRiel;
-                    if (!publicDraft.enabledSections) publicDraft.enabledSections = {};
-                    publicDraft.enabledSections.gift = true;
-                }
-            }
-        }
-
-        const mergedPublicGarden = draftToTemplate(publicDraft, publicDraft.gallery);
-        if (!mergedPublicGarden) return <TemplateUnavailable />;
+        if (!publicDraft || !mergedPublicGarden) return <TemplateUnavailable />;
         const showRsvp = publicDraft.enabledSections?.rsvp !== false;
 
-        if (mergedPublicGarden) {
-            const royalGarden = [mergedPublicGarden.tpl?.code, mergedPublicGarden.tpl?.slug, mergedPublicGarden.tpl?.templateCode].includes('royal-garden-cinematic');
-            const ownLocaleControl = royalGarden || [mergedPublicGarden.tpl?.code, mergedPublicGarden.tpl?.slug, mergedPublicGarden.tpl?.templateCode].includes('khmer-floral-gold');
-            return (
-                <div lang={displayLocale} className={royalGarden ? 'public-royal-garden' : undefined}>
-                {!ownLocaleControl && rawDraft.localizedContentV1 && localeContent(rawDraft).enabledLocales.includes('en') && <nav className="public-locale-switch" aria-label="Invitation language">{[['km', '\u1781\u17d2\u1798\u17c2\u179a'], ['en', 'English']].map(([locale, label]) => <button key={locale} type="button" lang={locale} aria-pressed={displayLocale === locale} onClick={() => { const params = new URLSearchParams(searchParams); params.set('lang', locale); setSearchParams(params, { replace: true, preventScrollReset: true }); }}>{label}</button>)}</nav>}
-                {!ownLocaleControl && searchParams.get('lang') === 'en' && displayLocale !== 'en' && <p role="status" lang="en">English is not published for this invitation. Showing Khmer.</p>}
-                <TemplateExperience
-                    cinematicOpening={invitation?.cinematicOpening}
-                    cinematicLanguage={publicDraft.languageMode}
-                    cinematicKey={slug}
-                    loadCinematicVideo={loadCinematicVideo}
-                    tpl={mergedPublicGarden.tpl}
-                    variant={mergedPublicGarden.variant}
-                    showActions={false}
-                    showBreadcrumb={false}
-                    showStickyCta={true}
-                >
-                    {showRsvp && (
-                        <PublicRsvpForm
-                            slug={slug}
-                            inviteToken={inviteToken}
-                            accessToken={effectiveAccessToken}
-                            languageMode={publicDraft.languageMode}
-                        />
-                    )}
-                </TemplateExperience>
-                <PublicTicketAccess compact={ownLocaleControl} displayContent={publicDraft} languageMode={publicDraft.languageMode} slug={slug} token={inviteToken} accessToken={effectiveAccessToken} />
-                </div>
-            );
-        }
+        const royalGarden = [mergedPublicGarden.tpl?.code, mergedPublicGarden.tpl?.slug, mergedPublicGarden.tpl?.templateCode].includes('royal-garden-cinematic');
+        const ownLocaleControl = royalGarden || [mergedPublicGarden.tpl?.code, mergedPublicGarden.tpl?.slug, mergedPublicGarden.tpl?.templateCode].includes('khmer-floral-gold');
+        return (
+            <div
+                ref={invitationShellRef}
+                tabIndex={-1}
+                lang={displayLocale}
+                className={royalGarden ? 'public-royal-garden' : undefined}
+                style={{ outline: "none" }}
+            >
+            {!ownLocaleControl && rawDraft.localizedContentV1 && localeContent(rawDraft).enabledLocales.includes('en') && <nav className="public-locale-switch" aria-label="Invitation language">{[['km', '\u1781\u17d2\u1798\u17c2\u179a'], ['en', 'English']].map(([locale, label]) => <button key={locale} type="button" lang={locale} aria-pressed={displayLocale === locale} onClick={() => { const params = new URLSearchParams(searchParams); params.set('lang', locale); setSearchParams(params, { replace: true, preventScrollReset: true }); }}>{label}</button>)}</nav>}
+            {!ownLocaleControl && searchParams.get('lang') === 'en' && displayLocale !== 'en' && <p role="status" lang="en">English is not published for this invitation. Showing Khmer.</p>}
+            <TemplateExperience
+                cinematicOpening={invitation?.cinematicOpening}
+                cinematicLanguage={publicDraft.languageMode}
+                cinematicKey={slug}
+                loadCinematicVideo={loadCinematicVideo}
+                tpl={mergedPublicGarden.tpl}
+                variant={mergedPublicGarden.variant}
+                showActions={false}
+                showBreadcrumb={false}
+                showStickyCta={true}
+            >
+                {showRsvp && (
+                    <PublicRsvpForm
+                        slug={slug}
+                        inviteToken={inviteToken}
+                        accessToken={effectiveAccessToken}
+                        languageMode={publicDraft.languageMode}
+                    />
+                )}
+            </TemplateExperience>
+            <PublicTicketAccess compact={ownLocaleControl} displayContent={publicDraft} languageMode={publicDraft.languageMode} slug={slug} token={inviteToken} accessToken={effectiveAccessToken} />
+            </div>
+        );
     }
 
     if (protectedMode) {
@@ -356,61 +369,18 @@ export default function PublicInvitationPage() {
             <ProtectedInvitationGate
                 error={remoteError}
                 loading={verifyingAccess}
+                attempt={accessAttempt}
                 onSubmit={verifyAccess}
-                languageMode={invitation?.languageMode || activeDraft?.languageMode || searchParams.get("lang") || useLanguageStore.getState().lang || "km"}
+                languageMode={invitation?.languageMode || queryLang || useLanguageStore.getState().lang || "km"}
             />
         );
     }
 
-    if (activeDraft?.id && gallery === null) {
-        return (
-            <main className="public-state" role="status">
-                <div style={{ padding: 80, textAlign: "center", color: "#7d6443" }}>
-                    កំពុងផ្ទុក...
-                </div>
-            </main>
-        );
-    }
-
-    if (activeDraft?.id && merged) {
-        const isDraftPublished = activeDraft.status === "PUBLISHED" || activeDraft.published === true;
-        if (!isDraftPublished && !shouldBackToDashboard) {
-            return (
-                <PublicUnavailableView
-                    stateType="UNPUBLISHED"
-                    languageMode={activeDraft?.languageMode}
-                    isOwner={isOwner}
-                />
-            );
-        }
-        return (
-            <TemplateExperience
-                tpl={merged.tpl}
-                variant={merged.variant}
-                useTemplateLink={shouldBackToDashboard ? `/dashboard/invitations/${activeDraft.id}/edit` : ""}
-                primaryCtaLabel="កែសម្រួលសន្លឹកការ"
-                breadcrumbItems={[
-                    { label: "ផ្ទាំងគ្រប់គ្រង", to: "/dashboard" },
-                    { label: "ចម្លងតំណភ្ជាប់" },
-                ]}
-                backLink="/dashboard"
-                backLabel="ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង"
-                showBreadcrumb={shouldBackToDashboard}
-                showActions={shouldBackToDashboard}
-                showStickyCta={shouldBackToDashboard}
-            >
-                {activeDraft.rsvp?.enabled !== false && activeDraft.enabledSections?.rsvp !== false && (
-                    <PublicRsvpForm slug={slug} inviteToken={inviteToken} />
-                )}
-            </TemplateExperience>
-        );
-    }
-
-    const effectiveStateType = (userOwnsInvitation || activeDraft) ? "UNPUBLISHED" : (errorType || "NOT_FOUND");
+    const effectiveStateType = userOwnsInvitation ? "UNPUBLISHED" : (errorType || "NOT_FOUND");
     return (
         <PublicUnavailableView
             stateType={effectiveStateType}
-            languageMode={invitation?.languageMode || activeDraft?.languageMode || searchParams.get("lang")}
+            languageMode={invitation?.languageMode || queryLang}
             isOwner={isOwner}
         />
     );
@@ -437,10 +407,24 @@ function formatPublicAccessError(err, isEn) {
     return raw || (isEn ? "This invitation requires a password." : "សន្លឹកការនេះត្រូវការពាក្យសម្ងាត់។");
 }
 
-function ProtectedInvitationGate({ error, loading, onSubmit, languageMode = "km" }) {
+function ProtectedInvitationGate({ error, loading, attempt = 0, onSubmit, languageMode = "km" }) {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const passwordRef = useRef(null);
     const isEn = String(languageMode).toUpperCase() === "EN";
+
+    // The gate is the only thing a protected guest can act on: focus the field.
+    useEffect(() => {
+        passwordRef.current?.focus?.();
+    }, []);
+
+    // A rejected attempt clears the secret (it is never echoed) and returns
+    // focus to the field for a clean retry.
+    useEffect(() => {
+        if (!attempt) return;
+        setPassword("");
+        passwordRef.current?.focus?.();
+    }, [attempt, error]);
 
     return (
         <main className="public-state protected-gate">
@@ -448,6 +432,7 @@ function ProtectedInvitationGate({ error, loading, onSubmit, languageMode = "km"
                 className="protected-gate-card"
                 onSubmit={(event) => {
                     event.preventDefault();
+                    if (loading) return;
                     onSubmit(password);
                 }}
             >
@@ -461,6 +446,7 @@ function ProtectedInvitationGate({ error, loading, onSubmit, languageMode = "km"
                     <span>{isEn ? "Password" : "ពាក្យសម្ងាត់"}</span>
                     <div className="protected-gate-input-wrap">
                         <input
+                            ref={passwordRef}
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
@@ -468,6 +454,7 @@ function ProtectedInvitationGate({ error, loading, onSubmit, languageMode = "km"
                             aria-invalid={Boolean(error)}
                             aria-describedby={error ? "protected-gate-error" : undefined}
                             placeholder={isEn ? "Enter access password" : "វាយបញ្ចូលពាក្យសម្ងាត់"}
+                            disabled={loading}
                             required
                         />
                         <button
@@ -482,7 +469,7 @@ function ProtectedInvitationGate({ error, loading, onSubmit, languageMode = "km"
                     </div>
                 </label>
                 {error && <div id="protected-gate-error" className="inv-error" role="alert">{error}</div>}
-                <button className="inv-primary-btn" type="submit" disabled={loading}>
+                <button className="inv-primary-btn" type="submit" disabled={loading} aria-busy={loading}>
                     {loading ? (isEn ? "Checking..." : "កំពុងពិនិត្យ...") : (isEn ? "Unlock Invitation" : "បើកសន្លឹកការ")}
                 </button>
             </form>
