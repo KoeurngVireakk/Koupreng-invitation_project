@@ -9,6 +9,11 @@ import {
   Sparkles,
   Music,
   VolumeX,
+  Lock,
+  Gift,
+  QrCode,
+  Copy,
+  Check,
 } from "lucide-react";
 import defaultMusicUrl from "@/assets/music/Instrumental Wedding Music (VioSounds Cover).m4a";
 import { normalizeTemplateViewModel } from "../../model/templateModel";
@@ -48,13 +53,25 @@ export default function EmeraldLuxeLayout({
   const [opened, setOpened] = useState(preview && !previewStartClosed ? true : false);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // Audio Control
+  // Audio & Copy State
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [copiedAccount, setCopiedAccount] = useState("");
   const mainRef = useRef(null);
   useEffect(() => {
     if (opened) mainRef.current?.focus({ preventScroll: true });
   }, [opened]);
+
+  const handleCopyAccount = async (accountNum, key) => {
+    if (!accountNum) return;
+    try {
+      await navigator.clipboard?.writeText(String(accountNum));
+      setCopiedAccount(key);
+      window.setTimeout(() => setCopiedAccount(""), 2000);
+    } catch {
+      setCopiedAccount("");
+    }
+  };
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
@@ -139,8 +156,8 @@ export default function EmeraldLuxeLayout({
         onClick={toggleMusic}
         style={{
           position: "fixed",
-          bottom: "24px",
-          right: "24px",
+          bottom: "calc(84px + env(safe-area-inset-bottom))",
+          right: "20px",
           zIndex: 90,
           width: "48px",
           height: "48px",
@@ -154,9 +171,10 @@ export default function EmeraldLuxeLayout({
           justifyContent: "center",
           cursor: "pointer",
         }}
-        aria-label="Toggle Audio"
+        aria-label={isPlaying ? "បិទភ្លេង / Pause audio" : "ចាក់ភ្លេង / Play audio"}
+        aria-pressed={isPlaying}
       >
-        {isPlaying ? <Music className="w-5 h-5 animate-spin" /> : <VolumeX className="w-5 h-5" />}
+        {isPlaying ? <Music className={reduced ? "w-5 h-5" : "w-5 h-5 animate-spin"} aria-hidden="true" /> : <VolumeX className="w-5 h-5" aria-hidden="true" />}
       </button>
 
       {/* Dynamic Animated Gate Overlay */}
@@ -208,9 +226,9 @@ export default function EmeraldLuxeLayout({
 
       {/* Top Bar for Back / Replay */}
       <main ref={mainRef} tabIndex={-1} inert={!opened} aria-hidden={!opened}>
-      <div style={{ maxWidth: "600px", margin: "1rem auto 0", padding: "0 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ maxWidth: "600px", margin: "1rem auto 0", padding: "0 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
         {showBack && (
-          <Link to={backTo} style={{ color: "var(--el-gold-primary)", textDecoration: "none", fontSize: "0.85rem" }}>
+          <Link to={backTo} style={{ color: "var(--el-gold-primary)", textDecoration: "none", fontSize: "0.85rem", minHeight: "44px", display: "inline-flex", alignItems: "center" }}>
             ← {backLabel}
           </Link>
         )}
@@ -222,9 +240,10 @@ export default function EmeraldLuxeLayout({
               background: "rgba(212, 175, 55, 0.15)",
               border: "1px solid var(--el-gold-primary)",
               color: "var(--el-gold-light)",
-              padding: "0.35rem 0.85rem",
+              padding: "0.5rem 0.9rem",
+              minHeight: "44px",
               borderRadius: "6px",
-              fontSize: "0.75rem",
+              fontSize: "0.8rem",
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
@@ -232,7 +251,8 @@ export default function EmeraldLuxeLayout({
               marginLeft: "auto",
             }}
           >
-            {opened ? "🔒 បិទវាំងននមើល (Close)" : "✨ បើកវាំងននមើល (Open)"}
+            {opened ? <Lock className="w-4 h-4" aria-hidden="true" /> : <Sparkles className="w-4 h-4" aria-hidden="true" />}
+            <span>{opened ? "បិទវាំងននមើល (Close)" : "បើកវាំងននមើល (Open)"}</span>
           </button>
         )}
       </div>
@@ -297,6 +317,57 @@ export default function EmeraldLuxeLayout({
         </section>
       )}
 
+      {/* Gift / KHQR Section */}
+      {isEnabled("gift") && (tpl.bankAccount?.accountNumber || tpl.bankAccount?.qrUrl || (Array.isArray(tpl.gift) && tpl.gift.length > 0)) && (
+        <section style={{ maxWidth: "560px", margin: "3rem auto 0", padding: "0 1.5rem", textAlign: "center" }}>
+          <div style={{ background: "rgba(13, 38, 30, 0.78)", border: "1px solid var(--el-border-gold)", borderRadius: "16px", padding: "1.5rem", backdropFilter: "blur(10px)" }}>
+            <Gift className="w-6 h-6 mx-auto mb-2 text-amber-300" aria-hidden="true" />
+            <h3 style={{ fontFamily: "Cinzel, serif", color: "var(--el-gold-light)", fontSize: "1.15rem", margin: "0 0 0.35rem" }}>
+              {tpl.bankAccount?.bank || tpl.gift?.[0]?.bank || "WEDDING GIFT & KHQR"}
+            </h3>
+            <p style={{ fontSize: "0.82rem", color: "var(--el-text-muted)", margin: "0 0 1rem" }}>
+              <InvitationLabel value={"វត្តមានដ៏ថ្លៃថ្លារបស់លោកអ្នក គឺជាកាដូដ៏មានតម្លៃបំផុត"} />
+            </p>
+            <div style={{ background: "#fdfbf7", color: "#1c1917", padding: "1rem", borderRadius: "12px", display: "inline-block" }}>
+              {tpl.bankAccount?.qrUrl ? (
+                <img src={tpl.bankAccount.qrUrl} alt="KHQR" className="w-36 h-36 mx-auto object-contain rounded-lg" />
+              ) : (
+                <QrCode className="w-32 h-32 mx-auto text-stone-800" aria-hidden="true" />
+              )}
+              {(tpl.bankAccount?.accountNumber || tpl.gift?.[0]?.account) && (
+                <p style={{ fontSize: "0.9rem", fontWeight: "700", marginTop: "0.5rem" }}>
+                  {tpl.bankAccount?.accountNumber || tpl.gift?.[0]?.account}
+                </p>
+              )}
+            </div>
+            {(tpl.bankAccount?.accountNumber || tpl.gift?.[0]?.account) && (
+              <div style={{ marginTop: "0.85rem" }}>
+                <button
+                  type="button"
+                  onClick={() => handleCopyAccount(tpl.bankAccount?.accountNumber || tpl.gift?.[0]?.account, "el-gift")}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                    minHeight: "44px",
+                    padding: "0.5rem 1.1rem",
+                    borderRadius: "999px",
+                    border: "1px solid var(--el-gold-primary)",
+                    background: "rgba(212, 175, 55, 0.14)",
+                    color: "var(--el-gold-light)",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  {copiedAccount === "el-gift" ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+                  <InvitationLabel value={copiedAccount === "el-gift" ? "បានចម្លងលេខគណនី" : "ចម្លងលេខគណនី"} />
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* FAQ Section */}
       {isEnabled("faq") && faqList.length > 0 && (
         <section style={{ maxWidth: "560px", margin: "3rem auto 0", padding: "0 1.5rem" }}>
@@ -313,12 +384,12 @@ export default function EmeraldLuxeLayout({
                     background: "rgba(6, 21, 16, 0.6)",
                     border: "1px solid rgba(212, 175, 55, 0.2)",
                     borderRadius: "10px",
-                    padding: "0.75rem 1rem",
+                    padding: "0.5rem 1rem",
                     color: "var(--el-gold-light)",
                     fontSize: "0.85rem",
                   }}
                 >
-                  <summary style={{ cursor: "pointer", fontWeight: "600" }}>{item.q}</summary>
+                  <summary style={{ cursor: "pointer", fontWeight: "600", minHeight: "44px", display: "flex", alignItems: "center" }}>{item.q}</summary>
                   <p style={{ marginTop: "0.5rem", fontSize: "0.8rem", color: "var(--el-text-muted)", borderTop: "1px solid rgba(212,175,55,0.15)", paddingTop: "0.5rem" }}>
                     {item.a}
                   </p>
@@ -350,13 +421,13 @@ export default function EmeraldLuxeLayout({
       {/* Bottom Sticky Action */}
       <InvitationBranding content={tpl} />
       {!preview && useTemplateLink && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#061510", borderTop: "1px solid var(--el-border-gold)", padding: "0.75rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 80 }}>
+        <div className="el-sticky-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#061510", borderTop: "1px solid var(--el-border-gold)", padding: "0.75rem 1.5rem calc(0.75rem + env(safe-area-inset-bottom))", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", zIndex: 80 }}>
           <span style={{ fontSize: "0.85rem", color: "var(--el-gold-primary)", fontFamily: "Cinzel, serif" }}>
             Emerald Luxe • 3D Double Card
           </span>
           <Link
             to={useTemplateLink}
-            style={{ background: "linear-gradient(135deg, var(--el-gold-primary), #997320)", color: "#061510", padding: "0.5rem 1.25rem", borderRadius: "9999px", textDecoration: "none", fontWeight: "700", fontSize: "0.85rem" }}
+            style={{ background: "linear-gradient(135deg, var(--el-gold-primary), #997320)", color: "#061510", padding: "0.5rem 1.25rem", minHeight: "44px", display: "inline-flex", alignItems: "center", borderRadius: "9999px", textDecoration: "none", fontWeight: "700", fontSize: "0.85rem" }}
           ><InvitationLabel value={"ប្រើគំរូនេះ"} /></Link>
         </div>
       )}

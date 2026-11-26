@@ -24,7 +24,19 @@ export default function TemplateVenue({ content }) {
         if (content.seatingTables && content.seatingTables.length > 0) {
             return content.seatingTables;
         }
-        // Fallback realistic banquet tables for wedding preview
+        if (content.hasHostContent) {
+            if (content.guestTable) {
+                return [{
+                    id: "guest-table",
+                    tableName: content.guestTable,
+                    tableLabel: content.guestSeat || "",
+                    capacity: 10,
+                    assignedSeats: 1,
+                }];
+            }
+            return [];
+        }
+        // Fallback realistic banquet tables for demo template preview
         const names = ["តុ ១", "តុ ២", "តុ ៣", "តុ ៤", "តុ ៥", "តុ ៦", "តុ VIP ១", "តុ VIP ២"];
         if (content.guestTable && !names.includes(content.guestTable)) {
             names.push(content.guestTable);
@@ -36,7 +48,7 @@ export default function TemplateVenue({ content }) {
             capacity: 10,
             assignedSeats: 8,
         }));
-    }, [content.seatingTables, content.guestTable]);
+    }, [content.seatingTables, content.guestTable, content.guestSeat, content.hasHostContent]);
 
     return (
         <section className="tx-section tx-venue" data-tx-section="venue" aria-labelledby="tx-venue-title">
@@ -104,26 +116,29 @@ export default function TemplateVenue({ content }) {
                                     <span><InvitationLabel value={"កន្លែងអង្គុយ៖"} />{content.guestTable} {content.guestSeat ? `(កៅអី ${content.guestSeat})` : ""}</span>
                                 </div>
 
-                                <button
-                                    type="button"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "6px",
-                                        padding: "8px 14px",
-                                        borderRadius: "10px",
-                                        background: "#ffffff",
-                                        border: "1px solid rgba(185, 139, 66, 0.4)",
-                                        color: "#b98b42",
-                                        fontSize: "0.85rem",
-                                        fontWeight: 700,
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() => setShowFloorPlan(true)}
-                                >
-                                    <IoMapOutline />
-                                    <span><InvitationLabel value={"🗺️ មើលទីតាំងតុក្នុងសាល"} /></span>
-                                </button>
+                                {venueTables.length > 0 && (
+                                    <button
+                                        type="button"
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: "6px",
+                                            minHeight: "44px",
+                                            padding: "8px 14px",
+                                            borderRadius: "10px",
+                                            background: "#ffffff",
+                                            border: "1px solid rgba(185, 139, 66, 0.4)",
+                                            color: "#b98b42",
+                                            fontSize: "0.85rem",
+                                            fontWeight: 700,
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => setShowFloorPlan(true)}
+                                    >
+                                        <IoMapOutline aria-hidden="true" />
+                                        <span><InvitationLabel value={"មើលទីតាំងតុក្នុងសាល"} /></span>
+                                    </button>
+                                )}
                             </div>
                         )}
 

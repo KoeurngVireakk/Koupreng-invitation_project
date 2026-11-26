@@ -14,9 +14,20 @@ export function getTelegramWebApp() {
   return window.Telegram?.WebApp || null;
 }
 
-export function isInsideTelegram() {
+export function isInAppBrowser() {
+  if (typeof window === "undefined") return false;
   const tg = getTelegramWebApp();
-  return Boolean(tg && tg.initData && tg.initData.length > 0);
+  if ((tg && tg.initData && tg.initData.length > 0) || window.TelegramWebviewProxy) return true;
+  const ua = typeof navigator !== "undefined" ? navigator.userAgent || "" : "";
+  return /FBAN|FBAV|FB_IAB|Messenger|WhatsApp|Telegram|Line\//i.test(ua);
+}
+
+export function isInsideTelegram() {
+  if (typeof window === "undefined") return false;
+  const tg = getTelegramWebApp();
+  if (Boolean(tg && tg.initData && tg.initData.length > 0) || Boolean(window.TelegramWebviewProxy)) return true;
+  const ua = typeof navigator !== "undefined" ? navigator.userAgent || "" : "";
+  return /Telegram/i.test(ua);
 }
 
 /**
@@ -36,20 +47,26 @@ export function initTelegramWebApp() {
       tg.enableClosingConfirmation();
     }
 
-    // Set matching ceremonial cream / gold header
+    const isDarkSurface = typeof document !== "undefined" && Boolean(
+      document.querySelector(".el-container, .tdy-page-root, .tpl-boilerplate, [data-theme='dark']")
+    );
+    const chromeColor = isDarkSurface ? "#0b0b0d" : "#FAF6F0";
+
+    // Set matching theme header
     if (typeof tg.setHeaderColor === "function") {
-      tg.setHeaderColor("#FAF6F0");
+      tg.setHeaderColor(chromeColor);
     }
     if (typeof tg.setBackgroundColor === "function") {
-      tg.setBackgroundColor("#FAF6F0");
+      tg.setBackgroundColor(chromeColor);
     }
 
-    // Bind viewport height CSS variable
+    // Bind stable viewport height CSS variable for Telegram / IAB resizing
     const updateViewport = () => {
-      if (tg.viewportHeight) {
+      const height = tg.viewportStableHeight || tg.viewportHeight;
+      if (height) {
         document.documentElement.style.setProperty(
           "--tg-viewport-height",
-          `${tg.viewportHeight}px`
+          `${height}px`
         );
       }
     };

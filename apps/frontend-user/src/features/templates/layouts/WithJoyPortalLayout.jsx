@@ -21,6 +21,8 @@ import {
   QrCode,
   ExternalLink,
   Gift,
+  Copy,
+  Check,
 } from "lucide-react";
 import defaultMusicUrl from "../../../assets/music/ថ្ងៃដែលរង់ចាំ.mp3";
 import CoverBackground from "../shared/Openings/CoverBackground";
@@ -67,10 +69,22 @@ export default function WithJoyPortalLayout({
   const coverImage = effectiveContent.coverImage || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
   const musicUrl = effectiveContent.music?.url || effectiveContent.music || (effectiveContent.hasHostContent ? "" : defaultMusicUrl);
 
-  // Lightbox modal state with keyboard support
+  // Lightbox & Gift copy state
   const [activePhoto, setActivePhoto] = useState(null);
+  const [copiedAccount, setCopiedAccount] = useState("");
   const openPhoto = index => setActivePhoto(index);
   const closePhoto = () => setActivePhoto(null);
+
+  const handleCopyAccount = async (accountNum, key) => {
+    if (!accountNum) return;
+    try {
+      await navigator.clipboard?.writeText(String(accountNum));
+      setCopiedAccount(key);
+      window.setTimeout(() => setCopiedAccount(""), 2000);
+    } catch {
+      setCopiedAccount("");
+    }
+  };
 
   // RSVP Form state
   const [rsvpState, setRsvpState] = useState({
@@ -108,19 +122,24 @@ export default function WithJoyPortalLayout({
     : effectiveContent.hasHostContent ? [] : defaultGallery;
 
   const isEnabled = (key) => effectiveContent.enabledSections?.[key] !== false;
-  const dressColors = Array.isArray(content.dressCode)
-    ? content.dressCode
-    : (Array.isArray(content.dressCode?.colors) ? content.dressCode.colors : (content.dressColors || [
+  const dressColors = Array.isArray(effectiveContent.dressCode)
+    ? effectiveContent.dressCode
+    : (Array.isArray(effectiveContent.dressCode?.colors) ? effectiveContent.dressCode.colors : (effectiveContent.dressColors || [
         { hex: "#2B6CB0", name: "ខៀវ" },
         { hex: "#4299E1", name: "ផ្ទៃមេឃ" },
         { hex: "#D69E2E", name: "មាស" },
         { hex: "#FFFFFF", name: "ស" },
       ]));
-  const faqList = Array.isArray(content.faq) && content.faq.length > 0 ? content.faq : [
+  const faqList = Array.isArray(effectiveContent.faq) && effectiveContent.faq.length > 0 ? effectiveContent.faq : [
     { id: "f1", q: "តើមានចំណតរថយន្តដែរឬទេ?", a: "បាទ/ចាស មានចំណតរថយន្តធំទូលាយដោយឥតគិតថ្លៃសម្រាប់ភ្ញៀវកិត្តិយសទាំងអស់។" },
     { id: "f2", q: "តើអាចនាំកុមារតូចៗមកបានទេ?", a: "យើងខ្ញុំស្វាគមន៍វត្តមានកុមារតូចៗទាំងអស់ក្នុងពិធីមង្គលការ។" },
     { id: "f3", q: "តើកម្មវិធីចាប់ផ្ដើម និងបញ្ចប់នៅម៉ោងប៉ុន្មាន?", a: "កម្មវិធីទទួលភ្ញៀវចាប់ផ្ដើមពីម៉ោង ០៥:០០ ល្ងាច តទៅ។" },
   ];
+  const mapsHref = effectiveContent.googleMapsUrl || venue.mapLink || effectiveContent.googleMapUrl || (
+    (venue.name || venue.address)
+      ? `https://maps.google.com/?q=${encodeURIComponent(`${venue.name || ""} ${venue.address || ""}`.trim())}`
+      : ""
+  );
 
   return (
     <div className="wj-portal">
@@ -230,7 +249,7 @@ export default function WithJoyPortalLayout({
         <section id="dress-code" className="wj-section" style={{ background: "#ffffff" }}>
           <div className="wj-section-header">
             <p className="wj-section-kicker">Dress Code</p>
-            <h2 className="wj-section-title">{content.dressCode?.name || "ពណ៌សម្លៀកបំពាក់ (Dress Code)"}</h2>
+            <h2 className="wj-section-title">{effectiveContent.dressCode?.name || "ពណ៌សម្លៀកបំពាក់ (Dress Code)"}</h2>
             <p className="wj-section-sub"><InvitationLabel value={"ពណ៌សម្លៀកបំពាក់សម្រាប់ភ្ញៀវកិត្តិយស"} /></p>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1.25rem", flexWrap: "wrap", maxWidth: "600px", margin: "0 auto" }}>
@@ -250,9 +269,9 @@ export default function WithJoyPortalLayout({
               </div>
             ))}
           </div>
-          {content.dressCode?.description && (
+          {effectiveContent.dressCode?.description && (
             <p style={{ textAlign: "center", color: "var(--wj-text-muted)", fontSize: "0.85rem", marginTop: "1rem" }}>
-              {content.dressCode.description}
+              {effectiveContent.dressCode.description}
             </p>
           )}
         </section>
@@ -310,23 +329,26 @@ export default function WithJoyPortalLayout({
             <MapPin className="w-10 h-10 mx-auto mb-3" style={{ color: "var(--wj-primary-light)" }} />
             <h3 style={{ fontSize: "1.3rem", fontWeight: "700", marginBottom: "0.5rem" }}>{venue.name}</h3>
             <p style={{ color: "var(--wj-text-muted)", marginBottom: "1.5rem" }}>{venue.address}</p>
-            <a
-              href={`https://maps.google.com/?q=${encodeURIComponent(venue.name + " " + venue.address)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                background: "var(--wj-primary)",
-                color: "#ffffff",
-                padding: "0.75rem 1.5rem",
-                borderRadius: "10px",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            ><InvitationLabel value={"មើលលើ Google Maps"} /><ExternalLink className="w-4 h-4" />
-            </a>
+            {mapsHref && (
+              <a
+                href={mapsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  minHeight: "44px",
+                  background: "var(--wj-primary)",
+                  color: "#ffffff",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  textDecoration: "none",
+                  fontWeight: "600",
+                }}
+              ><InvitationLabel value={"មើលលើ Google Maps"} /><ExternalLink className="w-4 h-4" aria-hidden="true" />
+              </a>
+            )}
           </div>
         </section>
       )}
@@ -389,9 +411,33 @@ export default function WithJoyPortalLayout({
                 <QrCode className="w-36 h-36 mx-auto text-slate-800" />
               )}
               {effectiveContent.bankAccount?.accountNumber && (
-                <p style={{ fontSize: "0.85rem", fontWeight: "600", marginTop: "0.5rem" }}>
-                  {effectiveContent.bankAccount.accountNumber} {effectiveContent.bankAccount.bank ? `(${effectiveContent.bankAccount.bank})` : ""}
-                </p>
+                <>
+                  <p style={{ fontSize: "0.85rem", fontWeight: "600", marginTop: "0.5rem" }}>
+                    {effectiveContent.bankAccount.accountNumber} {effectiveContent.bankAccount.bank ? `(${effectiveContent.bankAccount.bank})` : ""}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyAccount(effectiveContent.bankAccount.accountNumber, "wj-bank")}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.4rem",
+                      minHeight: "44px",
+                      marginTop: "0.5rem",
+                      padding: "0.45rem 1rem",
+                      borderRadius: "999px",
+                      border: "1px solid var(--wj-border)",
+                      background: "#ffffff",
+                      color: "var(--wj-primary)",
+                      fontWeight: "600",
+                      fontSize: "0.85rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {copiedAccount === "wj-bank" ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+                    <InvitationLabel value={copiedAccount === "wj-bank" ? "បានចម្លងលេខគណនី" : "ចម្លងលេខគណនី"} />
+                  </button>
+                </>
               )}
               {effectiveContent.bankAccount?.accountName ? (
                 <p style={{ fontSize: "0.75rem", color: "var(--wj-text-muted)" }}>{effectiveContent.bankAccount.accountName}</p>
@@ -422,7 +468,7 @@ export default function WithJoyPortalLayout({
                   padding: "1rem 1.25rem",
                 }}
               >
-                <summary style={{ fontWeight: "600", color: "var(--wj-primary)", cursor: "pointer", fontSize: "0.95rem" }}>
+                <summary style={{ fontWeight: "600", color: "var(--wj-primary)", cursor: "pointer", fontSize: "0.95rem", minHeight: "44px", display: "flex", alignItems: "center" }}>
                   {item.q}
                 </summary>
                 <p style={{ marginTop: "0.5rem", fontSize: "0.85rem", color: "var(--wj-text-muted)", lineHeight: "1.6", borderTop: "1px solid var(--wj-border)", paddingTop: "0.5rem" }}>
@@ -543,7 +589,7 @@ export default function WithJoyPortalLayout({
         <p style={{ fontFamily: "Cinzel, serif", fontSize: "1.3rem", fontWeight: "700", marginBottom: "0.5rem" }}>
           {groom} &amp; {bride}
         </p>
-        <p style={{ color: "#a0aec0", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+        <p style={{ color: "#cbd5e1", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
           សូមអរគុណសម្រាប់ការចូលរួមជាចំណែកនៃថ្ងៃដ៏វិសេសវិសាលរបស់យើងខ្ញុំ
         </p>
         {!preview && useTemplateLink && (
@@ -551,16 +597,19 @@ export default function WithJoyPortalLayout({
             <Link
               to={useTemplateLink}
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                minHeight: "44px",
                 background: "linear-gradient(135deg, #d69e2e, #b7791f)",
-                color: "#ffffff",
+                color: "#0f172a",
                 padding: "0.75rem 1.75rem",
                 borderRadius: "9999px",
-                fontWeight: "600",
+                fontWeight: "700",
                 textDecoration: "none",
                 boxShadow: "0 4px 14px rgba(214, 158, 46, 0.4)",
               }}
             >
-              ប្រើគំរូ WithJoy Portal នេះ
+              <InvitationLabel value={"ប្រើគំរូ WithJoy Portal នេះ"} />
             </Link>
           </div>
         )}

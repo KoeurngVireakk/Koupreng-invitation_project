@@ -17,9 +17,10 @@
   min-height: 100vh;
   background-color: var(--wj-bg);
   color: var(--wj-text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Kantumruy Pro", sans-serif;
+  font-family: "Kantumruy Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   position: relative;
   overflow-x: hidden;
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
 }
 
 /* Sticky Glassmorphism Header */
@@ -37,13 +38,18 @@
 .wj-nav-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.85rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem 1rem;
 }
 
 .wj-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: "Cinzel", "Playfair Display", "Moul", "Kantumruy Pro", Georgia, serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -54,16 +60,31 @@
 
 .wj-nav-links {
   display: flex;
-  gap: 1.25rem;
+  gap: 0.65rem 1rem;
   align-items: center;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.wj-nav-links::-webkit-scrollbar {
+  display: none;
 }
 
 .wj-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  white-space: nowrap;
+  flex-shrink: 0;
   color: var(--wj-text-muted);
   text-decoration: none;
   font-size: 0.925rem;
   font-weight: 500;
-  padding: 0.4rem 0.6rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 6px;
   transition: color 0.2s, background-color 0.2s;
 }
@@ -112,16 +133,17 @@
 
 .wj-hero-tag {
   display: inline-block;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   letter-spacing: normal;
   text-transform: uppercase;
-  color: var(--wj-accent);
-  background: rgba(214, 158, 46, 0.15);
-  border: 1px solid rgba(214, 158, 46, 0.4);
-  padding: 0.35rem 1rem;
+  color: #fde68a;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(253, 230, 138, 0.45);
+  padding: 0.4rem 1.05rem;
   border-radius: 9999px;
   margin-bottom: 1.25rem;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 }
 
 .wj-hero-names {
@@ -500,7 +522,7 @@
     border-radius: 9999px;
     background: rgba(26, 54, 93, 0.06);
     flex-shrink: 0;
-    min-height: 36px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
   }

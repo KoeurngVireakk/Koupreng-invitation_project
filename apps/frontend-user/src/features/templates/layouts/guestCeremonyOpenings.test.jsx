@@ -2,6 +2,8 @@ import { render, screen, fireEvent, act, cleanup } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import WithJoyPortalOpening from "./WithJoyPortalOpening";
 import BlissEditorialOpening from "./BlissEditorialOpening";
+import RibbonOpening from "../shared/Openings/RibbonOpening";
+import FloatingAudioPlayer from "../shared/AudioPlayer/FloatingAudioPlayer";
 import { usePrefersReducedMotion } from "@/shared/hooks/usePrefersReducedMotion";
 
 vi.mock("@/shared/hooks/usePrefersReducedMotion", () => ({
@@ -96,5 +98,27 @@ describe("BlissEditorialOpening", () => {
         render(<BlissEditorialOpening content={{ ...content, studioStyle: { motion: "minimal" } }} />);
         fireEvent.click(screen.getByRole("button", { name: "Turn the page" }));
         expect(screen.queryByRole("region", { name: "Wedding invitation cover" })).not.toBeInTheDocument();
+    });
+});
+
+describe("RibbonOpening & FloatingAudioPlayer", () => {
+    it("renders semantic open and skip buttons on RibbonOpening and reveals immediately under reduced motion", () => {
+        vi.mocked(usePrefersReducedMotion).mockReturnValue(true);
+        const onOpen = vi.fn();
+        const onSkip = vi.fn();
+        render(<RibbonOpening groom="Sokha" bride="Maly" onOpen={onOpen} onSkip={onSkip} />);
+
+        const openBtn = screen.getByRole("button", { name: /Open invitation/ });
+        expect(openBtn).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /Skip opening/ })).toBeInTheDocument();
+
+        fireEvent.click(openBtn);
+        expect(onOpen).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not autoplay music on default mount without guest gesture", () => {
+        const playSpy = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
+        render(<FloatingAudioPlayer src="/audio/sample.mp3" />);
+        expect(playSpy).not.toHaveBeenCalled();
     });
 });

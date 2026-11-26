@@ -100,9 +100,10 @@ describe("PublicRsvpForm Feature", () => {
             // Should not show the submit button
             expect(screen.queryByText("ផ្ញើ RSVP")).not.toBeInTheDocument();
         });
+        expect(localStorage.getItem("koupreng_guest_rsvp_my-wedding")).toBeNull();
     });
 
-    it("restores QR pass from localStorage when public guest returns to page", async () => {
+    it("restores QR pass from localStorage when public guest returns to page without mutating URL token", async () => {
         localStorage.setItem(
             "koupreng_guest_rsvp_my-wedding",
             JSON.stringify({
@@ -112,6 +113,7 @@ describe("PublicRsvpForm Feature", () => {
                 attendeeCount: 1,
             })
         );
+        const replaceSpy = vi.spyOn(window.history, "replaceState");
 
         render(<PublicRsvpForm slug="my-wedding" khmerLabels={true} />);
 
@@ -120,6 +122,7 @@ describe("PublicRsvpForm Feature", () => {
             expect(screen.getByText("Dara Cached")).toBeInTheDocument();
             expect(screen.queryByText("ផ្ញើ RSVP")).not.toBeInTheDocument();
         });
+        expect(replaceSpy).not.toHaveBeenCalled();
     });
 
     it("submits RSVP form and immediately displays the generated QR pass with token", async () => {

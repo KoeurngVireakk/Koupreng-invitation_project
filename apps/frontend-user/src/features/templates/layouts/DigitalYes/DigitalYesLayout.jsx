@@ -252,7 +252,7 @@ export default function DigitalYesLayout({
         {showBack ? (
           <Link
             to={backTo}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs font-medium text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 min-h-[44px] rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs font-medium text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
           >
             <span>{backLabel}</span>
           </Link>
@@ -261,19 +261,24 @@ export default function DigitalYesLayout({
         <div className="flex items-center gap-2 ml-auto">
           {isFullView && (
             <button
+              type="button"
               onClick={handleReplay}
               title="មើលចលនាបើកសំបុត្រម្តងទៀត"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
+              aria-label="មើលចលនាបើកសំបុត្រម្តងទៀត"
+              className="flex items-center gap-1.5 px-3 min-h-[44px] min-w-[44px] justify-center rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
+              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">បើកម្តងទៀត</span>
             </button>
           )}
 
           <button
+            type="button"
             onClick={toggleMusic}
             title={isPlayingMusic ? "បិទភ្លេង" : "ចាក់ភ្លេង"}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
+            aria-label={isPlayingMusic ? "បិទភ្លេង" : "ចាក់ភ្លេង"}
+            aria-pressed={isPlayingMusic}
+            className="flex items-center gap-1.5 px-3.5 min-h-[44px] rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-xs text-amber-200 hover:bg-black/80 transition shadow-lg cursor-pointer"
           >
             {isPlayingMusic ? (
               <>
@@ -286,8 +291,8 @@ export default function DigitalYesLayout({
               </>
             ) : (
               <>
-                <VolumeX className="h-3.5 w-3.5 text-zinc-400" />
-                <span className="text-[11px] text-zinc-400">បើកភ្លេង</span>
+                <VolumeX className="h-3.5 w-3.5 text-zinc-200" aria-hidden="true" />
+                <span className="text-[11px] text-zinc-200">បើកភ្លេង</span>
               </>
             )}
           </button>
@@ -353,7 +358,7 @@ export default function DigitalYesLayout({
               <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 tdy-font-moul drop-shadow-sm">
                 {tpl.title || 'សិរីសួស្តីអាពាហ៍ពិពាហ៍'}
               </h2>
-              <p className="text-[11px] tracking-[0.3em] text-amber-200/60 uppercase tdy-font-cinzel font-semibold mt-1.5">
+              <p className="text-xs text-amber-200/90 uppercase tdy-font-kantumruy font-semibold mt-1.5" style={{ letterSpacing: /[\u1780-\u17ff]/.test(tpl.subtitle || '') ? 'normal' : '0.2em' }}>
                 {tpl.subtitle || 'THE WEDDING CELEBRATION OF'}
               </p>
             </div>
@@ -488,23 +493,24 @@ export default function DigitalYesLayout({
                     </p>
                   )}
 
-                  {tpl.googleMapsUrl && (
+                  {(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl) && (
                     <a
-                      href={tpl.googleMapsUrl}
+                      href={tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-110 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition transform hover:scale-105 active:scale-95"
+                      className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-110 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition transform hover:scale-105 active:scale-95"
                     >
                       <span>មើលទីតាំងលើ Google Maps</span>
-                      <ExternalLink className="h-3.5 w-3.5" />
+                      <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                     </a>
                   )}
 
                   <IllustratedMap content={tpl} />
                   {tpl.sketchMapImage && (
                     <div className="mt-5 pt-4 border-t border-amber-500/20">
-                      <p className="text-xs text-amber-300 font-medium mb-2.5">
-                        🗺️ គំនូសប្លង់ទីតាំង / Sketch Map
+                      <p className="text-xs text-amber-300 font-medium mb-2.5 flex items-center justify-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                        <span>គំនូសប្លង់ទីតាំង / Sketch Map</span>
                       </p>
                       <img
                         src={tpl.sketchMapImage}
@@ -593,9 +599,9 @@ export default function DigitalYesLayout({
                         key={item.id || item.q}
                         className="group rounded-2xl border border-amber-400/25 bg-black/50 p-4 text-xs text-amber-100/90 transition shadow-sm hover:border-amber-400/40"
                       >
-                        <summary className="cursor-pointer font-semibold text-amber-200 list-none flex items-center justify-between gap-3">
+                        <summary className="cursor-pointer min-h-[44px] font-semibold text-amber-200 list-none flex items-center justify-between gap-3">
                           <span className="leading-snug">{item.q}</span>
-                          <span className="text-amber-400 text-xs shrink-0 group-open:rotate-180 transition transform duration-200">▼</span>
+                          <span className="text-amber-300 text-xs shrink-0 group-open:rotate-180 transition transform duration-200">▼</span>
                         </summary>
                         <p className="mt-3 text-amber-100/80 leading-relaxed text-xs pt-3 border-t border-amber-500/15">
                           {item.a}
@@ -615,21 +621,22 @@ export default function DigitalYesLayout({
                   {isEnabled("rsvp") && (
                     <a
                       href="#rsvp-section"
-                      className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs sm:text-sm shadow-md hover:brightness-110 active:scale-98 transition"
+                      className="flex items-center justify-center gap-1.5 min-h-[44px] py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs sm:text-sm shadow-md hover:brightness-110 active:scale-98 transition"
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className="h-4 w-4" aria-hidden="true" />
                       <span>ឆ្លើយតប RSVP</span>
                     </a>
                   )}
 
                   {isEnabled("gift") && (
                     <button
+                      type="button"
                       onClick={() => setShowQrModal(true)}
-                      className={`flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl bg-white/10 border border-amber-400/35 text-amber-200 font-bold text-xs sm:text-sm hover:bg-white/20 active:scale-98 transition shadow-sm cursor-pointer ${
+                      className={`flex items-center justify-center gap-1.5 min-h-[44px] py-3 px-4 rounded-xl bg-white/10 border border-amber-400/35 text-amber-200 font-bold text-xs sm:text-sm hover:bg-white/20 active:scale-98 transition shadow-sm cursor-pointer ${
                         !isEnabled("rsvp") ? "col-span-2" : ""
                       }`}
                     >
-                      <QrCode className="h-4 w-4 text-amber-400" />
+                      <QrCode className="h-4 w-4 text-amber-400" aria-hidden="true" />
                       <span>ចងដៃតាម QR</span>
                     </button>
                   )}
@@ -643,10 +650,10 @@ export default function DigitalYesLayout({
             {/* Footer Closing */}
             <AuthoredClosing content={tpl} />
             <div className="pt-6 border-t border-amber-400/15 text-center">
-              <p className="text-xs sm:text-sm text-amber-200/70">
+              <p className="text-xs text-amber-200/90">
                 សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅចំពោះវត្តមានដ៏ឧត្តុង្គឧត្តម
               </p>
-              <p className="text-[10px] text-amber-400/50 mt-1 uppercase tracking-widest tdy-font-cinzel font-semibold">
+              <p className="text-xs text-amber-300/90 mt-1 uppercase tracking-widest tdy-font-cinzel font-semibold">
                 WITH LOVE &amp; GRATITUDE
               </p>
               <InvitationBranding content={tpl} />
@@ -686,24 +693,26 @@ export default function DigitalYesLayout({
                 />
               ) : (
                 <div className="w-full h-full border border-stone-800 rounded-xl flex flex-col items-center justify-center p-2 text-slate-950 text-center">
-                  <span className="text-[10px] font-bold text-red-600 tracking-wider">KHQR</span>
+                  <QrCode className="h-8 w-8 text-amber-700 mb-1" aria-hidden="true" />
+                  <span className="text-[10px] font-bold text-red-700 tracking-wider">KHQR</span>
                   <span className="text-[9px] font-semibold text-slate-800 mt-1">{tpl.bankAccount?.accountName}</span>
-                  <span className="text-[8px] text-slate-500 mt-0.5 font-mono">{tpl.bankAccount?.accountNumber}</span>
-                  <div className="mt-2 text-[16px]">📱💳</div>
+                  <span className="text-[8px] text-slate-600 mt-0.5 font-mono">{tpl.bankAccount?.accountNumber}</span>
                 </div>
               )}
             </div>
 
             <div className="text-xs text-stone-300 space-y-1">
               <p className="font-semibold text-amber-200">{tpl.bankAccount?.accountName}</p>
-              <div className="flex items-center justify-center gap-1.5 font-mono text-stone-400">
+              <div className="flex items-center justify-center gap-1.5 font-mono text-stone-300">
                 <span>{tpl.bankAccount?.accountNumber}</span>
                 <button
+                  type="button"
                   onClick={handleCopyAccount}
-                  className="p-1 rounded hover:bg-white/10 text-stone-400 hover:text-white transition cursor-pointer"
+                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer"
+                  aria-label="ចម្លងលេខគណនី"
                   title="ចម្លងលេខគណនី"
                 >
-                  <Copy className="h-3.5 w-3.5" />
+                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
                 </button>
               </div>
               {copied && <span className="text-[10px] text-emerald-400 font-medium">ចម្លងបានជោគជ័យ!</span>}
@@ -712,7 +721,7 @@ export default function DigitalYesLayout({
             <button
               type="button"
               onClick={() => setShowQrModal(false)}
-              className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-xs font-semibold text-stone-200 transition cursor-pointer"
+              className="w-full min-h-[44px] py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-xs font-semibold text-stone-200 transition cursor-pointer"
             >
               បិទផ្ទាំង
             </button>
@@ -722,14 +731,14 @@ export default function DigitalYesLayout({
 
       {/* Sticky Bottom Actions Bar */}
       {isFullView && !preview && useTemplateLink && (
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 p-3 bg-black/85 backdrop-blur-md border-t border-amber-500/25 flex items-center justify-between max-w-2xl w-full px-5">
+        <div className="tdy-sticky-bar fixed bottom-0 left-1/2 -translate-x-1/2 z-40 p-3 bg-black/85 backdrop-blur-md border-t border-amber-500/25 flex items-center justify-between max-w-2xl w-full px-5" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="text-xs tdy-font-cinzel text-amber-200">The Digital Yes • Luxury Reel</span>
           </div>
           <Link
             to={useTemplateLink}
-            className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg transition"
+            className="px-4 min-h-[44px] inline-flex items-center rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg transition"
           ><InvitationLabel value={"ប្រើគំរូនេះ"} /></Link>
         </div>
       )}

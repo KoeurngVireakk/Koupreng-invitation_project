@@ -145,13 +145,6 @@ function GuestRsvpSession({
                             seatNumber: data.seatNumber,
                         };
                         setSubmitted(existingData);
-                        if (storageKey) {
-                            try {
-                                localStorage.setItem(storageKey, JSON.stringify(existingData));
-                            } catch {
-                                // ignore storage error
-                            }
-                        }
                     } else if (data.guestName) {
                         setForm((prev) => ({
                             ...prev,
@@ -172,14 +165,6 @@ function GuestRsvpSession({
                 const cached = JSON.parse(localStorage.getItem(storageKey) || "null");
                 if (cached && (cached.responseStatus || cached.inviteToken)) {
                     setSubmitted(cached);
-                    // Softly set query param ?token=... in the browser bar
-                    if (cached.inviteToken && typeof window !== "undefined") {
-                        const currentUrl = new URL(window.location.href);
-                        if (!currentUrl.searchParams.get("token")) {
-                            currentUrl.searchParams.set("token", cached.inviteToken);
-                            window.history.replaceState(null, "", currentUrl.toString());
-                        }
-                    }
                 }
             } catch {
                 // ignore storage error
@@ -210,6 +195,12 @@ function GuestRsvpSession({
 
     const submit = async (event) => {
         event.preventDefault();
+        if (typeof navigator !== "undefined" && navigator.onLine === false) {
+            setError(language === "kh"
+                ? "គ្មានការតភ្ជាប់អ៊ីនធឺណិត។ សូមភ្ជាប់ឡើងវិញ រួចផ្ញើ RSVP ម្ដងទៀត។"
+                : "You are offline. Reconnect and try submitting your RSVP again.");
+            return;
+        }
         setLoading(true);
         setError("");
         try {
@@ -235,7 +226,7 @@ function GuestRsvpSession({
             setSubmitted(submittedData);
             setIsEditing(false);
 
-            if (slug) {
+            if (slug && !inviteToken) {
                 const storageKey = `koupreng_guest_rsvp_${slug}`;
                 try {
                     localStorage.setItem(storageKey, JSON.stringify(submittedData));
@@ -288,13 +279,14 @@ function GuestRsvpSession({
             {showQrPass ? (
                 <div className="pub-rsvp-done" role="status" style={{ textAlign: "center", padding: "1.25rem 1rem" }}>
                     <h2>{labels.receivedTitle}</h2>
-                    <p style={{ margin: "0.5rem 0 1rem", color: "#475569" }}>
+                    <p style={{ margin: "0.5rem 0 1rem", opacity: 0.85 }}>
                         {submitted.guestName ? `${submitted.guestName}, ` : ""}{labels.receivedText}
                     </p>
 
                     {(submitted.responseStatus === "ATTENDING" || submitted.responseStatus === "attending" || !submitted.responseStatus) ? (
                         <div style={{
                             background: "#fafaf9",
+                            color: "#1c1917",
                             border: "1.5px dashed #b0926a",
                             borderRadius: "16px",
                             padding: "1.25rem",
@@ -354,14 +346,15 @@ function GuestRsvpSession({
                     ) : (
                         <div style={{
                             background: "#f8fafc",
+                            color: "#1e293b",
                             border: "1px solid #cbd5e1",
                             borderRadius: "12px",
                             padding: "1rem",
                             maxWidth: "320px",
                             margin: "1rem auto 0"
                         }}>
-                            <span style={{ fontSize: "1.2rem" }}>💌</span>
-                            <p style={{ margin: "6px 0 0", fontSize: "0.85rem", color: "#475569" }}>
+                            <span style={{ fontSize: "1.2rem" }} aria-hidden="true">💌</span>
+                            <p style={{ margin: "6px 0 0", fontSize: "0.85rem", color: "#334155" }}>
                                 {submitted.responseStatus === "NOT_ATTENDING" ? labels.notAttending : labels.maybe}
                             </p>
                         </div>
@@ -372,16 +365,16 @@ function GuestRsvpSession({
                             <button
                                 type="button"
                                 className="inv-secondary-btn"
-                                style={{ fontSize: "0.8rem", padding: "6px 14px" }}
+                                style={{ fontSize: "0.8rem", padding: "8px 14px", minHeight: "44px" }}
                                 onClick={handleCopy}
                             >
-                                {copied ? `✓ ${labels.copied}` : `📋 ${labels.copyLink}`}
+                                {copied ? `✓ ${labels.copied}` : labels.copyLink}
                             </button>
                         )}
                         <button
                             type="button"
                             className="inv-secondary-btn"
-                            style={{ fontSize: "0.8rem", padding: "6px 14px" }}
+                            style={{ fontSize: "0.8rem", padding: "8px 14px", minHeight: "44px" }}
                             onClick={() => {
                                 setForm((prev) => ({
                                     ...prev,
@@ -392,7 +385,7 @@ function GuestRsvpSession({
                                 setIsEditing(true);
                             }}
                         >
-                            ✏️ {labels.editResponse}
+                            {labels.editResponse}
                         </button>
                     </div>
                 </div>
@@ -407,7 +400,7 @@ function GuestRsvpSession({
                             <button
                                 type="button"
                                 className="inv-secondary-btn"
-                                style={{ fontSize: "0.8rem", padding: "4px 12px" }}
+                                style={{ fontSize: "0.8rem", padding: "8px 14px", minHeight: "44px" }}
                                 onClick={() => setIsEditing(false)}
                             >
                                 {labels.cancelEdit}
@@ -474,11 +467,11 @@ function GuestRsvpSession({
                     {guestVerified && !submitted && (
                         <div>
                             {reminder.url ? (
-                                <a className="inv-secondary-btn" href={reminder.url} target="_blank" rel="noreferrer">
+                                <a className="inv-secondary-btn" style={{ minHeight: "44px" }} href={reminder.url} target="_blank" rel="noreferrer">
                                     {labels.reminderOpen}
                                 </a>
                             ) : (
-                                <button className="inv-secondary-btn" type="button" disabled={reminder.busy}
+                                <button className="inv-secondary-btn" style={{ minHeight: "44px" }} type="button" disabled={reminder.busy}
                                     onClick={beginReminder}>
                                     {labels.reminder}
                                 </button>

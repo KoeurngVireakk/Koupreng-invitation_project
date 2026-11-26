@@ -88,6 +88,10 @@ apiClient.interceptors.request.use(
 
     const skipAuth = config.skipAuth === true;
 
+    if (skipAuth) {
+      config.suppressAuthRedirect = true;
+    }
+
     if (config.skipAuth !== undefined) {
       delete config.skipAuth;
     }

@@ -115,7 +115,7 @@ export default function TemplateDemoPage({ backLink, backLabel, primaryCtaLabel 
     const knownLocal = TEMPLATES.some((item) => [item.id, item.code, item.slug].includes(knownId));
     if (!remoteTpl && !knownLocal) {
         if (loading) return <PageSkeleton layout="public" label="កំពុងផ្ទុកគំរូ… / Loading template…" />;
-        return <main className="public-state"><h1>រកគំរូមិនឃើញ / Template unavailable</h1><Link to="/templates">មើលគំរូសន្លឹកការ / Browse templates</Link></main>;
+        return <main className="public-state"><h1>រកគំរូមិនឃើញ / Template unavailable</h1><Link to="/templates" style={{ display: "inline-flex", alignItems: "center", minHeight: "44px", padding: "0 16px" }}>មើលគំរូសន្លឹកការ / Browse templates</Link></main>;
     }
 
     return (

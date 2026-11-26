@@ -1,3 +1,4 @@
+import InvitationLightbox from "../shared/Gallery/InvitationLightbox";
 import DemoRsvpNotice from "../shared/RSVP/DemoRsvpNotice";
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import Modal from '@/shared/ui/Modal';
@@ -11,7 +12,7 @@ import ProgramTimeline from '../shared/ProgramTimeline';
 import ProgramDetails from "../shared/ProgramDetails";
 import { useId, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, QrCode, Copy, Check, ExternalLink } from "lucide-react";
 import FloatingAudioPlayer from "../shared/AudioPlayer/FloatingAudioPlayer";
 import defaultMusicUrl from "../../../assets/music/Instrumental Wedding Music (VioSounds Cover).m4a";
 import CoverBackground from "../shared/Openings/CoverBackground";
@@ -57,11 +58,23 @@ export default function BlissEditorialLayout({
     hall: "",
     address: "",
   };
-  const coverImage = effectiveContent.coverImage || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
+  const defaultGallery = [
+    "/images/wedding/couple-hero-meadow.webp",
+    "/images/wedding/couple-celebration-confetti.webp",
+    "/images/wedding/couple-studio-bow.webp",
+    "/images/wedding/couple-garden-rings.webp",
+  ];
+
+  const galleryImages = (effectiveContent.gallery && effectiveContent.gallery.length)
+    ? effectiveContent.gallery.map(img => typeof img === "string" ? img : img.src || img.url).filter(Boolean)
+    : effectiveContent.hasHostContent ? [] : defaultGallery;
+  const coverImage = effectiveContent.coverImage || galleryImages[0] || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
   const musicUrl = effectiveContent.music?.url || effectiveContent.music || (effectiveContent.hasHostContent ? "" : defaultMusicUrl);
 
-  // RSVP Drawer state
+  // RSVP Drawer state & Gallery lightbox state
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(null);
+  const [copiedAccount, setCopiedAccount] = useState("");
   const [rsvpState, setRsvpState] = useState({
     name: "",
     attending: "yes",
@@ -75,31 +88,39 @@ export default function BlissEditorialLayout({
     setRsvpState((prev) => ({ ...prev, submitted: true }));
   };
 
-  const defaultGallery = [
-    "/images/wedding/couple-hero-meadow.webp",
-    "/images/wedding/couple-celebration-confetti.webp",
-    "/images/wedding/couple-studio-bow.webp",
-    "/images/wedding/couple-garden-rings.webp",
-  ];
+  const handleCopyAccount = async (accountNum, key) => {
+    if (!accountNum) return;
+    try {
+      await navigator.clipboard?.writeText(String(accountNum));
+      setCopiedAccount(key);
+      window.setTimeout(() => setCopiedAccount(""), 2000);
+    } catch {
+      setCopiedAccount("");
+    }
+  };
 
-  const galleryImages = (effectiveContent.gallery && effectiveContent.gallery.length)
-    ? effectiveContent.gallery.map(img => typeof img === "string" ? img : img.src || img.url)
-    : effectiveContent.hasHostContent ? [] : defaultGallery;
-
-  const isEnabled = (key) => content.enabledSections?.[key] !== false;
-  const dressColors = Array.isArray(content.dressCode)
-    ? content.dressCode
-    : (Array.isArray(content.dressCode?.colors) ? content.dressCode.colors : (content.dressColors || [
+  const isEnabled = (key) => effectiveContent.enabledSections?.[key] !== false;
+  const dressColors = Array.isArray(effectiveContent.dressCode)
+    ? effectiveContent.dressCode
+    : (Array.isArray(effectiveContent.dressCode?.colors) ? effectiveContent.dressCode.colors : (effectiveContent.dressColors || [
         { hex: "#2C2C2C", name: "Charcoal" },
         { hex: "#8E8279", name: "Taupe" },
         { hex: "#D6CFC7", name: "Cream" },
         { hex: "#FFFFFF", name: "White" },
       ]));
-  const faqList = Array.isArray(content.faq) && content.faq.length > 0 ? content.faq : [
+  const faqList = Array.isArray(effectiveContent.faq) && effectiveContent.faq.length > 0 ? effectiveContent.faq : [
     { id: "f1", q: "តើមានចំណតរថយន្តដែរឬទេ?", a: "បាទ/ចាស មានចំណតរថយន្តធំទូលាយដោយឥតគិតថ្លៃសម្រាប់ភ្ញៀវកិត្តិយសទាំងអស់។" },
     { id: "f2", q: "តើអាចនាំកុមារតូចៗមកបានទេ?", a: "យើងខ្ញុំស្វាគមន៍វត្តមានកុមារតូចៗទាំងអស់ក្នុងពិធីមង្គលការ។" },
     { id: "f3", q: "តើកម្មវិធីចាប់ផ្ដើម និងបញ្ចប់នៅម៉ោងប៉ុន្មាន?", a: "កម្មវិធីទទួលភ្ញៀវចាប់ផ្ដើមពីម៉ោង ០៥:០០ ល្ងាច តទៅ។" },
   ];
+  const mapsHref = effectiveContent.googleMapsUrl || venue.mapLink || effectiveContent.googleMapUrl || (
+    (venue.name || venue.address)
+      ? `https://maps.google.com/?q=${encodeURIComponent(`${venue.name || ""} ${venue.address || ""}`.trim())}`
+      : ""
+  );
+  const giftEntries = Array.isArray(effectiveContent.gift) ? effectiveContent.gift.filter((item) => item && (item.account || item.number || item.qrUrl || item.qrValue)) : [];
+  const hasBankGift = Boolean(effectiveContent.bankAccount?.accountNumber || effectiveContent.bankAccount?.qrUrl || giftEntries.length > 0);
+  const isEnglishOnly = String(effectiveContent.languageMode).toLowerCase() === "en";
 
   return (
     <div className="bliss-container">
@@ -108,22 +129,23 @@ export default function BlissEditorialLayout({
       {/* Editorial Minimalist Header */}
       <header className="bliss-header">
         <div className="bliss-monogram">
-          {groomEn.charAt(0)} &amp; {brideEn.charAt(0)}
+          {(groomEn || groom).charAt(0)} &amp; {(brideEn || bride).charAt(0)}
         </div>
         <nav className="bliss-header-nav">
           <a href="#editorial-hero" className="bliss-header-link"><InvitationLabel value={"សេចក្តីផ្តើម"} /></a>
           {isEnabled("schedule") && <a href="#editorial-program" className="bliss-header-link"><InvitationLabel value={"កម្មវិធី"} /></a>}
-          {isEnabled("gallery") && <a href="#editorial-spread" className="bliss-header-link"><InvitationLabel value={"កម្រងរូបភាព"} /></a>}
+          {isEnabled("gallery") && galleryImages.length > 0 && <a href="#editorial-spread" className="bliss-header-link"><InvitationLabel value={"កម្រងរូបភាព"} /></a>}
           {isEnabled("dressCode") && <a href="#editorial-dress" className="bliss-header-link">Dress Code</a>}
-          {isEnabled("map") && <a href="#editorial-venue" className="bliss-header-link"><InvitationLabel value={"ទីតាំង"} /></a>}
-          {isEnabled("faq") && <a href="#editorial-faq" className="bliss-header-link">FAQ</a>}
+          {isEnabled("map") && (venue.name || venue.address || mapsHref || !effectiveContent.hasHostContent) && <a href="#editorial-venue" className="bliss-header-link"><InvitationLabel value={"ទីតាំង"} /></a>}
+          {isEnabled("gift") && hasBankGift && <a href="#editorial-gift" className="bliss-header-link"><InvitationLabel value={"ចំណងដៃ"} /></a>}
+          {isEnabled("faq") && faqList.length > 0 && <a href="#editorial-faq" className="bliss-header-link">FAQ</a>}
           {isEnabled("rsvp") && (
             <button type="button" className="bliss-rsvp-trigger" onClick={() => setDrawerOpen(true)}>
               RSVP
             </button>
           )}
           {showBack && (
-            <Link to={backTo} className="bliss-header-link" style={{ opacity: 0.7 }}>
+            <Link to={backTo} className="bliss-header-link" style={{ color: "var(--bliss-charcoal)" }}>
               ← {backLabel}
             </Link>
           )}
@@ -180,7 +202,7 @@ export default function BlissEditorialLayout({
       {isEnabled("dressCode") && dressColors.length > 0 && (
         <section id="editorial-dress" className="bliss-section" style={{ textAlign: "center", borderTop: "1px solid var(--bliss-border)" }}>
           <p className="bliss-kicker">Palette &amp; Attire</p>
-          <h2 className="bliss-title" style={{ marginBottom: "1.5rem" }}>{content.dressCode?.name || "ពណ៌សម្លៀកបំពាក់ (Dress Code)"}</h2>
+          <h2 className="bliss-title" style={{ marginBottom: "1.5rem" }}>{effectiveContent.dressCode?.name || "ពណ៌សម្លៀកបំពាក់ (Dress Code)"}</h2>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1.5rem", flexWrap: "wrap", maxWidth: "600px", margin: "0 auto" }}>
             {dressColors.map((c, i) => (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
@@ -198,16 +220,16 @@ export default function BlissEditorialLayout({
               </div>
             ))}
           </div>
-          {content.dressCode?.description && (
-            <p style={{ color: "var(--bliss-taupe)", maxWidth: "500px", margin: "1.5rem auto 0", lineHeight: "1.7", fontSize: "0.85rem" }}>
-              {content.dressCode.description}
+          {effectiveContent.dressCode?.description && (
+            <p style={{ color: "#59514B", maxWidth: "500px", margin: "1.5rem auto 0", lineHeight: "1.7", fontSize: "0.85rem" }}>
+              {effectiveContent.dressCode.description}
             </p>
           )}
         </section>
       )}
 
       {/* Asymmetrical Gallery Spread */}
-      {isEnabled("gallery") && (
+      {isEnabled("gallery") && galleryImages.length > 0 && (
         <section id="editorial-spread" className="bliss-section" style={{ borderTop: "1px solid var(--bliss-border)" }}>
           <div className="bliss-section-heading">
             <p className="bliss-kicker">Visual Editorial</p>
@@ -215,48 +237,105 @@ export default function BlissEditorialLayout({
           </div>
 
           <div className="bliss-gallery-spread">
-            <div className="bliss-gallery-col-1 bliss-gallery-frame">
-              <img src={galleryImages[0]} alt="Spread 1" loading="lazy" />
-            </div>
-            <div className="bliss-gallery-col-2 bliss-gallery-frame">
-              <img src={galleryImages[1]} alt="Spread 2" loading="lazy" />
-            </div>
-            <div className="bliss-gallery-col-3 bliss-gallery-frame">
-              <img src={galleryImages[2]} alt="Spread 3" loading="lazy" />
-            </div>
-            <div className="bliss-gallery-col-4 bliss-gallery-frame">
-              <img src={galleryImages[3]} alt="Spread 4" loading="lazy" />
-            </div>
+            {galleryImages.slice(0, 4).map((src, index) => (
+              <button
+                key={`${src}-${index}`}
+                type="button"
+                onClick={() => setActivePhoto(index)}
+                className={`bliss-gallery-col-${index + 1} bliss-gallery-frame`}
+                style={{ padding: 0, border: "none", background: "transparent", cursor: "pointer", width: "100%", display: "block", minHeight: "44px" }}
+                aria-label={isEnglishOnly ? `Open photo ${index + 1}` : `ពង្រីករូបភាពទី ${index + 1}`}
+              >
+                <img src={src} alt={`Spread ${index + 1}`} loading="lazy" />
+              </button>
+            ))}
           </div>
+          <InvitationLightbox images={galleryImages} index={activePhoto} onIndexChange={setActivePhoto} onClose={() => setActivePhoto(null)} />
         </section>
       )}
 
       {/* Venue Information */}
-      {isEnabled("map") && (
+      {isEnabled("map") && (venue.name || venue.address || mapsHref || !effectiveContent.hasHostContent) && (
         <section id="editorial-venue" className="bliss-section" style={{ textAlign: "center", borderTop: "1px solid var(--bliss-border)" }}>
           <IllustratedMap content={effectiveContent} />
           <p className="bliss-kicker">The Destination</p>
           <h2 className="bliss-title" style={{ marginBottom: "1rem" }}>{venue.name}</h2>
-          <p style={{ color: "var(--bliss-taupe)", maxWidth: "500px", margin: "0 auto 2rem", lineHeight: "1.7" }}>
+          <p style={{ color: "#59514B", maxWidth: "500px", margin: "0 auto 2rem", lineHeight: "1.7" }}>
             {venue.address}
           </p>
-          <a
-            href={`https://maps.google.com/?q=${encodeURIComponent(venue.name + " " + venue.address)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-block",
-              fontSize: "0.8rem",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "var(--bliss-charcoal)",
-              borderBottom: "1px solid var(--bliss-charcoal)",
-              paddingBottom: "4px",
-              textDecoration: "none",
-            }}
-          >
-            View on Google Maps →
-          </a>
+          {mapsHref && (
+            <a
+              href={mapsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                minHeight: "44px",
+                padding: "0.5rem 0.75rem",
+                fontSize: "0.85rem",
+                letterSpacing: "normal",
+                color: "var(--bliss-charcoal)",
+                borderBottom: "1px solid var(--bliss-charcoal)",
+                textDecoration: "none",
+              }}
+            >
+              <InvitationLabel value={"មើលលើ Google Maps"} />
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+            </a>
+          )}
+        </section>
+      )}
+
+      {/* Gift / KHQR Section */}
+      {isEnabled("gift") && hasBankGift && (
+        <section id="editorial-gift" className="bliss-section" style={{ textAlign: "center", borderTop: "1px solid var(--bliss-border)" }}>
+          <div className="bliss-section-heading">
+            <p className="bliss-kicker">Wedding Gift</p>
+            <h2 className="bliss-title"><InvitationLabel value={"ចំណងដៃ & ពាក្យជូនពរ"} /></h2>
+          </div>
+          <div style={{ maxWidth: "460px", margin: "0 auto", background: "#ffffff", border: "1px solid var(--bliss-border)", borderRadius: "16px", padding: "2rem" }}>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--bliss-charcoal)", marginBottom: "0.5rem" }}>
+              {effectiveContent.bankAccount?.bank || giftEntries[0]?.bank || "Bank & KHQR"}
+            </h3>
+            {effectiveContent.bankAccount?.qrUrl ? (
+              <img src={effectiveContent.bankAccount.qrUrl} alt="KHQR" className="w-40 h-40 mx-auto object-contain rounded-lg mb-4" />
+            ) : (
+              <QrCode className="w-36 h-36 mx-auto text-stone-800 mb-4" aria-hidden="true" />
+            )}
+            {effectiveContent.bankAccount?.accountNumber && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                <p style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--bliss-charcoal)" }}>
+                  {effectiveContent.bankAccount.accountNumber}
+                </p>
+                {effectiveContent.bankAccount?.accountName && (
+                  <p style={{ fontSize: "0.85rem", color: "#59514B" }}>{effectiveContent.bankAccount.accountName}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleCopyAccount(effectiveContent.bankAccount.accountNumber, "primary")}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                    minHeight: "44px",
+                    padding: "0.5rem 1rem",
+                    border: "1px solid var(--bliss-border)",
+                    borderRadius: "999px",
+                    background: "#faf7f2",
+                    color: "var(--bliss-charcoal)",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {copiedAccount === "primary" ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+                  <InvitationLabel value={copiedAccount === "primary" ? "បានចម្លងលេខគណនី" : "ចម្លងលេខគណនី"} />
+                </button>
+              </div>
+            )}
+          </div>
         </section>
       )}
 
@@ -276,10 +355,10 @@ export default function BlissEditorialLayout({
                   paddingBottom: "1rem",
                 }}
               >
-                <summary style={{ fontWeight: "600", color: "var(--bliss-charcoal)", cursor: "pointer", fontSize: "0.95rem" }}>
+                <summary style={{ fontWeight: "600", color: "var(--bliss-charcoal)", cursor: "pointer", fontSize: "0.95rem", minHeight: "44px", display: "flex", alignItems: "center" }}>
                   {item.q}
                 </summary>
-                <p style={{ marginTop: "0.75rem", fontSize: "0.85rem", color: "var(--bliss-taupe)", lineHeight: "1.7" }}>
+                <p style={{ marginTop: "0.75rem", fontSize: "0.85rem", color: "#59514B", lineHeight: "1.7" }}>
                   {item.a}
                 </p>
               </details>
@@ -294,14 +373,16 @@ export default function BlissEditorialLayout({
         <p style={{ fontFamily: "Cinzel, serif", fontSize: "1.4rem", letterSpacing: "0.15em", marginBottom: "0.5rem" }}>
           {groomEn} &amp; {brideEn}
         </p>
-        <p style={{ fontSize: "0.8rem", color: "var(--bliss-taupe)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "2rem" }}>
-          Phnom Penh, Cambodia • {dateTextEn}
+        <p style={{ fontSize: "0.85rem", color: "#59514B", letterSpacing: "normal", marginBottom: "2rem" }}>
+          {[venue.address || (!effectiveContent.hasHostContent ? "Phnom Penh, Cambodia" : ""), dateTextEn || dateText].filter(Boolean).join(" • ")}
         </p>
         {!preview && useTemplateLink && (
           <Link
             to={useTemplateLink}
             style={{
-              display: "inline-block",
+              display: "inline-flex",
+              alignItems: "center",
+              minHeight: "44px",
               background: "var(--bliss-charcoal)",
               color: "#ffffff",
               padding: "0.8rem 2rem",
@@ -311,7 +392,7 @@ export default function BlissEditorialLayout({
               textDecoration: "none",
             }}
           >
-            ប្រើគំរូ Bliss Editorial នេះ
+            <InvitationLabel value={"ប្រើគំរូ Bliss Editorial នេះ"} />
           </Link>
         )}
         <InvitationBranding content={effectiveContent} />

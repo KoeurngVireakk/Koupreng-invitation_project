@@ -44,10 +44,16 @@ export default class RouteErrorBoundary extends Component {
     }
 
     const isKhmer = document.documentElement.lang === "km" || localStorage.getItem("koupreng_lang") === "km";
+    const pathname = typeof window !== "undefined" ? window.location?.pathname || "" : "";
+    const isPublicGuestRoute = /^\/(?:i|w|templates)(?:\/|$)/.test(pathname);
     const title = isKhmer ? "មានបញ្ហាក្នុងការបង្ហាញទំព័រនេះ" : "Something went wrong loading this page";
-    const description = isKhmer
-      ? "កម្មវិធីបានជួបប្រទះបញ្ហាបច្ចេកទេសដែលមិនរំពឹងទុក។ សូមព្យាយាមផ្ទុកទំព័រឡើងវិញ ឬត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង។"
-      : "An unexpected technical error occurred while rendering this page. Please try reloading or return to your events.";
+    const description = isPublicGuestRoute
+      ? (isKhmer
+          ? "កម្មវិធីបានជួបប្រទះបញ្ហាក្នុងការផ្ទុកសន្លឹកអញ្ជើញ។ សូមព្យាយាមម្ដងទៀត។"
+          : "We hit an unexpected issue loading this invitation. Please try again.")
+      : isKhmer
+        ? "កម្មវិធីបានជួបប្រទះបញ្ហាបច្ចេកទេសដែលមិនរំពឹងទុក។ សូមព្យាយាមផ្ទុកទំព័រឡើងវិញ ឬត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង។"
+        : "An unexpected technical error occurred while rendering this page. Please try reloading or return to your events.";
 
     return (
       <div className="route-error-boundary" role="alert" aria-live="assertive">
@@ -69,14 +75,16 @@ export default class RouteErrorBoundary extends Component {
               <span>{isKhmer ? "ព្យាយាមម្ដងទៀត" : "Try Again"}</span>
             </button>
 
-            <Link
-              to="/app/events"
-              className="route-error-btn route-error-btn-secondary"
-              onClick={() => this.setState({ hasError: false })}
-            >
-              <IoCalendarOutline aria-hidden="true" />
-              <span>{isKhmer ? "កម្មវិធីរបស់ខ្ញុំ" : "My Events"}</span>
-            </Link>
+            {!isPublicGuestRoute && (
+              <Link
+                to="/app/events"
+                className="route-error-btn route-error-btn-secondary"
+                onClick={() => this.setState({ hasError: false })}
+              >
+                <IoCalendarOutline aria-hidden="true" />
+                <span>{isKhmer ? "កម្មវិធីរបស់ខ្ញុំ" : "My Events"}</span>
+              </Link>
+            )}
 
             <Link
               to="/"

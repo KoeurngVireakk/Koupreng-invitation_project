@@ -71,16 +71,16 @@ export function normalizeTemplateViewModel(tpl = {}, content = {}) {
   }));
 
   // Gift & QR
-  const rawGift = (Array.isArray(merged.gift) ? merged.gift[0] : merged.gift) || {};
-  const giftBank = rawGift.bank || merged.bankName || "";
-  const giftNumber = rawGift.number || merged.bankAccountNumber || merged.accountNumber || "";
-  const giftAccountName = rawGift.account || merged.bankAccountName || merged.accountName || "";
+  const rawGift = (Array.isArray(merged.gift) ? merged.gift[0] : merged.gift) || merged.bankAccount || {};
+  const giftBank = rawGift.bank || merged.bankAccount?.bank || merged.bankName || "";
+  const giftNumber = rawGift.number || rawGift.accountNumber || merged.bankAccount?.accountNumber || merged.bankAccountNumber || merged.accountNumber || "";
+  const giftAccountName = rawGift.account || rawGift.accountName || merged.bankAccount?.accountName || merged.bankAccountName || merged.accountName || "";
   const bankAccount = {
     bank: giftBank,
     accountNumber: giftNumber,
     accountName: giftAccountName,
-    qrUrl: rawGift.qrImage || rawGift.qrUrl || merged.qrGiftUrl || merged.qrUrl || "",
-    qrValue: rawGift.qrValue || merged.qrValue || [giftBank, giftAccountName, giftNumber].filter(Boolean).join(" | "),
+    qrUrl: rawGift.qrImage || rawGift.qrUrl || merged.bankAccount?.qrUrl || merged.qrGiftUrl || merged.qrUrl || "",
+    qrValue: rawGift.qrValue || merged.bankAccount?.qrValue || merged.qrValue || [giftBank, giftAccountName, giftNumber].filter(Boolean).join(" | "),
   };
 
   // Dress code
