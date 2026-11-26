@@ -85,3 +85,84 @@
   .event-overview .workspace-section { padding: 20px; border-radius: 14px; }
 }
 @media(prefers-reduced-motion:reduce) { .event-overview .overview-metrics > a { transition: none; } }
+
+/* Obsidian x Champagne Gold dark treatment for the owner event overview. */
+:root[data-color-mode="dark"] .event-overview,
+:root.dark .event-overview {
+  color: var(--ui-theme-ink);
+  --overview-border: var(--ui-theme-border);
+  --overview-muted: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .event-overview :is(.dash-page-header h1, .overview-hero-content h2, .workspace-section h2, .overview-metrics strong, .overview-checklist strong),
+:root.dark .event-overview :is(.dash-page-header h1, .overview-hero-content h2, .workspace-section h2, .overview-metrics strong, .overview-checklist strong) {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .event-overview :is(.overview-metrics span, .overview-metric-sub, .overview-event-meta, .overview-publication-controls summary, .overview-activity p, .overview-metrics span),
+:root.dark .event-overview :is(.overview-metrics span, .overview-metric-sub, .overview-event-meta, .overview-publication-controls summary, .overview-activity p) {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .event-overview :is(.overview-hero, .workspace-section, .overview-metrics > a, .overview-tool-grid a),
+:root.dark .event-overview :is(.overview-hero, .workspace-section, .overview-metrics > a, .overview-tool-grid a) {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  box-shadow: var(--ui-theme-shadow);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-cover,
+:root.dark .event-overview .overview-cover {
+  background: var(--ui-theme-subtle);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-actions .primary,
+:root.dark .event-overview .overview-actions .primary {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-actions .primary:hover,
+:root.dark .event-overview .overview-actions .primary:hover {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+}
+
+:root[data-color-mode="dark"] .event-overview .workspace-badge,
+:root.dark .event-overview .workspace-badge {
+  background: var(--ui-theme-gold-soft);
+  color: var(--ui-theme-gold-bright);
+}
+
+:root[data-color-mode="dark"] .event-overview :is(.overview-checklist li.is-done > svg, .overview-checklist li > svg:last-child),
+:root.dark .event-overview :is(.overview-checklist li.is-done > svg, .overview-checklist li > svg:last-child) {
+  color: var(--ui-theme-success);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-checklist li,
+:root.dark .event-overview .overview-checklist li {
+  border-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-activity li,
+:root.dark .event-overview .overview-activity li {
+  border-bottom-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .event-overview :is(.overview-couple-names, .overview-couple-names svg, .overview-event-meta svg, .overview-tool-grid svg),
+:root.dark .event-overview :is(.overview-couple-names, .overview-couple-names svg, .overview-event-meta svg, .overview-tool-grid svg) {
+  color: var(--ui-theme-gold);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-countdown-pill,
+:root.dark .event-overview .overview-countdown-pill {
+  background: var(--ui-theme-gold-soft);
+  color: var(--ui-theme-gold);
+  border-color: color-mix(in srgb, var(--ui-theme-gold) 35%, transparent);
+}
+
+:root[data-color-mode="dark"] .event-overview :where(a, button, summary):focus-visible,
+:root.dark .event-overview :where(a, button, summary):focus-visible {
+  outline: 3px solid var(--ui-theme-focus);
+}

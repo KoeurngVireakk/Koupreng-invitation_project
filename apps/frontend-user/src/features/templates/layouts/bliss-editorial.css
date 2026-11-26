@@ -343,3 +343,179 @@
     height: 380px;
   }
 }
+
+/* =========================================================================
+   BLISS CEREMONY OPENING — opt-in editorial cover turn
+   A printed magazine cover lifts away like a turned page while a gold rule
+   sweeps out. Transform/opacity only; the invitation stays mounted beneath.
+   ========================================================================= */
+.bliss-opening {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  padding:
+    max(1.5rem, env(safe-area-inset-top))
+    max(1.25rem, env(safe-area-inset-right))
+    max(1.5rem, env(safe-area-inset-bottom))
+    max(1.25rem, env(safe-area-inset-left));
+  background: var(--bliss-bg);
+  perspective: 1400px;
+  overflow: hidden;
+}
+
+.bliss-opening__stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.bliss-opening__rule {
+  width: 62%;
+  max-width: 520px;
+  height: 1px;
+  background: var(--bliss-gold);
+  opacity: 0.45;
+  transform: scaleX(0.2);
+  transition:
+    transform var(--ui-duration-ceremony, 700ms) var(--ui-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    opacity var(--ui-duration-ceremony, 700ms) var(--ui-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.bliss-opening[data-state="opening"] .bliss-opening__rule {
+  transform: scaleX(1.35);
+  opacity: 0;
+}
+
+.bliss-opening__cover {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 460px);
+  box-sizing: border-box;
+  padding: clamp(2rem, 6vw, 3.25rem) clamp(1.5rem, 5vw, 2.75rem);
+  text-align: center;
+  background: var(--bliss-surface);
+  border: 1px solid var(--bliss-border);
+  box-shadow: 0 26px 60px rgba(28, 25, 23, 0.18);
+  transform-origin: 12% 50%;
+  transition:
+    transform var(--ui-duration-ceremony, 700ms) var(--ui-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    opacity var(--ui-duration-ceremony, 700ms) var(--ui-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow var(--ui-duration-ceremony, 700ms) var(--ui-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.bliss-opening[data-state="opening"] .bliss-opening__cover {
+  transform: translate(-4%, -5%) rotate(-1.6deg) rotateY(-12deg);
+  opacity: 0;
+  box-shadow: 0 10px 22px rgba(28, 25, 23, 0.08);
+}
+
+.bliss-opening__issue {
+  margin-bottom: 1.5rem;
+  color: var(--bliss-gold);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.bliss-opening__masthead {
+  font-family: "Cinzel", "Playfair Display", "Moul", "Kantumruy Pro", Georgia, serif;
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--bliss-charcoal);
+}
+
+.bliss-opening__hairline {
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin: 1.5rem auto;
+  background: var(--bliss-gold);
+}
+
+.bliss-opening__names {
+  font-family: "Cinzel", "Playfair Display", "Moul", "Kantumruy Pro", Georgia, serif;
+  font-size: clamp(1.6rem, 5.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--bliss-charcoal);
+}
+
+.bliss-opening__date,
+.bliss-opening__subtitle {
+  margin-top: 0.9rem;
+  color: var(--bliss-taupe);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bliss-opening__subtitle {
+  margin-top: 0.4rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.bliss-opening__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.bliss-opening__turn {
+  min-height: 48px;
+  padding: 0.8rem 2.25rem;
+  border: 1px solid var(--bliss-charcoal);
+  background: var(--bliss-charcoal);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bliss-opening__turn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.bliss-opening__turn:focus-visible,
+.bliss-opening__skip:focus-visible {
+  outline: 2px solid var(--bliss-gold);
+  outline-offset: 3px;
+}
+
+.bliss-opening__skip {
+  min-height: 44px;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--bliss-taupe);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .bliss-opening__cover {
+    padding: 2rem 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bliss-opening__cover,
+  .bliss-opening__rule {
+    transition: none;
+  }
+}

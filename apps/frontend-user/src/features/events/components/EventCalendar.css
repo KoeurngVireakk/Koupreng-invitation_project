@@ -772,10 +772,12 @@
 
 :root[data-color-mode="dark"] .dash-wrapper .event-calendar-cell:hover,
 :root[data-color-mode="dark"] .dash-wrapper .event-calendar-nav-btn:hover,
+:root[data-color-mode="dark"] .dash-wrapper .event-calendar-today-btn:hover,
 :root[data-color-mode="dark"] .dash-wrapper .event-calendar-action-btn.secondary:hover,
 :root[data-color-mode="dark"] .dash-wrapper .event-calendar-clear-selection-btn:hover {
   background: var(--app-raised);
   border-color: var(--app-gold);
+  color: var(--app-ink);
 }
 
 :root[data-color-mode="dark"] .dash-wrapper .event-calendar-cell--selected {

@@ -20,8 +20,8 @@ const features = {
   ] },
 };
 async function open(page, code) {
-  const controls = page.getByRole('button', { name: /^(Open invitation|View invitation details|បើកសំបុត្រ|បើកធៀប|ចុចទីនេះ|ចុចដើម្បីបើក|សូមចុច|សូមបើក|សូមគោរពអញ្ចើញ)/i });
-  if (['withjoy-modern-portal', 'bliss-editorial-wedding', 'event-essential', 'template-boilerplate'].includes(code)) {
+  const controls = page.getByRole('button', { name: /^(Open invitation|View invitation details|Turn the page|បើកសំបុត្រ|បើកទំព័រ|បើកធៀប|ចុចទីនេះ|ចុចដើម្បីបើក|សូមចុច|សូមបើក|សូមគោរពអញ្ចើញ)/i });
+  if (['event-essential', 'template-boilerplate'].includes(code)) {
     await expect(controls).toHaveCount(0);
     return;
   }

@@ -22,8 +22,8 @@ const families = [
   ['khmer-celestial', '.kc-page,.kc-root,.kc-template,.kc-invitation', '.kc-main', '.kc-opening__skip'],
   ['the-digital-yes-wedding', '.tdy-card-container,.tdy-envelope-scene', '.tdy-card-container', 'button[aria-label*="Skip"]'],
   ['emerald-canva-luxe-wedding', '.el-container', '.el-section,.el-card-container', '.el-skip-btn'],
-  ['withjoy-modern-portal', '.wj-portal', '.wj-hero', null],
-  ['bliss-editorial-wedding', '.bliss-editorial,.bliss-page,.bliss-container', '.bliss-hero-editorial', null],
+  ['withjoy-modern-portal', '.wj-portal', '.wj-hero', '.wj-opening__skip'],
+  ['bliss-editorial-wedding', '.bliss-editorial,.bliss-page,.bliss-container', '.bliss-hero-editorial', '.bliss-opening__skip'],
   ['cover-khmer-golden-wedding', '.ck-page', '.ck-invitation', '.ck-cover__skip'],
 ];
 
@@ -131,6 +131,7 @@ for (const row of families) test(`normal art ${row[0]} cover and readable invita
 for (const family of ['template-boilerplate','withjoy-modern-portal']) {
   test(`gallery ${family} keyboard isolation and return`, async ({ page }, info) => {
     await open(page, family);
+    await reveal(page, families.find(row => row[0] === family));
     const trigger = page.locator(family === 'template-boilerplate' ? '[data-tx-section="gallery"] button' : '.wj-gallery-item').first();
     await trigger.focus(); await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');
@@ -241,6 +242,7 @@ test('normal motion DigitalYes retains a working skip during opening and focuses
 
 test('Bliss drawer retains draft while closing, traps focus and restores trigger', async ({ page }, info) => {
   await open(page, 'bliss-editorial-wedding');
+  await reveal(page, families.find(row => row[0] === 'bliss-editorial-wedding'));
   const trigger = page.locator('.bliss-rsvp-trigger').first();
   await trigger.focus(); await page.keyboard.press('Enter');
   const dialog = page.getByRole('dialog', { name:'RSVP', exact:true });

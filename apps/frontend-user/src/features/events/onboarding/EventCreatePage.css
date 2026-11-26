@@ -1238,3 +1238,29 @@
     animation: none !important;
   }
 }
+
+/* Obsidian x Champagne Gold dark treatment for onboarding primary actions. */
+:root[data-color-mode="dark"] .event-create :is(.event-step-nav-btn.next, .event-mobile-nav-btn.create, .event-mobile-nav-btn.next, .event-create-actions .workspace-button.primary),
+.dark .event-create :is(.event-step-nav-btn.next, .event-mobile-nav-btn.create, .event-mobile-nav-btn.next, .event-create-actions .workspace-button.primary) {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] .event-create :is(.event-step-nav-btn.next, .event-create-actions .workspace-button.primary):hover:not(:disabled),
+.dark .event-create :is(.event-step-nav-btn.next, .event-create-actions .workspace-button.primary):hover:not(:disabled) {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] .event-create .event-wizard-progress-bar,
+.dark .event-create .event-wizard-progress-bar {
+  background: linear-gradient(90deg, var(--ui-theme-gold) 0%, var(--ui-theme-action) 100%);
+}
+
+:root[data-color-mode="dark"] .event-create :is(.event-create-back),
+.dark .event-create :is(.event-create-back) {
+  color: var(--ui-theme-gold);
+}

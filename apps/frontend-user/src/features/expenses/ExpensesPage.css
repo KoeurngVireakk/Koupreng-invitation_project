@@ -1360,3 +1360,92 @@
   .exp-page, .ep-page { width: calc(100% - 24px); }
   .exp-hero, .ep-hero { padding: 20px 16px; border-radius: 16px; }
 }
+
+/* Obsidian x Champagne Gold dark treatment for budget/expense chrome. */
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-add-payment-btn,
+:root.dark :is(.exp-page, .ep-page) .exp-add-payment-btn {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-add-payment-btn:hover,
+:root.dark :is(.exp-page, .ep-page) .exp-add-payment-btn:hover {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-status-paid,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-status-paid {
+  background: var(--ui-theme-success-soft);
+  color: var(--ui-theme-success);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-status-partial,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-status-partial {
+  background: var(--ui-theme-warning-soft);
+  color: var(--ui-theme-warning);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-status-unpaid,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-status-unpaid {
+  background: var(--ui-theme-subtle);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-progress,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-progress {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-progress-track,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-progress-track {
+  background: var(--ui-theme-subtle);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-payment-progress-track span,
+:root.dark :is(.exp-page, .ep-page) .exp-payment-progress-track span {
+  background: var(--ui-theme-action);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-payment-desc, .exp-payment-amount-wrap input),
+:root.dark :is(.exp-page, .ep-page) :is(.exp-payment-desc, .exp-payment-amount-wrap input) {
+  background: var(--ui-theme-subtle) !important;
+  border-color: var(--ui-theme-control-border) !important;
+  color: var(--ui-theme-ink) !important;
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-calculated-input, .exp-calculated-input:focus),
+:root.dark :is(.exp-page, .ep-page) :is(.exp-calculated-input, .exp-calculated-input:focus) {
+  background: var(--ui-theme-disabled-bg) !important;
+  border-color: var(--ui-theme-border) !important;
+  color: var(--ui-theme-muted) !important;
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-row-over, .ep-row-over),
+:root.dark :is(.exp-page, .ep-page) :is(.exp-row-over, .ep-row-over) {
+  background: var(--ui-theme-danger-soft) !important;
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-row-over, .ep-row-over):hover,
+:root.dark :is(.exp-page, .ep-page) :is(.exp-row-over, .ep-row-over):hover {
+  background: var(--ui-theme-raised) !important;
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-table tbody tr, .ep-table tbody tr),
+:root.dark :is(.exp-page, .ep-page) :is(.exp-table tbody tr, .ep-table tbody tr) {
+  border-bottom-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-secondary-btn:hover,
+:root.dark :is(.exp-page, .ep-page) .exp-secondary-btn:hover {
+  background: var(--ui-theme-hover);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(.exp-page, .ep-page) .exp-field-hint,
+:root.dark :is(.exp-page, .ep-page) .exp-field-hint {
+  color: var(--ui-theme-muted);
+}

@@ -1469,12 +1469,28 @@
     cursor: zoom-out;
 }
 
+.tx-lightbox__figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 88vh;
+    cursor: default;
+}
+
 .tx-lightbox__img {
     max-width: 100%;
     max-height: 88vh;
     border-radius: var(--tpl-radius);
     box-shadow: var(--tpl-shadow);
     cursor: default;
+}
+
+/* Broken image fallback inside the lightbox keeps a readable frame. */
+.tx-lightbox .tx-image-fallback {
+    width: min(80vw, 640px);
+    min-height: min(50vh, 360px);
+    border-radius: var(--tpl-radius);
 }
 
 .tx-lightbox__close {
@@ -2144,6 +2160,10 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    box-sizing: border-box;
     background: rgba(255, 252, 246, 0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -2151,8 +2171,29 @@
     border-radius: 9999px;
     box-shadow: 0 10px 30px rgba(58, 37, 20, 0.16), 0 2px 8px rgba(197, 160, 89, 0.14);
     padding: 0.35rem 0.5rem;
-    max-width: calc(100vw - 2rem);
+    /* Never exceed the viewport: the pill scrolls internally instead of
+       widening the page at 320px. */
+    max-width: calc(100vw - 1rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    transition:
+        opacity var(--ui-duration-fast, 120ms) var(--ui-ease-out, ease),
+        visibility var(--ui-duration-fast, 120ms) var(--ui-ease-out, ease);
     animation: tx-quicknav-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tx-quick-nav::-webkit-scrollbar {
+    display: none;
+}
+
+/* Set while a form field is focused, the on-screen keyboard is open, or the
+   RSVP section is on screen, so the dock never covers the form. */
+.tx-quick-nav.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 @keyframes tx-quicknav-enter {
@@ -2189,7 +2230,10 @@
 .tx-quick-nav__item {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.35rem;
+    box-sizing: border-box;
+    flex: 0 0 auto;
     padding: 0.45rem 0.85rem;
     min-height: 44px;
     min-width: 44px;
@@ -2217,17 +2261,24 @@
     outline-offset: 1px;
 }
 
-.tx-quick-nav__item.is-active {
+.tx-quick-nav__item.is-active,
+.tx-quick-nav__item--primary {
     background: var(--tpl-accent, #c5a059);
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 2px 8px rgba(197, 160, 89, 0.35);
 }
 
+.tx-quick-nav__item--primary:hover {
+    background: var(--tpl-accent-strong, var(--tpl-accent, #c5a059));
+    color: #ffffff;
+}
+
 .tx-quick-nav__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
     font-size: 1rem;
     line-height: 1;
 }
@@ -2242,6 +2293,34 @@
     }
     .tx-quick-nav__item {
         padding: 0.4rem 0.65rem;
+    }
+}
+
+/* Below 360px collapse to icon-only 44px targets so six items still fit. */
+@media (max-width: 359px) {
+    .tx-quick-nav {
+        gap: 0.1rem;
+        padding: 0.25rem;
+    }
+
+    .tx-quick-nav__item,
+    .tx-quick-nav[data-compact="true"] .tx-quick-nav__item {
+        width: 44px;
+        min-width: 44px;
+        padding: 0;
+    }
+
+    .tx-quick-nav__label,
+    .tx-quick-nav[data-compact="true"] .tx-quick-nav__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
     }
 }
 

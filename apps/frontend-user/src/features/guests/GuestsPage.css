@@ -2033,3 +2033,24 @@
         padding: 28px 12px !important;
     }
 }
+
+/* Obsidian x Champagne Gold: guest inline actions must not fall back to the
+   cream/forest legacy roles when rendered outside the dash-wrapper remap. */
+:root[data-color-mode="dark"] .pe-guest-inline-actions .guest-action-btn,
+.dark .pe-guest-inline-actions .guest-action-btn {
+  border-color: var(--ui-theme-control-border);
+  color: var(--ui-theme-action);
+  background: var(--ui-theme-surface);
+}
+
+:root[data-color-mode="dark"] .pe-guest-inline-actions .guest-action-btn:hover,
+.dark .pe-guest-inline-actions .guest-action-btn:hover {
+  background: var(--ui-theme-hover);
+  border-color: var(--ui-theme-gold);
+  color: var(--ui-theme-gold-bright);
+}
+
+:root[data-color-mode="dark"] .guest-row-more summary,
+.dark .guest-row-more summary {
+  color: var(--ui-theme-action);
+}

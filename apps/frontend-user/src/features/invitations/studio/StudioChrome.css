@@ -1001,3 +1001,76 @@
   border-color: color-mix(in srgb, var(--app-danger) 40%, transparent);
   color: var(--app-danger);
 }
+
+/* Obsidian x Champagne Gold: remap studio-local chrome roles to theme tokens.
+   Invitation artwork inside the preview iframe is untouched. */
+:root[data-color-mode="dark"] :is(.invitation-studio, .event-workspace.is-studio),
+.dark :is(.invitation-studio, .event-workspace.is-studio) {
+  --studio-ink: var(--ui-theme-ink);
+  --studio-gold: var(--ui-theme-gold);
+  --ws-border: var(--ui-theme-border);
+  --ws-border-strong: var(--ui-theme-control-border);
+  --ws-ink: var(--ui-theme-ink);
+  --ws-muted: var(--ui-theme-muted);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar .studio-toolbar, .invitation-studio .studio-toolbar),
+.dark :is(#invitation-studio-toolbar .studio-toolbar, .invitation-studio .studio-toolbar) {
+  background: var(--ui-theme-canvas);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar, .invitation-studio) :is(.studio-back:hover, .studio-action:hover, .studio-more summary:hover),
+.dark :is(#invitation-studio-toolbar, .invitation-studio) :is(.studio-back:hover, .studio-action:hover, .studio-more summary:hover) {
+  background: var(--ui-theme-hover);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--save,
+.dark :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--save {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--save:hover:not(:disabled),
+.dark :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--save:hover:not(:disabled) {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--publish,
+.dark :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--publish {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-gold);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--publish:hover:not(:disabled),
+.dark :is(#invitation-studio-toolbar, .invitation-studio) .studio-action--publish:hover:not(:disabled) {
+  background: var(--ui-theme-hover);
+  border-color: var(--ui-theme-gold);
+}
+
+:root[data-color-mode="dark"] .invitation-studio .studio-document h1,
+.dark .invitation-studio .studio-document h1 {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .invitation-studio .studio-section-list button:hover,
+.dark .invitation-studio .studio-section-list button:hover {
+  background: var(--ui-theme-hover);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .invitation-studio .studio-section-list button[aria-current],
+.dark .invitation-studio .studio-section-list button[aria-current] {
+  background: var(--ui-theme-action-soft);
+  color: var(--ui-theme-ink);
+  box-shadow: inset 3.5px 0 0 var(--ui-theme-action);
+}

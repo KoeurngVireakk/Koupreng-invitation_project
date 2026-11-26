@@ -292,3 +292,18 @@
   border-color: var(--app-accent);
   color: var(--app-on-accent);
 }
+
+:root[data-color-mode="dark"] .event-settings-save .workspace-button.primary {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+  box-shadow: none;
+}
+
+:root[data-color-mode="dark"] .event-settings .event-settings-save .workspace-button.primary:hover:not(:disabled),
+:root[data-color-mode="dark"] .event-settings-save .workspace-button.primary:hover:not(:disabled) {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+  color: var(--ui-theme-on-action);
+  box-shadow: none;
+}

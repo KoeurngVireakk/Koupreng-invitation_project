@@ -256,3 +256,140 @@
         margin-top: 16px;
     }
 }
+
+/* Obsidian x Champagne Gold dark treatment for enterprise surfaces. */
+:root[data-color-mode="dark"] .enterprise-page,
+:root.dark .enterprise-page {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-head h1,
+:root.dark .enterprise-page .enterprise-head h1,
+:root[data-color-mode="dark"] .enterprise-page .enterprise-panel :is(h2, h3),
+:root.dark .enterprise-page .enterprise-panel :is(h2, h3),
+:root[data-color-mode="dark"] .enterprise-page .enterprise-form label,
+:root.dark .enterprise-page .enterprise-form label {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page :is(.enterprise-head p, .enterprise-muted, .enterprise-head .enterprise-eyebrow),
+:root.dark .enterprise-page :is(.enterprise-head p, .enterprise-muted, .enterprise-head .enterprise-eyebrow) {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-eyebrow,
+:root.dark .enterprise-page .enterprise-eyebrow {
+  color: var(--ui-theme-gold);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-panel,
+:root.dark .enterprise-page .enterprise-panel {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+  box-shadow: var(--ui-theme-shadow);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-form :is(input, select, textarea),
+:root.dark .enterprise-page .enterprise-form :is(input, select, textarea) {
+  background: var(--ui-theme-subtle);
+  border-color: var(--ui-theme-control-border);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-form :is(input, select, textarea)::placeholder,
+:root.dark .enterprise-page .enterprise-form :is(input, select, textarea)::placeholder {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-btn,
+:root.dark .enterprise-page .enterprise-btn {
+  background: var(--ui-theme-action);
+  border: 1px solid var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-btn:hover:not(:disabled),
+:root.dark .enterprise-page .enterprise-btn:hover:not(:disabled) {
+  background: var(--ui-theme-action-hover);
+  border-color: var(--ui-theme-action-hover);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-btn.secondary,
+:root.dark .enterprise-page .enterprise-btn.secondary {
+  background: var(--ui-theme-secondary-action);
+  color: var(--ui-theme-on-secondary-action);
+  border-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-btn.danger,
+:root.dark .enterprise-page .enterprise-btn.danger {
+  background: var(--ui-theme-danger-action);
+  border-color: var(--ui-theme-danger-action);
+  color: var(--ui-theme-on-danger-action);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-table :is(th, td),
+:root.dark .enterprise-page .enterprise-table :is(th, td) {
+  border-bottom-color: var(--ui-theme-border);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-table th,
+:root.dark .enterprise-page .enterprise-table th {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-badge,
+:root.dark .enterprise-page .enterprise-badge {
+  background: var(--ui-theme-subtle);
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-badge.good,
+:root.dark .enterprise-page .enterprise-badge.good {
+  background: var(--ui-theme-success-soft);
+  color: var(--ui-theme-success);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-badge.warn,
+:root.dark .enterprise-page .enterprise-badge.warn {
+  background: var(--ui-theme-warning-soft);
+  color: var(--ui-theme-warning);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-message,
+:root.dark .enterprise-page .enterprise-message {
+  background: var(--ui-theme-success-soft);
+  border-color: color-mix(in srgb, var(--ui-theme-success) 38%, transparent);
+  color: var(--ui-theme-success);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-error,
+:root.dark .enterprise-page .enterprise-error {
+  background: var(--ui-theme-danger-soft);
+  border-color: color-mix(in srgb, var(--ui-theme-danger) 38%, transparent);
+  color: var(--ui-theme-danger);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-empty,
+:root.dark .enterprise-page .enterprise-empty {
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .enterprise-list li,
+:root.dark .enterprise-page .enterprise-list li {
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .enterprise-page .receipt-lines div,
+:root.dark .enterprise-page .receipt-lines div {
+  border-bottom-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .enterprise-page :is(button, a, input, select, textarea):focus-visible,
+:root.dark .enterprise-page :is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--ui-theme-focus);
+  outline-offset: 2px;
+}
