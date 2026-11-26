@@ -6,6 +6,7 @@ import WithJoyPortalLayout from "./WithJoyPortalLayout";
 import EmeraldLuxeLayout from "./EmeraldLuxe/EmeraldLuxeLayout";
 import DigitalYesLayout from "./DigitalYes/DigitalYesLayout";
 import TemplateVenue from "../experience/components/sections/TemplateVenue";
+import { safeImageUrl } from "../shared/invitationFeatures";
 
 describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () => {
   beforeEach(() => {
@@ -149,5 +150,15 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
     expect(container.innerHTML).not.toContain("tracking-[0.3em]");
     expect(container.querySelector('a[href^="javascript:"]')).toBeNull();
     expect(container.querySelector(".tdy-sticky-bar")).toBeInTheDocument();
+  });
+
+  it("safeImageUrl permits relative, data:image, same-origin, and allowlisted HTTPS media while blocking XSS/redirects", () => {
+    expect(safeImageUrl("javascript:alert(1)")).toBe("");
+    expect(safeImageUrl("//evil.example/img.png")).toBe("");
+    expect(safeImageUrl("https://evil.example/qr.png")).toBe("");
+    expect(safeImageUrl("data:text/html;base64,PHNjcmlwdD4=")).toBe("");
+    expect(safeImageUrl("/uploads/khqr.png?v=1")).toBe("/uploads/khqr.png?v=1");
+    expect(safeImageUrl("https://images.unsplash.com/photo-1")).toBe("https://images.unsplash.com/photo-1");
+    expect(safeImageUrl("data:image/png;base64,iVBORw0KGgo=")).toBe("data:image/png;base64,iVBORw0KGgo=");
   });
 });

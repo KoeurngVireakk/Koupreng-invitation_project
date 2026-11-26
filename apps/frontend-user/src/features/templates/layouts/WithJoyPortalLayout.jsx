@@ -2,8 +2,7 @@ import InvitationLightbox from "../shared/Gallery/InvitationLightbox";
 import DemoRsvpNotice from "../shared/RSVP/DemoRsvpNotice";
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import IllustratedMap from '@/features/templates/shared/IllustratedMap';
-import { safeDirections } from '../shared/invitationFeatures';
-import { safeIntroMedia } from '../shared/cinematicIntro';
+import { safeDirections, safeImageUrl } from '../shared/invitationFeatures';
 import SaveTheDate from '../shared/SaveTheDate';
 import AuthoredClosing from '../shared/AuthoredClosing';
 import InvitationBranding from '../shared/InvitationBranding';
@@ -142,7 +141,7 @@ export default function WithJoyPortalLayout({
       ? `https://maps.google.com/?q=${encodeURIComponent(`${venue.name || ""} ${venue.address || ""}`.trim())}`
       : ""
   );
-  const safeQrUrl = safeIntroMedia(effectiveContent.bankAccount?.qrUrl);
+  const safeQrUrl = safeImageUrl(effectiveContent.bankAccount?.qrUrl);
 
   return (
     <div className="wj-portal">

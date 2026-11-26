@@ -3,8 +3,7 @@ import DemoRsvpNotice from "../shared/RSVP/DemoRsvpNotice";
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import Modal from '@/shared/ui/Modal';
 import IllustratedMap from '@/features/templates/shared/IllustratedMap';
-import { safeDirections } from '../shared/invitationFeatures';
-import { safeIntroMedia } from '../shared/cinematicIntro';
+import { safeDirections, safeImageUrl } from '../shared/invitationFeatures';
 import SaveTheDate from '../shared/SaveTheDate';
 import AuthoredClosing from '../shared/AuthoredClosing';
 import InvitationBranding from '../shared/InvitationBranding';
@@ -68,9 +67,9 @@ export default function BlissEditorialLayout({
   ];
 
   const galleryImages = (effectiveContent.gallery && effectiveContent.gallery.length)
-    ? effectiveContent.gallery.map(img => safeIntroMedia(typeof img === "string" ? img : img.src || img.url)).filter(Boolean)
+    ? effectiveContent.gallery.map(img => safeImageUrl(typeof img === "string" ? img : img.src || img.url)).filter(Boolean)
     : effectiveContent.hasHostContent ? [] : defaultGallery;
-  const coverImage = safeIntroMedia(effectiveContent.coverImage) || galleryImages[0] || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
+  const coverImage = safeImageUrl(effectiveContent.coverImage) || galleryImages[0] || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
   const musicUrl = effectiveContent.music?.url || effectiveContent.music || (effectiveContent.hasHostContent ? "" : defaultMusicUrl);
 
   // RSVP Drawer state & Gallery lightbox state
@@ -120,7 +119,7 @@ export default function BlissEditorialLayout({
       ? `https://maps.google.com/?q=${encodeURIComponent(`${venue.name || ""} ${venue.address || ""}`.trim())}`
       : ""
   );
-  const safeQrUrl = safeIntroMedia(effectiveContent.bankAccount?.qrUrl);
+  const safeQrUrl = safeImageUrl(effectiveContent.bankAccount?.qrUrl);
   const giftEntries = Array.isArray(effectiveContent.gift) ? effectiveContent.gift.filter((item) => item && (item.account || item.number || item.qrUrl || item.qrValue)) : [];
   const hasBankGift = Boolean(effectiveContent.bankAccount?.accountNumber || effectiveContent.bankAccount?.qrUrl || giftEntries.length > 0);
   const isEnglishOnly = String(effectiveContent.languageMode).toLowerCase() === "en";

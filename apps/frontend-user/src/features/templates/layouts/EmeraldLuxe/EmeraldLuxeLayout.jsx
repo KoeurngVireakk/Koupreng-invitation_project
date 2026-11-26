@@ -24,7 +24,7 @@ import TemplateOpeningGate from "../../experience/components/sections/TemplateOp
 import Card3DFlip from "./components/Card3DFlip";
 import GalleryGrid from "../../shared/Gallery/GalleryGrid";
 import RsvpContainer from "../../shared/RSVP/RsvpContainer";
-import { safeIntroMedia } from "../../shared/cinematicIntro";
+import { safeImageUrl } from "../../shared/invitationFeatures";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
 import "../../experience/template-experience.css";
 import "./emerald-luxe.css";
@@ -330,8 +330,8 @@ export default function EmeraldLuxeLayout({
               <InvitationLabel value={"វត្តមានដ៏ថ្លៃថ្លារបស់លោកអ្នក គឺជាកាដូដ៏មានតម្លៃបំផុត"} />
             </p>
             <div style={{ background: "#fdfbf7", color: "#1c1917", padding: "1rem", borderRadius: "12px", display: "inline-block" }}>
-              {safeIntroMedia(tpl.bankAccount?.qrUrl) ? (
-                <img src={safeIntroMedia(tpl.bankAccount.qrUrl)} alt="KHQR" className="w-36 h-36 mx-auto object-contain rounded-lg" />
+              {safeImageUrl(tpl.bankAccount?.qrUrl) ? (
+                <img src={safeImageUrl(tpl.bankAccount.qrUrl)} alt="KHQR" className="w-36 h-36 mx-auto object-contain rounded-lg" />
               ) : (
                 <QrCode className="w-32 h-32 mx-auto text-stone-800" aria-hidden="true" />
               )}
