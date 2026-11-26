@@ -17,7 +17,8 @@ export default function BlissEditorialOpening({ content = {}, preview = false, o
     const [phase, setPhase] = useState("idle");
     const timerRef = useRef(null);
     const isEn = String(content.languageMode).toLowerCase() === "en";
-    const optedOut = content.design?.showOpening === false || content.openingStyle === "none";
+    const optedOut = content.design?.showOpening === false || content.openingStyle === "none" || content.studioStyle?.motion === "none";
+    const minimalMotion = content.studioStyle?.motion === "minimal" || content.cinematicIntro?.reducedMotion === true;
     const bypassed = reduced || preview || optedOut;
 
     useEffect(() => () => {
@@ -34,13 +35,17 @@ export default function BlissEditorialOpening({ content = {}, preview = false, o
 
     const reveal = useCallback(() => {
         if (phase !== "idle") return;
-        setPhase("opening");
         onOpen?.();
+        if (minimalMotion) {
+            setPhase("done");
+            return;
+        }
+        setPhase("opening");
         timerRef.current = window.setTimeout(() => {
             timerRef.current = null;
             setPhase("done");
         }, REVEAL_MS);
-    }, [onOpen, phase]);
+    }, [minimalMotion, onOpen, phase]);
 
     useEffect(() => {
         if (bypassed || phase === "done") return undefined;

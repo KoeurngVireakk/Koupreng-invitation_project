@@ -91,4 +91,10 @@ describe("BlissEditorialOpening", () => {
         render(<BlissEditorialOpening content={{ ...content, design: { showOpening: false } }} />);
         expect(screen.queryByRole("region", { name: "Wedding invitation cover" })).not.toBeInTheDocument();
     });
+
+    it("reveals instantaneously under minimal studio motion", () => {
+        render(<BlissEditorialOpening content={{ ...content, studioStyle: { motion: "minimal" } }} />);
+        fireEvent.click(screen.getByRole("button", { name: "Turn the page" }));
+        expect(screen.queryByRole("region", { name: "Wedding invitation cover" })).not.toBeInTheDocument();
+    });
 });

@@ -17,8 +17,8 @@ for (const code of codes) test(`saved presentation reaches published ${code}`, a
   await page.goto('/i/review-celestial');
   if (code === 'khmer-floral-gold') await page.locator('.kfg-open').click();
   else {
-    const opener = page.getByRole('button', { name: /Open invitation|View invitation details|Open Invitation|Tap seal|\u1794\u17be\u1780\u179f|\u1785\u17bb\u1785/ }).first();
-    if (!['withjoy-modern-portal', 'bliss-editorial-wedding', 'event-essential'].includes(code)) { await expect(opener).toBeVisible(); await opener.focus(); await opener.press('Enter'); }
+    const opener = page.getByRole('button', { name: /Open invitation|View invitation details|Open Invitation|Turn the page|Tap seal|\u1794\u17be\u1780\u179f|\u1794\u17be\u1780\u1791\u17c6\u1796\u17d0\u179a|\u1785\u17bb\u1785/ }).first();
+    if (!['event-essential'].includes(code)) { await expect(opener).toBeVisible(); await opener.focus(); await opener.press('Enter'); }
   }
   await expect(page.locator('[data-date-style="horizontal"]')).toBeVisible();
   await expect(page.locator('[data-program-style="numbered"]')).toBeVisible();
