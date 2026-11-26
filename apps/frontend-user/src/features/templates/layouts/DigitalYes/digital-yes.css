@@ -34,6 +34,11 @@
   background-color: #120308;
 }
 
+.tdy-page-root .pub-rsvp-live,
+.tdy-page-root .pub-rsvp-live p[role="status"] {
+  color: #fef3c7;
+}
+
 body:has(.tdy-page-root),
 .app-container:has(.tdy-page-root) {
   display: flex !important;

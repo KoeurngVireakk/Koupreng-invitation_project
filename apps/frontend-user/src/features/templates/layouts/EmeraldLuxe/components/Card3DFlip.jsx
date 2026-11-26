@@ -23,7 +23,7 @@ export default function Card3DFlip({
 
           <div className="el-card-header">
             <Sparkles className="el-ornament-icon" />
-            <p style={{ fontSize: "0.8rem", letterSpacing: "0.25em", color: "var(--el-gold-primary)", textTransform: "uppercase" }}>
+            <p style={{ fontSize: "0.85rem", letterSpacing: "normal", color: "var(--el-gold-primary)", textTransform: "uppercase" }}>
               {tpl.title || 'ROYAL EMERALD INVITATION'}
             </p>
           </div>
@@ -136,17 +136,18 @@ export default function Card3DFlip({
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
+                    minHeight: "44px",
                     background: "linear-gradient(135deg, var(--el-gold-primary), #997320)",
                     color: "#061510",
-                    padding: "0.4rem 1rem",
+                    padding: "0.55rem 1.15rem",
                     borderRadius: "9999px",
                     textDecoration: "none",
                     fontWeight: "700",
-                    fontSize: "0.75rem",
+                    fontSize: "0.8rem",
                     boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
                   }}
                 >
-                  <MapPin className="w-3.5 h-3.5" />
+                  <MapPin className="w-4 h-4" aria-hidden="true" />
                   មើលទីតាំងលើ Google Maps
                 </a>
               </div>
@@ -155,7 +156,7 @@ export default function Card3DFlip({
                   {tpl.sketchMapImage && (
               <div style={{ marginTop: "0.75rem", borderTop: "1px solid rgba(212,175,55,0.15)", paddingTop: "0.5rem", textAlign: "center" }}>
                 <p style={{ fontSize: "0.75rem", color: "var(--el-gold-light)", margin: "0 0 6px", fontWeight: "600" }}>
-                  🗺️ គំនូសប្លង់ទីតាំង (Sketch Map)
+                  គំនូសប្លង់ទីតាំង (Sketch Map)
                 </p>
                 <img
                   src={tpl.sketchMapImage}

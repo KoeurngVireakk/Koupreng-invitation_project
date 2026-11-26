@@ -155,4 +155,28 @@ describe("httpClient 401 interceptor", () => {
 
     window.removeEventListener("koupreng:api-error", eventSpy);
   });
+
+  it("never redirects a guest to /login or clears auth on skipAuth 401 responses", () => {
+    window.location.pathname = "/i/dara-sophea";
+    window.location.search = "?token=secret-guest-token";
+    window.location.href = "/i/dara-sophea?token=secret-guest-token";
+
+    const requestInterceptor = apiClient.interceptors.request.handlers[0];
+    const responseInterceptor = apiClient.interceptors.response.handlers[0];
+    const config = requestInterceptor.fulfilled({ headers: {}, skipAuth: true });
+    expect(config.skipAuth).toBeUndefined();
+    expect(config.suppressAuthRedirect).toBe(true);
+
+    const error = {
+      config,
+      response: {
+        status: 401,
+        data: { message: "Incorrect password" },
+      },
+    };
+
+    expect(() => responseInterceptor.rejected(error)).toThrow(ApiError);
+    expect(authStorage.clearStoredAuth).not.toHaveBeenCalled();
+    expect(window.location.href).toBe("/i/dara-sophea?token=secret-guest-token");
+  });
 });

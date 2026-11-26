@@ -1,23 +1,16 @@
 import { invitationFeatureFields } from '../../templates/shared/invitationFeatures';
 import { eventPresentationFields } from '../../templates/shared/eventPresentation';
-import { resolveEvent } from '../../templates/shared/eventDateTime';
+import { formatEventDate, resolveEvent } from '../../templates/shared/eventDateTime';
 import { legacyProgram, normalizeProgram } from "../../templates/shared/program";
 import { getTemplateById } from "@/features/templates/data/templatesData";
+import { getDedicatedTemplateComponent } from "@/features/templates/registry/templateRegistry";
 import { resolveVariant } from "@/features/templates/experience/config/templateExperienceThemes";
 
 
 function displayDate(date, languageMode) {
     if (!date) return "";
-    try {
-        return new Intl.DateTimeFormat(String(languageMode).toLowerCase() === "en" ? "en-US" : "km-KH", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        }).format(new Date(`${date}T00:00:00`));
-    } catch {
-        return date;
-    }
+    const isEn = String(languageMode).toLowerCase() === "en";
+    return formatEventDate(date, isEn, isEn ? "latin" : "khmer", { weekday: "long" }) || date;
 }
 
 function initials(couple = {}) {
@@ -46,9 +39,13 @@ export function draftToTemplate(draft, gallery = []) {
     if (!draft) return null;
 
     const templateId = draft.templateCode || draft.templateId;
-    const baseTpl = templateId === "event-essential"
-        ? { id: "event-essential", code: "event-essential", slug: "event-essential", enabledSections: {} }
-        : getTemplateById(templateId);
+    const isSharedTemplate = ["event-essential", "koupreng-demo-wedding"].includes(templateId);
+    const dedicatedFallback = templateId && getDedicatedTemplateComponent({ code: templateId, slug: templateId, templateCode: templateId })
+        ? { id: templateId, code: templateId, slug: templateId, enabledSections: {} }
+        : null;
+    const baseTpl = isSharedTemplate
+        ? { id: templateId, code: templateId, slug: templateId, enabledSections: {} }
+        : (getTemplateById(templateId) || dedicatedFallback);
     if (!baseTpl) return null;
 
     const sectionEnabled = (legacyValue, key, defaultValue = true) => {

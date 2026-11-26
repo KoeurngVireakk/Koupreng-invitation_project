@@ -16,7 +16,7 @@
 .tpl-royal-garden :where(button,select):disabled { cursor: default; opacity: .5; }
 .tpl-royal-garden main:focus { outline: none; }
 .rg-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.tpl-royal-garden .rg-paper { position: relative; min-height: 100dvh; padding: 60px 0 115px; background-image: var(--asset-background); background-size: cover; background-attachment: fixed; }
+.tpl-royal-garden .rg-paper { position: relative; min-height: 100dvh; padding: max(76px, calc(env(safe-area-inset-top) + 64px)) 0 calc(130px + env(safe-area-inset-bottom)); background-image: var(--asset-background); background-size: cover; background-attachment: fixed; }
 .tpl-royal-garden .rg-paper::before { content: ''; position: absolute; z-index: -1; inset: 0; background: var(--asset-pattern) 0 0 / calc(180px * var(--rg-ornament-scale)) calc(210px * var(--rg-ornament-scale)); opacity: var(--rg-pattern-opacity); pointer-events: none; }
 .tpl-royal-garden .rg-section { width: min(var(--rg-content-width), 100%); margin: auto; padding: 0 24px var(--rg-section-spacing); text-align: center; scroll-margin-top: 88px; }
 .tpl-royal-garden .rg-heading { margin-bottom: 28px; }
@@ -111,7 +111,7 @@
 .tpl-royal-garden .rg-top-controls { position: fixed; z-index: 25; top: max(12px,env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: min(100% - 28px,650px); display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
 .tpl-royal-garden .rg-top-controls > * { pointer-events: auto; }
 .tpl-royal-garden .rg-language { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--rg-gold); background: color-mix(in srgb,var(--rg-white) 94%,transparent); padding: 2px 12px; border-radius: 30px; color: var(--rg-gold-dark); box-shadow: 0 3px 12px color-mix(in srgb,var(--rg-ink) 10%,transparent); }
-.tpl-royal-garden .rg-language select { min-height: 40px; max-width: 110px; border: 0; background: transparent; color: inherit; font: 400 15px/2 var(--rg-body-font); }
+.tpl-royal-garden .rg-language select { min-height: 44px; max-width: 110px; border: 0; background: transparent; color: inherit; font: 400 15px/2 var(--rg-body-font); }
 .tpl-royal-garden .rg-music { border: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--rg-white); color: var(--rg-gold-dark); display: grid; place-items: center; box-shadow: 0 3px 12px color-mix(in srgb,var(--rg-ink) 12%,transparent); }
 .tpl-royal-garden .rg-back-link { display: flex; gap: 8px; align-items: center; justify-content: center; color: var(--rg-muted); font-size: 13px; margin: 0 auto 20px; text-decoration: none; }
 .tpl-royal-garden .rg-use-template { position: fixed; z-index: 30; top: 18px; right: 15px; background: var(--rg-white); padding: 8px 14px; border: 1px solid var(--rg-border); border-radius: 30px; color: var(--rg-ink); font-size: 13px; text-decoration: none; }

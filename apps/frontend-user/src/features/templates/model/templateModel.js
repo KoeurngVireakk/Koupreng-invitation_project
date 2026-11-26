@@ -1,4 +1,5 @@
 import { normalizeDressColors } from "../experience/config/templateExperienceContent";
+import { safeDirections } from "../shared/invitationFeatures";
 
 /**
  * Normalizes template, draft, or invitation data into a predictable view-model
@@ -35,9 +36,10 @@ export function normalizeTemplateViewModel(tpl = {}, content = {}) {
   let googleMapsUrl = "";
   if (rawMap && typeof rawMap === "string" && rawMap.trim()) {
     const trimmed = rawMap.trim();
-    googleMapsUrl = /^https?:\/\//i.test(trimmed)
-      ? trimmed
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmed)}`;
+    const safeUrl = safeDirections(trimmed);
+    googleMapsUrl = safeUrl || (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmed)}`
+      : "");
   } else if (venueName) {
     googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([venueName, venueAddress].filter(Boolean).join(" "))}`;
   }
@@ -71,16 +73,16 @@ export function normalizeTemplateViewModel(tpl = {}, content = {}) {
   }));
 
   // Gift & QR
-  const rawGift = (Array.isArray(merged.gift) ? merged.gift[0] : merged.gift) || {};
-  const giftBank = rawGift.bank || merged.bankName || "";
-  const giftNumber = rawGift.number || merged.bankAccountNumber || merged.accountNumber || "";
-  const giftAccountName = rawGift.account || merged.bankAccountName || merged.accountName || "";
+  const rawGift = (Array.isArray(merged.gift) ? merged.gift[0] : merged.gift) || merged.bankAccount || {};
+  const giftBank = rawGift.bank || merged.bankAccount?.bank || merged.bankName || "";
+  const giftNumber = rawGift.number || rawGift.accountNumber || merged.bankAccount?.accountNumber || merged.bankAccountNumber || merged.accountNumber || "";
+  const giftAccountName = rawGift.account || rawGift.accountName || merged.bankAccount?.accountName || merged.bankAccountName || merged.accountName || "";
   const bankAccount = {
     bank: giftBank,
     accountNumber: giftNumber,
     accountName: giftAccountName,
-    qrUrl: rawGift.qrImage || rawGift.qrUrl || merged.qrGiftUrl || merged.qrUrl || "",
-    qrValue: rawGift.qrValue || merged.qrValue || [giftBank, giftAccountName, giftNumber].filter(Boolean).join(" | "),
+    qrUrl: rawGift.qrImage || rawGift.qrUrl || merged.bankAccount?.qrUrl || merged.qrGiftUrl || merged.qrUrl || "",
+    qrValue: rawGift.qrValue || merged.bankAccount?.qrValue || merged.qrValue || [giftBank, giftAccountName, giftNumber].filter(Boolean).join(" | "),
   };
 
   // Dress code

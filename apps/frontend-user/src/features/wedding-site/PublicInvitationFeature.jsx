@@ -2,7 +2,7 @@ import { PageSkeleton } from '@/shared/ui/LoadingState';
 import { guestLocale, localeContent, projectLocale } from '../templates/shared/localizedContent';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { IoHomeOutline, IoLockClosedOutline, IoSearchOutline } from "react-icons/io5";
+import { IoHomeOutline, IoLockClosedOutline, IoRefreshOutline, IoSearchOutline, IoWifiOutline } from "react-icons/io5";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useLanguageStore } from "@/stores/useLanguageStore";
 
@@ -43,6 +43,27 @@ function publicStateCopy(languageMode, stateType = "UNPUBLISHED") {
             unavailable: title,
             unavailableDetail: message,
             stateType: "NOT_FOUND",
+        };
+    }
+
+    if (stateType === "NETWORK_ERROR") {
+        const title = isEn
+            ? "Unable to connect"
+            : isKh
+                ? "មិនអាចតភ្ជាប់បានទេ"
+                : "មិនអាចតភ្ជាប់បានទេ / Unable to connect";
+        const message = isEn
+            ? "Please check your internet connection and tap Retry to open the invitation."
+            : isKh
+                ? "សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិតរបស់លោកអ្នក រួចចុចព្យាយាមម្ដងទៀត។"
+                : "សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិត រួចចុចព្យាយាមម្ដងទៀត។ Please check your connection and try again.";
+        return {
+            loading: isEn ? "Loading invitation…" : isKh ? "កំពុងផ្ទុកសន្លឹកការ..." : "កំពុងផ្ទុកសន្លឹកការ... / Loading invitation…",
+            title,
+            message,
+            unavailable: title,
+            unavailableDetail: message,
+            stateType: "NETWORK_ERROR",
         };
     }
 
@@ -94,6 +115,8 @@ export default function PublicInvitationPage() {
     const [protectedMode, setProtectedMode] = useState(false);
     const [verifyingAccess, setVerifyingAccess] = useState(false);
     const [accessAttempt, setAccessAttempt] = useState(0);
+    const [retryCount, setRetryCount] = useState(0);
+    const [isOnline, setIsOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine !== false));
     // Access grants are namespaced by slug so a token minted for one invitation
     // can never be presented to another slug during a route switch.
     const [accessGrant, setAccessGrant] = useState(() => ({
@@ -113,11 +136,23 @@ export default function PublicInvitationPage() {
         queryLangRef.current = queryLang;
     }, [queryLang]);
 
+    useEffect(() => {
+        if (typeof window === "undefined") return undefined;
+        const goOnline = () => setIsOnline(true);
+        const goOffline = () => setIsOnline(false);
+        window.addEventListener("online", goOnline);
+        window.addEventListener("offline", goOffline);
+        return () => {
+            window.removeEventListener("online", goOnline);
+            window.removeEventListener("offline", goOffline);
+        };
+    }, []);
+
     const verifiedAccessToken = accessGrant.slug === slug ? accessGrant.token : "";
     const effectiveAccessToken = queryAccessToken || verifiedAccessToken;
     // Server-owned identity. Only a slug/invite-token/access-token change may
     // trigger a re-fetch; a locale change is a pure view transform.
-    const requestIdentity = `${slug || ""}\u0000${inviteToken || ""}\u0000${effectiveAccessToken || ""}`;
+    const requestIdentity = `${slug || ""}\u0000${inviteToken || ""}\u0000${effectiveAccessToken || ""}\u0000${retryCount}`;
 
     // Owner chrome is granted only by the authenticated account's own server
     // list. A navigation hint, a slug/id heuristic or an ownerless local draft
@@ -219,8 +254,15 @@ export default function PublicInvitationPage() {
                     }
                     setAccessGrant({ slug: slug || "", token: "" });
                 }
-                const is404 = err?.status === 404 || String(err?.message || "").toLowerCase().includes("not found");
-                const detectedType = is404 ? "NOT_FOUND" : "UNPUBLISHED";
+                const status = err?.status;
+                const lowerMessage = String(err?.message || "").toLowerCase();
+                const isOfflineOrNetwork = (typeof navigator !== "undefined" && navigator.onLine === false)
+                    || !status
+                    || status >= 500
+                    || lowerMessage.includes("network")
+                    || lowerMessage.includes("failed to fetch");
+                const is404 = status === 404 || lowerMessage.includes("not found");
+                const detectedType = is404 ? "NOT_FOUND" : isOfflineOrNetwork ? "NETWORK_ERROR" : "UNPUBLISHED";
                 const fallbackLang = String(queryLangRef.current || useLanguageStore.getState().lang || "km").toUpperCase();
                 setErrorType(detectedType);
                 setProtectedMode(protectedError);
@@ -236,7 +278,7 @@ export default function PublicInvitationPage() {
         return () => {
             requestGeneration.current += 1;
         };
-    }, [requestIdentity, slug, accessStorageKey, inviteToken, effectiveAccessToken]);
+    }, [requestIdentity, slug, accessStorageKey, inviteToken, effectiveAccessToken, retryCount]);
 
     // Move focus into the unlocked invitation once it has actually painted.
     useEffect(() => {
@@ -337,6 +379,24 @@ export default function PublicInvitationPage() {
                 className={royalGarden ? 'public-royal-garden' : undefined}
                 style={{ outline: "none" }}
             >
+            {!isOnline && (
+                <div
+                    role="status"
+                    aria-live="polite"
+                    style={{
+                        background: "#451a03",
+                        color: "#fef3c7",
+                        borderBottom: "1px solid rgba(245, 158, 11, 0.35)",
+                        padding: "10px 16px",
+                        textAlign: "center",
+                        fontSize: "0.85rem",
+                    }}
+                >
+                    {displayLocale === "en"
+                        ? "Offline — reconnect before submitting RSVP or loading maps."
+                        : "គ្មានការតភ្ជាប់អ៊ីនធឺណិត — សូមភ្ជាប់ឡើងវិញ ដើម្បីផ្ញើ RSVP ឬមើលផែនទី។"}
+                </div>
+            )}
             {!ownLocaleControl && rawDraft.localizedContentV1 && localeContent(rawDraft).enabledLocales.includes('en') && <nav className="public-locale-switch" aria-label="Invitation language">{[['km', '\u1781\u17d2\u1798\u17c2\u179a'], ['en', 'English']].map(([locale, label]) => <button key={locale} type="button" lang={locale} aria-pressed={displayLocale === locale} onClick={() => { const params = new URLSearchParams(searchParams); params.set('lang', locale); setSearchParams(params, { replace: true, preventScrollReset: true }); }}>{label}</button>)}</nav>}
             {!ownLocaleControl && searchParams.get('lang') === 'en' && displayLocale !== 'en' && <p role="status" lang="en">English is not published for this invitation. Showing Khmer.</p>}
             <TemplateExperience
@@ -382,6 +442,7 @@ export default function PublicInvitationPage() {
             stateType={effectiveStateType}
             languageMode={invitation?.languageMode || queryLang}
             isOwner={isOwner}
+            onRetry={effectiveStateType === "NETWORK_ERROR" ? () => setRetryCount((c) => c + 1) : undefined}
         />
     );
 }
@@ -399,7 +460,7 @@ function formatPublicAccessError(err, isEn) {
             ? "Please enter the invitation password."
             : "សូមបញ្ចូលពាក្យសម្ងាត់ដើម្បីបើកសន្លឹកការ។";
     }
-    if (lower.includes("invalid invitation password") || lower.includes("incorrect password") || err?.status === 403) {
+    if (lower.includes("invalid invitation password") || lower.includes("incorrect password") || err?.status === 401 || err?.status === 403) {
         return isEn
             ? "Incorrect password. Please try again or use your personal guest link."
             : "ពាក្យសម្ងាត់មិនត្រឹមត្រូវទេ។ សូមពិនិត្យម្តងទៀត ឬប្រើតំណភ្ជាប់ផ្ទាល់ខ្លួនរបស់ភ្ញៀវ។";
@@ -483,12 +544,14 @@ function PublicUnavailableView({
     message,
     languageMode = "",
     isOwner = false,
+    onRetry,
 }) {
     const isEn = String(languageMode).toUpperCase() === "EN";
     const copy = publicStateCopy(languageMode, stateType);
     const finalTitle = title || copy.title;
     const finalMessage = message || copy.message;
     const isNotFound = stateType === "NOT_FOUND";
+    const isNetworkError = stateType === "NETWORK_ERROR";
 
     return (
         <main
@@ -530,7 +593,7 @@ function PublicUnavailableView({
                         fontSize: "2rem",
                     }}
                 >
-                    {isNotFound ? <IoSearchOutline /> : <IoLockClosedOutline />}
+                    {isNotFound ? <IoSearchOutline /> : isNetworkError ? <IoWifiOutline /> : <IoLockClosedOutline />}
                 </div>
 
                 <div
@@ -563,34 +626,59 @@ function PublicUnavailableView({
                         fontSize: "0.9375rem",
                         color: "var(--ui-theme-muted, #525f58)",
                         lineHeight: 1.7,
-                        margin: isOwner ? "0 0 28px" : "0",
+                        margin: (isOwner || onRetry) ? "0 0 28px" : "0",
                     }}
                 >
                     {finalMessage}
                 </p>
 
-                {isOwner && (
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-                        <Link
-                            to="/dashboard"
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                padding: "11px 24px",
-                                minHeight: "44px",
-                                borderRadius: "14px",
-                                background: "var(--ui-theme-action, #1c3a32)",
-                                color: "var(--ui-theme-on-action, #ffffff)",
-                                fontSize: "0.875rem",
-                                fontWeight: 700,
-                                textDecoration: "none",
-                                transition: "transform 0.15s ease",
-                            }}
-                        >
-                            <IoHomeOutline style={{ fontSize: "1.1rem" }} />
-                            <span>{isEn ? "Go to Dashboard" : "ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង"}</span>
-                        </Link>
+                {(onRetry || isOwner) && (
+                    <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
+                        {onRetry && (
+                            <button
+                                type="button"
+                                onClick={onRetry}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "11px 24px",
+                                    minHeight: "44px",
+                                    borderRadius: "14px",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    background: "var(--ui-theme-action, #1c3a32)",
+                                    color: "var(--ui-theme-on-action, #ffffff)",
+                                    fontSize: "0.875rem",
+                                    fontWeight: 700,
+                                }}
+                            >
+                                <IoRefreshOutline style={{ fontSize: "1.1rem" }} aria-hidden="true" />
+                                <span>{isEn ? "Retry" : "ព្យាយាមម្ដងទៀត / Retry"}</span>
+                            </button>
+                        )}
+                        {isOwner && (
+                            <Link
+                                to="/dashboard"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "11px 24px",
+                                    minHeight: "44px",
+                                    borderRadius: "14px",
+                                    background: "var(--ui-theme-action, #1c3a32)",
+                                    color: "var(--ui-theme-on-action, #ffffff)",
+                                    fontSize: "0.875rem",
+                                    fontWeight: 700,
+                                    textDecoration: "none",
+                                    transition: "transform 0.15s ease",
+                                }}
+                            >
+                                <IoHomeOutline style={{ fontSize: "1.1rem" }} />
+                                <span>{isEn ? "Go to Dashboard" : "ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង"}</span>
+                            </Link>
+                        )}
                     </div>
                 )}
             </div>

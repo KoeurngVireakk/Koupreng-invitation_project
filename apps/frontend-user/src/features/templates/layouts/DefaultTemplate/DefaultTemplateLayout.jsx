@@ -10,6 +10,7 @@ import GalleryGrid from "../../shared/Gallery/GalleryGrid";
 import RsvpContainer from "../../shared/RSVP/RsvpContainer";
 import InvitationBranding from "../../shared/InvitationBranding";
 import ScheduleList from "../../shared/EventSchedule/ScheduleList";
+import { safeDirections } from "../../shared/invitationFeatures";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
 
 /**
@@ -48,10 +49,10 @@ export default function DefaultTemplateLayout({
   const hasCustomCover = Boolean(tpl.coverBackgroundImage || tpl.coverVideoUrl || tpl.openingVideoUrl);
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#faf8f5", color: "#2d3748", fontFamily: "system-ui, sans-serif" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#faf8f5", color: "#2d3748", fontFamily: "'Kantumruy Pro', 'Noto Serif Khmer', system-ui, sans-serif" }}>
       {showBack && (
         <div style={{ maxWidth: "800px", margin: "0 auto", padding: "1rem 1.5rem" }}>
-          <Link to={backTo} style={{ color: "#8b5cf6", textDecoration: "none", fontSize: "0.875rem", fontWeight: "500" }}>
+          <Link to={backTo} style={{ color: "#6d28d9", textDecoration: "none", fontSize: "0.875rem", fontWeight: "600", minHeight: "44px", display: "inline-flex", alignItems: "center" }}>
             ← {backLabel}
           </Link>
         </div>
@@ -112,9 +113,37 @@ export default function DefaultTemplateLayout({
           <h3 style={{ fontSize: "1.15rem", fontWeight: "600", color: "#1f2937", margin: "0 0 4px" }}>
             {tpl.venueName}
           </h3>
-          <p style={{ color: "#6b7280", fontSize: "0.9rem", margin: 0 }}>
+          <p style={{ color: "#4b5563", fontSize: "0.9rem", margin: 0 }}>
             {tpl.venueHall && `${tpl.venueHall} • `}{tpl.venueAddress}
           </p>
+          {(() => {
+            const safeMapHref = safeDirections(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl);
+            if (!safeMapHref) return null;
+            return (
+              <a
+                href={safeMapHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  marginTop: "1rem",
+                  padding: "0.6rem 1.25rem",
+                  minHeight: "44px",
+                  borderRadius: "9999px",
+                  background: "#6d28d9",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontWeight: "600",
+                  fontSize: "0.875rem",
+                }}
+              >
+                <MapPin size={16} aria-hidden="true" />
+                <InvitationLabel value={"មើលទីតាំងលើ Google Maps"} />
+              </a>
+            );
+          })()}
         </div>
 
         {/* Gallery */}
@@ -135,13 +164,13 @@ export default function DefaultTemplateLayout({
 
       {/* Sticky Bottom Actions Bar */}
       {!preview && useTemplateLink && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)", borderTop: "1px solid #e5e7eb", padding: "0.75rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 50 }}>
-          <span style={{ fontSize: "0.875rem", color: "#4b5563" }}>
+        <div className="dl-sticky-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)", borderTop: "1px solid #e5e7eb", padding: "0.75rem 1.5rem max(0.75rem, env(safe-area-inset-bottom))", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 50 }}>
+          <span style={{ fontSize: "0.875rem", color: "#374151" }}>
             {tpl.name || "គំរូសន្លឹកការ"}
           </span>
           <Link
             to={useTemplateLink}
-            style={{ padding: "0.5rem 1.25rem", borderRadius: "9999px", background: "#7c3aed", color: "#fff", textDecoration: "none", fontWeight: "600", fontSize: "0.875rem" }}
+            style={{ padding: "0.6rem 1.25rem", minHeight: "44px", display: "inline-flex", alignItems: "center", borderRadius: "9999px", background: "#6d28d9", color: "#fff", textDecoration: "none", fontWeight: "600", fontSize: "0.875rem" }}
           ><InvitationLabel value={"ប្រើគំរូនេះ"} /></Link>
         </div>
       )}

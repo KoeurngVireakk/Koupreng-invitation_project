@@ -1,5 +1,5 @@
 /* V3.2 guest content stays within the existing information scroll root. */
-.public-royal-garden .public-ticket-button[data-compact=true] { top:calc(var(--rg-canvas-inset) + max(8px,env(safe-area-inset-top))); bottom:auto; left:50%; transform:translateX(-50%); width:44px; height:44px; padding:0; display:grid; place-items:center; color:#f2d693; border:1px solid #f2d693; background:#041b39; box-shadow:none; }
+.public-royal-garden .public-ticket-button[data-compact=true] { top:auto; bottom:calc(var(--rg-canvas-inset, 0px) + 76px + env(safe-area-inset-bottom)); left:max(14px, calc((100% - var(--rg-canvas-width, 100%)) / 2 + 12px)); transform:none; width:44px; height:44px; padding:0; display:grid; place-items:center; color:#f2d693; border:1px solid #f2d693; background:#041b39; box-shadow:0 4px 14px rgba(0,0,0,.35); }
 .public-royal-garden .public-ticket-button[data-compact=true]:focus-visible { outline:3px solid #fff6df; outline-offset:3px; }
 .tpl-royal-garden .rg-wedding-calendar { padding:0; container-type:inline-size; }
 .tpl-royal-garden .rg-wedding-calendar h2 { font-family:var(--rg-heading-font); }

@@ -53,21 +53,21 @@ export const rsvpService = {
   remove: (invitationId, rsvpId) => api.delete(`/v1/invitations/${invitationId}/rsvps/${rsvpId}`).then(unwrap),
   submitPublic: (slug, data, params) =>
     api
-      .post(`/v1/public/invitations/${encodeURIComponent(slug)}/rsvp${toQuery(publicParams(params))}`, data, { skipAuth: true })
+      .post(`/v1/public/invitations/${encodeURIComponent(slug)}/rsvp${toQuery(publicParams(params))}`, data, { skipAuth: true, suppressAuthRedirect: true })
       .then(unwrap),
   submitPublicWithToken: (slug, token, data, params) =>
     api
       .post(
         `/v1/public/invitations/${encodeURIComponent(slug)}/guests/${encodeURIComponent(token)}/rsvp${toQuery(publicParams(params))}`,
         data,
-        { skipAuth: true },
+        { skipAuth: true, suppressAuthRedirect: true },
       )
       .then(unwrap),
   beginGuestTelegramReminders: (slug, inviteToken) =>
     api.post(`/v1/public/invitations/${encodeURIComponent(slug)}/telegram-reminders/link`,
-      { inviteToken }, { skipAuth: true }).then(unwrap),
+      { inviteToken }, { skipAuth: true, suppressAuthRedirect: true }).then(unwrap),
   publicWishes: (slug, params) =>
-    api.get(`/v1/public/invitations/${encodeURIComponent(slug)}/wishes${toQuery(publicParams(params))}`, { skipAuth: true }).then(unwrap),
+    api.get(`/v1/public/invitations/${encodeURIComponent(slug)}/wishes${toQuery(publicParams(params))}`, { skipAuth: true, suppressAuthRedirect: true }).then(unwrap),
   wishes: (invitationId) => {
     if (!invitationId || (typeof invitationId === "string" && !/^\d+$/.test(invitationId))) {
       return Promise.resolve([]);

@@ -49,7 +49,7 @@ export const mediaService = {
   ownerCinematicContent: (invitationId, mediaId, signal) =>
     api.get(`/v1/invitations/${invitationId}/media/${mediaId}/cinematic-content`, { responseType: 'blob', signal }).then(unwrap),
   publicCinematicContent: (slug, mediaId, access, signal) =>
-    api.post(`/v1/public/invitations/${encodeURIComponent(slug)}/media/${mediaId}/cinematic-content`, access, { skipAuth: true, responseType: 'blob', signal }).then(unwrap),
+    api.post(`/v1/public/invitations/${encodeURIComponent(slug)}/media/${mediaId}/cinematic-content`, access, { skipAuth: true, suppressAuthRedirect: true, responseType: 'blob', signal }).then(unwrap),
   list: (invitationId) => {
     if (isLocalDraftId(invitationId)) {
       const draft = typeof invitationId === "string" ? getDraft(invitationId) : null;

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Sparkles } from "lucide-react";
+import { usePrefersReducedMotion } from "@/shared/hooks/usePrefersReducedMotion";
 
 /**
  * RibbonOpening — Silk Ribbon Untie Interaction (ស្រាយខ្សែបូសូត្រ 3D)
- * Highly popular in Facebook Reels & Instagram Wedding Invitations.
+ * Accessible semantic button + Skip control + reduced-motion bypass.
  */
 export default function RibbonOpening({
   groom = "កូនកំលោះ",
@@ -11,8 +12,10 @@ export default function RibbonOpening({
   ribbonColor = "#D4AF37", // Gold luxury silk
   ribbonColor2 = "#B8860B",
   onOpen,
+  onSkip,
   state = "closed",
 }) {
+  const reducedMotion = usePrefersReducedMotion();
   const [isUntying, setIsUntying] = useState(false);
   const [isOpened, setIsOpened] = useState(state === "opened");
 
@@ -26,8 +29,14 @@ export default function RibbonOpening({
     }
   }, [state]);
 
-  const handleUntie = () => {
+  const handleUntie = (skip = false) => {
     if (isUntying || isOpened) return;
+    if (skip || reducedMotion) {
+      setIsOpened(true);
+      if (skip && onSkip) onSkip();
+      else if (onOpen) onOpen();
+      return;
+    }
     setIsUntying(true);
 
     setTimeout(() => {
@@ -40,7 +49,12 @@ export default function RibbonOpening({
 
   return (
     <div
-      className={`ribbon-opening-overlay absolute inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-700 ${
+      role="dialog"
+      aria-modal="true"
+      aria-label="ស្រាយខ្សែបូសូត្រ ដើម្បីបើកសំបុត្រអញ្ជើញ / Untie ribbon to open invitation"
+      className={`ribbon-opening-overlay absolute inset-0 z-50 flex items-center justify-center overflow-hidden ${
+        reducedMotion ? "" : "transition-opacity duration-700"
+      } ${
         isUntying ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
       style={{
@@ -58,7 +72,8 @@ export default function RibbonOpening({
 
       {/* Vertical Ribbon Band */}
       <div
-        className="absolute inset-y-0 w-14 sm:w-16 shadow-2xl transition-transform duration-700 ease-in-out pointer-events-none"
+        aria-hidden="true"
+        className={`absolute inset-y-0 w-14 sm:w-16 shadow-2xl pointer-events-none ${reducedMotion ? "" : "transition-transform duration-700 ease-in-out"}`}
         style={{
           background: `linear-gradient(90deg, ${ribbonColor2} 0%, ${ribbonColor} 50%, ${ribbonColor2} 100%)`,
           boxShadow: "0 0 30px rgba(0,0,0,0.8), inset 0 0 8px rgba(255,255,255,0.3)",
@@ -71,7 +86,8 @@ export default function RibbonOpening({
 
       {/* Horizontal Ribbon Band */}
       <div
-        className="absolute inset-x-0 h-14 sm:h-16 shadow-2xl transition-transform duration-700 ease-in-out pointer-events-none"
+        aria-hidden="true"
+        className={`absolute inset-x-0 h-14 sm:h-16 shadow-2xl pointer-events-none ${reducedMotion ? "" : "transition-transform duration-700 ease-in-out"}`}
         style={{
           background: `linear-gradient(180deg, ${ribbonColor2} 0%, ${ribbonColor} 50%, ${ribbonColor2} 100%)`,
           boxShadow: "0 0 30px rgba(0,0,0,0.8), inset 0 0 8px rgba(255,255,255,0.3)",
@@ -83,14 +99,20 @@ export default function RibbonOpening({
       </div>
 
       {/* Center Silk Bow & Rosette */}
-      <div
-        className={`relative z-20 flex flex-col items-center justify-center transition-all duration-700 ease-out cursor-pointer select-none ${
+      <button
+        type="button"
+        disabled={isUntying || isOpened}
+        aria-label="បើកសំបុត្រអញ្ជើញ — សូមចុចស្រាយខ្សែបូ / Open invitation"
+        className={`relative z-20 flex flex-col items-center justify-center bg-transparent border-0 p-4 cursor-pointer select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300 focus-visible:outline-offset-4 ${
+          reducedMotion ? "" : "transition-all duration-700 ease-out"
+        } ${
           isUntying ? "scale-125 opacity-0 -rotate-12" : "scale-100 opacity-100 hover:scale-105"
         }`}
-        onClick={handleUntie}
+        onClick={() => handleUntie(false)}
       >
         {/* Left Bow Loop */}
         <div
+          aria-hidden="true"
           className="absolute -left-12 sm:-left-16 w-14 sm:w-18 h-10 sm:h-12 rounded-full border-2 border-amber-200/40 shadow-lg pointer-events-none -rotate-25"
           style={{
             background: `radial-gradient(ellipse at center, ${ribbonColor} 0%, ${ribbonColor2} 100%)`,
@@ -99,6 +121,7 @@ export default function RibbonOpening({
 
         {/* Right Bow Loop */}
         <div
+          aria-hidden="true"
           className="absolute -right-12 sm:-right-16 w-14 sm:w-18 h-10 sm:h-12 rounded-full border-2 border-amber-200/40 shadow-lg pointer-events-none rotate-25"
           style={{
             background: `radial-gradient(ellipse at center, ${ribbonColor} 0%, ${ribbonColor2} 100%)`,
@@ -112,25 +135,34 @@ export default function RibbonOpening({
             background: `linear-gradient(135deg, ${ribbonColor} 0%, #7d5910 100%)`,
           }}
         >
-          <Sparkles className="w-5 h-5 text-amber-100 animate-pulse mb-0.5" />
+          <Sparkles className={`w-5 h-5 text-amber-100 mb-0.5${reducedMotion ? "" : " animate-pulse"}`} aria-hidden="true" />
           <span className="text-xs sm:text-sm font-bold text-amber-950 font-serif leading-tight">
             {groom?.[0] || "V"} &amp; {bride?.[0] || "S"}
           </span>
-          <span className="text-[8px] uppercase tracking-normal text-amber-900 font-semibold mt-0.5">
+          <span className="text-[10px] text-amber-950 font-semibold mt-0.5">
             ស្រាយខ្សែបូ
           </span>
         </div>
 
         {/* Action Prompt */}
-        <div className="mt-8 px-5 py-2 rounded-full bg-black/60 border border-amber-400/40 backdrop-blur-md shadow-xl text-center">
+        <div className="mt-8 px-5 py-2.5 min-h-[44px] rounded-full bg-black/75 border border-amber-400/40 backdrop-blur-md shadow-xl text-center">
           <p className="text-xs sm:text-sm font-medium text-amber-200 tracking-normal">
-            ✨ សូមចុចស្រាយខ្សែបូ ដើម្បីបើកសំបុត្រ
+            សូមចុចស្រាយខ្សែបូ ដើម្បីបើកសំបុត្រ
           </p>
-          <span className="text-[10px] text-amber-300/60 uppercase tracking-widest block mt-0.5">
+          <span className="text-[10px] text-amber-300/80 uppercase tracking-widest block mt-0.5">
             TAP TO UNTIE RIBBON
           </span>
         </div>
-      </div>
+      </button>
+
+      <button
+        type="button"
+        onClick={() => handleUntie(true)}
+        className="fixed top-6 right-5 z-30 min-h-[44px] px-4 py-2 rounded-full bg-black/75 border border-amber-300/35 text-xs text-amber-200 underline hover:bg-black/90 cursor-pointer"
+        aria-label="រំលង (Skip opening)"
+      >
+        រំលង (Skip)
+      </button>
     </div>
   );
 }

@@ -352,4 +352,35 @@ describe("Phase 16 public guest authority", () => {
     expect(screen.queryByText("A Guest Secret")).toBeNull();
     expect(screen.getByText("B Guest Title")).toBeInTheDocument();
   });
+
+  it("renders a connection recovery screen with Retry on network failure and recovers on retry", async () => {
+    mocks.publicBySlug
+      .mockRejectedValueOnce(new Error("Network Error"))
+      .mockResolvedValueOnce(makeInvitation({ kmTitle: "Recovered Wedding" }));
+
+    renderPublicRoute("/w/retry-slug?lang=km");
+
+    expect(await screen.findByRole("heading", { name: /មិនអាចតភ្ជាប់បានទេ|Unable to connect/ })).toBeInTheDocument();
+    expect(screen.queryByText(/Host has temporarily unpublished|ម្ចាស់បានបិទការផ្សព្វផ្សាយ/)).toBeNull();
+
+    const retryBtn = screen.getByRole("button", { name: /Retry|ព្យាយាមម្ដងទៀត/ });
+    fireEvent.click(retryBtn);
+
+    expect(await screen.findByText("Recovered Wedding")).toBeInTheDocument();
+  });
+
+  it("resolves template-boilerplate and koupreng-demo-wedding without hitting TemplateUnavailable", async () => {
+    const { draftToTemplate } = await import("../wedding-builder/utils/draftToTemplate");
+    for (const code of ["template-boilerplate", "custom-starter", "koupreng-demo-wedding", "event-essential"]) {
+      const mapped = draftToTemplate({
+        id: "draft-1",
+        templateCode: code,
+        eventDate: "2027-12-05",
+        languageMode: "KH",
+      });
+      expect(mapped).not.toBeNull();
+      expect(mapped.tpl.code).toBe(code);
+      expect(mapped.tpl.dateText).toContain("ធ្នូ");
+    }
+  });
 });
