@@ -51,21 +51,46 @@ public class TelegramOwnerRepository {
     public java.util.List<UpcomingInvitation> upcoming(long afterId, java.time.LocalDate from,
                                                       java.time.LocalDate to) {
         return jdbc.sql("""
-                SELECT i.invitation_id, i.user_id, i.title, i.event_date,
+                SELECT i.invitation_id, i.user_id, i.title, i.event_date, i.rsvp_deadline,
                        CASE WHEN JSON_VALID(i.content_json)
                             THEN JSON_UNQUOTE(JSON_EXTRACT(i.content_json, '$.eventTimezone')) END AS timezone
-                FROM invitations i JOIN telegram_owner_links l ON l.user_id = i.user_id
-                JOIN users u ON u.user_id = l.user_id
+                FROM invitations i LEFT JOIN telegram_owner_links l ON l.user_id = i.user_id
+                JOIN users u ON u.user_id = i.user_id
                 WHERE i.invitation_id > :afterId AND i.event_date BETWEEN :from AND :to
                   AND i.deleted = FALSE AND i.status = 'PUBLISHED' AND i.moderation_status = 'ACTIVE'
-                  AND l.telegram_user_id IS NOT NULL AND u.status = 'ACTIVE' AND u.deleted = FALSE
+                  AND u.status = 'ACTIVE' AND u.deleted = FALSE
+                  AND (l.telegram_user_id IS NOT NULL OR EXISTS (
+                    SELECT 1 FROM guests g JOIN telegram_guest_reminder_links gl ON gl.guest_id = g.guest_id
+                    WHERE g.invitation_id = i.invitation_id AND gl.chat_id IS NOT NULL
+                  ))
                 ORDER BY i.invitation_id LIMIT 100
                 """).param("afterId", afterId).param("from", from).param("to", to)
                 .query((rs, row) -> new UpcomingInvitation(rs.getLong(1), rs.getLong(2), rs.getString(3),
-                        rs.getObject(4, java.time.LocalDate.class), rs.getString(5))).list();
+                        rs.getObject(4, java.time.LocalDate.class), rs.getObject(5, java.time.LocalDate.class),
+                        rs.getString(6))).list();
     }
 
-    public record UpcomingInvitation(long id, long userId, String title, java.time.LocalDate date, String timezone) {}
+    public record UpcomingInvitation(long id, long userId, String title, java.time.LocalDate date,
+                                     java.time.LocalDate rsvpDeadline, String timezone) {}
+
+    public Instant lockScheduleCheckpoint(long invitationId, Instant firstCheck) {
+        jdbc.sql("""
+                INSERT INTO telegram_event_schedule_checkpoint (invitation_id, checked_through)
+                VALUES (:invitationId, :firstCheck)
+                ON DUPLICATE KEY UPDATE checked_through = checked_through
+                """).param("invitationId", invitationId).param("firstCheck", Timestamp.from(firstCheck)).update();
+        return jdbc.sql("""
+                SELECT checked_through FROM telegram_event_schedule_checkpoint
+                WHERE invitation_id = :invitationId FOR UPDATE
+                """).param("invitationId", invitationId).query(Timestamp.class).single().toInstant();
+    }
+
+    public void advanceScheduleCheckpoint(long invitationId, Instant now) {
+        jdbc.sql("""
+                UPDATE telegram_event_schedule_checkpoint SET checked_through = :now
+                WHERE invitation_id = :invitationId
+                """).param("invitationId", invitationId).param("now", Timestamp.from(now)).update();
+    }
 
     public void enqueue(long userId, String key, String title, String text) {
         jdbc.sql("""

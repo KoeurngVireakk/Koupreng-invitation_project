@@ -428,6 +428,8 @@ public class SubscriptionService {
                 alert.currency(), alert.amount(), alert.bankMinute(), minuteEnd)) return null;
 
         Subscription selected = candidates.getFirst();
+        // The bank reports only a minute. A checkout created inside that minute might follow the payment.
+        if (selected.getCreatedAt().isAfter(alert.bankMinute())) return null;
         if (!STATUS_PENDING_PAYMENT.equals(selected.getStatus()) || !PAYMENT_STATUS_PENDING.equals(selected.getPaymentStatus())
                 || !selected.getPaymentExpiresAt().isAfter(now) || !selected.getPaymentExpiresAt().isAfter(postedAt)) return null;
 

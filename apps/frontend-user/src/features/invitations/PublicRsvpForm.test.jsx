@@ -10,6 +10,7 @@ afterEach(() => {
 vi.mock("@/features/rsvp/api/rsvpApi", () => ({
     rsvpService: {
         publicWishes: vi.fn().mockResolvedValue([]),
+        beginGuestTelegramReminders: vi.fn().mockResolvedValue({ url: "https://t.me/fixture_bot?start=g_fixture" }),
         submitPublic: vi.fn().mockResolvedValue({
             id: 10,
             guestName: "Samnang",
@@ -53,6 +54,21 @@ vi.mock("@/features/invitations/api/invitationApi", () => ({
 }));
 
 describe("PublicRsvpForm Feature", () => {
+    it("only offers Telegram reminders to a verified pending guest and requests a link on click", async () => {
+        const { rsvpService } = await import("@/features/rsvp/api/rsvpApi");
+        const view = render(<PublicRsvpForm slug="my-wedding" inviteToken="invalid" />);
+        expect(await screen.findByRole("alert")).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Get a Telegram RSVP reminder" })).not.toBeInTheDocument();
+
+        view.rerender(<PublicRsvpForm slug="my-wedding" inviteToken="token-pending" />);
+        const action = await screen.findByRole("button", { name: "Get a Telegram RSVP reminder" });
+        expect(rsvpService.beginGuestTelegramReminders).not.toHaveBeenCalled();
+        fireEvent.click(action);
+        expect(rsvpService.beginGuestTelegramReminders).toHaveBeenCalledWith("my-wedding", "token-pending");
+        expect(await screen.findByRole("link", { name: "Open Telegram and press Start" }))
+            .toHaveAttribute("href", "https://t.me/fixture_bot?start=g_fixture");
+    });
+
     it('uses royal attendance controls and guest counts without changing the real submission contract', async () => {
         const { rsvpService } = await import('@/features/rsvp/api/rsvpApi');
         render(<PublicRsvpForm slug="royal-test" appearance="royal" languageMode="EN" showPublicWishes={false} />);

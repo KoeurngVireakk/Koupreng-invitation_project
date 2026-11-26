@@ -1668,11 +1668,44 @@ paths:
     delete:
       tags:
       - telegram-owner-controller
-      summary: Disconnect
+      summary: Disconnect Telegram account
       operationId: disconnect
+      responses:
+        "204":
+          description: No Content
+      security:
+      - bearerAuth: []
+  /api/v1/public/invitations/{slug}/telegram-reminders/link:
+    post:
+      tags:
+      - telegram-guest-reminder-controller
+      summary: Create a guest Telegram reminder opt-in link
+      operationId: begin
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+        example: demo-wedding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuestReminderLinkRequest"
+            examples:
+              guestReminderOptIn:
+                summary: Use the token from a personalized invitation
+                value:
+                  inviteToken: <guest-invitation-token>
+        required: true
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseConnectLink"
   /api/v1/public/invitations/{slug}/rsvp:
     post:
       tags:
@@ -9897,6 +9930,16 @@ components:
         expiresAt:
           type: string
           format: date-time
+    GuestReminderLinkRequest:
+      type: object
+      properties:
+        inviteToken:
+          type: string
+          maxLength: 128
+          minLength: 0
+          writeOnly: true
+      required:
+      - inviteToken
     RsvpRequest:
       type: object
       properties:

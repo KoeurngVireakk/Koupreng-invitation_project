@@ -2,6 +2,7 @@ package com.koupreng.backend.notification.application;
 
 import com.koupreng.backend.notification.infrastructure.TelegramUserBotProperties;
 import com.koupreng.backend.notification.infrastructure.persistence.TelegramOwnerRepository;
+import com.koupreng.backend.notification.infrastructure.persistence.TelegramGuestReminderRepository;
 import com.koupreng.backend.shared.config.AppProperties;
 import com.koupreng.backend.shared.exception.ApiException;
 import com.koupreng.backend.user.application.CurrentUserService;
@@ -23,13 +24,15 @@ public class TelegramOwnerService {
     private final SecureRandom random = new SecureRandom();
     private final CurrentUserService users;
     private final TelegramOwnerRepository owners;
+    private final TelegramGuestReminderRepository guests;
     private final TelegramUserBotProperties bot;
     private final String baseUrl;
 
     public TelegramOwnerService(CurrentUserService users, TelegramOwnerRepository owners,
-            TelegramUserBotProperties bot, AppProperties app) {
+            TelegramGuestReminderRepository guests, TelegramUserBotProperties bot, AppProperties app) {
         this.users = users;
         this.owners = owners;
+        this.guests = guests;
         this.bot = bot;
         this.baseUrl = app.getInvitation().getPublicBaseUrl().replaceAll("/+$", "");
     }
@@ -45,11 +48,29 @@ public class TelegramOwnerService {
         if (owners.linkedChat(userId).isPresent()) {
             throw new ApiException(HttpStatus.CONFLICT, "Disconnect your current Telegram chat before linking a new one");
         }
-        byte[] bytes = new byte[32];
-        random.nextBytes(bytes);
-        String challenge = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+        String challenge = newChallenge();
         Instant expiresAt = Instant.now().plusSeconds(300);
         owners.createChallenge(userId, digest(challenge), expiresAt);
+        return connectLink(challenge, expiresAt);
+    }
+
+    public ConnectLink beginGuestReminders(String slug, String inviteToken) {
+        if (!bot.enabled()) throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Telegram notifications are unavailable");
+        String challenge = newChallenge();
+        Instant expiresAt = Instant.now().plusSeconds(300);
+        if (!guests.createChallenge(slug, inviteToken, digest(challenge), expiresAt)) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "A valid guest invitation link is required");
+        }
+        return connectLink("g_" + challenge, expiresAt);
+    }
+
+    private String newChallenge() {
+        byte[] bytes = new byte[32];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    private ConnectLink connectLink(String challenge, Instant expiresAt) {
         return new ConnectLink("https://t.me/" + bot.username() + "?start=" + challenge, expiresAt);
     }
 
@@ -83,6 +104,7 @@ public class TelegramOwnerService {
             case "/help" -> "Koupreng Invitation\n" + HELP;
             case "/stop" -> {
                 owners.disconnectChat(chatId);
+                guests.revoke(chatId);
                 yield "បានផ្ដាច់ Telegram / Telegram disconnected";
             }
             case "/settings", "/events", "/guests", "/rsvp", "/stats", "/subscription", "/payment" ->
@@ -94,6 +116,11 @@ public class TelegramOwnerService {
 
     private String start(long chatId, String[] command) {
         if (command.length == 1) return "Koupreng Invitation\n" + HELP + "\n" + baseUrl + "/app/notifications";
+        if (command[1].matches("g_[A-Za-z0-9_-]{43}")) {
+            return guests.consumeChallenge(digest(command[1].substring(2)), chatId, Instant.now())
+                    ? "បានបើកការរំលឹក RSVP / RSVP reminders enabled. /stop ដើម្បីបិទ / to stop."
+                    : "តំណបានផុតកំណត់ ឬបានប្រើរួច / Link expired or already used.";
+        }
         try {
             if (command[1].matches("[A-Za-z0-9_-]{43}")
                     && owners.consumeChallenge(digest(command[1]), chatId, Instant.now())) {

@@ -1,6 +1,8 @@
 package com.koupreng.backend.subscription.application;
 
 import com.koupreng.backend.payment.api.dto.ConfirmPaymentRequest;
+import com.koupreng.backend.payment.domain.TemplatePaymentOrder;
+import com.koupreng.backend.payment.infrastructure.persistence.TemplatePaymentOrderRepository;
 import com.koupreng.backend.subscription.api.dto.TelegramDetectSubscriptionPaymentRequest;
 import com.koupreng.backend.subscription.domain.SubscriptionPaymentDetectionStatus;
 import com.koupreng.backend.subscription.domain.Subscription;
@@ -14,13 +16,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -35,6 +40,8 @@ class SubscriptionIntegrityMySqlTests {
     @Autowired private SubscriptionRepository subscriptions;
     @Autowired private SubscriptionPackageRepository packages;
     @Autowired private AppUserRepository users;
+    @Autowired private JdbcClient jdbc;
+    @Autowired private TemplatePaymentOrderRepository templates;
     @Autowired private PlatformTransactionManager transactions;
     @Autowired private com.koupreng.backend.payment.application.PaymentEvidenceService evidenceService;
     @Autowired private com.koupreng.backend.payment.infrastructure.persistence.PaymentEvidenceRepository evidenceRepository;
@@ -186,10 +193,55 @@ class SubscriptionIntegrityMySqlTests {
         competing.setStatus("REVIEW_REQUIRED");
         subscriptions.saveAndFlush(competing);
         var alert = directAlert(pending);
+        setCheckoutCreatedAt(competing, alert.getMerchantMessageAt().truncatedTo(ChronoUnit.MINUTES).plusSeconds(10));
         assertEquals(SubscriptionPaymentDetectionStatus.REVIEW_REQUIRED, service.reconcileDirectPayWayAlert(alert).status());
         assertFalse(subscriptions.findById(pending.getId()).orElseThrow().isActive());
         assertFalse(subscriptions.findById(competing.getId()).orElseThrow().isActive());
         assertNull(evidenceRepository.findById(alert.getPaywayTransactionId()).orElseThrow().getVerificationMethod());
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(ints = {-1, 0, 20, 61})
+    void automatedSettlementRequiresCheckoutAtOrBeforeTheStartOfTheBankMinute(int creationOffsetSeconds) {
+        enableDirectAlertSettlement();
+        String suffix = Integer.toString(880 + creationOffsetSeconds);
+        Subscription order = alertsOrder("DEMO PAYER", suffix);
+        Instant bankMinute = recentBankMinute();
+        setCheckoutCreatedAt(order, bankMinute.plusSeconds(creationOffsetSeconds));
+        var alert = directAlert(order, bankMinute);
+
+        boolean eligible = creationOffsetSeconds <= 0;
+        assertEquals(eligible ? SubscriptionPaymentDetectionStatus.PAID : SubscriptionPaymentDetectionStatus.REVIEW_REQUIRED,
+                service.reconcileDirectPayWayAlert(alert).status());
+        var refreshed = subscriptions.findById(order.getId()).orElseThrow();
+        assertEquals(eligible, refreshed.isActive());
+        if (!eligible) assertEquals("REVIEW_REQUIRED", refreshed.getStatus());
+    }
+
+    @Test
+    void aCompetingTemplateWithTheSameAmountAndCurrencyPreventsAutomaticSettlement() {
+        enableDirectAlertSettlement();
+        Subscription subscription = alertsOrder("DEMO PAYER", "872");
+        subscription.setAmount(new BigDecimal("0.03"));
+        subscriptions.saveAndFlush(subscription);
+        Instant bankMinute = recentBankMinute();
+        var template = new TemplatePaymentOrder();
+        template.setUser(user());
+        template.setOrderCode("QA-" + UUID.randomUUID());
+        template.setTransactionId("QA-" + UUID.randomUUID());
+        template.setTemplateId(1L);
+        template.setTemplateName("Fixture template");
+        template.setPackageName("Fixture package");
+        template.setAmount(subscription.getAmount());
+        template.setCurrency(subscription.getCurrency());
+        template.setExpiresAt(Instant.now().plusSeconds(120));
+        templates.saveAndFlush(template);
+        jdbc.sql("UPDATE template_payment_orders SET created_at = :created WHERE order_code = :code")
+                .param("created", Timestamp.from(bankMinute)).param("code", template.getOrderCode()).update();
+
+        assertEquals(SubscriptionPaymentDetectionStatus.REVIEW_REQUIRED,
+                service.reconcileDirectPayWayAlert(directAlert(subscription, bankMinute)).status());
+        assertFalse(subscriptions.findById(subscription.getId()).orElseThrow().isActive());
     }
 
     @org.junit.jupiter.params.ParameterizedTest
@@ -239,12 +291,27 @@ class SubscriptionIntegrityMySqlTests {
     }
 
     private TelegramDetectSubscriptionPaymentRequest directAlert(Subscription order) {
-        Instant posted = Instant.now();
+        Instant bankMinute = recentBankMinute();
+        setCheckoutCreatedAt(order, bankMinute.minusSeconds(1));
+        return directAlert(order, bankMinute);
+    }
+
+    private Instant recentBankMinute() {
+        return Instant.now().truncatedTo(ChronoUnit.MINUTES).minusSeconds(120);
+    }
+
+    private void setCheckoutCreatedAt(Subscription order, Instant created) {
+        jdbc.sql("UPDATE subscriptions SET created_at = :created WHERE order_code = :code")
+                .param("created", Timestamp.from(created)).param("code", order.getOrderCode()).update();
+    }
+
+    private TelegramDetectSubscriptionPaymentRequest directAlert(Subscription order, Instant bankMinute) {
+        Instant posted = bankMinute.plusSeconds(45);
         String time = java.time.format.DateTimeFormatter.ofPattern("MMM d, hh:mm a", java.util.Locale.ENGLISH)
                 .withZone(java.time.ZoneId.of("Asia/Phnom_Penh")).format(posted);
         String id = "990" + order.getId();
         var alert = new TelegramDetectSubscriptionPaymentRequest();
-        alert.setRawMessage("$0.01 paid by DEMO PAYER (*" + order.getPayerAccountLast3()
+        alert.setRawMessage("$" + order.getAmount().toPlainString() + " paid by DEMO PAYER (*" + order.getPayerAccountLast3()
                 + ") on " + time + " via ABA PAY at KOEURNG VIREAK. Trx. ID: " + id + ", APV: 123456.");
         alert.setDetectedBy("telegram-payway-bot");
         alert.setDetectedAmount(order.getAmount());

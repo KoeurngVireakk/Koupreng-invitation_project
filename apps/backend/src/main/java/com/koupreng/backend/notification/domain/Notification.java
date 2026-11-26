@@ -89,6 +89,9 @@ public class Notification {
     private String paymentDeliveryKey;
     @Column(name = "delivery_attempts", nullable = false)
     private int deliveryAttempts;
+
+    @Column(name = "telegram_delivery_in_flight", nullable = false)
+    private boolean telegramDeliveryInFlight;
     @Column(name = "next_delivery_at")
     private Instant nextDeliveryAt;
 
