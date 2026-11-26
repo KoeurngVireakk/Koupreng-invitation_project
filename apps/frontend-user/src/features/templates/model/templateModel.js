@@ -1,4 +1,5 @@
 import { normalizeDressColors } from "../experience/config/templateExperienceContent";
+import { safeDirections } from "../shared/invitationFeatures";
 
 /**
  * Normalizes template, draft, or invitation data into a predictable view-model
@@ -35,9 +36,10 @@ export function normalizeTemplateViewModel(tpl = {}, content = {}) {
   let googleMapsUrl = "";
   if (rawMap && typeof rawMap === "string" && rawMap.trim()) {
     const trimmed = rawMap.trim();
-    googleMapsUrl = /^https?:\/\//i.test(trimmed)
-      ? trimmed
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmed)}`;
+    const safeUrl = safeDirections(trimmed);
+    googleMapsUrl = safeUrl || (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmed)}`
+      : "");
   } else if (venueName) {
     googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([venueName, venueAddress].filter(Boolean).join(" "))}`;
   }

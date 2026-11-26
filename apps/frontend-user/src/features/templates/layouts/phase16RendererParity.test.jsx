@@ -38,7 +38,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
             brideEn: "Mealea",
             gallery: [],
             venue: { name: "Koh Pich", address: "Phnom Penh" },
-            googleMapsUrl: "https://maps.example.com/bliss-venue",
+            googleMapsUrl: "https://maps.google.com/?q=BlissVenue",
             bankAccount: { bank: "ABA Bank", accountNumber: "001 234 567", accountName: "Dara Sok" },
             enabledSections: { gallery: true, map: true, gift: true },
           }}
@@ -47,7 +47,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
     );
 
     expect(container.querySelectorAll(".bliss-gallery-frame")).toHaveLength(0);
-    const mapLink = container.querySelector('a[href="https://maps.example.com/bliss-venue"]');
+    const mapLink = container.querySelector('a[href="https://maps.google.com/?q=BlissVenue"]');
     expect(mapLink).toBeInTheDocument();
     expect(screen.getByText("001 234 567")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /ចម្លងលេខគណនី/i })).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
             groom: "សុវណ្ណ",
             bride: "ស្រីនាថ",
             venue: { name: "Chroy Changvar", address: "Phnom Penh" },
-            googleMapsUrl: "https://maps.example.com/withjoy-venue",
+            googleMapsUrl: "https://maps.google.com/?q=WithJoyVenue",
             bankAccount: { bank: "ACLEDA", accountNumber: "099 888 777" },
             enabledSections: { map: true, gift: true },
           }}
@@ -74,7 +74,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
       </MemoryRouter>
     );
 
-    expect(container.querySelector('a[href="https://maps.example.com/withjoy-venue"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="https://maps.google.com/?q=WithJoyVenue"]')).toBeInTheDocument();
     const copyBtn = screen.getByRole("button", { name: /ចម្លងលេខគណនី/i });
     fireEvent.click(copyBtn);
     expect(writeText).toHaveBeenCalledWith("099 888 777");
@@ -92,7 +92,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
             bride: "ពេជ្រ",
             venueName: "Diamond Island",
             venueAddress: "Phnom Penh",
-            googleMapsUrl: "https://maps.example.com/emerald-venue",
+            googleMapsUrl: "https://maps.google.com/?q=EmeraldVenue",
             schedule: [{ time: "17:00", title: "ពិធីទទួលភ្ញៀវ" }],
             bankAccount: { bank: "ABA", accountNumber: "012 345 678" },
             enabledSections: { schedule: true, map: true, gift: true },
@@ -102,7 +102,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
     );
 
     expect(screen.getAllByText("ពិធីទទួលភ្ញៀវ").length).toBeGreaterThan(0);
-    expect(container.querySelector('a[href="https://maps.example.com/emerald-venue"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="https://maps.google.com/?q=EmeraldVenue"]')).toBeInTheDocument();
     expect(screen.getAllByText(/012 345 678/).length).toBeGreaterThan(0);
 
     const audioBtn = screen.getByRole("button", { name: /ចាក់ភ្លេង|Play audio/i });
@@ -127,7 +127,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
     expect(container.textContent).not.toContain("តុ VIP ១");
   });
 
-  it("DigitalYesLayout avoids Khmer tracking-[0.3em] and clears sticky action bar cleanly", () => {
+  it("DigitalYesLayout avoids Khmer tracking-[0.3em], strips javascript: URLs, and clears sticky action bar cleanly", () => {
     const { container } = render(
       <MemoryRouter>
         <DigitalYesLayout
@@ -138,7 +138,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
             bride: "សុខ ស្រីពេជ្រ",
             venueName: "Premier Center",
             venueAddress: "Sen Sok",
-            googleMapsUrl: "https://maps.example.com/digital-yes",
+            googleMapsUrl: "javascript:alert(1)",
             enabledSections: { map: true },
           }}
         />
@@ -147,7 +147,7 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
 
     fireEvent.click(screen.getByRole("button", { name: /រំលង|Skip/i }));
     expect(container.innerHTML).not.toContain("tracking-[0.3em]");
-    expect(container.querySelector('a[href="https://maps.example.com/digital-yes"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href^="javascript:"]')).toBeNull();
     expect(container.querySelector(".tdy-sticky-bar")).toBeInTheDocument();
   });
 });

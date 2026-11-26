@@ -3,6 +3,8 @@ import DemoRsvpNotice from "../shared/RSVP/DemoRsvpNotice";
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import Modal from '@/shared/ui/Modal';
 import IllustratedMap from '@/features/templates/shared/IllustratedMap';
+import { safeDirections } from '../shared/invitationFeatures';
+import { safeIntroMedia } from '../shared/cinematicIntro';
 import SaveTheDate from '../shared/SaveTheDate';
 import AuthoredClosing from '../shared/AuthoredClosing';
 import InvitationBranding from '../shared/InvitationBranding';
@@ -66,9 +68,9 @@ export default function BlissEditorialLayout({
   ];
 
   const galleryImages = (effectiveContent.gallery && effectiveContent.gallery.length)
-    ? effectiveContent.gallery.map(img => typeof img === "string" ? img : img.src || img.url).filter(Boolean)
+    ? effectiveContent.gallery.map(img => safeIntroMedia(typeof img === "string" ? img : img.src || img.url)).filter(Boolean)
     : effectiveContent.hasHostContent ? [] : defaultGallery;
-  const coverImage = effectiveContent.coverImage || galleryImages[0] || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
+  const coverImage = safeIntroMedia(effectiveContent.coverImage) || galleryImages[0] || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
   const musicUrl = effectiveContent.music?.url || effectiveContent.music || (effectiveContent.hasHostContent ? "" : defaultMusicUrl);
 
   // RSVP Drawer state & Gallery lightbox state
@@ -113,11 +115,12 @@ export default function BlissEditorialLayout({
     { id: "f2", q: "តើអាចនាំកុមារតូចៗមកបានទេ?", a: "យើងខ្ញុំស្វាគមន៍វត្តមានកុមារតូចៗទាំងអស់ក្នុងពិធីមង្គលការ។" },
     { id: "f3", q: "តើកម្មវិធីចាប់ផ្ដើម និងបញ្ចប់នៅម៉ោងប៉ុន្មាន?", a: "កម្មវិធីទទួលភ្ញៀវចាប់ផ្ដើមពីម៉ោង ០៥:០០ ល្ងាច តទៅ។" },
   ];
-  const mapsHref = effectiveContent.googleMapsUrl || venue.mapLink || effectiveContent.googleMapUrl || (
+  const mapsHref = safeDirections(effectiveContent.googleMapsUrl || venue.mapLink || effectiveContent.googleMapUrl) || (
     (venue.name || venue.address)
       ? `https://maps.google.com/?q=${encodeURIComponent(`${venue.name || ""} ${venue.address || ""}`.trim())}`
       : ""
   );
+  const safeQrUrl = safeIntroMedia(effectiveContent.bankAccount?.qrUrl);
   const giftEntries = Array.isArray(effectiveContent.gift) ? effectiveContent.gift.filter((item) => item && (item.account || item.number || item.qrUrl || item.qrValue)) : [];
   const hasBankGift = Boolean(effectiveContent.bankAccount?.accountNumber || effectiveContent.bankAccount?.qrUrl || giftEntries.length > 0);
   const isEnglishOnly = String(effectiveContent.languageMode).toLowerCase() === "en";
@@ -299,8 +302,8 @@ export default function BlissEditorialLayout({
             <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--bliss-charcoal)", marginBottom: "0.5rem" }}>
               {effectiveContent.bankAccount?.bank || giftEntries[0]?.bank || "Bank & KHQR"}
             </h3>
-            {effectiveContent.bankAccount?.qrUrl ? (
-              <img src={effectiveContent.bankAccount.qrUrl} alt="KHQR" className="w-40 h-40 mx-auto object-contain rounded-lg mb-4" />
+            {safeQrUrl ? (
+              <img src={safeQrUrl} alt="KHQR" className="w-40 h-40 mx-auto object-contain rounded-lg mb-4" />
             ) : (
               <QrCode className="w-36 h-36 mx-auto text-stone-800 mb-4" aria-hidden="true" />
             )}

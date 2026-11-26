@@ -28,6 +28,7 @@ import WaxSealEnvelope from "./components/WaxSealEnvelope";
 import TemplateOpeningGate from "../../experience/components/sections/TemplateOpeningGate";
 import DigitalYesSchedule from "./components/DigitalYesSchedule";
 import DigitalYesRsvpModal from "./components/DigitalYesRsvpModal";
+import { safeDirections } from "../../shared/invitationFeatures";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
 import "../../experience/template-experience.css";
 import "./digital-yes.css";
@@ -493,17 +494,21 @@ export default function DigitalYesLayout({
                     </p>
                   )}
 
-                  {(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl) && (
-                    <a
-                      href={tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-110 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition transform hover:scale-105 active:scale-95"
-                    >
-                      <span>មើលទីតាំងលើ Google Maps</span>
-                      <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                  )}
+                  {(() => {
+                    const safeMapHref = safeDirections(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl);
+                    if (!safeMapHref) return null;
+                    return (
+                      <a
+                        href={safeMapHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-110 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition transform hover:scale-105 active:scale-95"
+                      >
+                        <span>មើលទីតាំងលើ Google Maps</span>
+                        <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                      </a>
+                    );
+                  })()}
 
                   <IllustratedMap content={tpl} />
                   {tpl.sketchMapImage && (

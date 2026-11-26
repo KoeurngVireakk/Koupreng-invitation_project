@@ -10,6 +10,7 @@ import GalleryGrid from "../../shared/Gallery/GalleryGrid";
 import RsvpContainer from "../../shared/RSVP/RsvpContainer";
 import InvitationBranding from "../../shared/InvitationBranding";
 import ScheduleList from "../../shared/EventSchedule/ScheduleList";
+import { safeDirections } from "../../shared/invitationFeatures";
 import { isTrustedPreviewMessage, readEmbeddedPreviewChannel } from "@/shared/preview/previewMessaging";
 
 /**
@@ -115,30 +116,34 @@ export default function DefaultTemplateLayout({
           <p style={{ color: "#4b5563", fontSize: "0.9rem", margin: 0 }}>
             {tpl.venueHall && `${tpl.venueHall} • `}{tpl.venueAddress}
           </p>
-          {(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl) && (
-            <a
-              href={tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                marginTop: "1rem",
-                padding: "0.6rem 1.25rem",
-                minHeight: "44px",
-                borderRadius: "9999px",
-                background: "#6d28d9",
-                color: "#ffffff",
-                textDecoration: "none",
-                fontWeight: "600",
-                fontSize: "0.875rem",
-              }}
-            >
-              <MapPin size={16} aria-hidden="true" />
-              <InvitationLabel value={"មើលទីតាំងលើ Google Maps"} />
-            </a>
-          )}
+          {(() => {
+            const safeMapHref = safeDirections(tpl.googleMapsUrl || tpl.venue?.mapLink || tpl.googleMapUrl);
+            if (!safeMapHref) return null;
+            return (
+              <a
+                href={safeMapHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  marginTop: "1rem",
+                  padding: "0.6rem 1.25rem",
+                  minHeight: "44px",
+                  borderRadius: "9999px",
+                  background: "#6d28d9",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontWeight: "600",
+                  fontSize: "0.875rem",
+                }}
+              >
+                <MapPin size={16} aria-hidden="true" />
+                <InvitationLabel value={"មើលទីតាំងលើ Google Maps"} />
+              </a>
+            );
+          })()}
         </div>
 
         {/* Gallery */}
