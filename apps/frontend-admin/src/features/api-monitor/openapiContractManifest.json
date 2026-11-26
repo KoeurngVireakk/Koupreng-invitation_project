@@ -325,7 +325,14 @@
     "path": "/api/v1/telegram/user/link",
     "method": "DELETE",
     "tag": "telegram-owner-controller",
-    "summary": "Disconnect",
+    "summary": "Disconnect Telegram account",
+    "isLegacy": false
+  },
+  {
+    "path": "/api/v1/public/invitations/{slug}/telegram-reminders/link",
+    "method": "POST",
+    "tag": "telegram-guest-reminder-controller",
+    "summary": "Create a guest Telegram reminder opt-in link",
     "isLegacy": false
   },
   {
@@ -1551,6 +1558,13 @@
     "method": "GET",
     "tag": "Attendance analytics",
     "summary": "Report",
+    "isLegacy": false
+  },
+  {
+    "path": "/api/v1/invitations/{id}/templates/{templateId}/access",
+    "method": "GET",
+    "tag": "Invitations",
+    "summary": "Template Access",
     "isLegacy": false
   },
   {

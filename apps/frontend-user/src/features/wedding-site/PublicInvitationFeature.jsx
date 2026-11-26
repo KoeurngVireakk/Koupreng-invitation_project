@@ -1,6 +1,6 @@
 import { PageSkeleton } from '@/shared/ui/LoadingState';
 import { guestLocale, localeContent, projectLocale } from '../templates/shared/localizedContent';
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useMemo, useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { IoHomeOutline, IoLockClosedOutline, IoSearchOutline } from "react-icons/io5";
 import { Eye, EyeOff, Lock } from "lucide-react";
@@ -103,6 +103,12 @@ export default function PublicInvitationPage() {
     const shouldBackToDashboard = location.state?.backTo === "/dashboard";
     const queryAccessToken = searchParams.get("accessToken") || "";
     const queryLang = searchParams.get("lang") || "";
+    const describeLoadError = useEffectEvent((error, protectedError, stateType) => {
+        const language = String(queryLang || useLanguageStore.getState().lang || "km").toUpperCase();
+        return protectedError
+            ? formatPublicAccessError(error, language === "EN")
+            : (error?.message || publicStateCopy(language, stateType).message);
+    });
     const accessStorageKey = slug ? `koupreng_invitation_access_${slug}` : "";
     const effectiveAccessToken = queryAccessToken || verifiedAccessToken;
     const loadCinematicVideo = useCallback(signal => mediaService.publicCinematicContent(slug, invitation?.cinematicOpening?.videoMediaId,
@@ -200,12 +206,9 @@ export default function PublicInvitationPage() {
                     }
                     const is404 = err?.status === 404 || String(err?.message || "").toLowerCase().includes("not found");
                     const detectedType = is404 ? "NOT_FOUND" : "UNPUBLISHED";
-                    const fallbackLang = String(queryLang || useLanguageStore.getState().lang || "km").toUpperCase();
                     setErrorType(detectedType);
                     setProtectedMode(protectedError);
-                    setRemoteError(protectedError
-                        ? formatPublicAccessError(err, fallbackLang === "EN")
-                        : (err?.message || publicStateCopy(fallbackLang, detectedType).message));
+                    setRemoteError(describeLoadError(err, protectedError, detectedType));
                 }
             })
             .finally(() => {
@@ -217,7 +220,7 @@ export default function PublicInvitationPage() {
         return () => {
             active = false;
         };
-    }, [slug, inviteToken, effectiveAccessToken, accessStorageKey, queryLang]);
+    }, [slug, inviteToken, effectiveAccessToken, accessStorageKey]);
 
     const activeDraftId = activeDraft?.id;
 

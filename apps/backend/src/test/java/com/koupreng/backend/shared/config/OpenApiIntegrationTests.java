@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -27,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.koupreng.backend.auth.api.dto.AuthResponse;
 import com.koupreng.backend.auth.api.dto.LoginRequest;
+import com.koupreng.backend.notification.application.TelegramOwnerService;
 import com.koupreng.backend.template.application.TemplateCatalogService;
 import com.koupreng.backend.user.api.dto.UserResponse;
 import com.koupreng.backend.user.domain.Role;
@@ -84,6 +87,26 @@ class OpenApiIntegrationTests {
 
     @MockitoBean
     private TemplateCatalogService templateCatalogService;
+
+    @MockitoBean
+    private TelegramOwnerService telegramOwnerService;
+
+    @Test
+    @WithMockUser
+    void telegramDisconnectReturnsAndDocumentsAnEmpty204Response() throws Exception {
+        mockMvc.perform(delete("/api/v1/telegram/user/link"))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+        verify(telegramOwnerService).disconnect(any());
+
+        String operation = "$.paths['/api/v1/telegram/user/link'].delete";
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(operation + ".responses['204']").exists())
+                .andExpect(jsonPath(operation + ".responses['204'].content").doesNotExist())
+                .andExpect(jsonPath(operation + ".responses['200']").doesNotExist())
+                .andExpect(jsonPath(operation + ".security[0].bearerAuth").isArray());
+    }
 
     @Test
     void checkedInOpenApiContractMatchesRuntimeDocument() throws Exception {

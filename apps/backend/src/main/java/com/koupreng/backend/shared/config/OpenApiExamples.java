@@ -89,6 +89,9 @@ final class OpenApiExamples {
             case "GuestSelectionExportRequest" -> one("selectedGuests", "Export up to 100 selected records from this event", """
                     {"guestIds":[501,502]}
                     """);
+            case "GuestReminderLinkRequest" -> one("guestReminderOptIn", "Use the token from a personalized invitation", """
+                    {"inviteToken":"<guest-invitation-token>"}
+                    """);
             case "InvitationCustomizationRequest" -> one("weddingDesign", "Customize a bilingual wedding invitation", """
                     {
                       "templateId": null,
