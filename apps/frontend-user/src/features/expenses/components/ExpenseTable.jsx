@@ -43,13 +43,14 @@ export function ExpenseTable({
 }) {
     const [selectedCurrency, setSelectedCurrency] = useState("All");
     const currencies = Array.from(new Set(expenses.map((item) => item.currency || "USD")));
+    const activeCurrency = currencies.includes(selectedCurrency) ? selectedCurrency : "All";
     const filtered = expenses.filter((e) => {
         const matchCat = selectedCat === "All" || e.category === selectedCat;
-        const matchCurrency = selectedCurrency === "All" || (e.currency || "USD") === selectedCurrency;
+        const matchCurrency = activeCurrency === "All" || (e.currency || "USD") === activeCurrency;
         const matchSearch = !search || (e.name || "").toLowerCase().includes(search.toLowerCase()) || (e.vendorName || "").toLowerCase().includes(search.toLowerCase());
         return matchCat && matchCurrency && matchSearch;
     });
-    const hasActiveFilters = selectedCat !== "All" || selectedCurrency !== "All" || Boolean(search);
+    const hasActiveFilters = selectedCat !== "All" || activeCurrency !== "All" || Boolean(search);
 
     return (
         <div className="exp-content">
@@ -95,7 +96,7 @@ export function ExpenseTable({
                         <select
                             className="exp-currency-filter"
                             aria-label={lang === "en" ? "Filter by currency" : "តម្រៀបតាមរូបិយប័ណ្ណ"}
-                            value={selectedCurrency}
+                            value={activeCurrency}
                             onChange={(e) => setSelectedCurrency(e.target.value)}
                         >
                             <option value="All">{lang === "en" ? "All currencies" : "គ្រប់រូបិយប័ណ្ណ"}</option>

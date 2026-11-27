@@ -11,6 +11,7 @@ import "./ReportsPage.css";
 export default function FinancialReport() {
   const { text: t, lang } = useBackendMessages("reports");
   const { sourceData, generatedAt, loading, error, reload } = useActiveEventReport();
+  const [refreshCount, setRefreshCount] = useState(0);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [previewZoom, setPreviewZoom] = useState(100);
   const previewTrigger = useRef(null);
@@ -34,6 +35,11 @@ export default function FinancialReport() {
     if (wasPreview.current && !isPreviewMode) previewTrigger.current?.focus();
     wasPreview.current = isPreviewMode;
   }, [isPreviewMode]);
+
+  const handleRefresh = () => {
+    setRefreshCount((count) => count + 1);
+    reload();
+  };
 
   const handlePrint = () => {
     window.print();
@@ -141,7 +147,7 @@ export default function FinancialReport() {
             <button
               type="button"
               className="report-action-btn"
-              onClick={reload}
+              onClick={handleRefresh}
               disabled={loading}
               title={lang === "en" ? "Refresh report data" : "ផ្ទុកទិន្នន័យរបាយការណ៍ឡើងវិញ"}
             >
@@ -181,7 +187,7 @@ export default function FinancialReport() {
             </button>
           </div>
         </header>
-      {hasServerInvitation && <OwnerReportSummary invitationId={invitationId} />}
+      {hasServerInvitation && <OwnerReportSummary invitationId={invitationId} refreshKey={refreshCount} />}
 
       {loading && sourceData && <LoadingRegion />}
       {error && sourceData && <ErrorState message={error} onRetry={reload} />}

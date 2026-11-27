@@ -44,6 +44,12 @@ it('blocks inverted date ranges with a visible alert and supports manual refresh
   fireEvent.click(screen.getByRole('button', { name: 'Apply dates' }));
   expect(screen.getByRole('alert')).toHaveTextContent('Start date cannot be after end date.');
   expect(api.get).toHaveBeenCalledTimes(1);
+  expect(screen.getByLabelText('From').closest('form')).toHaveAttribute('novalidate');
+
+  fireEvent.change(screen.getByLabelText('From'), { target: { value: '' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Apply dates' }));
+  expect(screen.getByRole('alert')).toHaveTextContent('Please select both start and end dates.');
+  expect(api.get).toHaveBeenCalledTimes(1);
 
   fireEvent.click(screen.getByRole('button', { name: 'Refresh' }));
   await waitFor(() => expect(api.get).toHaveBeenCalledTimes(2));

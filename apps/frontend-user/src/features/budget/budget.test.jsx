@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import BudgetPage from "./BudgetPage";
+import { feedback } from "@/shared/feedback/feedback";
 
 afterEach(() => {
   cleanup();
@@ -127,6 +128,28 @@ describe("BudgetPage Module", () => {
 
     await waitFor(() => {
       expect(exportBtn).toBeInTheDocument();
+    });
+  });
+
+  it("exposes accessible progressbar semantics and confirms deletion through feedback.confirm", async () => {
+    const confirmSpy = vi.spyOn(feedback, "confirm").mockResolvedValueOnce(false);
+    render(
+      <MemoryRouter initialEntries={["/dashboard/invitations/1/budget"]}>
+        <Routes>
+          <Route path="/dashboard/invitations/:invitationId/budget" element={<BudgetPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const progressBars = await screen.findAllByRole("progressbar");
+    expect(progressBars.length).toBeGreaterThanOrEqual(2);
+    expect(progressBars[0]).toHaveAttribute("aria-valuenow", "64");
+
+    const deleteBtn = screen.getByRole("button", { name: /Delete|លុប/i });
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

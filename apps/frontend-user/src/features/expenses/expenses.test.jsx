@@ -6,7 +6,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import ExpensesFeature from "./ExpensesFeature";
 import { expensesApi } from "./api/expensesApi";
 import { toExpensePayload } from "./hooks/useExpenses";
-import { buildFilteredExpensesCsv } from "./expenseCsv";
+import { buildFilteredExpensesCsv, exportFilteredExpensesCsv } from "./expenseCsv";
 
 describe("Expenses Feature", () => {
     beforeEach(() => {
@@ -181,5 +181,19 @@ describe("Expenses Feature", () => {
         expect(csv).toContain("\"'@EvilVendor\"");
         expect(csv).toContain("\"Subtotal (USD)\"");
         expect(csv).toContain("\"Subtotal (KHR)\"");
+    });
+
+    it("guards CSV quotes, commas, CR/LF newlines, USD float precision, and empty export sets", () => {
+        expect(exportFilteredExpensesCsv([], "EmptyEvent")).toBe(false);
+
+        const csv = buildFilteredExpensesCsv([
+            { name: "Stage \"Main\", Hall\r\nSetup", vendorName: "\t+1+1", category: "Decor & Flowers", currency: "USD", budget: 12.3, amount: 0.1, status: "PENDING" },
+            { name: "Lighting", vendorName: "\n-2*3", category: "Decor & Flowers", currency: "USD", budget: 0.1, amount: 0.2, status: "PAID" },
+        ]);
+
+        expect(csv).toContain("\"Stage \"\"Main\"\", Hall\r\nSetup\"");
+        expect(csv).toContain("\"'\t+1+1\"");
+        expect(csv).toContain("\"'\n-2*3\"");
+        expect(csv).toContain("\"Subtotal (USD)\",\"\",\"Summary (no currency mixing)\",\"USD\",\"12.4\",\"0.3\"");
     });
 });

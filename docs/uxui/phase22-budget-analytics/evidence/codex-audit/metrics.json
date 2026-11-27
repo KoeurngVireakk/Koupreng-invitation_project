@@ -1,0 +1,52 @@
+[
+  {
+    "name": "01-expenses-light-mobile-390.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {}
+  },
+  {
+    "name": "02-financial-report-light-mobile-390.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {}
+  },
+  {
+    "name": "03-expenses-khr-filtered-csv-desktop.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {
+      "downloadedFilename": "expenses_filtered______________________________2026-11-27.csv",
+      "hasBom": true,
+      "hasKhrSubtotal": true,
+      "excludesUsdRow": true,
+      "escapesFormulaAt": true
+    }
+  },
+  {
+    "name": "04-analytics-inverted-date-alert.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {
+      "alertText": "Start date cannot be after end date."
+    }
+  },
+  {
+    "name": "05-analytics-empty-zero-denominator.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {}
+  },
+  {
+    "name": "06-financial-report-error-403.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {}
+  }
+]

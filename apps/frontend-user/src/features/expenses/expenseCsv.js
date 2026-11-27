@@ -33,13 +33,15 @@ export function buildFilteredExpensesCsv(expenses = []) {
   }
 
   for (const [currency, totals] of byCurrency.entries()) {
+    const scale = currency === "KHR" ? 1 : 100;
+    const roundCurrency = (val) => Math.round(val * scale) / scale;
     rows.push([
       safeCsvCell(`Subtotal (${currency})`),
       safeCsvCell(""),
       safeCsvCell("Summary (no currency mixing)"),
       safeCsvCell(currency),
-      safeCsvCell(totals.budget),
-      safeCsvCell(totals.spent),
+      safeCsvCell(roundCurrency(totals.budget)),
+      safeCsvCell(roundCurrency(totals.spent)),
       safeCsvCell(""),
       safeCsvCell(""),
     ]);

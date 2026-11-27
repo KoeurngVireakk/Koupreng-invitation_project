@@ -30,9 +30,13 @@ export default function AttendanceAnalytics() {
   const labels = [copy('កាលបរិច្ឆេទ', 'Date'), copy('កំណត់ត្រាភ្ញៀវថ្មី', 'Guest records created'), copy('RSVP ចុងក្រោយ', 'Latest RSVP records'), copy('ចូលរួម', 'Attending records'), copy('មិនចូលរួម', 'Declined records'), copy('ប្រហែល', 'Maybe records'), copy('វត្តមានសកម្ម', 'Active check-in records')];
   return <main className="workspace-page attendance-analytics">
     <header className="workspace-heading"><h1>{copy('វិភាគការចូលរួម', 'Attendance analytics')}</h1><p>{copy('ទិន្នន័យភ្ញៀវ RSVP និងវត្តមានដែលបានរក្សាទុក។ ត្រូវការសិទ្ធិរបាយការណ៍ និងកញ្ចប់ម្ចាស់ដែលមានវិភាគកម្រិតខ្ពស់។', 'Stored guest, RSVP and check-in facts. Requires report permission and the owner’s Advanced Analytics entitlement.')}</p></header>
-    <form className="workspace-section analytics-range" onSubmit={event => {
+    <form className="workspace-section analytics-range" noValidate onSubmit={event => {
       event.preventDefault();
-      if (draft.from && draft.to && draft.from > draft.to) {
+      if (!draft.from || !draft.to) {
+        setRangeError(copy('សូមជ្រើសរើសថ្ងៃចាប់ផ្ដើម និងថ្ងៃបញ្ចប់។', 'Please select both start and end dates.'));
+        return;
+      }
+      if (draft.from > draft.to) {
         setRangeError(copy('ថ្ងៃចាប់ផ្ដើមមិនអាចក្រោយថ្ងៃបញ្ចប់បានទេ។', 'Start date cannot be after end date.'));
         return;
       }

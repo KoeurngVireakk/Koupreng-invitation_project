@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
 import { reportsApi } from "../api/reportsApi";
 
-export default function OwnerReportSummary({ invitationId }) {
+export default function OwnerReportSummary({ invitationId, refreshKey = 0 }) {
   const { text: t } = useBackendMessages("reports");
   const [state, setState] = useState({ loading: true, error: "", guests: null, rsvp: null });
   const [exporting, setExporting] = useState(false);
@@ -13,7 +13,7 @@ export default function OwnerReportSummary({ invitationId }) {
       .then(([guests, rsvp]) => { if (active) setState({ loading: false, error: "", guests, rsvp }); })
       .catch((error) => { if (active) setState({ loading: false, error: error.message || "Could not load attendance reports", guests: null, rsvp: null }); });
     return () => { active = false; };
-  }, [invitationId]);
+  }, [invitationId, refreshKey]);
   const exportCsv = async (type) => {
     setExporting(true);
     try { await reportsApi.exportCsv(invitationId, type); }
