@@ -20,6 +20,9 @@ import {
     UserPlus,
     Gift,
     AlertTriangle,
+    AlertCircle,
+    WifiOff,
+    Lock,
     Check,
 } from "lucide-react";
 import { useCheckInDesk } from "./hooks/useCheckInDesk";
@@ -95,6 +98,7 @@ export default function InvitationCheckInPage() {
     const workspace = useEventWorkspace();
     const canRecordGifts = workspace?.isOwner !== false;
     const canManageGuests = workspace ? Boolean(workspace.can?.("MANAGE_GUESTS")) : true;
+    const canCheckIn = workspace ? Boolean(workspace.can?.("MANAGE_CHECKIN")) : true;
     const limitedRoster = workspace?.isOwner === false && !canManageGuests;
 
     const {
@@ -102,6 +106,7 @@ export default function InvitationCheckInPage() {
         token, setToken, note, setNote, tokenGiftAmount, setTokenGiftAmount,
         tokenGiftCurrency, setTokenGiftCurrency, search, setSearch,
         statusFilter, setStatusFilter, rosterPage, setRosterPage, rosterMeta, loading, saving, error, failure,
+        scanOutcome, setScanOutcome, performScan,
         celebrationData, celebrationGiftAmount, setCelebrationGiftAmount,
         celebrationGiftCurrency, setCelebrationGiftCurrency, duplicateWarning, setDuplicateWarning,
         walkInModalOpen, setWalkInModalOpen, walkInForm, setWalkInForm, pendingWalkIn,
@@ -159,33 +164,74 @@ export default function InvitationCheckInPage() {
 
             {/* Duplicate Scan Warning Banner */}
             {duplicateWarning && (
-                <div className="checkin-duplicate-banner" style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "14px",
-                    padding: "16px 20px",
-                    background: "#fffbeb",
-                    border: "1px solid #fde68a",
-                    borderRadius: "16px",
-                    marginBottom: "20px",
-                    color: "#92400e"
-                }}>
-                    <AlertTriangle size={24} color="#d97706" style={{ flexShrink: 0 }} />
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 800, fontSize: "0.95rem" }}>
+                <div className="checkin-duplicate-banner" role="alert">
+                    <AlertTriangle size={24} className="checkin-banner-icon" aria-hidden="true" />
+                    <div className="checkin-banner-body">
+                        <div className="checkin-banner-title">
                             {copy("ភ្ញៀវនេះបានកត់ត្រាវត្តមានរួចហើយ។", "This guest is already checked in.")}
                         </div>
-                        <div style={{ fontSize: "0.84rem", marginTop: "3px", color: "#78350f" }}>
+                        <div className="checkin-banner-sub">
                             {uiCopy("ឈ្មោះ៖", "Name:")} <strong>{duplicateWarning.guestName}</strong> {uiCopy("• បានចូលនៅម៉ោង៖", "• Checked in at:")} {duplicateWarning.checkedInAt} ({duplicateWarning.source})
                         </div>
                     </div>
                     <button
                         type="button"
+                        className="checkin-banner-close"
+                        aria-label={copy("បិទការព្រមាន", "Dismiss warning")}
                         onClick={() => setDuplicateWarning(null)}
-                        style={{ border: "none", background: "none", cursor: "pointer", color: "#92400e" }}
                     >
-                        <X size={18} />
+                        <X size={18} aria-hidden="true" />
                     </button>
+                </div>
+            )}
+
+            {/* Scan Outcome Result Banner (Invalid / Expired / Wrong-Event / Network Offline / Valid) */}
+            {scanOutcome && scanOutcome.status !== "DUPLICATE" && (
+                <div
+                    className={`checkin-scan-outcome checkin-scan-outcome--${scanOutcome.status.toLowerCase()}`}
+                    role={scanOutcome.status === "SUCCESS" ? "status" : "alert"}
+                >
+                    {scanOutcome.status === "OFFLINE" ? (
+                        <WifiOff size={22} className="checkin-banner-icon" aria-hidden="true" />
+                    ) : scanOutcome.status === "SUCCESS" ? (
+                        <CheckCircle2 size={22} className="checkin-banner-icon" aria-hidden="true" />
+                    ) : (
+                        <AlertCircle size={22} className="checkin-banner-icon" aria-hidden="true" />
+                    )}
+                    <div className="checkin-banner-body">
+                        <div className="checkin-banner-title">
+                            {scanOutcome.status === "OFFLINE"
+                                ? copy("គ្មានអ៊ីនធឺណិត — តម្រូវឱ្យផ្ទៀងផ្ទាត់ជាមួយម៉ាស៊ីនមេ", "Connection offline — live server verification required")
+                                : scanOutcome.status === "SUCCESS"
+                                ? copy(`បានកត់ត្រាវត្តមាន៖ ${scanOutcome.guestName}`, `Verified & checked in: ${scanOutcome.guestName}`)
+                                : copy("មិនអាចផ្ទៀងផ្ទាត់ QR ឬការចូលរួមបានទេ", "QR or check-in verification failed")}
+                        </div>
+                        <div className="checkin-banner-sub">
+                            {scanOutcome.status === "SUCCESS"
+                                ? `${scanOutcome.tableNumber ? copy(`តុលេខ ${scanOutcome.tableNumber}`, `Table ${scanOutcome.tableNumber}`) : copy("រក្សាទុកក្នុងបញ្ជីវត្តមានរួចរាល់", "Saved to attendance log")}`
+                                : scanOutcome.message}
+                        </div>
+                    </div>
+                    <div className="checkin-banner-actions">
+                        {scanOutcome.retryToken && scanOutcome.status !== "SUCCESS" && (
+                            <button
+                                type="button"
+                                className="checkin-banner-retry"
+                                disabled={saving || !canCheckIn}
+                                onClick={() => performScan(scanOutcome.retryToken, false)}
+                            >
+                                <RefreshCw size={14} aria-hidden="true" /> {copy("ព្យាយាមម្ដងទៀត", "Retry")}
+                            </button>
+                        )}
+                        <button
+                            type="button"
+                            className="checkin-banner-close"
+                            aria-label={copy("បិទលទ្ធផល", "Dismiss result")}
+                            onClick={() => setScanOutcome(null)}
+                        >
+                            <X size={18} aria-hidden="true" />
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -305,10 +351,17 @@ export default function InvitationCheckInPage() {
                 </div>
             )}
 
+            {!canCheckIn && (
+                <div className="checkin-readonly-banner" role="status">
+                    <Lock size={18} aria-hidden="true" />
+                    <span>{copy("មើលតែប៉ុណ្ណោះ — ត្រូវការសិទ្ធិ MANAGE_CHECKIN ដើម្បីស្កេន ឬកត់ត្រាវត្តមាន។", "Read-only attendance view — MANAGE_CHECKIN permission is required to record or undo attendance.")}</span>
+                </div>
+            )}
+
             {error && <AccessFailureState error={failure || error} feature="QR_CHECK_IN" permission="MANAGE_CHECKIN" />}
 
             {/* Live Camera Scanner */}
-            <QrCameraScanner onScan={handleCameraScan} disabled={saving} />
+            <QrCameraScanner onScan={handleCameraScan} disabled={saving || !canCheckIn} />
 
             {/* Main Workstation 2-Columns */}
             <section className="checkin-layout checkin-workspace-layout">
@@ -405,13 +458,13 @@ export default function InvitationCheckInPage() {
                     <button
                         className="checkin-submit-btn inv-primary-btn"
                         type="submit"
-                        disabled={saving || !token.trim()}
+                        disabled={!canCheckIn || saving || !token.trim()}
                         aria-label={uiCopy("កត់ត្រាវត្តមាន", "Check in")}
                     >
                         {saving ? "Checking..." : uiCopy("កត់ត្រាវត្តមាន", "Check in")}
                     </button>
 
-                    <div style={{ marginTop: "16px", padding: "12px 16px", background: "#fdfaf5", border: "1px solid #eadfce", borderRadius: "14px", fontSize: "13px", color: "#7d6443", lineHeight: 1.5 }}>
+                    <div className="checkin-tip-box">
                         <strong>{copy("គន្លឹះ៖", "Tip:")}</strong> {copy("ប្រើឧបករណ៍ស្កេន QR ឬបិទភ្ជាប់តំណអញ្ជើញផ្ទាល់ខ្លួនរបស់ភ្ញៀវ។", "Use a USB QR scanner or paste the guest’s personal invitation link.")}
                     </div>
                 </form>
@@ -441,19 +494,11 @@ export default function InvitationCheckInPage() {
                             {search && (
                                 <button
                                     type="button"
+                                    className="checkin-search-clear"
+                                    aria-label={copy("សម្អាតការស្វែងរក", "Clear search")}
                                     onClick={() => setSearch("")}
-                                    style={{
-                                        position: "absolute",
-                                        right: "10px",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                        border: "none",
-                                        background: "none",
-                                        color: "#94a3b8",
-                                        cursor: "pointer",
-                                    }}
                                 >
-                                    <X size={15} />
+                                    <X size={15} aria-hidden="true" />
                                 </button>
                             )}
                         </div>
@@ -547,7 +592,7 @@ export default function InvitationCheckInPage() {
                                                 <button
                                                     className={`checkin-row-btn inv-secondary-btn ${checked ? "is-checked" : "action-checkin"}`}
                                                     type="button"
-                                                    disabled={saving || checked}
+                                                    disabled={!canCheckIn || saving || checked}
                                                     onClick={() => manual(guest)}
                                                     aria-label={checked ? "✓ Checked in" : uiCopy("កត់ត្រាវត្តមាន", "Check in")}
                                                 >
@@ -644,26 +689,17 @@ export default function InvitationCheckInPage() {
                                         </div>
                                     </td>
                                     <td style={{ textAlign: "right" }}>
-                                        <button
-                                            type="button"
-                                            onClick={() => undoCheckIn(item)}
-                                            title={uiCopy("ដកការកត់ត្រាវត្តមានវិញ", "Undo check-in")}
-                                            style={{
-                                                border: "1px solid color-mix(in srgb, var(--ui-theme-warning, #c2410c) 35%, transparent)",
-                                                background: "var(--ui-theme-warning-soft, #fff7ed)",
-                                                color: "var(--ui-theme-warning, #c2410c)",
-                                                borderRadius: "6px",
-                                                padding: "4px 8px",
-                                                fontSize: "0.74rem",
-                                                fontWeight: 600,
-                                                cursor: "pointer",
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "3px",
-                                            }}
-                                        >
-                                            <RotateCcw size={12} /> {uiCopy("ដកចេញ", "Remove")}
-                                        </button>
+                                        {canCheckIn && (
+                                            <button
+                                                type="button"
+                                                className="checkin-undo-btn"
+                                                disabled={saving}
+                                                onClick={() => undoCheckIn(item)}
+                                                title={uiCopy("ដកការកត់ត្រាវត្តមានវិញ", "Undo check-in")}
+                                            >
+                                                <RotateCcw size={12} aria-hidden="true" /> {uiCopy("ដកចេញ", "Remove")}
+                                            </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
@@ -701,10 +737,10 @@ export default function InvitationCheckInPage() {
                             </h3>
 
                             <div style={{ textAlign: "center", margin: "14px 0 16px" }}>
-                                <div style={{ fontSize: "1.45rem", fontWeight: 800, color: "#2a1f10" }}>
+                                <div className="checkin-celebration-guest">
                                     {celebrationData.guestName}
                                 </div>
-                                <p style={{ margin: "4px 0 0", fontSize: "0.85rem", color: "#8c7a65" }}>
+                                <p className="checkin-celebration-sub">
                                     {uiCopy("សូមស្វាគមន៍វត្តមានក្នុងពិធីមង្គលការដ៏សិរីសួស្តី", "Welcome to our wedding celebration")}
                                 </p>
                             </div>
@@ -712,7 +748,7 @@ export default function InvitationCheckInPage() {
                             <div className="checkin-table-display-card">
                                 <div className="checkin-table-label">{copy("កន្លែងអង្គុយ", "Seating table")}</div>
                                 <div className="checkin-table-number-huge">
-                                    {celebrationData.tableNumber ? `តុលេខ ${celebrationData.tableNumber}` : uiCopy("តុភ្ញៀវកិត្តិយស", "VIP table")}
+                                    {celebrationData.tableNumber ? copy(`តុលេខ ${celebrationData.tableNumber}`, `Table ${celebrationData.tableNumber}`) : uiCopy("តុភ្ញៀវកិត្តិយស", "VIP table")}
                                 </div>
                                 <div className="checkin-meta-tags">
                                     {celebrationData.groupName && (

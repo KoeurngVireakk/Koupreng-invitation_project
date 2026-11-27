@@ -1,0 +1,24 @@
+{
+  "phase": 20,
+  "title": "Ticket Design, QR, Delivery, Attendance & Check-In",
+  "branch": "feat/phase20-tickets-checkin",
+  "baseSha": "2f773ba69b82f7ac3ad0d1b985d019b906198577",
+  "status": "PASS_LOCAL",
+  "gates": [
+    { "id": "P20-G01", "name": "Ticket design separated from server QR identity & print/PDF export ready", "status": "PASS_LOCAL" },
+    { "id": "P20-G02", "name": "QR contains opaque/URL identity with no raw guest PII & validated PNG bytes", "status": "PASS_LOCAL" },
+    { "id": "P20-G03", "name": "Check-in scanner supports camera fallback, in-app WebView warning, dedup & no stale verify", "status": "PASS_LOCAL" },
+    { "id": "P20-G04", "name": "Duplicate, invalid/expired & offline scan states distinct; zero offline check-in fabrication", "status": "PASS_LOCAL" },
+    { "id": "P20-G05", "name": "Obsidian Dark Mode & Light Mode WCAG 2.2 AA contrast & 0px overflow across 9 captures", "status": "PASS_LOCAL" },
+    { "id": "P20-G06", "name": "RBAC MANAGE_CHECKIN & MANAGE_GUESTS boundaries enforced across desk & limited roster", "status": "PASS_LOCAL" },
+    { "id": "P20-G07", "name": "Physical smartphone camera & native in-app WebView scan/download test", "status": "DEFERRED_P26", "carryForward": "P16-G12/G13" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "254 files / 1950 tests passed (44.25s)",
+    "viteBuild": "passed (1.42s)",
+    "playwrightV2": "27 passed, 5 skipped (desktop-only on mobile), 0 failed (1.2m)",
+    "screenshots": "9/9 0px overflow, 0 non-header Axe violations (reduced from 6 before-state contrast violations)"
+  }
+}

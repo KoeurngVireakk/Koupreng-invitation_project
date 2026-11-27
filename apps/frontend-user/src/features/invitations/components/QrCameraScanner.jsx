@@ -1,7 +1,8 @@
 import { useUiCopy } from "@/shared/i18n/useUiCopy";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Camera, CameraOff, RefreshCw, AlertCircle } from "lucide-react";
+import { Camera, CameraOff, RefreshCw, AlertCircle, Smartphone } from "lucide-react";
 import jsQR from "jsqr";
+import { isInAppBrowser } from "@/shared/telegram/telegramWebApp";
 
 function extractTokenFromQr(text) {
   if (!text) return "";
@@ -31,6 +32,8 @@ export default function QrCameraScanner({ onScan, disabled }) {
   const barcodeDetectorRef = useRef(null);
   const onScanRef = useRef(onScan);
   const activeSessionRef = useRef(false);
+  const lastDecodedRef = useRef({ token: "", at: 0 });
+  const inAppClient = isInAppBrowser();
 
   useEffect(() => {
     onScanRef.current = onScan;
@@ -89,17 +92,23 @@ export default function QrCameraScanner({ onScan, disabled }) {
             if (barcodes && barcodes.length > 0) {
               const token = extractTokenFromQr(barcodes[0].rawValue);
               if (token && activeSessionRef.current) {
-                // Detected token: trigger verification without premature audio success
-                setIsVerifying(true);
-                if (onScanRef.current) {
-                  onScanRef.current(token);
+                const nowDecoded = performance.now();
+                if (lastDecodedRef.current.token === token && nowDecoded - lastDecodedRef.current.at < 2500) {
+                  if (activeSessionRef.current) animFrameRef.current = requestAnimationFrame(detectLoop);
+                  return;
                 }
-                setTimeout(() => {
-                  if (activeSessionRef.current) {
-                    setIsVerifying(false);
-                    animFrameRef.current = requestAnimationFrame(detectLoop);
-                  }
-                }, 2500);
+                lastDecodedRef.current = { token, at: nowDecoded };
+                setIsVerifying(true);
+                try {
+                  await Promise.resolve(onScanRef.current?.(token));
+                } finally {
+                  setTimeout(() => {
+                    if (activeSessionRef.current) {
+                      setIsVerifying(false);
+                      animFrameRef.current = requestAnimationFrame(detectLoop);
+                    }
+                  }, 1100);
+                }
                 return;
               }
             }
@@ -138,17 +147,23 @@ export default function QrCameraScanner({ onScan, disabled }) {
           if (code && code.data && activeSessionRef.current) {
             const token = extractTokenFromQr(code.data);
             if (token) {
-              // Detected token: trigger verification without premature audio success
-              setIsVerifying(true);
-              if (onScanRef.current) {
-                onScanRef.current(token);
+              const nowDecoded = performance.now();
+              if (lastDecodedRef.current.token === token && nowDecoded - lastDecodedRef.current.at < 2500) {
+                if (activeSessionRef.current) animFrameRef.current = requestAnimationFrame(detectLoop);
+                return;
               }
-              setTimeout(() => {
-                if (activeSessionRef.current) {
-                  setIsVerifying(false);
-                  animFrameRef.current = requestAnimationFrame(detectLoop);
-                }
-              }, 2500);
+              lastDecodedRef.current = { token, at: nowDecoded };
+              setIsVerifying(true);
+              try {
+                await Promise.resolve(onScanRef.current?.(token));
+              } finally {
+                setTimeout(() => {
+                  if (activeSessionRef.current) {
+                    setIsVerifying(false);
+                    animFrameRef.current = requestAnimationFrame(detectLoop);
+                  }
+                }, 1100);
+              }
               return;
             }
           }
@@ -460,46 +475,28 @@ export default function QrCameraScanner({ onScan, disabled }) {
         </div>
       </div>
 
+      {inAppClient && !isScanning && (
+        <div className="checkin-inapp-advisory" role="status">
+          <Smartphone size={18} aria-hidden="true" style={{ flexShrink: 0 }} />
+          <span>
+            {uiCopy(
+              "ប្រើប្រាស់ក្នុងកម្មវិធីផ្ញើសារ៖ កាមេរ៉ាអាចត្រូវបានដាក់កម្រិត។ បើមិនអាចបើកកាមេរ៉ាបាន សូមបើកក្នុង Safari/Chrome ឬបញ្ចូលកូដដោយដៃ។",
+              "In-app browser detected: camera permission may be blocked by Telegram/Messenger. Open in Safari/Chrome or use manual token lookup below."
+            )}
+          </span>
+        </div>
+      )}
+
       {errorMsg && (
-        <div
-          role="alert"
-          style={{
-            padding: "12px 16px",
-            background: "#fef2f2",
-            color: "#b91c1c",
-            borderRadius: "10px",
-            fontSize: "0.88rem",
-            marginBottom: "14px",
-            border: "1px solid #fecaca",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <AlertCircle size={18} style={{ flexShrink: 0 }} />
+        <div className="checkin-camera-error" role="alert">
+          <AlertCircle size={18} aria-hidden="true" style={{ flexShrink: 0 }} />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {isVerifying && (
-        <div
-          role="status"
-          style={{
-            padding: "12px 18px",
-            background: "linear-gradient(135deg, #fefce8, #fef9c3)",
-            border: "1.5px solid #fde047",
-            color: "#854d0e",
-            borderRadius: "12px",
-            fontSize: "0.92rem",
-            fontWeight: 700,
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "14px",
-            boxShadow: "0 2px 10px rgba(234, 179, 8, 0.15)",
-          }}
-        >
-          <RefreshCw size={18} className="animate-spin" />
+        <div className="checkin-camera-verifying" role="status">
+          <RefreshCw size={18} className="animate-spin" aria-hidden="true" />
           <span>
             {uiCopy(
               "បានស្កេនកូដ — កំពុងផ្ទៀងផ្ទាត់វត្តមានជាមួយប្រព័ន្ធ...",

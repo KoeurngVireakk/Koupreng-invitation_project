@@ -1,0 +1,83 @@
+[
+  {
+    "name": "01-ticket-designer-light-en-1440.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "02-ticket-designer-obsidian-km-1440.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "03-ticket-designer-mobile-preview-390.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "04-qr-management-light-en-1440.png",
+    "route": "/app/events/42/qr",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "05-qr-management-obsidian-km-1440.png",
+    "route": "/app/events/42/qr",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "06-checkin-desk-light-en-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "07-checkin-desk-obsidian-km-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "08-checkin-desk-mobile-obsidian-390.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "09-checkin-celebration-modal-obsidian-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  }
+]

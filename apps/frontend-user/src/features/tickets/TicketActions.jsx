@@ -3,7 +3,7 @@ import { copyText } from "@/features/guests/model/guestMappers";
 import { renderTicket, ticketBlob } from "./ticketRenderer";
 import { useLanguageStore } from "@/stores/useLanguageStore";
 import { isInAppBrowser } from "@/shared/telegram/telegramWebApp";
-import { Download, Share2, Copy } from "lucide-react";
+import { Download, Share2, Copy, Printer } from "lucide-react";
 
 export default function TicketActions({ ticket, ready, languageMode }) {
   const uiLanguage = useLanguageStore(state => state.lang);
@@ -66,6 +66,7 @@ export default function TicketActions({ ticket, ready, languageMode }) {
     <div>
       <button type="button" disabled={!ready || busy} onClick={() => perform(() => download(2))}><Download size={18} aria-hidden="true" />{en ? "Download PNG · 2×" : "ទាញយក PNG · 2×"}</button>
       <button type="button" disabled={!ready || busy} onClick={() => perform(() => download(3))}>PNG · 3×</button>
+      <button type="button" disabled={!ready || busy} onClick={() => window.print?.()}><Printer size={18} aria-hidden="true" />{en ? "Print / PDF" : "បោះពុម្ព / PDF"}</button>
       <button type="button" disabled={!ready || busy} onClick={() => perform(share)}><Share2 size={18} aria-hidden="true" />{en ? "Share" : "ចែករំលែក"}</button>
       <button type="button" disabled={busy} onClick={() => perform(async () => { if (!await copyText(ticket.invitationUrl)) throw new Error(en ? "Copy is unavailable. Please download the ticket to share it." : "មិនអាចចម្លងបានទេ។ សូមទាញយកកាតដើម្បីចែករំលែក។"); setMessage(en ? "Invitation link copied" : "បានចម្លងតំណសំបុត្រអញ្ជើញ"); })}><Copy size={18} aria-hidden="true" />{en ? "Copy invitation link" : "ចម្លងតំណសំបុត្រអញ្ជើញ"}</button>
       {ticket.kind !== "GUEST" && (
@@ -73,8 +74,8 @@ export default function TicketActions({ ticket, ready, languageMode }) {
       )}
     </div>
     {fallbackImageUrl && (
-      <div style={{ marginTop: "12px", textAlign: "center", padding: "12px", borderRadius: "12px", border: "1px dashed currentColor" }}>
-        <img src={fallbackImageUrl} alt={en ? "Saved invitation ticket preview" : "រូបភាពកាតអញ្ជើញសម្រាប់រក្សាទុក"} style={{ maxWidth: "240px", width: "100%", height: "auto", margin: "0 auto 8px", borderRadius: "8px" }} />
+      <div className="ticket-fallback-card">
+        <img src={fallbackImageUrl} alt={en ? "Saved invitation ticket preview" : "រូបភាពកាតអញ្ជើញសម្រាប់រក្សាទុក"} />
         <button type="button" onClick={() => { URL.revokeObjectURL(fallbackImageUrl); setFallbackImageUrl(""); }}>
           {en ? "Hide image preview" : "បិទរូបភាព"}
         </button>

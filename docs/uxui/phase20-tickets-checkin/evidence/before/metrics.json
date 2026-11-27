@@ -1,0 +1,105 @@
+[
+  {
+    "name": "01-ticket-designer-light-en-1440.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "02-ticket-designer-obsidian-km-1440.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "03-ticket-designer-mobile-preview-390.png",
+    "route": "/app/events/42/tickets/design",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "04-qr-management-light-en-1440.png",
+    "route": "/app/events/42/qr",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "05-qr-management-obsidian-km-1440.png",
+    "route": "/app/events/42/qr",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "06-checkin-desk-light-en-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 4,
+        "targets": [
+          "tr:nth-child(1) > td:nth-child(1) > .checkin-guest-cell > div:nth-child(2) > div:nth-child(2) > .table.checkin-tag-pill",
+          "tr:nth-child(2) > td:nth-child(1) > .checkin-guest-cell > div:nth-child(2) > div:nth-child(2) > .table.checkin-tag-pill",
+          "tr:nth-child(3) > td:nth-child(1) > .checkin-guest-cell > div:nth-child(2) > div:nth-child(2) > .table.checkin-tag-pill",
+          "div:nth-child(1) > .table.checkin-tag-pill"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "07-checkin-desk-obsidian-km-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "08-checkin-desk-mobile-obsidian-390.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "09-checkin-celebration-modal-obsidian-1440.png",
+    "route": "/app/events/42/check-in",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2,
+        "targets": [
+          ".checkin-modal-inner > div:nth-child(2) > div",
+          ".checkin-modal-inner > div:nth-child(2) > p"
+        ]
+      }
+    ],
+    "totalAxeRaw": 1
+  }
+]

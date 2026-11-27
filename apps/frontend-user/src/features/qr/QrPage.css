@@ -32,8 +32,8 @@
 }
 
 .qr-type-badge {
-  background: var(--ws-gold, #926c34);
-  color: #ffffff;
+  background: var(--app-accent);
+  color: var(--app-on-accent);
   padding: 3px 10px;
   border-radius: 9999px;
   font-size: 12px;
@@ -45,14 +45,15 @@
 .qr-type-indicator p {
   margin: 0;
   font-size: 13px;
-  color: #59615c;
+  color: var(--app-muted);
   line-height: 1.5;
 }
 
 .qr-card {
-  border: 1.5px solid #eadfce;
+  border: 1.5px solid var(--app-border);
   border-radius: 20px;
-  background: #ffffff;
+  background: var(--app-surface);
+  color: var(--app-ink);
   padding: 36px 28px;
   display: grid;
   grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
@@ -70,15 +71,16 @@
   height: auto;
   aspect-ratio: 1;
   border-radius: 16px;
-  border: 1.5px solid #e6dccb;
+  border: 1.5px solid var(--app-border);
   background: #ffffff;
+  color: #1f2421;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   margin-bottom: 0;
   box-shadow: inset 0 2px 8px rgba(93, 67, 32, 0.04);
-  padding: 12px;
+  padding: 16px;
 }
 
 .qr-image {
@@ -92,15 +94,16 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  color: #1f2421;
 }
 
 .qr-icon-placeholder {
-  color: #967037;
+  color: #6e4f1d;
 }
 
 .qr-code-text {
   font-size: 12px;
-  color: #8c8275;
+  color: var(--app-muted);
   font-family: monospace;
   word-break: break-all;
   max-width: 220px;
@@ -117,23 +120,23 @@
 .qr-title {
   font-size: 18px;
   font-weight: 750;
-  color: #1f2421;
+  color: var(--app-ink);
   margin: 4px 0;
 }
 
 .qr-guest {
   font-size: 14px;
-  color: #59615c;
+  color: var(--app-muted);
   margin: 0;
 }
 
 .qr-guest strong {
-  color: #967037;
+  color: var(--app-gold);
 }
 
 .qr-link {
   font-size: 13px;
-  color: #0f766e;
+  color: var(--app-accent);
   text-decoration: none;
   word-break: break-all;
   max-width: 100%;
@@ -142,13 +145,13 @@
   gap: 6px;
   padding: 4px 10px;
   border-radius: 8px;
-  background: #f0fdfa;
-  border: 1px solid #ccfbf1;
+  background: var(--app-subtle);
+  border: 1px solid var(--app-border);
   transition: background 150ms ease;
 }
 
 .qr-link:hover {
-  background: #ccfbf1;
+  border-color: var(--app-gold);
 }
 
 .qr-actions {
@@ -166,7 +169,7 @@
 .qr-empty {
   text-align: center;
   padding: 40px 20px;
-  color: #59615c;
+  color: var(--app-muted);
 }
 
 @media print {
