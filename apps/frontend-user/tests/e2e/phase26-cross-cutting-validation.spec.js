@@ -64,7 +64,16 @@ async function installPhase26Fixtures(page, { authenticated = true, lang = "en",
     };
     if (p.endsWith("/invitations/my")) return json([baseEvent]);
     if (p === "/api/v1/invitations/101" || p === "/api/v1/invitations/101/preview") return json(baseEvent);
-    if (p === "/api/v1/invitations/101/access") return json({ owner: true, permissions: ["VIEW_EVENT", "EDIT_EVENT", "MANAGE_GUESTS"], ownerFeatures: ["QR_INVITATIONS"] });
+    if (p === "/api/v1/invitations/101/access") return json({ owner: true, permissions: ["VIEW_EVENT", "EDIT_EVENT", "MANAGE_GUESTS", "MANAGE_BUDGET"], ownerFeatures: ["QR_INVITATIONS"] });
+    if (p === "/api/v1/invitations/101/budget-items") {
+      return json([
+        { id: 1, category: "Venue & Transport", itemName: "Grand Ballroom Rental", estimatedCost: 4500, actualCost: 4500, currency: "USD", status: "PAID", expenseDate: "2026-11-20", vendorName: "Sokha Hotel" },
+        { id: 2, category: "Food & Catering", itemName: "Khmer Ceremony Feast", estimatedCost: 12000000, actualCost: 6000000, currency: "KHR", status: "PENDING", expenseDate: "2026-11-21", vendorName: "Mekong Catering" },
+      ]);
+    }
+    if (p === "/api/v1/invitations/101/budget/summary") {
+      return json({ plannedTotalUsd: 4500, spentTotalUsd: 4500, plannedTotalKhr: 12000000, spentTotalKhr: 6000000 });
+    }
     if (p.startsWith("/api/v1/public/invitations/audit-event")) {
       if (p.endsWith("/wishes")) {
         const msg = xssInject ? '<img src=x onerror="window.__xssFired=true">Best wishes!' : "សូមជូនពរគូស្វាមីភរិយាថ្មី!";
@@ -86,25 +95,55 @@ async function installPhase26Fixtures(page, { authenticated = true, lang = "en",
 }
 
 test.describe("Phase 26 — Cross-Cutting Validation (WCAG 2.2 AA, Responsive, Multilingual, PWA, Security)", () => {
-  test("passes WCAG 2.2 AA with 0 violations on landing, catalog, and host shell across Light and Obsidian Dark", async ({ page }) => {
+  test("passes WCAG 2.2 AA with 0 violations across landing, catalog, populated budget, opened drawer at 359px, and opened public invitation", async ({ page }) => {
     for (const scenario of [
       { route: "/", theme: "light", lang: "en", auth: false },
       { route: "/templates", theme: "dark", lang: "en", auth: false },
       { route: "/app/events", theme: "dark", lang: "km", auth: true },
+      { route: "/app/events/101/budget", theme: "light", lang: "km", auth: true, waitText: "Grand Ballroom Rental" },
     ]) {
       await installPhase26Fixtures(page, { authenticated: scenario.auth, lang: scenario.lang, theme: scenario.theme });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(scenario.route, { waitUntil: "domcontentloaded" });
       await page.evaluate(() => document.fonts.ready);
-      await page.waitForTimeout(450);
+      if (scenario.waitText) {
+        await expect(page.locator("body")).toContainText(scenario.waitText, { timeout: 15000 });
+      } else {
+        await page.waitForTimeout(450);
+      }
 
       expect(await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth))).toBe(0);
       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
       expect(axe.violations, `Axe violations on ${scenario.route} (${scenario.theme}/${scenario.lang})`).toEqual([]);
     }
+
+    // Open mobile drawer below 359px and verify profile link keeps an explicit accessible name and 0 Axe violations
+    await page.setViewportSize({ width: 359, height: 800 });
+    await installPhase26Fixtures(page, { authenticated: true, lang: "km", theme: "dark" });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/app/events", { waitUntil: "domcontentloaded" });
+    await page.locator(".host-hamburger-btn").click();
+    const drawer = page.locator("#host-mobile-navigation");
+    await expect(drawer).toHaveClass(/open/);
+    await expect(drawer.getByRole("link", { name: "Sokha Meas" })).toBeVisible();
+    const drawerAxe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    expect(drawerAxe.violations, "Axe violations on opened mobile drawer at 359px").toEqual([]);
+
+    // Verify opened public invitation experience after envelope activation (outside inert cover)
+    await page.setViewportSize({ width: 390, height: 844 });
+    await installPhase26Fixtures(page, { authenticated: false, lang: "km", theme: "light" });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/i/audit-event", { waitUntil: "domcontentloaded" });
+    await page.locator(".kc-opening button").first().click();
+    await expect(page.locator(".kc-main")).not.toHaveAttribute("aria-hidden", "true");
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth))).toBe(0);
+    const openedInviteAxe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    expect(openedInviteAxe.violations, "Axe violations on opened public invitation").toEqual([]);
   });
 
-  test("preserves 0px overflow from 320px to 1440px, short landscape height, and 200% font scale", async ({ page }) => {
+  test("preserves 0px overflow from 320px to 1440px, short landscape height, and genuine 200% computed font resize", async ({ page }) => {
     await installPhase26Fixtures(page, { authenticated: true, lang: "km", theme: "dark" });
     await page.goto("/app/events", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("main").first()).toBeVisible();
@@ -124,8 +163,32 @@ test.describe("Phase 26 — Cross-Cutting Validation (WCAG 2.2 AA, Responsive, M
     }
 
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const resizeCheck = await page.evaluate(() => {
+      const h1 = document.querySelector("h1");
+      const supporting = document.querySelector("main p");
+      const beforeH1 = h1 ? parseFloat(getComputedStyle(h1).fontSize) : 0;
+      const beforeP = supporting ? parseFloat(getComputedStyle(supporting).fontSize) : 0;
+
+      const snapshot = [...document.querySelectorAll("body *")].map((el) => [el, parseFloat(getComputedStyle(el).fontSize)]);
+      for (const [el, px] of snapshot) {
+        if (px > 0) el.style.setProperty("font-size", `${px * 2}px`, "important");
+      }
+
+      const afterH1 = h1 ? parseFloat(getComputedStyle(h1).fontSize) : 0;
+      const afterP = supporting ? parseFloat(getComputedStyle(supporting).fontSize) : 0;
+      return {
+        beforeH1,
+        afterH1,
+        beforeP,
+        afterP,
+        overflowX: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+      };
+    });
+    expect(resizeCheck.beforeH1).toBeGreaterThan(0);
+    expect(resizeCheck.afterH1).toBeGreaterThanOrEqual(resizeCheck.beforeH1 * 1.99);
+    expect(resizeCheck.beforeP).toBeGreaterThan(0);
+    expect(resizeCheck.afterP).toBeGreaterThanOrEqual(resizeCheck.beforeP * 1.99);
+    expect(resizeCheck.overflowX).toBe(0);
   });
 
   test("verifies PWA zero-SW posture, valid manifest, unauth route guard, and XSS escaping on public invite", async ({ page }) => {

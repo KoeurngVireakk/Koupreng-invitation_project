@@ -1,16 +1,16 @@
 {
   "stage": "after",
-  "generatedAt": "2026-11-27T13:30:32.055Z",
+  "generatedAt": "2026-11-27T13:54:37.313Z",
   "bundles": {
-    "jsTotalBytes": 3060180,
-    "jsTotalGzipBytes": 962645,
-    "cssTotalBytes": 1468698,
-    "cssTotalGzipBytes": 303439,
+    "jsTotalBytes": 3060293,
+    "jsTotalGzipBytes": 962625,
+    "cssTotalBytes": 1468887,
+    "cssTotalGzipBytes": 303471,
     "mediaTotalBytes": 10423126,
     "entryJs": {
-      "name": "index-DrBL6YOJ.js",
+      "name": "index-BGPTBe31.js",
       "bytes": 479460,
-      "gzipBytes": 141692
+      "gzipBytes": 141715
     },
     "entryCss": {
       "name": "index-BkbsjD8Y.css",
@@ -19,24 +19,24 @@
     },
     "topJsChunks": [
       {
-        "name": "index-DrBL6YOJ.js",
+        "name": "index-BGPTBe31.js",
         "bytes": 479460,
-        "gzipBytes": 141692
+        "gzipBytes": 141715
       },
       {
-        "name": "InvitationEditFeature-CRJ2GEFD.js",
+        "name": "InvitationEditFeature-dcbTtRyL.js",
         "bytes": 251151,
-        "gzipBytes": 65445
+        "gzipBytes": 65442
       },
       {
-        "name": "InvitationCheckInPage-CIFTpL00.js",
+        "name": "InvitationCheckInPage-CiMLkS4r.js",
         "bytes": 186238,
-        "gzipBytes": 61907
+        "gzipBytes": 61905
       },
       {
-        "name": "TemplateExperience-BwdzXWN2.js",
+        "name": "TemplateExperience-BhdUmcTY.js",
         "bytes": 130537,
-        "gzipBytes": 34695
+        "gzipBytes": 34689
       },
       {
         "name": "useBackendMessages-xghX5alh.js",
@@ -49,19 +49,19 @@
         "gzipBytes": 24707
       },
       {
-        "name": "RoyalGardenCinematicLayout-BJbOP5Lo.js",
+        "name": "RoyalGardenCinematicLayout-DZe0Gzyk.js",
         "bytes": 70536,
-        "gzipBytes": 21791
+        "gzipBytes": 21789
       },
       {
-        "name": "EventCreatePage-R48MBZP6.js",
+        "name": "EventCreatePage-D0YoLcJR.js",
         "bytes": 58148,
         "gzipBytes": 14805
       },
       {
-        "name": "InvitationStudio-TIXd01rN.js",
+        "name": "InvitationStudio-CW7v7FjJ.js",
         "bytes": 56218,
-        "gzipBytes": 16451
+        "gzipBytes": 16446
       },
       {
         "name": "MotionConfigContext-CluVpD3A.js",
@@ -367,6 +367,7 @@
       "lang": "km",
       "theme": "light",
       "width": 1440,
+      "waitText": "Grand Ballroom Rental",
       "overflowX": 0,
       "h1Count": 1,
       "violationCount": 0,
@@ -406,13 +407,37 @@
       "violations": []
     },
     {
-      "id": "11-public-invite-light-km",
+      "id": "11-public-invite-opening-light-km",
       "route": "/i/audit-event",
       "lang": "km",
       "theme": "light",
       "width": 390,
       "overflowX": 0,
       "h1Count": 2,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "12-public-invite-opened-light-km",
+      "route": "/i/audit-event",
+      "lang": "km",
+      "theme": "light",
+      "width": 390,
+      "openEnvelope": true,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "13-mobile-drawer-359-dark-km",
+      "route": "/app/events",
+      "lang": "km",
+      "theme": "dark",
+      "width": 359,
+      "openMobileDrawer": true,
+      "overflowX": 0,
+      "h1Count": 1,
       "violationCount": 0,
       "violations": []
     }
@@ -427,55 +452,55 @@
   "perfSummary": [
     {
       "route": "/",
-      "domContentLoadedMs": 58,
-      "loadMs": 838,
-      "fcpMs": 148,
-      "lcpMs": 148,
-      "cls": 0.003,
-      "jsTransferKb": 224,
+      "domContentLoadedMs": 64,
+      "loadMs": 880,
+      "fcpMs": 152,
+      "lcpMs": 152,
+      "cls": 0.0019,
+      "jsTransferKb": 224.1,
       "cssTransferKb": 49.1,
-      "taskMs": 163,
+      "taskMs": 165,
       "scriptMs": 60,
-      "jsHeapUsedMB": 4.71
+      "jsHeapUsedMB": 4.72
     },
     {
       "route": "/templates",
-      "domContentLoadedMs": 91,
-      "loadMs": 861,
-      "fcpMs": 132,
-      "lcpMs": 464,
+      "domContentLoadedMs": 58,
+      "loadMs": 835,
+      "fcpMs": 100,
+      "lcpMs": 436,
       "cls": 0.0011,
-      "jsTransferKb": 224.3,
+      "jsTransferKb": 224.4,
       "cssTransferKb": 49.1,
-      "taskMs": 157,
-      "scriptMs": 74,
+      "taskMs": 125,
+      "scriptMs": 61,
       "jsHeapUsedMB": 5.01
     },
     {
       "route": "/app/events",
       "domContentLoadedMs": 59,
-      "loadMs": 821,
-      "fcpMs": 84,
-      "lcpMs": 448,
+      "loadMs": 804,
+      "fcpMs": 88,
+      "lcpMs": 452,
       "cls": 0,
       "jsTransferKb": 293,
-      "cssTransferKb": 72.4,
-      "taskMs": 170,
+      "cssTransferKb": 72.5,
+      "taskMs": 164,
       "scriptMs": 79,
-      "jsHeapUsedMB": 5.48
+      "jsHeapUsedMB": 5.47
     },
     {
       "route": "/i/audit-event",
-      "domContentLoadedMs": 61,
-      "loadMs": 860,
+      "domContentLoadedMs": 59,
+      "loadMs": 891,
       "fcpMs": 88,
       "lcpMs": 832,
       "cls": 0.0013,
-      "jsTransferKb": 411.4,
+      "jsTransferKb": 411.5,
       "cssTransferKb": 109,
-      "taskMs": 320,
+      "taskMs": 321,
       "scriptMs": 97,
-      "jsHeapUsedMB": 6.33
+      "jsHeapUsedMB": 6.34
     }
   ]
 }

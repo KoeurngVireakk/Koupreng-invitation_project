@@ -3,11 +3,11 @@
   "title": "Cross-Cutting Validation (Accessibility, Multilingual, Responsive, Performance, PWA & Security)",
   "branch": "feat/phase26-cross-cutting-qa",
   "baseSha": "6c8b40b1a5e8a92be744008b64de10e29a30f9db",
-  "status": "READY_FOR_CODEX_REVIEW",
+  "status": "CODEX_REMEDIATION_READY_FOR_RE_REVIEW",
   "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
   "gates": [
-    { "id": "P26-G01", "name": "WCAG 2.2 AA Light/Obsidian Dark + EN/KM audit with 0 violations (including header controls)", "status": "PASS_LOCAL" },
-    { "id": "P26-G02", "name": "Responsive 12-viewport matrix (320px..1440px, 96/96 checks), short landscape height, and 200% font scale 0px overflow", "status": "PASS_LOCAL" },
+    { "id": "P26-G01", "name": "WCAG 2.2 AA Light/Obsidian Dark + EN/KM audit with 0 violations (including header controls, opened 359px drawer, populated budget-items, and opened public invitation)", "status": "PASS_LOCAL" },
+    { "id": "P26-G02", "name": "Responsive 12-viewport matrix (320px..1440px, 96/96 checks), short landscape height, and genuine 200% computed font resize (h1 and p >= 1.99x) 0px overflow", "status": "PASS_LOCAL" },
     { "id": "P26-G03", "name": "Multilingual EN/KM normalization (<html lang>) and state-preserving toggle with keyboard focus restoration", "status": "PASS_LOCAL" },
     { "id": "P26-G04", "name": "Chromium lab performance baseline telemetry and lazy route-chunked production bundle check", "status": "PASS_LOCAL" },
     { "id": "P26-G05", "name": "PWA zero-Service-Worker posture (0 registrations) + valid manifest.webmanifest + unauth redirect + XSS escaping", "status": "PASS_LOCAL" },
@@ -16,10 +16,10 @@
   "verification": {
     "eslint": "0 errors",
     "knipAndDeps": "passed",
-    "vitestFull": "257 files / 1979 tests passed (39.35s)",
-    "viteBuild": "passed (1.59s, entry index.js 479.46 kB / 142.81 kB gzip)",
-    "playwrightPhase26": "8 passed (desktop-chromium & mobile-chromium, 7.9s, 0 Axe violations, 0px overflow)",
-    "captureScript": "96/96 responsive checks 0px overflow; 11/11 Axe cases clean (reduced from 10 baseline WCAG 2.5.3 violations)",
+    "vitestFull": "257 files / 1979 tests passed (47.06s)",
+    "viteBuild": "passed (1.39s, entry index.js 479.46 kB / 142.84 kB gzip)",
+    "playwrightPhase26": "8 passed (desktop-chromium & mobile-chromium, 13.6s, 0 Axe violations across opened drawer/opened public invite/populated budget, genuine 200% computed font resize)",
+    "captureScript": "96/96 responsive checks 0px overflow; 13/13 Axe cases clean (reduced from 10 baseline + 1 post-opening WCAG 2.5.3 violations)",
     "repositoryPolicyTests": "18 passed / 0 failed"
   }
 }

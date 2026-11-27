@@ -426,7 +426,7 @@ export default function KhmerCelestialLayout({
             {content.eventTime ? <p className="kc-hero__time" style={celestialElementFont(content, "time")}>{content.eventTime}</p> : null}
             {content.venue?.name ? <p className="kc-hero__venue">{content.venue.name}</p> : null}
           </motion.div>
-          <button type="button" className="kc-hero__scroll" onClick={scrollToInvitation} aria-label="រំកិលទៅព័ត៌មានគ្រួសារ">
+          <button type="button" className="kc-hero__scroll" onClick={scrollToInvitation} aria-label={languageMode === "en" ? "សូមអញ្ជើញ · Scroll to family details" : "សូមអញ្ជើញ · រំកិលទៅព័ត៌មានគ្រួសារ"}>
             <span><InvitationLabel value={"សូមអញ្ជើញ"} /></span>
             <ArrowDown aria-hidden="true" />
           </button>

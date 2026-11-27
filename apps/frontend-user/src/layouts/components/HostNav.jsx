@@ -462,6 +462,7 @@ export default function HostNav() {
           <Link
             to="/app/profile"
             className="host-profile-pill"
+            aria-label={displayName}
             onClick={closeMobileMenu}
           >
             <span

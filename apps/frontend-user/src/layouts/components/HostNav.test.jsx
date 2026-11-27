@@ -138,6 +138,7 @@ describe("HostNav component", () => {
     expect(mobileDrawer).toHaveClass("open");
     expect(mobileDrawer).not.toHaveAttribute("inert");
     expect(mobileDrawer).toHaveAttribute("aria-hidden", "false");
+    expect(within(mobileDrawer).getByRole("link", { name: "Sokha Chan" })).toHaveAttribute("href", "/app/profile");
 
     // Click close button inside drawer
     const closeBtn = screen.getByRole("button", { name: "Close menu" });

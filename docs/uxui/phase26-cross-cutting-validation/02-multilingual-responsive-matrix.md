@@ -10,13 +10,13 @@
 | `/` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/templates` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/login` | `0px` across all 12 widths | `PASS_LOCAL` |
-| `/app/events` | `0px` across all 12 widths | `PASS_LOCAL` |
+| `/app/events` *(including opened drawer at `359px`)* | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/app/events/101/guests` | `0px` across all 12 widths | `PASS_LOCAL` |
-| `/app/events/101/budget` | `0px` across all 12 widths | `PASS_LOCAL` |
+| `/app/events/101/budget` *(populated USD/KHR `/budget-items`)* | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/app/events/101/reports` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/i/audit-event` | `0px` across all 12 widths | `PASS_LOCAL` |
 
-Total viewport checks: **`96 / 96` (`0` overflow failures)**, plus short landscape (`844x390`) and `200%` font scale (`html { font-size: 200% }`) verified in Playwright (`0px` overflow).
+Total viewport checks: **`96 / 96` (`0` overflow failures)**, plus short landscape (`844x390`) and genuine 200% computed font resize (`h1` and `main p` computed `font-size` verified `>= 1.99x` baseline including `px`-sized `EventsFeature.css` rules) verified in Playwright (`0px` overflow).
 
 ## 2. Multilingual EN/KM Parity
 

@@ -173,7 +173,20 @@ async function installMocks(page, { authenticated = true, lang = 'en', theme = '
         ],
       });
     }
-    if (p === '/api/v1/invitations/101/expenses') return json([]);
+    if (p === '/api/v1/invitations/101/budget-items' || p === '/api/v1/invitations/101/expenses') {
+      return json([
+        { id: 1, category: 'Venue & Transport', itemName: 'Grand Ballroom Rental', estimatedCost: 4500, actualCost: 4500, currency: 'USD', status: 'PAID', expenseDate: '2026-11-20', vendorName: 'Sokha Hotel' },
+        { id: 2, category: 'Food & Catering', itemName: 'Khmer Ceremony Feast', estimatedCost: 12000000, actualCost: 6000000, currency: 'KHR', status: 'PENDING', expenseDate: '2026-11-21', vendorName: 'Mekong Catering' },
+      ]);
+    }
+    if (p === '/api/v1/invitations/101/budget/summary') {
+      return json({
+        plannedTotalUsd: 4500,
+        spentTotalUsd: 4500,
+        plannedTotalKhr: 12000000,
+        spentTotalKhr: 6000000,
+      });
+    }
     if (p.includes('/analytics')) {
       return json({
         from: '2026-11-01',
@@ -231,7 +244,13 @@ async function run() {
       await installMocks(page, { authenticated: true, lang: 'km', theme: 'light' });
       for (const route of responsiveRoutes) {
         await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(400);
+        if (route === '/app/events/101/budget') {
+          await page.waitForFunction(() => document.body.innerText.includes('Grand Ballroom Rental'));
+        } else if (route === '/i/audit-event') {
+          await page.locator('.kc-opening button').first().waitFor({ state: 'visible' });
+        } else {
+          await page.waitForTimeout(400);
+        }
         const routeWidths = {};
         for (const width of VIEWPORT_WIDTHS) {
           await page.setViewportSize({ width, height: 900 });
@@ -245,7 +264,7 @@ async function run() {
       await context.close();
     }
 
-    // 2. WCAG 2.2 AA Light/Dark + EN/KM Audit across 11 key routes (capture screenshots too)
+    // 2. WCAG 2.2 AA Light/Dark + EN/KM Audit across 13 key states (including opened envelope, populated budget, and opened 359px mobile drawer)
     const a11yCases = [
       { id: '01-landing-light-en', route: '/', lang: 'en', theme: 'light', width: 1440 },
       { id: '02-landing-dark-km', route: '/', lang: 'km', theme: 'dark', width: 390 },
@@ -253,11 +272,13 @@ async function run() {
       { id: '04-login-light-km', route: '/login', lang: 'km', theme: 'light', width: 390 },
       { id: '05-events-dark-km', route: '/app/events', lang: 'km', theme: 'dark', width: 1440 },
       { id: '06-guests-dark-en', route: '/app/events/101/guests', lang: 'en', theme: 'dark', width: 390 },
-      { id: '07-budget-light-km', route: '/app/events/101/budget', lang: 'km', theme: 'light', width: 1440 },
+      { id: '07-budget-light-km', route: '/app/events/101/budget', lang: 'km', theme: 'light', width: 1440, waitText: 'Grand Ballroom Rental' },
       { id: '08-reports-dark-en', route: '/app/events/101/reports', lang: 'en', theme: 'dark', width: 1440 },
       { id: '09-packages-dark-en', route: '/app/packages', lang: 'en', theme: 'dark', width: 1440 },
       { id: '10-notifications-dark-km', route: '/app/notifications', lang: 'km', theme: 'dark', width: 390 },
-      { id: '11-public-invite-light-km', route: '/i/audit-event', lang: 'km', theme: 'light', width: 390 },
+      { id: '11-public-invite-opening-light-km', route: '/i/audit-event', lang: 'km', theme: 'light', width: 390 },
+      { id: '12-public-invite-opened-light-km', route: '/i/audit-event', lang: 'km', theme: 'light', width: 390, openEnvelope: true },
+      { id: '13-mobile-drawer-359-dark-km', route: '/app/events', lang: 'km', theme: 'dark', width: 359, openMobileDrawer: true },
     ];
 
     const a11yResults = [];
@@ -267,7 +288,27 @@ async function run() {
       await installMocks(page, { authenticated: c.route.startsWith('/app'), lang: c.lang, theme: c.theme });
       await page.goto(`${baseURL}${c.route}`, { waitUntil: 'domcontentloaded' });
       await page.evaluate(() => document.fonts.ready);
-      await page.waitForTimeout(700);
+      if (c.waitText) {
+        await page.waitForFunction((txt) => document.body.innerText.includes(txt), c.waitText);
+      } else {
+        await page.waitForTimeout(700);
+      }
+      if (c.openEnvelope) {
+        await page.locator('.kc-opening button').first().click();
+        await page.waitForFunction(() => {
+          const main = document.querySelector('.kc-main');
+          return main && main.getAttribute('aria-hidden') !== 'true' && !main.hasAttribute('inert');
+        });
+        await page.waitForTimeout(300);
+      }
+      if (c.openMobileDrawer) {
+        await page.locator('.host-hamburger-btn').click();
+        await page.waitForFunction(() => {
+          const drawer = document.getElementById('host-mobile-navigation');
+          return drawer && drawer.classList.contains('open') && !drawer.hasAttribute('inert');
+        });
+        await page.waitForTimeout(200);
+      }
       const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
       const diag = await page.evaluate(() => ({
         lang: document.documentElement.lang,
