@@ -11,7 +11,7 @@
 | `/templates` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/login` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/app/events` *(including opened drawer at `359px`)* | `0px` across all 12 widths | `PASS_LOCAL` |
-| `/app/events/101/guests` | `0px` across all 12 widths | `PASS_LOCAL` |
+| `/app/events/101/guests` *(populated `/guests/page` & `/guests/overview`)* | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/app/events/101/budget` *(populated USD/KHR `/budget-items`)* | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/app/events/101/reports` | `0px` across all 12 widths | `PASS_LOCAL` |
 | `/i/audit-event` | `0px` across all 12 widths | `PASS_LOCAL` |

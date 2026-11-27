@@ -65,6 +65,26 @@ async function installPhase26Fixtures(page, { authenticated = true, lang = "en",
     if (p.endsWith("/invitations/my")) return json([baseEvent]);
     if (p === "/api/v1/invitations/101" || p === "/api/v1/invitations/101/preview") return json(baseEvent);
     if (p === "/api/v1/invitations/101/access") return json({ owner: true, permissions: ["VIEW_EVENT", "EDIT_EVENT", "MANAGE_GUESTS", "MANAGE_BUDGET"], ownerFeatures: ["QR_INVITATIONS"] });
+    const guestRows = [
+      { id: 501, invitationId: 101, guestName: "Sokha Chan", phone: "012345678", seatCount: 2, guestGroup: "Bride Side", sideType: "Family", sendStatus: "SENT" },
+      { id: 502, invitationId: 101, guestName: "ចាន់ ដារ៉ា", phone: "012999888", seatCount: 1, guestGroup: "Family", sideType: "Friend", sendStatus: "PENDING" },
+    ];
+    if (p === "/api/v1/invitations/101/guests") return json(guestRows);
+    if (p === "/api/v1/invitations/101/guests/overview") {
+      return json({
+        guestRecords: 2, reservedSeats: 3, attendingRecords: 1, declinedRecords: 0, maybeRecords: 0,
+        unansweredRecords: 1, respondedRecords: 1, toInviteRecords: 1, checkedInRecords: 0, confirmedAttendees: 2, markedSentRecords: 1,
+      });
+    }
+    if (p === "/api/v1/invitations/101/guests/page") {
+      return json({
+        items: [
+          { guest: guestRows[0], rsvpStatus: "ATTENDING", attendeeCount: 2, respondedAt: "2026-11-26T08:00:00Z", checkedIn: false, checkedInAt: null },
+          { guest: guestRows[1], rsvpStatus: null, attendeeCount: null, respondedAt: null, checkedIn: false, checkedInAt: null },
+        ],
+        page: 0, size: 25, totalElements: 2, totalPages: 1,
+      });
+    }
     if (p === "/api/v1/invitations/101/budget-items") {
       return json([
         { id: 1, category: "Venue & Transport", itemName: "Grand Ballroom Rental", estimatedCost: 4500, actualCost: 4500, currency: "USD", status: "PAID", expenseDate: "2026-11-20", vendorName: "Sokha Hotel" },
@@ -100,6 +120,7 @@ test.describe("Phase 26 — Cross-Cutting Validation (WCAG 2.2 AA, Responsive, M
       { route: "/", theme: "light", lang: "en", auth: false },
       { route: "/templates", theme: "dark", lang: "en", auth: false },
       { route: "/app/events", theme: "dark", lang: "km", auth: true },
+      { route: "/app/events/101/guests", theme: "dark", lang: "en", auth: true, waitText: "Sokha Chan" },
       { route: "/app/events/101/budget", theme: "light", lang: "km", auth: true, waitText: "Grand Ballroom Rental" },
     ]) {
       await installPhase26Fixtures(page, { authenticated: scenario.auth, lang: scenario.lang, theme: scenario.theme });

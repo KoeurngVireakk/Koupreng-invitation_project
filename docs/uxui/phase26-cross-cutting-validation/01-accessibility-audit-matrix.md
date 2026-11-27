@@ -24,7 +24,7 @@
 | `03-templates-dark-en` | `/templates` | `en` | `dark` | `1440` | `1` (`label-content-name-mismatch`: 2) | **`0`** |
 | `04-login-light-km` | `/login` | `km` | `light` | `390` | `0` | **`0`** |
 | `05-events-dark-km` | `/app/events` | `km` | `dark` | `1440` | `1` (`label-content-name-mismatch`: 1) | **`0`** |
-| `06-guests-dark-en` | `/app/events/101/guests` | `en` | `dark` | `390` | `0` | **`0`** |
+| `06-guests-dark-en` *(populated `/guests/page` & `/guests/overview`)* | `/app/events/101/guests` | `en` | `dark` | `390` | `0` | **`0`** |
 | `07-budget-light-km` *(populated `/budget-items`)* | `/app/events/101/budget` | `km` | `light` | `1440` | `1` (`label-content-name-mismatch`: 1) | **`0`** |
 | `08-reports-dark-en` | `/app/events/101/reports` | `en` | `dark` | `1440` | `1` (`label-content-name-mismatch`: 1) | **`0`** |
 | `09-packages-dark-en` | `/app/packages` | `en` | `dark` | `1440` | `1` (`label-content-name-mismatch`: 1) | **`0`** |

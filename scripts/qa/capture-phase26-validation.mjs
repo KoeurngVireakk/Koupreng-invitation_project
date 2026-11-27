@@ -154,12 +154,37 @@ async function installMocks(page, { authenticated = true, lang = 'en', theme = '
         ownerFeatures: ['QR_INVITATIONS', 'QR_CHECK_IN', 'SEATING', 'ADVANCED_ANALYTICS', 'TEAM_MEMBERS'],
       });
     }
-    if (p === '/api/v1/invitations/101/guests') {
-      const payloadName = xssInject ? '<img src=x onerror="window.__xssFired=true">Dara' : 'Sokha Chan';
-      return json([
-        { id: 501, invitationId: 101, guestName: payloadName, phone: '012345678', seatCount: 2, guestGroup: 'Bride Side', sendStatus: 'SENT', rsvpStatus: 'ATTENDING' },
-        { id: 502, invitationId: 101, guestName: 'ចាន់ ដារ៉ា', phone: '012999888', seatCount: 1, guestGroup: 'Family', sendStatus: 'PENDING', rsvpStatus: 'PENDING' },
-      ]);
+    const guestRows = [
+      { id: 501, invitationId: 101, guestName: xssInject ? '<img src=x onerror="window.__xssFired=true">Dara' : 'Sokha Chan', phone: '012345678', seatCount: 2, guestGroup: 'Bride Side', sideType: 'Family', sendStatus: 'SENT', rsvpStatus: 'ATTENDING' },
+      { id: 502, invitationId: 101, guestName: 'ចាន់ ដារ៉ា', phone: '012999888', seatCount: 1, guestGroup: 'Family', sideType: 'Friend', sendStatus: 'PENDING', rsvpStatus: 'PENDING' },
+    ];
+    if (p === '/api/v1/invitations/101/guests') return json(guestRows);
+    if (p === '/api/v1/invitations/101/guests/overview') {
+      return json({
+        guestRecords: guestRows.length,
+        reservedSeats: 3,
+        attendingRecords: 1,
+        declinedRecords: 0,
+        maybeRecords: 0,
+        unansweredRecords: 1,
+        respondedRecords: 1,
+        toInviteRecords: 1,
+        checkedInRecords: 0,
+        confirmedAttendees: 2,
+        markedSentRecords: 1,
+      });
+    }
+    if (p === '/api/v1/invitations/101/guests/page') {
+      return json({
+        items: [
+          { guest: guestRows[0], rsvpStatus: 'ATTENDING', attendeeCount: 2, respondedAt: '2026-11-26T08:00:00Z', checkedIn: false, checkedInAt: null },
+          { guest: guestRows[1], rsvpStatus: null, attendeeCount: null, respondedAt: null, checkedIn: false, checkedInAt: null },
+        ],
+        page: 0,
+        size: 25,
+        totalElements: guestRows.length,
+        totalPages: 1,
+      });
     }
     if (p === '/api/v1/invitations/101/budget') {
       return json({
@@ -246,6 +271,8 @@ async function run() {
         await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
         if (route === '/app/events/101/budget') {
           await page.waitForFunction(() => document.body.innerText.includes('Grand Ballroom Rental'));
+        } else if (route === '/app/events/101/guests') {
+          await page.waitForFunction(() => document.body.innerText.includes('Sokha Chan'));
         } else if (route === '/i/audit-event') {
           await page.locator('.kc-opening button').first().waitFor({ state: 'visible' });
         } else {
@@ -271,7 +298,7 @@ async function run() {
       { id: '03-templates-dark-en', route: '/templates', lang: 'en', theme: 'dark', width: 1440 },
       { id: '04-login-light-km', route: '/login', lang: 'km', theme: 'light', width: 390 },
       { id: '05-events-dark-km', route: '/app/events', lang: 'km', theme: 'dark', width: 1440 },
-      { id: '06-guests-dark-en', route: '/app/events/101/guests', lang: 'en', theme: 'dark', width: 390 },
+      { id: '06-guests-dark-en', route: '/app/events/101/guests', lang: 'en', theme: 'dark', width: 390, waitText: 'Sokha Chan' },
       { id: '07-budget-light-km', route: '/app/events/101/budget', lang: 'km', theme: 'light', width: 1440, waitText: 'Grand Ballroom Rental' },
       { id: '08-reports-dark-en', route: '/app/events/101/reports', lang: 'en', theme: 'dark', width: 1440 },
       { id: '09-packages-dark-en', route: '/app/packages', lang: 'en', theme: 'dark', width: 1440 },

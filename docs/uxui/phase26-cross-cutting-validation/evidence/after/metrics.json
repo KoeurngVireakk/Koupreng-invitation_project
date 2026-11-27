@@ -1,6 +1,6 @@
 {
   "stage": "after",
-  "generatedAt": "2026-11-27T13:54:37.313Z",
+  "generatedAt": "2026-11-27T14:09:44.591Z",
   "bundles": {
     "jsTotalBytes": 3060293,
     "jsTotalGzipBytes": 962625,
@@ -356,6 +356,7 @@
       "lang": "en",
       "theme": "dark",
       "width": 390,
+      "waitText": "Sokha Chan",
       "overflowX": 0,
       "h1Count": 1,
       "violationCount": 0,
@@ -452,55 +453,55 @@
   "perfSummary": [
     {
       "route": "/",
-      "domContentLoadedMs": 64,
-      "loadMs": 880,
-      "fcpMs": 152,
-      "lcpMs": 152,
+      "domContentLoadedMs": 59,
+      "loadMs": 897,
+      "fcpMs": 148,
+      "lcpMs": 148,
       "cls": 0.0019,
       "jsTransferKb": 224.1,
       "cssTransferKb": 49.1,
-      "taskMs": 165,
-      "scriptMs": 60,
+      "taskMs": 164,
+      "scriptMs": 59,
       "jsHeapUsedMB": 4.72
     },
     {
       "route": "/templates",
-      "domContentLoadedMs": 58,
-      "loadMs": 835,
-      "fcpMs": 100,
-      "lcpMs": 436,
+      "domContentLoadedMs": 81,
+      "loadMs": 847,
+      "fcpMs": 132,
+      "lcpMs": 456,
       "cls": 0.0011,
       "jsTransferKb": 224.4,
       "cssTransferKb": 49.1,
-      "taskMs": 125,
-      "scriptMs": 61,
-      "jsHeapUsedMB": 5.01
+      "taskMs": 144,
+      "scriptMs": 71,
+      "jsHeapUsedMB": 5.03
     },
     {
       "route": "/app/events",
-      "domContentLoadedMs": 59,
-      "loadMs": 804,
-      "fcpMs": 88,
-      "lcpMs": 452,
+      "domContentLoadedMs": 73,
+      "loadMs": 825,
+      "fcpMs": 112,
+      "lcpMs": 480,
       "cls": 0,
       "jsTransferKb": 293,
       "cssTransferKb": 72.5,
-      "taskMs": 164,
-      "scriptMs": 79,
-      "jsHeapUsedMB": 5.47
+      "taskMs": 183,
+      "scriptMs": 87,
+      "jsHeapUsedMB": 5.5
     },
     {
       "route": "/i/audit-event",
-      "domContentLoadedMs": 59,
-      "loadMs": 891,
-      "fcpMs": 88,
-      "lcpMs": 832,
+      "domContentLoadedMs": 66,
+      "loadMs": 885,
+      "fcpMs": 96,
+      "lcpMs": 856,
       "cls": 0.0013,
       "jsTransferKb": 411.5,
       "cssTransferKb": 109,
-      "taskMs": 321,
-      "scriptMs": 97,
-      "jsHeapUsedMB": 6.34
+      "taskMs": 342,
+      "scriptMs": 109,
+      "jsHeapUsedMB": 6.35
     }
   ]
 }
