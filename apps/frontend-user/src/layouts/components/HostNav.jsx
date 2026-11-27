@@ -316,8 +316,12 @@ export default function HostNav() {
                 aria-label={displayName}
                 onClick={() => setProfileOpen((value) => !value)}
               >
-                <span className="host-profile-avatar">
-                  {profileImage ? <img key={profileImage} src={profileImage} alt="" /> : profileInitial}
+                <span
+                  className="host-profile-avatar"
+                  aria-hidden="true"
+                  data-initial={!profileImage ? profileInitial : undefined}
+                >
+                  {profileImage ? <img key={profileImage} src={profileImage} alt="" /> : null}
                 </span>
                 <span className="host-profile-name">{displayName}</span>
                 <ChevronDown className="host-profile-chevron" aria-hidden="true" />
@@ -458,10 +462,15 @@ export default function HostNav() {
           <Link
             to="/app/profile"
             className="host-profile-pill"
+            aria-label={displayName}
             onClick={closeMobileMenu}
           >
-            <span className="host-profile-avatar">
-              {profileImage ? <img src={profileImage} alt="" /> : profileInitial}
+            <span
+              className="host-profile-avatar"
+              aria-hidden="true"
+              data-initial={!profileImage ? profileInitial : undefined}
+            >
+              {profileImage ? <img src={profileImage} alt="" /> : null}
             </span>
             <span className="host-profile-name">{displayName}</span>
           </Link>

@@ -1,0 +1,25 @@
+{
+  "phase": 26,
+  "title": "Cross-Cutting Validation (Accessibility, Multilingual, Responsive, Performance, PWA & Security)",
+  "branch": "feat/phase26-cross-cutting-qa",
+  "baseSha": "6c8b40b1a5e8a92be744008b64de10e29a30f9db",
+  "status": "CODEX_REMEDIATION_READY_FOR_RE_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P26-G01", "name": "WCAG 2.2 AA Light/Obsidian Dark + EN/KM audit with 0 violations (including header controls, opened 359px drawer, populated budget-items, and opened public invitation)", "status": "PASS_LOCAL" },
+    { "id": "P26-G02", "name": "Responsive 12-viewport matrix (320px..1440px, 96/96 checks), short landscape height, and genuine 200% computed font resize (h1 and p >= 1.99x) 0px overflow", "status": "PASS_LOCAL" },
+    { "id": "P26-G03", "name": "Multilingual EN/KM normalization (<html lang>) and state-preserving toggle with keyboard focus restoration", "status": "PASS_LOCAL" },
+    { "id": "P26-G04", "name": "Chromium lab performance baseline telemetry and lazy route-chunked production bundle check", "status": "PASS_LOCAL" },
+    { "id": "P26-G05", "name": "PWA zero-Service-Worker posture (0 registrations) + valid manifest.webmanifest + unauth redirect + XSS escaping", "status": "PASS_LOCAL" },
+    { "id": "P26-G06", "name": "Physical iPhone/Android hardware, Telegram/Facebook in-app WebView, and live staging E2E", "status": "BLOCKED_EXTERNAL" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "257 files / 1979 tests passed (47.06s)",
+    "viteBuild": "passed (1.39s, entry index.js 479.46 kB / 142.84 kB gzip)",
+    "playwrightPhase26": "8 passed (desktop-chromium & mobile-chromium, 16.5s, 0 Axe violations across populated guests/budget, opened drawer/opened public invite, genuine 200% computed font resize)",
+    "captureScript": "96/96 responsive checks 0px overflow; 13/13 Axe cases clean (reduced from 10 baseline + 1 post-opening WCAG 2.5.3 violations)",
+    "repositoryPolicyTests": "18 passed / 0 failed"
+  }
+}

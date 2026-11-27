@@ -138,6 +138,7 @@ describe("HostNav component", () => {
     expect(mobileDrawer).toHaveClass("open");
     expect(mobileDrawer).not.toHaveAttribute("inert");
     expect(mobileDrawer).toHaveAttribute("aria-hidden", "false");
+    expect(within(mobileDrawer).getByRole("link", { name: "Sokha Chan" })).toHaveAttribute("href", "/app/profile");
 
     // Click close button inside drawer
     const closeBtn = screen.getByRole("button", { name: "Close menu" });
@@ -147,5 +148,17 @@ describe("HostNav component", () => {
     expect(mobileDrawer).not.toHaveClass("open");
     expect(mobileDrawer).toHaveAttribute("inert");
     expect(hamburger).toHaveFocus();
+  });
+
+  it("keeps avatar initial decorative so profile trigger visible text matches its aria-label", () => {
+    render(
+      <MemoryRouter initialEntries={["/app/events"]}>
+        <HostNav />
+      </MemoryRouter>
+    );
+
+    const profileTrigger = screen.getByRole("button", { name: "Sokha Chan" });
+    expect(profileTrigger.textContent.trim()).toBe("Sokha Chan");
+    expect(profileTrigger.querySelector(".host-profile-avatar")).toHaveAttribute("data-initial", "S");
   });
 });

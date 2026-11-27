@@ -270,6 +270,10 @@
   object-fit: cover;
 }
 
+.host-profile-avatar[data-initial]::before {
+  content: attr(data-initial);
+}
+
 .host-profile-name {
   max-width: 120px;
   overflow: hidden;
@@ -632,6 +636,16 @@
     width: 44px;
     height: 44px;
     justify-content: center;
+  }
+  .host-mobile-header .host-profile-name {
+    display: inline-block;
+    max-width: none;
+  }
+  .host-mobile-header .host-profile-pill {
+    width: auto;
+    height: auto;
+    padding: 6px 14px 6px 6px;
+    justify-content: flex-start;
   }
   .host-hamburger-btn {
     display: inline-flex;

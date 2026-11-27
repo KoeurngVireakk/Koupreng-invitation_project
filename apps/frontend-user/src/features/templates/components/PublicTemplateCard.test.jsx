@@ -17,3 +17,9 @@ it("labels zero per-template price with Premium access and preserves the stable 
   expect(screen.getByText("Premium · Included with Premium access")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Use design" })).toHaveAttribute("href", "/app/events/new?template=royal-garden-cinematic");
 });
+it("keeps decorative tier badge outside the preview media link so visible text matches its accessible name", () => {
+  show(royal);
+  const previewLink = screen.getByRole("link", { name: /Preview design Royal Garden Cinematic/i });
+  expect(previewLink.querySelector(".tp-card-badge")).toBeNull();
+  expect(previewLink.getAttribute("aria-label")).toContain(previewLink.textContent.trim());
+});
