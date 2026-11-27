@@ -110,4 +110,17 @@ describe("user financial report", () => {
     fireEvent.click(screen.getByRole("button", { name: "Refresh" }));
     expect(reload).toHaveBeenCalledTimes(1);
   });
+
+  it("isolates the A4 print preview inside .financial-report-page.is-print-preview", () => {
+    const { container } = render(<ReportsPage />);
+    const screenRoot = container.querySelector(".financial-report-page");
+    expect(screenRoot).toBeInTheDocument();
+    expect(screenRoot).not.toHaveClass("is-print-preview");
+
+    fireEvent.click(screen.getByRole("button", { name: /Preview/ }));
+    const previewRoot = document.querySelector(".financial-report-page.is-print-preview");
+    expect(previewRoot).toBeInTheDocument();
+    expect(previewRoot.querySelector(".report-sheet-simulation")).toBeInTheDocument();
+    expect(previewRoot.querySelector(".report-preview-toolbar")).toBeInTheDocument();
+  });
 });

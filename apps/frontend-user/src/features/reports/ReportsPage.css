@@ -154,7 +154,8 @@
   color: #b91c1c;
 }
 
-:root[data-color-mode="dark"] .financial-report-page {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview),
+:root.dark .financial-report-page:not(.is-print-preview) {
   --report-ink: var(--app-ink, #f5f2eb);
   --report-muted: var(--app-muted, #b8b2a6);
   --report-line: var(--app-border, #2e2a23);
@@ -163,32 +164,37 @@
   --report-gold: var(--app-gold, #d8b875);
 }
 
-:root[data-color-mode="dark"] .financial-report-header h1 {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .financial-report-header h1,
+:root.dark .financial-report-page:not(.is-print-preview) .financial-report-header h1 {
   color: var(--app-ink, #f5f2eb);
 }
 
-:root[data-color-mode="dark"] .financial-report-page .report-amount--income {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--income,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--income {
   color: #34d399;
 }
 
-:root[data-color-mode="dark"] .financial-report-page .report-amount--budget,
-:root[data-color-mode="dark"] .financial-report-page .report-amount--expense {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--budget,
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--expense,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--budget,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--expense {
   color: #fbbf24;
 }
 
-:root[data-color-mode="dark"] .financial-report-page .report-amount--balance {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--balance,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--balance {
   color: #f87171;
 }
 
-:root[data-color-mode="dark"] .report-summary-card,
-:root[data-color-mode="dark"] .owner-report-summary,
-:root[data-color-mode="dark"] .report-section {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) :is(.report-summary-card, .owner-report-summary, .report-section),
+:root.dark .financial-report-page:not(.is-print-preview) :is(.report-summary-card, .owner-report-summary, .report-section) {
   background: var(--app-surface, #141414);
   border-color: var(--app-border, #2e2a23);
   color: var(--app-ink, #f5f2eb);
 }
 
-:root[data-color-mode="dark"] .report-action-btn:not(.report-print-button) {
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-action-btn:not(.report-print-button),
+:root.dark .financial-report-page:not(.is-print-preview) .report-action-btn:not(.report-print-button) {
   background: var(--app-surface, #141414);
   border-color: var(--app-border, #2e2a23);
   color: var(--app-ink, #f5f2eb);

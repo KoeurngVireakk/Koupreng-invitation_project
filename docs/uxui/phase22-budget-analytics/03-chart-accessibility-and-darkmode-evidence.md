@@ -14,6 +14,7 @@ Captured via `scripts/qa/capture-phase22-evidence.mjs` against production `dist/
 | `06-financial-report-light-en-1440.png` | `1440px` Light EN | `0px -> 0px` | `12 -> 0` | Removed Tailwind `dark:text-*` class leakage + overrode `.money-card.is-*` cascade to `#047857` / `#92400e` / `#b91c1c` |
 | `07-financial-report-obsidian-km-1440.png` | `1440px` Dark KM | `0px -> 0px` | `0 -> 0` | `:root[data-color-mode="dark"]` financial card, header, button, and tabular metric tokens |
 | `08-financial-report-mobile-390.png` | `390px` Dark EN | `0px -> 0px` | `0 -> 0` | Responsive grid collapse, legible tabular numerals, `0px` horizontal overflow |
+| `09-financial-report-a4-preview-dark-1440.png` | `1440px` Dark EN (A4 Preview) | `0px -> 0px` | `3 -> 0` | Excluded `.financial-report-page.is-print-preview` from dark overrides in `ReportsPage.css` and `app-experience.css` so A4 paper stays white (`#ffffff`), headings `#1f2937`, amounts `#047857`/`#92400e`/`#b91c1c`, and alternating table rows `#fafcfb` with `#24312e` ink |
 
 ## 2. Chart & Data Alternatives
 

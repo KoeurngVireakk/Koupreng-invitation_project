@@ -70,5 +70,14 @@
     "lang": "en",
     "axeViolations": [],
     "totalAxeRaw": 0
+  },
+  {
+    "name": "09-financial-report-a4-preview-dark-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
   }
 ]

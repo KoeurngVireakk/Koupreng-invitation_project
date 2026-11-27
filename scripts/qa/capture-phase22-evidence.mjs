@@ -121,6 +121,7 @@ const CASES = [
   { name: '06-financial-report-light-en-1440.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'en', theme: 'light' },
   { name: '07-financial-report-obsidian-km-1440.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'km', theme: 'dark' },
   { name: '08-financial-report-mobile-390.png', route: '/app/events/42/reports', width: 390, height: 844, lang: 'en', theme: 'dark' },
+  { name: '09-financial-report-a4-preview-dark-1440.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'en', theme: 'dark', preview: true },
 ];
 
 async function run() {
@@ -141,6 +142,11 @@ async function run() {
       const { context, page } = await openContext(browser, c);
       await page.goto(`${baseURL}${c.route}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(1000);
+      if (c.preview) {
+        await page.locator('.report-preview-btn').click();
+        await page.waitForSelector('.financial-report-page.is-print-preview .report-sheet-simulation');
+        await page.waitForTimeout(300);
+      }
 
       const layout = await page.evaluate(() => {
         const doc = document.documentElement;

@@ -100,3 +100,20 @@ All checks below were executed directly by the Codex audit after the final code 
 
 - **Verdict:** **`READY_FOR_PR`** (all Phase 22 gates P22-G01 through P22-G06 pass local independent verification following Codex remediations; production/staging certification remains scoped to Phases 26–27).
 - Stopped at the required independent review gate per §13: awaiting user approval before pushing `feat/phase22-budget-analytics` and creating/merging the Phase 22 Pull Request into `origin/main`.
+
+---
+
+## 8. PR #49 Post-Review P2 Remediation Addendum (`P22-DEF-06`)
+
+- **PR Review Comment Addressed:** `https://github.com/KoeurngVireakk/Koupreng-invitation_project/pull/49#discussion_r4716199961` — *"Exclude the A4 preview from dark report theme overrides."*
+- **Root Cause:**
+  1. `apps/frontend-user/src/features/reports/ReportsPage.css` lines 157–195 applied `:root[data-color-mode="dark"]` variable (`--report-ink`, `--report-muted`, `--report-line`, `--report-paper`, `--report-green`, `--report-gold`), heading `h1`, `.report-amount--*`, `.report-summary-card`, `.owner-report-summary`, `.report-section`, and `.report-action-btn` overrides without `:not(.is-print-preview)`.
+  2. `apps/frontend-user/src/shared/styles/app-experience.css` lines 189–190 and 229 also matched `:root[data-color-mode=dark] .k-modal-container :is(h2,h3,p,label,...)` and `:root[data-color-mode=dark] .financial-report-page table thead th` inside `.is-print-preview`.
+- **Fix Applied:**
+  - Scoped all screen-only dark-mode selectors in `ReportsPage.css` (`:root[data-color-mode="dark"]` & `:root.dark`) to `.financial-report-page:not(.is-print-preview)`.
+  - Scoped `.k-modal-container:not(.is-print-preview)` (lines 189–190) and `.financial-report-page:not(.is-print-preview) table thead th` (line 229) in `app-experience.css`.
+- **Post-Fix Verification:**
+  - `npm --prefix apps/frontend-user run lint` (`0` errors), `analyze:knip`, `analyze:deps`, `vite build` (`1.54s`), and full Vitest (`255` files / `1959` tests passed).
+  - `node scripts/qa/capture-phase22-evidence.mjs --stage=after --port=4346` (`9/9` `0px` overflow, `0` non-header Axe violations).
+  - `node scripts/qa/verify-phase22-codex-audit.mjs --port=4347` (`8/8` `0px` overflow, `0` non-header Axe violations; verified Dark Preview and Light Preview produce identical white `#ffffff` sheet, `#24312e` `--report-ink`, `#fafcfb` even rows, `#047857` income color).
+  - `npx playwright test --config=playwright.frontend-user-v2.config.js` (`31 passed, 5 skipped, 0 failed` across `chromium-desktop`, `firefox-desktop`, `webkit-desktop`, `chromium-mobile`).

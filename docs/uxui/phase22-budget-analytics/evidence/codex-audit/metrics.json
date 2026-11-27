@@ -48,5 +48,39 @@
     "overflowX": 0,
     "axeViolations": [],
     "extra": {}
+  },
+  {
+    "name": "07-financial-report-a4-preview-dark-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {
+      "reportInk": "#24312e",
+      "reportPaper": "#fff",
+      "sheetBg": "rgb(255, 255, 255)",
+      "h1Color": "rgb(31, 41, 55)",
+      "cardBg": "rgb(255, 255, 255)",
+      "sectionBg": "rgba(0, 0, 0, 0)",
+      "incomeColor": "rgb(4, 120, 87)",
+      "trEvenBg": "rgb(250, 252, 251)",
+      "tdEvenColor": "rgb(36, 49, 46)"
+    }
+  },
+  {
+    "name": "08-financial-report-a4-preview-light-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "axeViolations": [],
+    "extra": {
+      "reportInk": "#24312e",
+      "reportPaper": "#fff",
+      "sheetBg": "rgb(255, 255, 255)",
+      "h1Color": "rgb(31, 41, 55)",
+      "cardBg": "rgb(255, 255, 255)",
+      "sectionBg": "rgba(0, 0, 0, 0)",
+      "incomeColor": "rgb(4, 120, 87)",
+      "trEvenBg": "rgb(250, 252, 251)",
+      "tdEvenColor": "rgb(36, 49, 46)"
+    }
   }
 ]

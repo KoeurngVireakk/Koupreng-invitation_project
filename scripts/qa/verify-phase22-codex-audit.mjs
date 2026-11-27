@@ -124,6 +124,8 @@ async function main() {
       { name: '04-analytics-inverted-date-alert.png', route: '/app/events/42/analytics', width: 1440, height: 900, lang: 'en', theme: 'dark', interactive: 'inverted-date' },
       { name: '05-analytics-empty-zero-denominator.png', route: '/app/events/42/analytics', width: 1440, height: 900, lang: 'en', theme: 'light', mode: 'analytics-empty' },
       { name: '06-financial-report-error-403.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'km', theme: 'dark', mode: 'report-error' },
+      { name: '07-financial-report-a4-preview-dark-1440.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'en', theme: 'dark', interactive: 'a4-preview' },
+      { name: '08-financial-report-a4-preview-light-1440.png', route: '/app/events/42/reports', width: 1440, height: 900, lang: 'en', theme: 'light', interactive: 'a4-preview' },
     ];
     const metrics = [];
     for (const c of cases) {
@@ -158,6 +160,27 @@ async function main() {
         await page.waitForTimeout(200);
         const alertText = await page.getByRole('alert').textContent();
         extra = { alertText };
+      }
+      if (c.interactive === 'a4-preview') {
+        await page.locator('.report-preview-btn').click();
+        await page.waitForSelector('.financial-report-page.is-print-preview .report-sheet-simulation');
+        await page.waitForTimeout(300);
+        extra = await page.evaluate(() => {
+          const root = document.querySelector('.financial-report-page.is-print-preview');
+          const sheet = root.querySelector('.report-sheet-simulation');
+          const rows = sheet.querySelectorAll('.report-table tbody tr');
+          return {
+            reportInk: getComputedStyle(root).getPropertyValue('--report-ink').trim(),
+            reportPaper: getComputedStyle(root).getPropertyValue('--report-paper').trim(),
+            sheetBg: getComputedStyle(sheet).backgroundColor,
+            h1Color: getComputedStyle(sheet.querySelector('.financial-report-header h1')).color,
+            cardBg: getComputedStyle(sheet.querySelector('.report-summary-card')).backgroundColor,
+            sectionBg: getComputedStyle(sheet.querySelector('.report-section')).backgroundColor,
+            incomeColor: getComputedStyle(sheet.querySelector('.report-amount--income')).color,
+            trEvenBg: getComputedStyle(rows[1]).backgroundColor,
+            tdEvenColor: getComputedStyle(rows[1].querySelector('td')).color,
+          };
+        });
       }
 
       const overflowX = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
