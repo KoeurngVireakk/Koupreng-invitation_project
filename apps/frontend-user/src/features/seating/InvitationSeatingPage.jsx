@@ -1,6 +1,8 @@
 import { PageSkeleton } from '@/shared/ui/LoadingState';
 import AccessFailureState from "@/shared/access/AccessFailureState";
-import { useState } from 'react';
+import { useEventWorkspace } from '@/features/events/workspace/EventContext';
+import { feedback } from '@/shared/feedback/feedback';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Armchair, Download, Grid2X2, Map, Plus, Users } from 'lucide-react';
 import { useBackendMessages } from '@/shared/i18n/useBackendMessages';
@@ -13,12 +15,25 @@ import './SeatingPage.css';
 
 export default function InvitationSeatingPage() {
   const { eventId, invitationId = eventId } = useParams();
-  const { text: t } = useBackendMessages('seating');
+  const { text: t, lang } = useBackendMessages('seating');
+  const en = lang === 'en';
+  const workspace = useEventWorkspace();
+  const canManageSeating = workspace?.access
+    ? workspace.access.owner === true || Boolean(workspace.access.permissions?.includes('MANAGE_SEATING'))
+    : workspace?.isOwner !== false;
   const [view, setView] = useState('list');
   const [mobilePanel, setMobilePanel] = useState('tables');
   const [createOpen, setCreateOpen] = useState(false);
+  const [floorPlanDirty, setFloorPlanDirty] = useState(false);
   const seating = useSeating(invitationId);
   const { plan, summary, layout, assignmentsByTable, loading, saving, error, tableForm, setTableForm, createTable, refresh } = seating;
+
+  useEffect(() => {
+    setCreateOpen(false);
+    setFloorPlanDirty(false);
+    setMobilePanel('tables');
+  }, [invitationId]);
+
   const tables = plan?.tables || [];
   const stats = [['tables', summary?.totalTables ?? tables.length], ['capacity', summary?.totalCapacity ?? 0], ['assignedSeats', summary?.assignedSeats ?? 0], ['unassigned', plan?.unassignedGuests?.length ?? 0]];
   const focusAssignment = () => { setMobilePanel('guests'); requestAnimationFrame(() => document.getElementById('seating-assignment-guest')?.focus()); };
@@ -26,13 +41,27 @@ export default function InvitationSeatingPage() {
     seating.setAssignmentForm({ guestId: String(assignment.guestId), tableId: '', seatCount: assignment.seatCount, seatLabel: assignment.seatLabel || '', notes: assignment.notes || '' });
     focusAssignment();
   };
+  const handleExport = async () => {
+    if (floorPlanDirty) {
+      const proceed = await feedback.confirm({
+        title: en ? 'Export with unsaved floor plan changes?' : 'នាំចេញខណៈប្លង់មិនទាន់រក្សាទុក?',
+        message: en
+          ? 'Your recent floor plan moves are unsaved. Export the last server-saved seating arrangement anyway?'
+          : 'ការផ្លាស់ប្តូរទីតាំងតុថ្មីៗមិនទាន់ត្រូវបានរក្សាទុកទេ។ នាំចេញបញ្ជីតុដែលបានរក្សាទុកចុងក្រោយមែនទេ?',
+        confirmText: en ? 'Export saved list' : 'នាំចេញបញ្ជីដែលរក្សាទុក',
+        cancelText: en ? 'Cancel' : 'បោះបង់',
+      });
+      if (!proceed) return;
+    }
+    await seating.exportCsv();
+  };
   return <main className="seating-page workspace-page">
     <header className="workspace-page-heading">
       <div><h1>{t('title')}</h1></div>
       <div className="workspace-actions">
-        <Link className="workspace-button" to={`/app/events/${invitationId}/guests`}><Users size={18} />{t('guests')}</Link>
-        <button className="workspace-button" type="button" disabled={!tables.length || saving} onClick={seating.exportCsv}><Download size={18} />{t('export')}</button>
-        <button className="workspace-button primary" type="button" onClick={() => setCreateOpen(true)} disabled={saving}><Plus size={18} />{t('createTable')}</button>
+        <Link className="workspace-button" to={`/app/events/${invitationId}/guests`}><Users size={18} aria-hidden="true" />{t('guests')}</Link>
+        <button className="workspace-button" type="button" disabled={!tables.length || saving} onClick={handleExport}><Download size={18} aria-hidden="true" />{t('export')}</button>
+        {canManageSeating && <button className="workspace-button primary" type="button" onClick={() => setCreateOpen(true)} disabled={saving}><Plus size={18} aria-hidden="true" />{t('createTable')}</button>}
       </div>
     </header>
     {loading && !plan && <PageSkeleton layout="chart" label={t('loading')} />}
@@ -46,13 +75,13 @@ export default function InvitationSeatingPage() {
     <section className={`seating-layout ${view === 'plan' ? 'seating-layout--plan' : ''}`} aria-busy={saving}>
       <div className={`seating-table-workspace ${mobilePanel !== 'guests' ? '' : 'mobile-hidden'}`}>
         <div className="workspace-section-heading"><h2>{t('tables')}</h2><div className="workspace-tabs" role="group" aria-label={t('view')}>
-          <button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}><Grid2X2 size={17} />{t('list')}</button>
-          <button type="button" data-testid="tab-floor-plan" aria-pressed={view === 'plan'} onClick={() => setView('plan')}><Map size={17} />{t('plan')}</button>
+          <button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}><Grid2X2 size={17} aria-hidden="true" />{t('list')}</button>
+          <button type="button" data-testid="tab-floor-plan" aria-pressed={view === 'plan'} onClick={() => setView('plan')}><Map size={17} aria-hidden="true" />{t('plan')}</button>
         </div></div>
-        {!tables.length ? <div className="workspace-empty seating-empty-state"><Armchair size={40} strokeWidth={1.5} aria-hidden="true" /><h2>{t('emptyTitle')}</h2><p>{t('emptyText')}</p><button className="workspace-button primary" type="button" onClick={() => setCreateOpen(true)}><Plus size={18} />{t('createTable')}</button></div> : view === 'plan' ? <SeatingFloorPlan key={invitationId} tables={tables} layout={layout} assignmentsByTable={assignmentsByTable} onSavePositions={seating.saveTablePositions} onReloadLayout={refresh} onAssignTable={table => { seating.setAssignmentForm(current => ({ ...current, tableId: String(table.id) })); focusAssignment(); }} onCreateTable={seating.createTableWithData} onRequestCreate={() => setCreateOpen(true)} invitationId={invitationId} saving={saving} /> :
-          <div className="seating-tables-grid">{tables.map(table => <SeatingTableCard key={table.id} table={table} assignments={assignmentsByTable.get(table.id) || []} unassign={seating.unassign} deleteTable={seating.deleteTable} onMove={openAssignment} onAssign={() => { seating.setAssignmentForm(current => ({ ...current, tableId: String(table.id) })); focusAssignment(); }} saving={saving} t={t} />)}</div>}
+        {!tables.length ? <div className="workspace-empty seating-empty-state"><Armchair size={40} strokeWidth={1.5} aria-hidden="true" /><h2>{t('emptyTitle')}</h2><p>{t('emptyText')}</p>{canManageSeating && <button className="workspace-button primary" type="button" onClick={() => setCreateOpen(true)}><Plus size={18} aria-hidden="true" />{t('createTable')}</button>}</div> : view === 'plan' ? <SeatingFloorPlan key={invitationId} tables={tables} layout={layout} assignmentsByTable={assignmentsByTable} onSavePositions={seating.saveTablePositions} onReloadLayout={refresh} onDirtyChange={setFloorPlanDirty} onAssignTable={canManageSeating ? table => { seating.setAssignmentForm(current => ({ ...current, tableId: String(table.id) })); focusAssignment(); } : undefined} onCreateTable={canManageSeating ? seating.createTableWithData : undefined} onRequestCreate={canManageSeating ? () => setCreateOpen(true) : undefined} readOnly={!canManageSeating} invitationId={invitationId} saving={saving} /> :
+          <div className="seating-tables-grid">{tables.map(table => <SeatingTableCard key={table.id} table={table} assignments={assignmentsByTable.get(table.id) || []} unassign={seating.unassign} deleteTable={seating.deleteTable} canManage={canManageSeating} onMove={openAssignment} onAssign={() => { seating.setAssignmentForm(current => ({ ...current, tableId: String(table.id) })); focusAssignment(); }} saving={saving} t={t} />)}</div>}
       </div>
-      <SeatingForms {...seating} className={mobilePanel === 'guests' ? '' : 'mobile-hidden'} t={t} />
+      <SeatingForms {...seating} canManage={canManageSeating} className={mobilePanel === 'guests' ? '' : 'mobile-hidden'} t={t} />
     </section>
     <Modal isOpen={createOpen} onClose={saving ? undefined : () => setCreateOpen(false)} title={t('createTable')} closeLabel={t('cancel')} className="workspace-dialog" closeOnEscape={!saving} closeOnBackdropClick={!saving}>
       <form className="workspace-form" onSubmit={async event => { if (await createTable(event)) setCreateOpen(false); }}>

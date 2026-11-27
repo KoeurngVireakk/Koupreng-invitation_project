@@ -1,4 +1,5 @@
 import { useUiCopy } from "@/shared/i18n/useUiCopy";
+import { feedback } from "@/shared/feedback/feedback";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
     IoSaveOutline,
@@ -264,6 +265,7 @@ export function SeatingFloorPlan({
     onSavePositions,
     onReloadLayout,
     onAssignTable,
+    onDirtyChange,
     layout,
     onCreateTable,
     onRequestCreate,
@@ -290,7 +292,10 @@ export function SeatingFloorPlan({
     const [zoom, setZoom] = useState(1);
     const viewportRef = useRef(null);
     const dirtyRef = useRef(false);
-    useEffect(() => { dirtyRef.current = isDirty; }, [isDirty]);
+    useEffect(() => {
+        dirtyRef.current = isDirty;
+        onDirtyChange?.(isDirty);
+    }, [isDirty, onDirtyChange]);
 
     // Dynamic Table Scale: 1.0 (<=30 tables), 0.82 (31-50), 0.68 (51-75), 0.54 (76-100+)
     const tableScale = useMemo(() => {
@@ -722,7 +727,22 @@ export function SeatingFloorPlan({
                     <small>{label('Arrow keys move a focused element 1%. Shift + arrow moves 5%.', 'គ្រាប់ចុចព្រួញផ្លាស់ទី ១%។ Shift និងព្រួញផ្លាស់ទី ៥%។')}</small>
                 </fieldset></details>
             )}
-            {!readOnly && <div className="sfp-save-status" role="status"><span>{saving ? label('Saving…', 'កំពុងរក្សាទុក…') : isDirty ? label('Unsaved layout changes', 'ប្លង់មិនទាន់រក្សាទុក') : layout?.version > 0 ? label('Saved to event', 'បានរក្សាទុកទៅកម្មវិធី') : layout === null ? label('Cloud layout unavailable. Reload to retry.', 'មិនអាចទាញយកប្លង់ពីម៉ាស៊ីនមេ។ សូមទាញយកឡើងវិញ។') : layout === undefined ? label('Venue decorations are stored on this device.', 'ការតុបតែងសាលរក្សាទុកក្នុងឧបករណ៍នេះ។') : label('Layout has not been saved to event yet.', 'ប្លង់មិនទាន់បានរក្សាទុកទៅកម្មវិធី។')}</span>{onReloadLayout && <button type="button" className="sfp-btn sfp-btn--outline" disabled={saving} onClick={() => { if (!isDirty || window.confirm(label('Discard local layout edits and reload the saved event layout?', 'បោះបង់ការកែប្លង់ ហើយទាញយកប្លង់ដែលបានរក្សាទុកវិញ?'))) { dirtyRef.current = false; setIsDirty(false); setSaveError(''); onReloadLayout(); } }}>{label('Reload saved layout', 'ទាញយកប្លង់ដែលរក្សាទុក')}</button>}</div>}
+            {!readOnly && <div className="sfp-save-status" role="status"><span>{saving ? label('Saving…', 'កំពុងរក្សាទុក…') : isDirty ? label('Unsaved layout changes', 'ប្លង់មិនទាន់រក្សាទុក') : layout?.version > 0 ? label('Saved to event', 'បានរក្សាទុកទៅកម្មវិធី') : layout === null ? label('Cloud layout unavailable. Reload to retry.', 'មិនអាចទាញយកប្លង់ពីម៉ាស៊ីនមេ។ សូមទាញយកឡើងវិញ។') : layout === undefined ? label('Venue decorations are stored on this device.', 'ការតុបតែងសាលរក្សាទុកក្នុងឧបករណ៍នេះ។') : label('Layout has not been saved to event yet.', 'ប្លង់មិនទាន់បានរក្សាទុកទៅកម្មវិធី។')}</span>{onReloadLayout && <button type="button" className="sfp-btn sfp-btn--outline" disabled={saving} onClick={async () => {
+                if (isDirty) {
+                    const ok = await feedback.confirm({
+                        title: label('Reload saved layout', 'ទាញយកប្លង់ដែលរក្សាទុក'),
+                        message: label('Discard local layout edits and reload the saved event layout?', 'បោះបង់ការកែប្លង់ ហើយទាញយកប្លង់ដែលបានរក្សាទុកវិញ?'),
+                        confirmText: label('Reload', 'ទាញយកឡើងវិញ'),
+                        cancelText: label('Cancel', 'បោះបង់'),
+                        destructive: true,
+                    });
+                    if (!ok) return;
+                }
+                dirtyRef.current = false;
+                setIsDirty(false);
+                setSaveError('');
+                onReloadLayout();
+            }}>{label('Reload saved layout', 'ទាញយកប្លង់ដែលរក្សាទុក')}</button>}</div>}
             {saveError && <p role="alert">{saveError}</p>}
 
             {/* Quick Add Table Modal */}
@@ -807,10 +827,10 @@ export function SeatingFloorPlan({
                     onTouchStart={(e) => handleStartDragVenue(e, "stage")}
                 >
                     <span className="sfp-stage__title">
-                        {t('stage')}
-                        {!readOnly && <span className="sfp-drag-handle-hint">{t('drag')}</span>}
+                        <span>{t('stage')}</span>
+                        {!readOnly && <span className="sfp-drag-handle-hint" aria-hidden="true">{t('drag')}</span>}
                     </span>
-                    <span className="sfp-stage__sub">{t('stageHint')}</span>
+                    <span className="sfp-stage__sub" aria-hidden="true">{t('stageHint')}</span>
                 </div>
 
                 {/* 2. Draggable & Orientable Red Carpet Walkway */}
@@ -835,8 +855,8 @@ export function SeatingFloorPlan({
                         onTouchStart={(e) => handleStartDragVenue(e, "walkway")}
                     >
                         <span className="sfp-walkway__label">
-                            {t('walkway')}
-                            {!readOnly && <span className="sfp-drag-handle-hint">{t('drag')}</span>}
+                            <span>{t('walkway')}</span>
+                            {!readOnly && <span className="sfp-drag-handle-hint" aria-hidden="true">{t('drag')}</span>}
                         </span>
                     </div>
                 )}
@@ -859,7 +879,7 @@ export function SeatingFloorPlan({
                 >
                     <span>
                         {t('entrance')}
-                        {!readOnly && <span className="sfp-drag-handle-hint">{t('drag')}</span>}
+                        {!readOnly && <span className="sfp-drag-handle-hint" aria-hidden="true">{t('drag')}</span>}
                     </span>
                 </div>
 
@@ -931,14 +951,14 @@ export function SeatingFloorPlan({
                         >
                             {/* Collision Warning Tooltip */}
                             {isColliding && (
-                                <div className="sfp-collision-tooltip">
+                                <div className="sfp-collision-tooltip" aria-hidden="true">
                                     {t('collision')}
                                 </div>
                             )}
 
                             {/* Highlight Badge if this is guest's assigned table */}
                             {isHighlighted && (
-                                <div className="sfp-highlight-badge">
+                                <div className="sfp-highlight-badge" aria-hidden="true">
                                     {t('yourTable')}
                                 </div>
                             )}
@@ -956,12 +976,13 @@ export function SeatingFloorPlan({
                                     {table.tableName}
                                 </span>
                                 {table.tableLabel && tableScale >= 0.7 && (
-                                    <span className="sfp-table-label" title={table.tableLabel}>
+                                    <span className="sfp-table-label" aria-hidden="true" title={table.tableLabel}>
                                         {table.tableLabel}
                                     </span>
                                 )}
                                 <span
                                     className="sfp-table-cap"
+                                    aria-hidden="true"
                                     style={{
                                         fontSize: tableScale < 0.6 ? "0.55rem" : tableScale < 0.8 ? "0.62rem" : "0.68rem",
                                         padding: tableScale < 0.6 ? "1px 3px" : "2px 6px",

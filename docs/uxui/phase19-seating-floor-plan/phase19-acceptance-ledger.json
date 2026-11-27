@@ -1,0 +1,47 @@
+{
+  "phase": "Phase 19",
+  "title": "Floor plan, seating arrangement and guest assignment",
+  "branch": "feat/phase19-seating-floor-plan",
+  "baseOriginMainSha": "c4b8c081557311fa04f269d94ffa12fa905c2d9e",
+  "recordedAt": "2026-11-27T10:48:00+07:00",
+  "verdict": "PASS_LOCAL",
+  "gates": [
+    {
+      "id": "P19-G01",
+      "title": "Floor plan Obsidian dark mode parity & WCAG AA contrast",
+      "status": "PASS_LOCAL",
+      "evidence": "SeatingFloorPlan.css unified toolbar, zoom readout, segmented controls, inspector drawer, legend & walkway labels onto --ui-theme-* tokens; color-contrast violations reduced from 3 dark / 1 light before edit to 0 after edit across all 8 scenes"
+    },
+    {
+      "id": "P19-G02",
+      "title": "Keyboard, numeric positioning & mobile task-tab parity",
+      "status": "PASS_LOCAL",
+      "evidence": "Arrow/Shift+Arrow movement, X/Y coordinate fieldset, and mobile Tables/Assign/Floor plan tabs verified across 390px-1440px (0px overflow) and seatingAccessibility.test.jsx (3/3 tests)"
+    },
+    {
+      "id": "P19-G03",
+      "title": "MANAGE_SEATING RBAC permission gating & non-blocking confirmations",
+      "status": "PASS_LOCAL",
+      "evidence": "InvitationSeatingPage.jsx + SeatingTableCard.jsx + SeatingForms.jsx gate create/assign/move/delete/drag via EventContext MANAGE_SEATING and replace window.confirm with feedback.confirm; verified by seating.test.jsx (8/8 tests)"
+    },
+    {
+      "id": "P19-G04",
+      "title": "Unsaved floor-plan warning guard before CSV export & event-switch cleanup",
+      "status": "PASS_LOCAL",
+      "evidence": "InvitationSeatingPage.jsx tracks onDirtyChange from SeatingFloorPlan, warns via FeedbackHost ConfirmDialog before exportCsv, and resets modal/dirty/panel state on invitationId switch"
+    },
+    {
+      "id": "P19-G05",
+      "title": "Lint, Vite build, full Vitest & Frontend User v2 E2E suites",
+      "status": "PASS_LOCAL",
+      "evidence": "npm run lint (0), vite build (0), npm test (254/254 files, 1947/1947 tests passed in 39.79s), playwright.frontend-user-v2 (27 passed, 5 skipped on mobile, 0 failed)"
+    }
+  ],
+  "visualCaptures": {
+    "beforeCount": 8,
+    "afterCount": 8,
+    "overflowMaxPx": 0,
+    "beforeContrastViolations": 7,
+    "afterContrastViolations": 0
+  }
+}

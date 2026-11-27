@@ -1,0 +1,187 @@
+{
+  "stage": "before",
+  "capturedAt": "2026-11-27T03:38:45.921Z",
+  "results": [
+    {
+      "name": "01-seating-list-light-en-1440.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02-seating-list-obsidian-km-1440.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03-seating-tablet-dark-768.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 768,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "04-seating-mobile-guests-km-390.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "05-seating-floorplan-light-1440.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            ".sfp-walkway__label > .sfp-drag-handle-hint"
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 7,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]",
+            ".sfp-stage",
+            ".sfp-walkway",
+            ".sfp-entrance",
+            ".sfp-table-node[role=\"button\"]:nth-child(4)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06-seating-floorplan-obsidian-1440.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3,
+          "targets": [
+            "span[aria-live=\"polite\"]",
+            ".sfp-options > summary",
+            ".sfp-walkway__label > .sfp-drag-handle-hint"
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 7,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]",
+            ".sfp-stage",
+            ".sfp-walkway",
+            ".sfp-entrance",
+            ".sfp-table-node[role=\"button\"]:nth-child(4)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07-seating-floorplan-mobile-390.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3,
+          "targets": [
+            "span[aria-live=\"polite\"]",
+            ".sfp-options > summary",
+            ".sfp-walkway__label > .sfp-drag-handle-hint"
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 6,
+          "targets": [
+            ".sfp-stage",
+            ".sfp-walkway",
+            ".sfp-entrance",
+            ".sfp-table-node[role=\"button\"]:nth-child(4)",
+            ".status-full"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08-seating-empty-obsidian-390.png",
+      "stage": "before",
+      "metrics": {
+        "url": "/app/events/42/seating",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    }
+  ]
+}
