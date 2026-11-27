@@ -67,7 +67,7 @@ export default function WithJoyPortalLayout({
     hall: "",
     address: "",
   };
-  const coverImage = effectiveContent.coverImage || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
+  const coverImage = safeImageUrl(effectiveContent.coverImage) || (effectiveContent.hasHostContent ? "" : "/images/wedding/couple-hero-meadow.webp");
   const musicUrl = effectiveContent.music?.url || effectiveContent.music || (effectiveContent.hasHostContent ? "" : defaultMusicUrl);
 
   // Lightbox & Gift copy state
@@ -119,7 +119,7 @@ export default function WithJoyPortalLayout({
     "/images/wedding/couple-studio-embrace.webp",
   ];
   const galleryImages = (effectiveContent.gallery && effectiveContent.gallery.length)
-    ? effectiveContent.gallery.map(img => typeof img === "string" ? img : img.src || img.url)
+    ? effectiveContent.gallery.map(img => safeImageUrl(typeof img === "string" ? img : img.src || img.url)).filter(Boolean)
     : effectiveContent.hasHostContent ? [] : defaultGallery;
 
   const isEnabled = (key) => effectiveContent.enabledSections?.[key] !== false;

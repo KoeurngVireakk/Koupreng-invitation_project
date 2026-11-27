@@ -1,19 +1,21 @@
 # 12 — Phase 15 & Frontend User 2.0 Development Handoff
 
-**Updated:** 2026-11-26 (`UTC+07:00`)  
+**Updated:** 2026-11-27 (`UTC+07:00`) — Reconciled against `origin/main` SHA `46887ac9809346eba6e455e2c8e36fdfaa8a0ddd` (`PR #42`)  
 **Workspace:** `D:\Koupreng-invitation_project`  
-**Branch / Base SHA:** `main` atop `53896aa72a8eeee6570fb5c75e9b3b867ec27e11` (reviewed local changes currently uncommitted — not auto-pushed or auto-deployed)
+**Authoritative Remote:** `https://github.com/KoeurngVireakk/Koupreng-invitation_project.git` (`origin/main`)  
+**Reconciliation Record:** [01-phase15-reconciliation.md](../phase16-guest-experience/01-phase15-reconciliation.md)
 
 ---
 
 ## 1. Honest Readiness Summary
 
-| Program Track | Local UI / Contract Verdict | Live Staging / CI Verdict | Evidence Reference |
+| Program Track | Local UI / Disposable-CI Verdict | Persistent Staging / Physical Device Verdict | Evidence Reference |
 |---|---|---|---|
-| **Frontend User 2.0 Foundations & Visual Refresh (`FUV2-01`..`06`, `13`)** | **VERIFIED — LOCAL** | Not yet run against remote GitHub Actions | `08-after-visual-proof.md`, `09-test-command-ledger.md`, `frontend-user-v2.spec.js` (`27 passed, 5 skipped [desktop-only on mobile], 0 failed`) |
-| **Admin Token Compatibility (`apps/frontend-admin`)** | **VERIFIED — LOCAL** | `53896aa7` admin CI job failed remotely prior to token sync; local admin clean | `sync-design-tokens --check`, admin `eslint .`, `38 files / 205 tests`, `vite build` (`2121` modules) |
-| **Phase 15: Publishing, Access Control, QR/Share, Unpublish & Gate** | **VERIFIED — LOCAL (`PARTIAL` on acceptance gate `FUV2-G43` pending live staging backend)** | Requires real MySQL/Spring Boot HTTP staging run (`PUT /invitations/{id}`, `publish`, `unpublish`, `403/429` bcrypt rate limit); local JUnit `*Invitation*` `57/57` green | `phase15PublishingAccess.test.jsx`, `StudioGuide.test.jsx`, `useStudioPersistence.test.jsx`, `InvitationForm.test.jsx`, `EventDetails.test.jsx`, `frontend-user-v2.spec.js` (Studio + Event Settings), `mvnw.cmd -Dtest=*Invitation* test` |
-| **Phases 16–21 (Player, Guest CRM, RSVP/Wishes, Seating, Tickets, Gifts/Payments)** | Surface styling & tokens upgraded cleanly (`UPGRADED`); **domain acceptance NOT claimed** | Unchanged — each phase keeps its own future business acceptance track per `docs/uxui/MASTER_SCOPE.md` | `01-route-feature-state-inventory.csv` |
+| **Frontend User 2.0 Foundations & Obsidian Gold 2.1 (`FUV2-01`..`06`, `13`)** | **VERIFIED — LOCAL + CI (`#45841524091`)** (`11/11` CI jobs + CodeQL `#45841523965` green on `46887ac9`) | No persistent staging run claimed (`VERIFIED_STAGING: 0`) | `08-after-visual-proof.md`, `09-test-command-ledger.md`, `frontend-user-v2.spec.js` (`27 passed, 5 skipped [desktop-only on mobile], 0 failed`) |
+| **Admin Token Compatibility (`apps/frontend-admin`)** | **VERIFIED — LOCAL + CI (`#45841524091`)** (historical `386a126b` fix resolved Gitleaks + unused admin shim) | No persistent staging run claimed | `sync-design-tokens --check` (`Verified 2 application token exports.`), CI job `Admin Frontend` |
+| **Phase 15: Publishing, Access Control, QR/Share, Unpublish & Gate** | **VERIFIED_LOCAL + DISPOSABLE MYSQL CI (`#45841524091`)** (`Phase15PublishingAccessMySqlTests` `1/1`, `0` skipped, `3.422s` on `phase7_disposable` MySQL 8; Vitest `253 files / 1935 tests`; Playwright `FUV2` `27 passed, 5 skipped, 0 failed`) | **NOT `PASS_STAGING`**: persistent live staging DB & browser-to-live-API journey unverified; `Phase15PublishingAccessMySqlTests.java:179-181` documents pre-rotation bearer `accessToken` remains valid until expiry after password rotation | `01-phase15-reconciliation.md`, `acceptance-gates.json` (`FUV2-G43`: `VERIFIED_LOCAL`, `VERIFIED_STAGING: 0`), `Phase15PublishingAccessMySqlTests.java` |
+| **Phase 16: Entire Guest-Facing Invitation / Player Experience (`PR #41` + `PR #42`)** | Accepted locally under Phase 16 domain closeout (see `PHASE_16_ACCEPTANCE.md` & `phase16-acceptance-ledger.json`) | Physical iPhone/Android hardware & native in-app browser testing **`BLOCKED_EXTERNAL`** (`adb` absent; no physical handsets attached) | `../../PHASE_16_ACCEPTANCE.md`, `../phase16-guest-experience/` |
+| **Phases 17–21 (Guest CRM, RSVP/Wishes, Seating, Tickets, Gifts/Payments)** | Surface styling & tokens upgraded cleanly (`UPGRADED`); **domain acceptance NOT claimed** | Unchanged — each phase keeps its own future business acceptance track per `docs/uxui/MASTER_SCOPE.md` | `01-route-feature-state-inventory.csv`, `../../FRONTEND_USER_ROUTE_FEATURE_STATE_MATRIX.csv` |
 | **Phases 22–27 & Phases 28–30** | Phases 22–27 retain approved roadmap; **Phases 28–30 do not exist** | n/a | `AGENTS.md`, `docs/uxui/MASTER_SCOPE.md` |
 
 ---

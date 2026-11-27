@@ -1,0 +1,723 @@
+{
+  "stage": "before",
+  "appDir": "D:\\Koupreng-tmp-before-p16\\apps\\frontend-user",
+  "capturedAt": "2026-11-27T01:51:54.050Z",
+  "results": [
+    {
+      "name": "01-renderer-khmer-floral-gold-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-khmer-floral-gold",
+      "renderer": "khmer-floral-gold",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-khmer-floral-gold",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "targets": [
+            ".kfg-guest-frame > span"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "02-renderer-royal-garden-cinematic-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-royal-garden-cinematic",
+      "renderer": "royal-garden-cinematic",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-royal-garden-cinematic",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": null,
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "03-renderer-silk-heritage-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-silk-heritage",
+      "renderer": "silk-heritage",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-silk-heritage",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "04-renderer-khmer-celestial-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-khmer-celestial",
+      "renderer": "khmer-celestial",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-khmer-celestial",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល ◆ មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": "khmer-celestial"
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "05-renderer-royal-khmer-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-royal-khmer-wedding",
+      "renderer": "royal-khmer-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-royal-khmer-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល ❖ មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": "khmer-celestial"
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "06-renderer-the-digital-yes-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-the-digital-yes-wedding",
+      "renderer": "the-digital-yes-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-the-digital-yes-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(18, 3, 8)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": null,
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "07-renderer-emerald-canva-luxe-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-emerald-canva-luxe-wedding",
+      "renderer": "emerald-canva-luxe-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-emerald-canva-luxe-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "08-renderer-withjoy-modern-portal-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-withjoy-modern-portal",
+      "renderer": "withjoy-modern-portal",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-withjoy-modern-portal",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល & មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "09-renderer-bliss-editorial-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-bliss-editorial-wedding",
+      "renderer": "bliss-editorial-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-bliss-editorial-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល &មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "10-renderer-khmer-golden-canva-inspired-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-khmer-golden-canva-inspired-wedding",
+      "renderer": "khmer-golden-canva-inspired-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-khmer-golden-canva-inspired-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [
+        {
+          "id": "target-size",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "All touch targets must be 24px large, or leave sufficient space",
+          "targets": [
+            ".public-ticket-button"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 1,
+      "pageErrors": [
+        "Unexpected token ':' "
+      ]
+    },
+    {
+      "name": "11-renderer-cover-khmer-golden-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-cover-khmer-golden-wedding",
+      "renderer": "cover-khmer-golden-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-cover-khmer-golden-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [
+        {
+          "id": "target-size",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "All touch targets must be 24px large, or leave sufficient space",
+          "targets": [
+            ".public-ticket-button"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 1,
+      "pageErrors": [
+        "Unexpected token ':' "
+      ]
+    },
+    {
+      "name": "12-renderer-template-boilerplate-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-template-boilerplate",
+      "renderer": "template-boilerplate",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-template-boilerplate",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល & មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "13-renderer-event-essential-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-event-essential",
+      "renderer": "event-essential",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-event-essential",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "14-renderer-koupreng-demo-wedding-km-390.png",
+      "stage": "before",
+      "route": "/i/guest-koupreng-demo-wedding",
+      "renderer": "koupreng-demo-wedding",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-koupreng-demo-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល&មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": "silk-heritage"
+      },
+      "axeViolations": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "Elements must only use permitted ARIA attributes",
+          "targets": [
+            ".tx-dress__palette"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 1,
+      "pageErrors": [
+        "Unexpected token ':' "
+      ]
+    },
+    {
+      "name": "15-khmer-floral-gold-desktop-en-1440.png",
+      "stage": "before",
+      "route": "/i/guest-khmer-floral-gold",
+      "renderer": "khmer-floral-gold",
+      "width": 1440,
+      "height": 900,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-khmer-floral-gold",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollWidth": 1440,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": "Sophal & Channary Royal Wedding",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "targets": [
+            ".kfg-guest-frame > span"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "16-royal-garden-tablet-en-768.png",
+      "stage": "before",
+      "route": "/i/guest-royal-garden-cinematic",
+      "renderer": "royal-garden-cinematic",
+      "width": 768,
+      "height": 1024,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-royal-garden-cinematic",
+        "innerWidth": 768,
+        "innerHeight": 1024,
+        "scrollWidth": 768,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": null,
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "17-bliss-editorial-narrow-320.png",
+      "stage": "before",
+      "route": "/i/guest-bliss-editorial-wedding",
+      "renderer": "bliss-editorial-wedding",
+      "width": 320,
+      "height": 568,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-bliss-editorial-wedding",
+        "innerWidth": 320,
+        "innerHeight": 568,
+        "scrollWidth": 320,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល &មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "18-withjoy-reduced-motion-390.png",
+      "stage": "before",
+      "route": "/i/guest-withjoy-modern-portal",
+      "renderer": "withjoy-modern-portal",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "reduce",
+      "metrics": {
+        "url": "/i/guest-withjoy-modern-portal",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": "Chann Sophal & Meas Channary",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "19-silk-heritage-dashboard-dark-isolated-390.png",
+      "stage": "before",
+      "route": "/i/guest-silk-heritage",
+      "renderer": "silk-heritage",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-silk-heritage",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "dark",
+        "lang": "km",
+        "h1Text": "សិរីមង្គលអាពាហ៍ពិពាហ៍ សុផល និង ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "20-landscape-phone-khmer-celestial-844x390.png",
+      "stage": "before",
+      "route": "/i/guest-khmer-celestial",
+      "renderer": "khmer-celestial",
+      "width": 844,
+      "height": 390,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-khmer-celestial",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollWidth": 844,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "ចាន់ សុផល ◆ មាស ចាន់ណារី",
+        "hasHorizontalScroll": false,
+        "rendererMarker": "khmer-celestial"
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "21-state-password-gate-rate-limit-390.png",
+      "stage": "before",
+      "route": "/i/protected-gate",
+      "renderer": "gate-429",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/protected-gate",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "បញ្ចូលពាក្យសម្ងាត់",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 3,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "22-state-private-not-found-390.png",
+      "stage": "before",
+      "route": "/i/private-unpublished",
+      "renderer": "state-404",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/private-unpublished",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "km",
+        "h1Text": "រកសន្លឹកការមិនឃើញ / Invitation unavailable",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 2,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "23-state-network-error-390.png",
+      "stage": "before",
+      "route": "/i/network-error-sample",
+      "renderer": "state-offline",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/network-error-sample",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": "សន្លឹកការមិនទាន់បានផ្សព្វផ្សាយ / Invitation unavailable",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 1,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "24-state-rsvp-and-ticket-success-390.png",
+      "stage": "before",
+      "route": "/i/guest-personalized?token=gtok_demo_88",
+      "renderer": "rsvp-ticket",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-personalized?token=gtok_demo_88",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(251, 246, 238)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": "Sophal & Channary Royal Wedding",
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1,
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "targets": [
+            ".kfg-guest-frame > span"
+          ]
+        }
+      ],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "25-state-telegram-inapp-ua-390.png",
+      "stage": "before",
+      "route": "/i/guest-the-digital-yes-wedding",
+      "renderer": "inapp-telegram",
+      "width": 390,
+      "height": 844,
+      "reducedMotion": "no-preference",
+      "metrics": {
+        "url": "/i/guest-the-digital-yes-wedding",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "overflowPx": 0,
+        "bodyBg": "rgb(18, 3, 8)",
+        "colorMode": "light",
+        "lang": "en",
+        "h1Text": null,
+        "hasHorizontalScroll": false,
+        "rendererMarker": null
+      },
+      "axeViolations": [],
+      "consoleErrorCount": 0,
+      "pageErrorCount": 0,
+      "pageErrors": []
+    }
+  ]
+}
