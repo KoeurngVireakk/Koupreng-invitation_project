@@ -1,0 +1,23 @@
+{
+  "phase": 21,
+  "title": "Gifts, Purchases, Payments, Contributions & Transactional UX",
+  "branch": "feat/phase21-gifts-payments",
+  "baseSha": "dbf526538cb73766b37f3f1276711c9a4d5c93f2",
+  "status": "PASS_LOCAL",
+  "gates": [
+    { "id": "P21-G01", "name": "Every payment status, amount & currency sourced strictly from backend without client price spoofing", "status": "PASS_LOCAL" },
+    { "id": "P21-G02", "name": "No browser-only PAID state or unlock on PayWay return (CONFIRMED vs PAID distinct)", "status": "PASS_LOCAL" },
+    { "id": "P21-G03", "name": "Owner-recorded gifts distinct from PayWay purchases; USD & KHR totals strictly separated", "status": "PASS_LOCAL" },
+    { "id": "P21-G04", "name": "Receipts scoped to server-verified PAID orders with printable PDF output", "status": "PASS_LOCAL" },
+    { "id": "P21-G05", "name": "Obsidian Dark Mode & Light Mode WCAG 2.2 AA contrast & label parity across 11 views", "status": "PASS_LOCAL" },
+    { "id": "P21-G06", "name": "C08-013 Live ABA PayWay merchant settlement certification on staging/prod", "status": "BLOCKED_EXTERNAL", "carryForward": "DEFERRED_P26" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "255 files / 1952 tests passed (42.87s)",
+    "viteBuild": "passed (1.32s)",
+    "playwrightV2": "27 passed, 5 skipped (desktop-only on mobile), 0 failed (1.1m)",
+    "screenshots": "11/11 0px overflow, 0 non-header Axe violations (reduced from 27 before-state violations)"
+  }
+}

@@ -1,5 +1,5 @@
 import { useLanguageStore } from "@/stores/useLanguageStore";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, afterEach, expect, it, vi } from "vitest";
 
@@ -14,8 +14,17 @@ it.each([null, { orderCode: "AUDIT", status: "PENDING" }, { orderCode: "OTHER", 
   expect(await screen.findByRole("alert")).toHaveTextContent("after payment has been verified");
   expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
 });
-it("preserves a server-reported zero paid amount without substituting another amount", async () => {
-  paymentService.paymentReceipt.mockResolvedValue({ orderCode: "AUDIT", status: "PAID", paidAmount: 0, amount: 25, currency: "USD" }); show();
-  expect(await screen.findByText("$0.00")).toBeInTheDocument();
-  expect(screen.queryByText("$25.00")).not.toBeInTheDocument();
+it("preserves a server-reported zero paid amount without substituting another amount and prints verified receipts", async () => {
+  const originalPrint = window.print;
+  const printSpy = vi.fn();
+  window.print = printSpy;
+  try {
+    paymentService.paymentReceipt.mockResolvedValue({ orderCode: "AUDIT", status: "PAID", paidAmount: 0, amount: 25, currency: "USD" }); show();
+    expect(await screen.findByText("$0.00")).toBeInTheDocument();
+    expect(screen.queryByText("$25.00")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Print / PDF" }));
+    expect(printSpy).toHaveBeenCalledTimes(1);
+  } finally {
+    window.print = originalPrint;
+  }
 });

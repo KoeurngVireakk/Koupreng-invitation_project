@@ -45,14 +45,29 @@
 .wg-hero-tag {
     display: inline-block;
     padding: 4px 12px;
-    background: rgba(176, 146, 106, 0.15);
-    color: var(--ws-gold-dark);
+    background: var(--app-subtle, rgba(176, 146, 106, 0.15));
+    color: var(--ui-theme-gold-text, #6e4f1d);
+    border: 1px solid var(--app-border);
     font-size: 14px;
     font-weight: 800;
     letter-spacing: normal;
     text-transform: none;
     border-radius: 50px;
     margin-bottom: 12px;
+}
+:root[data-color-mode="dark"] .wg-hero-tag {
+    color: var(--app-gold, #d8b875);
+}
+.wg-tx-scope-note {
+    margin: 10px 0 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--app-border);
+    background: var(--app-subtle);
+    color: var(--app-muted);
+    font-size: 12.5px;
+    line-height: 1.5;
+    display: inline-block;
 }
 
 .wg-title {
@@ -659,11 +674,18 @@
 
 .wg-danger-btn {
     background: #fef2f2;
-    color: #dc2626;
+    color: #b91c1c;
 }
 
 .wg-danger-btn:hover {
     background: #fecaca;
+}
+:root[data-color-mode="dark"] .wg-danger-btn {
+    background: rgba(239, 68, 68, 0.16);
+    color: #fca5a5;
+}
+:root[data-color-mode="dark"] .wg-danger-btn:hover {
+    background: rgba(239, 68, 68, 0.28);
 }
 
 /* ─── Empty state ─── */

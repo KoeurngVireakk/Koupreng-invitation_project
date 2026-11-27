@@ -50,11 +50,18 @@ export default function PaymentReceiptPage() {
         <main className="enterprise-page">
             <header className="enterprise-head">
                 <div>
-                    <span className="enterprise-eyebrow">{uiCopy("បង្កាន់ដៃ", "Receipt")}</span>
+                    <span className="enterprise-eyebrow">{uiCopy("បង្កាន់ដៃ · បានផ្ទៀងផ្ទាត់ដោយម៉ាស៊ីនមេ", "Server-Verified Receipt")}</span>
                     <h1>{receipt?.receiptNumber || uiCopy("បង្កាន់ដៃទូទាត់", "Payment receipt")}</h1>
                     <p>{uiCopy("បង្កាន់ដៃសម្រាប់ការបញ្ជាទិញដែលបានផ្ទៀងផ្ទាត់ការទូទាត់។", "Receipt generated from the verified payment order.")}</p>
                 </div>
-                <Link className="enterprise-btn secondary" to="/dashboard/payments">{uiCopy("ប្រវត្តិការទូទាត់", "Payment history")}</Link>
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                    {receipt && (
+                        <button type="button" className="enterprise-btn" onClick={() => window.print?.()}>
+                            {uiCopy("បោះពុម្ព / PDF", "Print / PDF")}
+                        </button>
+                    )}
+                    <Link className="enterprise-btn secondary" to="/dashboard/payments">{uiCopy("ប្រវត្តិការទូទាត់", "Payment history")}</Link>
+                </div>
             </header>
 
             {error && <div className="enterprise-error" role="alert">{error}</div>}

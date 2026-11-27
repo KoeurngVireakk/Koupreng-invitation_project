@@ -45,7 +45,7 @@
 .pkg-history { margin-bottom: 32px; }
 .pkg-history-table { overflow-x: auto; }
 .pkg-history table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
-.pkg-history th { background: #faf6ee; font-weight: 650; color: var(--ws-muted); }
+.pkg-history th { background: var(--app-subtle, #faf6ee); font-weight: 650; color: var(--app-muted, #5c4f3d); }
 .pkg-history :is(th, td) { padding: 18px 12px; border-bottom: 1px solid var(--ws-border); vertical-align: middle; }
 .pkg-order-code { overflow-wrap: anywhere; }
 .pkg-status { display: inline-block; padding: 4px 10px; border-radius: 8px; background: #f4f0e8; color: #6b4d1d; font-size: 14px; line-height: 1.8; }

@@ -59,8 +59,9 @@ export default function PaymentSuccessPage() {
         }
         switch (order.status) {
             case "PAID":
+                return uiCopy("ការទូទាត់ជោគជ័យ — គំរូធៀបត្រូវបានបើកដំណើរការ!", "Payment verified — template unlocked!");
             case "CONFIRMED":
-                return uiCopy("ការទូទាត់ជោគជ័យ — គំរូធៀបត្រូវបានបើកដំណើរការ!", "Payment confirmed & template unlocked!");
+                return uiCopy("បានទទួលការបញ្ជាក់ពីអ្នកផ្ដល់សេវា — កំពុងផ្ទៀងផ្ទាត់សិទ្ធិ...", "Provider confirmation received — verifying template access...");
             case "PAID_PENDING_REVIEW":
                 return uiCopy("បានទទួលការទូទាត់ — កំពុងត្រួតពិនិត្យ", "Payment received — pending manual review");
             case "FAILED":
@@ -102,6 +103,13 @@ export default function PaymentSuccessPage() {
                     <h2>{order.templateName}</h2>
                     <p>{order.orderCode}</p>
                     <div className="payment-actions">
+                        <button
+                            type="button"
+                            className="payment-secondary-btn"
+                            onClick={() => navigator.clipboard?.writeText(order.orderCode).catch(() => {})}
+                        >
+                            {uiCopy("ចម្លងលេខកូដបញ្ជាទិញ", "Copy reference")}
+                        </button>
                         <Link className="payment-secondary-btn link-button" to={`/payments/${order.orderCode}/status`}>
                             {uiCopy("មើលស្ថានភាព", "Open status")}
                         </Link>

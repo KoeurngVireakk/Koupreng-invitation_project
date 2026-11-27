@@ -1,0 +1,101 @@
+[
+  {
+    "name": "01-template-checkout-light-en-1440.png",
+    "route": "/templates/khmer-floral-gold/checkout",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "02-template-checkout-obsidian-km-1440.png",
+    "route": "/templates/khmer-floral-gold/checkout",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "03-payment-status-qr-light-en-1440.png",
+    "route": "/payments/ORD-2026-PENDING/status",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "04-payment-status-qr-obsidian-km-1440.png",
+    "route": "/payments/ORD-2026-PENDING/status",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "05-payment-status-qr-mobile-390.png",
+    "route": "/payments/ORD-2026-PENDING/status",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "06-payment-history-obsidian-km-1440.png",
+    "route": "/app/payments",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "07-payment-receipt-obsidian-en-1440.png",
+    "route": "/app/payments/ORD-2026-PAID",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "08-subscription-packages-obsidian-km-1440.png",
+    "route": "/app/packages",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "09-subscription-checkout-modal-obsidian-1440.png",
+    "route": "/app/packages",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "10-wedding-gifts-ledger-obsidian-km-1440.png",
+    "route": "/app/events/42/gifts",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "11-wedding-gifts-light-mobile-390.png",
+    "route": "/app/events/42/gifts",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  }
+]

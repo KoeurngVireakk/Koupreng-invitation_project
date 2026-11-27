@@ -53,7 +53,7 @@ export function GuestSelectField({ value, guestId, onChange, options = [], place
         <div ref={ref} style={{ position: "relative", width: "100%" }}>
             <button
                 type="button"
-                aria-label={ariaLabel}
+                aria-label={`${selectedLabel || placeholder}${ariaLabel ? ` — ${ariaLabel}` : ""}`}
                 aria-expanded={open}
                 data-gift-name-input="true"
                 onClick={() => setOpen(!open)}
