@@ -117,7 +117,13 @@ export function useAiAssistant() {
       setResponse(finalResponse);
       return finalResponse;
     } catch (err) {
-      if ([401,403].includes(err?.status)) feedback.explain(err, { event, feature: 'AI_ASSISTANT', permission: 'MANAGE_INVITATION' });
+      const denied = [401, 403].includes(err?.status);
+      if (denied) {
+        feedback.explain(err, { event, feature: 'AI_ASSISTANT', permission: 'MANAGE_INVITATION' });
+        setError(err?.message || "You do not have permission to generate invitation copy for this event.");
+        setResponse(null);
+        return null;
+      }
       setError(err?.message || "Could not generate text suggestions");
       const fallback = { enabled: false, source: "LOCAL_TEMPLATE", provider: "local-template",
         generatedText: buildLocalTemplateText(action, request), suggestions: [],

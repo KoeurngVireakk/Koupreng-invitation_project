@@ -97,7 +97,7 @@ export default function AiAssistantPage() {
         );
       }
       toast.success(en ? "Saved to invitation story" : "បានរក្សាទុកក្នុងផ្នែករឿងរ៉ាវជោគជ័យ");
-      navigate(`/dashboard/invitations/${invitationId}/edit`);
+      navigate(`/app/events/${invitationId}/invitation`);
     } catch {
       toast.error(en ? "Could not save text" : "មិនអាចរក្សាទុកអត្ថបទបានទេ");
     }
@@ -107,7 +107,7 @@ export default function AiAssistantPage() {
     <main className="dash-main pe-ai-page">
       <div>
         <Link
-          to={invitationId ? `/dashboard/invitations/${invitationId}/edit` : "/dashboard/invitations"}
+          to={invitationId ? `/app/events/${invitationId}/invitation` : "/app/events"}
           className="pe-ai-back-link"
         >
           <IoArrowBackOutline aria-hidden="true" />

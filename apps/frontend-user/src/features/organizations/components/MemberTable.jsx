@@ -1,7 +1,15 @@
 import { useUiCopy } from "@/shared/i18n/useUiCopy";
+import { Crown } from "lucide-react";
 import { IoPencilOutline, IoTrashOutline, IoPersonOutline } from "react-icons/io5";
 import { ResponsiveTable, StatusBadge } from "@/shared/ui";
 import RoleBadge from "./RoleBadge";
+
+function formatMemberDate(value, locale) {
+  if (!value) return "—";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "—";
+  return parsed.toLocaleDateString(locale);
+}
 
 export default function MemberTable({
   members = [],
@@ -11,6 +19,7 @@ export default function MemberTable({
   isOwner,
 }) {
   const uiCopy = useUiCopy();
+  const locale = uiCopy("km-KH", "en-US");
   return (
     <ResponsiveTable ariaLabel={uiCopy("តារាងសមាជិកក្រុម", "Organization members table")}>
       <thead>
@@ -27,19 +36,21 @@ export default function MemberTable({
           const isMemberOwner =
             member.role === "OWNER" ||
             (member.userId && String(member.userId) === String(ownerUserId));
+          const normalizedStatus = (member.status || "ACTIVE").toUpperCase();
 
           return (
             <tr key={member.id}>
               <td>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <div className="k-org-member-avatar">
-                    <IoPersonOutline />
+                    <IoPersonOutline aria-hidden="true" />
                   </div>
                   <div>
-                    <strong style={{ color: "var(--kp-dark)", fontSize: "0.9rem" }}>{member.email}</strong>
+                    <strong className="k-org-member-email">{member.email}</strong>
                     {isMemberOwner && (
                       <span className="k-org-owner-tag">
-                        {uiCopy("👑 ម្ចាស់", "👑 Owner")}
+                        <Crown size={12} aria-hidden="true" />
+                        <span>{uiCopy("ម្ចាស់", "Owner")}</span>
                       </span>
                     )}
                   </div>
@@ -49,14 +60,28 @@ export default function MemberTable({
                 <RoleBadge role={member.role} />
               </td>
               <td>
-                <StatusBadge status={member.status || "ACTIVE"} />
-                {!isMemberOwner && member.status === 'ACTIVE' && !member.inviteAcceptedAt && <p>{uiCopy('សិទ្ធិកម្មវិធីត្រូវការការអញ្ជើញថ្មី និងការទទួលយក។', 'Event access needs a new accepted invitation.')}</p>}
+                <StatusBadge status={normalizedStatus} />
+                {!isMemberOwner && normalizedStatus === "PENDING" && (
+                  <p className="k-org-invite-status-note">
+                    {uiCopy("កំពុងរង់ចាំសមាជិកទទួលយកកូដអញ្ជើញ។", "Waiting for invitee to accept invitation code.")}
+                  </p>
+                )}
+                {!isMemberOwner && (normalizedStatus === "EXPIRED" || normalizedStatus === "REVOKED") && (
+                  <p className="k-org-invite-status-note">
+                    {uiCopy("ការអញ្ជើញនេះមិនមានសុពលភាពទៀតទេ។ សូមបង្កើតកូដថ្មីប្រសិនបើត្រូវការ។", "This invitation is no longer valid. Issue a new code if access is still needed.")}
+                  </p>
+                )}
+                {!isMemberOwner && normalizedStatus === "ACTIVE" && !member.inviteAcceptedAt && !member.joinedAt && (
+                  <p className="k-org-invite-status-note">
+                    {uiCopy("សិទ្ធិកម្មវិធីត្រូវការការអញ្ជើញថ្មី និងការទទួលយក។", "Event access needs a new accepted invitation.")}
+                  </p>
+                )}
               </td>
-              <td style={{ color: "#64748b", fontSize: "0.85rem" }}>
+              <td className="k-org-member-date">
                 {member.joinedAt
-                  ? new Date(member.joinedAt).toLocaleDateString(uiCopy("km-KH", "en-US"))
+                  ? formatMemberDate(member.joinedAt, locale)
                   : member.invitedAt
-                  ? `${uiCopy("បានអញ្ជើញ", "Invited")} ${new Date(member.invitedAt).toLocaleDateString(uiCopy("km-KH", "en-US"))}`
+                  ? `${uiCopy("បានអញ្ជើញ", "Invited")} ${formatMemberDate(member.invitedAt, locale)}`
                   : "—"}
               </td>
               {isOwner && (
@@ -84,7 +109,7 @@ export default function MemberTable({
                       </button>
                     </div>
                   ) : (
-                    <span style={{ fontSize: "0.75rem", color: "#94a3b8", fontStyle: "italic" }}>
+                    <span className="k-org-owner-protected">
                       {uiCopy("មិនអាចដកម្ចាស់ចេញ", "Owner protected")}
                     </span>
                   )}

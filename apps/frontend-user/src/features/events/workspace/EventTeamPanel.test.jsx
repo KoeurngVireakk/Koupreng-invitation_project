@@ -94,4 +94,29 @@ describe("EventTeamPanel", () => {
     renderPanel();
     expect(await screen.findByText(/TEAM_MEMBERS|សិទ្ធិ/i)).toBeInTheDocument();
   });
+
+  it("resyncs linked team selection when active event or organizationId changes", async () => {
+    const view = renderPanel({ id: 101, organizationId: null });
+    const select = await screen.findByLabelText(/Linked team|ក្រុមដែលភ្ជាប់/i);
+    expect(select).toHaveValue("");
+
+    view.rerender(
+      <MemoryRouter>
+        <EventContext.Provider
+          value={{
+            eventId: "102",
+            event: { ...mockEvent, id: 102, title: "Updated Event", organizationId: 1 },
+            updateEvent: vi.fn(),
+            isOwner: true,
+            can: () => true,
+          }}
+        >
+          <EventTeamPanel />
+        </EventContext.Provider>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByLabelText(/Linked team|ក្រុមដែលភ្ជាប់/i)).toHaveValue("1");
+    expect(screen.getByText(/Updated Event/)).toBeInTheDocument();
+  });
 });

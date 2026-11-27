@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useLanguageStore } from "../../stores/useLanguageStore";
 import SocialAuthButtons from "./components/SocialAuthButtons";
+import DisplayPreferences from "@/shared/preferences/DisplayPreferences";
 import { userService } from "@/features/auth/api/userApi";
 import { useBackendMessages } from "../../shared/i18n/useBackendMessages";
 import "./ProfileFeature.css";
@@ -311,6 +312,18 @@ export default function ProfilePage() {
             <p className="profile-msg error" role="alert">{error}</p>
           )}
         </form>
+
+        {/* ── Preferences: Language & Theme ── */}
+        <hr className="profile-section-divider" />
+        <section className="profile-preferences-section" aria-labelledby="profile-preferences-heading">
+          <h2 id="profile-preferences-heading">
+            {copy("ចំណូលចិត្តភាសា និងផ្ទាំងបង្ហាញ", "Language & display preferences")}
+          </h2>
+          <p className="profile-preferences-note">
+            {copy("ប្ដូរភាសា (ខ្មែរ / EN) និងពន្លឺផ្ទាំងគ្រប់គ្រង។ គំរូធៀបអញ្ជើញរបស់ភ្ញៀវរក្សាពណ៌ និងរចនាប័ទ្មដើមដោយឯករាជ្យ។", "Switch host workspace language (Khmer / EN) and light/dark appearance. Guest wedding invitation templates preserve their independent art direction.")}
+          </p>
+          <DisplayPreferences />
+        </section>
 
         {/* ── Linked identities ── */}
         <hr className="profile-section-divider" />

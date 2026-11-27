@@ -139,13 +139,18 @@ describe("ProfileFeature", () => {
     });
   });
 
-  it("renders in Khmer locale", async () => {
-    useLanguageStore.getState().setLang("km");
+  it("renders in Khmer locale and preserves edited profile inputs when language changes", async () => {
     render(<ProfilePage />);
 
-    await waitFor(() => {
-      expect(screen.getByRole("heading", { name: /ប្រវត្តិរូបរបស់អ្នក/i })).toBeInTheDocument();
-    });
+    const nameInput = await screen.findByLabelText(/Full name/i);
+    expect(nameInput).toHaveValue("Koupreng Host");
+
+    fireEvent.change(nameInput, { target: { value: "Draft Unsaved Host" } });
+    expect(screen.getByRole("heading", { name: /Language & display preferences/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("switch"));
+    expect(await screen.findByRole("heading", { name: /ប្រវត្តិរូបរបស់អ្នក/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/ឈ្មោះពេញ/i)).toHaveValue("Draft Unsaved Host");
     expect(screen.getByRole("button", { name: /រក្សាទុកការកែប្រែ/i })).toBeInTheDocument();
   });
 });

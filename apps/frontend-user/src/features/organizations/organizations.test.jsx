@@ -91,6 +91,25 @@ describe("Organization Feature Module", () => {
       expect(screen.getByText("staff@koupreng.com")).toBeInTheDocument();
       expect(screen.getByText(/owner protected/i)).toBeInTheDocument();
       expect(screen.getAllByText("CHECK IN STAFF").length).toBeGreaterThan(0);
+      expect(screen.queryByText(/👑/)).not.toBeInTheDocument();
+    });
+
+    it("explains pending and revoked/expired invitation statuses in plain language", () => {
+      render(
+        <MemberTable
+          ownerUserId={101}
+          isOwner={true}
+          onEditRole={vi.fn()}
+          onRemove={vi.fn()}
+          members={[
+            { id: 1, userId: 102, email: "pending@koupreng.com", role: "DESIGNER", status: "PENDING", invitedAt: "2026-02-01T00:00:00Z" },
+            { id: 2, userId: 103, email: "revoked@koupreng.com", role: "VIEWER", status: "REVOKED", invitedAt: "2026-01-15T00:00:00Z" },
+          ]}
+        />
+      );
+
+      expect(screen.getByText(/Waiting for invitee to accept invitation code/i)).toBeInTheDocument();
+      expect(screen.getByText(/This invitation is no longer valid/i)).toBeInTheDocument();
     });
 
   });

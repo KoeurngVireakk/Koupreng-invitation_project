@@ -31,9 +31,9 @@ export default function OrganizationCard({ organization }) {
       </div>
 
       <div className="k-org-card-footer-lux">
-        <Link to={`/dashboard/organizations/${organization.id}`} className="k-org-btn-enter">
+        <Link to={`/app/organizations/${organization.id}`} className="k-org-btn-enter">
           <span>{uiCopy("ចូលគ្រប់គ្រងកន្លែងធ្វើការ", "Open workspace")}</span>
-          <IoArrowForwardOutline />
+          <IoArrowForwardOutline aria-hidden="true" />
         </Link>
       </div>
     </article>

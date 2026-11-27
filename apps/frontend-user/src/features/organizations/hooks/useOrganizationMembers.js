@@ -6,6 +6,7 @@ export function useOrganizationMembers(organizationId) {
   const [organization, setOrganization] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [saving, setSaving] = useState(false);
 
   const loadOrganization = useCallback(async () => {
@@ -29,14 +30,14 @@ export function useOrganizationMembers(organizationId) {
   const addMember = async (email, role) => {
     if (!organizationId) return false;
     setSaving(true);
-    setError("");
+    setActionError("");
     try {
       const invitation = await organizationService.addMember(organizationId, { email, role });
       refreshAccess();
       await loadOrganization();
       return invitation;
     } catch (err) {
-      setError(err?.message || "Could not add member");
+      setActionError(err?.message || "Could not add member");
       feedback.explain(err, { feature:'TEAM_MEMBERS', ownerOnly:true });
       return false;
     } finally {
@@ -47,14 +48,14 @@ export function useOrganizationMembers(organizationId) {
   const updateRole = async (memberId, role) => {
     if (!organizationId) return false;
     setSaving(true);
-    setError("");
+    setActionError("");
     try {
       await organizationService.updateMemberRole(organizationId, memberId, role);
       refreshAccess();
       await loadOrganization();
       return true;
     } catch (err) {
-      setError(err?.message || "Could not update member role");
+      setActionError(err?.message || "Could not update member role");
       feedback.explain(err, { ownerOnly:true });
       return false;
     } finally {
@@ -65,14 +66,14 @@ export function useOrganizationMembers(organizationId) {
   const removeMember = async (memberId) => {
     if (!organizationId) return false;
     setSaving(true);
-    setError("");
+    setActionError("");
     try {
       await organizationService.removeMember(organizationId, memberId);
       refreshAccess();
       await loadOrganization();
       return true;
     } catch (err) {
-      setError(err?.message || "Could not remove member");
+      setActionError(err?.message || "Could not remove member");
       feedback.explain(err, { ownerOnly:true });
       return false;
     } finally {
@@ -85,6 +86,7 @@ export function useOrganizationMembers(organizationId) {
     members: organization?.members || [],
     loading,
     error,
+    actionError,
     saving,
     loadOrganization,
     addMember,

@@ -1,0 +1,44 @@
+{
+  "phase": 23,
+  "title": "Team, Organization, Notifications, Preferences, Support & AI Decision",
+  "branch": "feat/phase23-team-org-notifications-ai",
+  "baseSha": "87a443ba5c9c6125e5e6adc445e128ae60812db7",
+  "status": "READY_FOR_CODEX_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    {
+      "id": "P23-G01",
+      "name": "Organizations, members, invite states & EventTeamPanel RBAC boundaries enforced and clear in EN/KM",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "id": "P23-G02",
+      "name": "Notifications preserve list on mutation errors, require confirmation before Telegram disconnect, and filter All/Unread/Failed safely",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "id": "P23-G03",
+      "name": "Profile language/appearance toggles preserve form inputs, explain template independence, and surface discoverable HostNav links",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "id": "P23-G04",
+      "name": "AI writing helper discloses built-in local template & PII warning upfront and fails closed on 401/403",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "id": "P23-G05",
+      "name": "Obsidian Dark Mode & Light Mode WCAG 2.2 AA contrast and mobile 390px reflow verified (0px overflow, 0 Axe violations across 10/10 captures)",
+      "status": "PASS_LOCAL"
+    }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "255 files / 1965 tests passed (69.55s)",
+    "viteBuild": "passed (2.25s)",
+    "playwrightPhase23": "4 passed (desktop-chromium & mobile-chromium, 12.1s)",
+    "playwrightV2Baseline": "31 passed, 5 skipped (desktop-only on chromium-mobile), 0 failed",
+    "screenshots": "10/10 after captures clean (0px overflow, 0 non-header Axe violations; fixed 17 baseline contrast violations)"
+  }
+}

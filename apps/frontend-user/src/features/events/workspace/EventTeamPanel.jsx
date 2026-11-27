@@ -18,6 +18,9 @@ export default function EventTeamPanel() {
   const [selection, setSelection] = useState(String(event.organizationId || ''));
   const [busy, setBusy] = useState(false), [review, setReview] = useState(false);
   useEffect(() => {
+    setSelection(String(event.organizationId || ''));
+  }, [eventId, event.organizationId]);
+  useEffect(() => {
     let active = true;
     Promise.all([invitationService.access(eventId), owner ? organizationService.listMine() : Promise.resolve([])])
       .then(([access, teams]) => { if (active) setState({ loading: false, teams: teams.filter(team => String(team.ownerUserId) === String(event.userId)), access, error: '' }); })
@@ -39,7 +42,7 @@ export default function EventTeamPanel() {
     finally { setBusy(false); }
   }
   const eligible = state.access?.ownerFeatures?.includes('TEAM_MEMBERS');
-  return <main className="workspace-page"><header className="workspace-heading"><h1>{copy('ក្រុមកម្មវិធី', 'Event team')}</h1><p>{copy('ភ្ជាប់ក្រុមដែលអ្នកជាម្ចាស់ ដើម្បីសហការតាមតួនាទី។', 'Link a team you own to collaborate according to each member’s role.')}</p></header>
+  return <main className="workspace-page"><header className="workspace-heading"><h1>{copy('ក្រុមកម្មវិធី', 'Event team')}</h1><p>{event.title ? `${event.title} — ` : ''}{copy('ភ្ជាប់ក្រុមដែលអ្នកជាម្ចាស់ ដើម្បីសហការតាមតួនាទី។', 'Link a team you own to collaborate according to each member’s role.')}</p></header>
     <section className="workspace-section"><p>{copy('សមាជិកទទួលសិទ្ធិលើកម្មវិធីទាំងអស់ដែលម្ចាស់ភ្ជាប់ទៅក្រុមនេះ។ ម្ចាស់គ្រប់គ្រងការផ្សព្វផ្សាយ ហិរញ្ញវត្ថុ សិទ្ធិចូល និងសមាជិក។ ការដកសមាជិកបញ្ចប់សិទ្ធិលើកម្មវិធីដែលភ្ជាប់។', 'Members can access all owner events linked to this team. Publishing, finances, access settings and membership stay owner-controlled. Removing a member revokes their access to linked events.')}</p>
       {state.loading ? <PageSkeleton layout="form" /> : <>
         {!owner && <p>{copy('មានតែម្ចាស់អាចប្ដូរក្រុមកម្មវិធី។', 'Only the event owner can change its team.')}</p>}
