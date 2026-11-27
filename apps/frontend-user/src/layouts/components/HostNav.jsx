@@ -1,13 +1,16 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
+  Bell,
   CalendarDays,
   CalendarPlus,
   ChevronDown,
+  LifeBuoy,
   Palette,
   Gem,
   LogOut,
   UserRound,
+  Users,
   Receipt,
   BarChart3,
   X,
@@ -29,6 +32,9 @@ const NAV_DICTIONARY = {
     paidTemplates: "គំរូដែលបានទិញ",
     paymentHistory: "ប្រវត្តិការទូទាត់",
     financialReports: "របាយការណ៍ហិរញ្ញវត្ថុ",
+    organizations: "ក្រុមការងារ",
+    notifications: "ការជូនដំណឹង",
+    support: "ជំនួយ និងការគាំទ្រ",
     dashboard: "ផ្ទាំងគ្រប់គ្រង",
     guests: "បញ្ជីភ្ញៀវ",
     expenses: "គម្រោងថវិកា",
@@ -43,6 +49,9 @@ const NAV_DICTIONARY = {
     paidTemplates: "Paid Templates",
     paymentHistory: "Payment History",
     financialReports: "Financial Reports",
+    organizations: "Teams & Workspaces",
+    notifications: "Notifications",
+    support: "Help & Support",
     dashboard: "Dashboard",
     guests: "Guests",
     expenses: "Budget",
@@ -370,6 +379,36 @@ export default function HostNav() {
                     <span>{getNavLabel("financialReports")}</span>
                   </Link>
 
+                  <Link
+                    to="/app/organizations"
+                    className="host-profile-menu-item"
+                    onClick={() => setProfileOpen(false)}
+                    role="menuitem"
+                  >
+                    <Users aria-hidden="true" />
+                    <span>{getNavLabel("organizations")}</span>
+                  </Link>
+
+                  <Link
+                    to="/app/notifications"
+                    className="host-profile-menu-item"
+                    onClick={() => setProfileOpen(false)}
+                    role="menuitem"
+                  >
+                    <Bell aria-hidden="true" />
+                    <span>{getNavLabel("notifications")}</span>
+                  </Link>
+
+                  <Link
+                    to="/contact"
+                    className="host-profile-menu-item"
+                    onClick={() => setProfileOpen(false)}
+                    role="menuitem"
+                  >
+                    <LifeBuoy aria-hidden="true" />
+                    <span>{getNavLabel("support")}</span>
+                  </Link>
+
                   <div className="host-profile-menu-divider" role="separator" />
 
                   <button
@@ -483,6 +522,36 @@ export default function HostNav() {
         >
           <span className="menu-icon"><BarChart3 aria-hidden="true" /></span>
           <span>{getNavLabel("financialReports")}</span>
+        </Link>
+
+        <Link
+          to="/app/organizations"
+          className={`host-mobile-menu-item${isActive("/app/organizations") ? " active" : ""}`}
+          aria-current={isActive("/app/organizations") ? "page" : undefined}
+          onClick={closeMobileMenu}
+        >
+          <span className="menu-icon"><Users aria-hidden="true" /></span>
+          <span>{getNavLabel("organizations")}</span>
+        </Link>
+
+        <Link
+          to="/app/notifications"
+          className={`host-mobile-menu-item${isActive("/app/notifications") ? " active" : ""}`}
+          aria-current={isActive("/app/notifications") ? "page" : undefined}
+          onClick={closeMobileMenu}
+        >
+          <span className="menu-icon"><Bell aria-hidden="true" /></span>
+          <span>{getNavLabel("notifications")}</span>
+        </Link>
+
+        <Link
+          to="/contact"
+          className={`host-mobile-menu-item${isActive("/contact") ? " active" : ""}`}
+          aria-current={isActive("/contact") ? "page" : undefined}
+          onClick={closeMobileMenu}
+        >
+          <span className="menu-icon"><LifeBuoy aria-hidden="true" /></span>
+          <span>{getNavLabel("support")}</span>
         </Link>
 
         <div className="host-mobile-menu-divider" />

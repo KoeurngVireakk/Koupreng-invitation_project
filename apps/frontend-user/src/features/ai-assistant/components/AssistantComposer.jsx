@@ -6,6 +6,7 @@ import {
   IoDocumentTextOutline,
   IoHeartOutline,
   IoLanguageOutline,
+  IoShieldCheckmarkOutline,
   IoSparklesOutline,
   IoTimeOutline,
 } from "react-icons/io5";
@@ -153,9 +154,19 @@ export default function AssistantComposer({
           rows="3"
           value={form.notes}
           onChange={(e) => setForm({ ...form, notes: e.target.value })}
-          placeholder={copy("បន្ថែមពាក្យជូនពរ ព័ត៌មានភ្ញៀវ ឬសំណូមពរពិសេស...", "Add wishes, guest details or special requests...")}
+          placeholder={copy("បន្ថែមពាក្យជូនពរ ឬសំណូមពរពិសេស (កុំបញ្ចូលលេខទូរស័ព្ទភ្ញៀវ ឬទិន្នន័យឯកជន)...", "Add wishes or special requests (do not include private guest phone numbers or confidential notes)...")}
         />
       </FormField>
+
+      <div className="pe-ai-privacy-notice" role="note">
+        <IoShieldCheckmarkOutline aria-hidden="true" />
+        <span>
+          {copy(
+            "សូមកុំបញ្ចូលលេខទូរស័ព្ទភ្ញៀវ អាសយដ្ឋានឯកជន ឬព័ត៌មានរសើប។ ប្រសិនបើសេវា AI មិនមានទេ Koupreng នឹងបង្កើតពុម្ពអត្ថបទជំនួយក្នុងមូលដ្ឋានដោយគ្មានការចំណាយបន្ថែម។",
+            "Do not enter private guest phone numbers, addresses, or confidential notes. If no AI provider is connected, Koupreng creates an editable draft from a local template with no extra charge."
+          )}
+        </span>
+      </div>
 
       <LoadingButton type="submit" isLoading={loading} className="pe-primary-btn pe-ai-generate">
         <IoSparklesOutline aria-hidden="true" />

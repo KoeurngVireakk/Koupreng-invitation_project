@@ -1,0 +1,149 @@
+[
+  {
+    "name": "01-organizations-light-en-1440.png",
+    "route": "/app/organizations",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "02-organizations-obsidian-km-1440.png",
+    "route": "/app/organizations",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 4,
+        "targets": [
+          "article:nth-child(1) > .k-org-card-content > h3",
+          "article:nth-child(1) > .k-org-card-content > .k-org-card-slug",
+          "article:nth-child(2) > .k-org-card-content > h3",
+          "article:nth-child(2) > .k-org-card-content > .k-org-card-slug"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "03-organization-detail-obsidian-en-1440.png",
+    "route": "/app/organizations/10",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 3,
+        "targets": [
+          "tr:nth-child(1) > td:nth-child(4)",
+          "tr:nth-child(2) > td:nth-child(4)",
+          "tr:nth-child(3) > td:nth-child(4)"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "04-organization-detail-mobile-390.png",
+    "route": "/app/organizations/10",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 3,
+        "targets": [
+          "tr:nth-child(1) > td:nth-child(4)",
+          "tr:nth-child(2) > td:nth-child(4)",
+          "tr:nth-child(3) > td:nth-child(4)"
+        ]
+      }
+    ],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "05-event-team-obsidian-km-1440.png",
+    "route": "/app/events/42/team",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "06-notifications-light-en-1440.png",
+    "route": "/app/notifications",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "targets": [
+          ".is-unread > .notif-item-main > .notif-meta > span:nth-child(1)",
+          ".is-unread > .notif-item-main > .notif-meta > span:nth-child(2)",
+          ".is-unread > .notif-item-main > .notif-meta > span:nth-child(3)",
+          ".notif-item:nth-child(2) > .notif-item-main > .notif-meta > span:nth-child(1)",
+          ".notif-item:nth-child(2) > .notif-item-main > .notif-meta > span:nth-child(2)",
+          ".notif-item:nth-child(2) > .notif-item-main > .notif-meta > span:nth-child(3)"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "07-notifications-obsidian-km-1440.png",
+    "route": "/app/notifications",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".notif-error"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "08-profile-obsidian-en-1440.png",
+    "route": "/app/profile",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "09-ai-assistant-obsidian-km-1440.png",
+    "route": "/app/events/42/assistant",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "10-ai-assistant-light-en-1440.png",
+    "route": "/app/events/42/assistant",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  }
+]

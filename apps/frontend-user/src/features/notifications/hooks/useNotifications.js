@@ -7,12 +7,14 @@ export function useNotifications() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [busyId, setBusyId] = useState(null);
 
   const loadData = useCallback(() => {
     const request = ++generation.current;
     setLoading(true);
     setError("");
+    setActionError("");
     Promise.all([
       notificationsApi.list(),
       notificationsApi.summary(),
@@ -39,6 +41,7 @@ export function useNotifications() {
 
   const markRead = async (notificationId) => {
     setBusyId(notificationId);
+    setActionError("");
     try {
       const updated = await notificationsApi.markRead(notificationId);
       setNotifications((items) =>
@@ -49,7 +52,7 @@ export function useNotifications() {
         unread: Math.max(0, (current?.unread || 0) - 1),
       }));
     } catch (err) {
-      setError(err?.message || "Could not mark notification as read");
+      setActionError(err?.message || "Could not mark notification as read");
     } finally {
       setBusyId(null);
     }
@@ -57,12 +60,13 @@ export function useNotifications() {
 
   const markAllRead = async () => {
     setBusyId("all");
+    setActionError("");
     try {
       const updated = await notificationsApi.markAllRead();
       setNotifications(updated || []);
       setSummary((current) => ({ ...(current || {}), unread: 0 }));
     } catch (err) {
-      setError(err?.message || "Could not mark notifications as read");
+      setActionError(err?.message || "Could not mark notifications as read");
     } finally {
       setBusyId(null);
     }
@@ -73,6 +77,7 @@ export function useNotifications() {
     summary,
     loading,
     error,
+    actionError,
     busyId,
     loadData,
     markRead,

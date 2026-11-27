@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLanguageStore } from '@/stores/useLanguageStore';
 import AssistantComposer from "./components/AssistantComposer";
 import AssistantResult from "./components/AssistantResult";
+import { aiAssistantService } from "./api/aiAssistantApi";
 import { useAiAssistant } from "./hooks/useAiAssistant";
 import { toInvitationStoryUpdate } from "./model/invitationContent";
 afterEach(cleanup);
@@ -176,6 +177,49 @@ describe("AI Invitation Assistant Module", () => {
 
       expect(res.generatedText).toContain("Registration & Welcome");
       expect(res.generatedText).not.toContain("Hair Cutting Ceremony");
+    });
+
+    it("fails closed on 403 authorization error without returning a local fallback draft", async () => {
+      const denied = Object.assign(new Error("Forbidden"), { status: 403 });
+      vi.spyOn(aiAssistantService, "draftCopy").mockRejectedValueOnce(denied);
+
+      const { result } = renderHook(() => useAiAssistant());
+      let res;
+      await act(async () => {
+        res = await result.current.generate("copy", {
+          action: "copy",
+          eventType: "WEDDING",
+          coupleNames: "Dara & Sophea",
+          language: "English",
+        });
+      });
+
+      expect(res).toBeNull();
+      expect(result.current.response).toBeNull();
+      expect(result.current.error).toContain("Forbidden");
+    });
+
+    it("renders upfront guest-PII and local-template disclosure in AssistantComposer", () => {
+      render(
+        <AssistantComposer
+          form={{
+            action: "copy",
+            eventType: "WEDDING",
+            coupleNames: "Dara & Sophea",
+            hostName: "",
+            eventDate: "",
+            venueName: "",
+            language: "Khmer",
+            tone: "formal",
+            notes: "",
+          }}
+          setForm={vi.fn()}
+          loading={false}
+          onSubmit={vi.fn()}
+        />
+      );
+
+      expect(screen.getByRole("note")).toHaveTextContent(/Do not enter private guest phone numbers/i);
     });
   });
 });

@@ -8,7 +8,7 @@ import {
   IoChevronForwardOutline,
   IoHomeOutline,
 } from "react-icons/io5";
-import { ErrorState, FormField, LoadingButton, Modal, toast } from "@/shared/ui";
+import { EmptyState, ErrorState, FormField, LoadingButton, Modal, toast } from "@/shared/ui";
 import { useOrganizations } from "./hooks/useOrganizations";
 import OrganizationCard from "./components/OrganizationCard";
 import AcceptTeamInvitation from "./components/AcceptTeamInvitation";
@@ -49,12 +49,12 @@ export default function OrganizationPage() {
     <div role="main" className="dash-main k-org-page">
       <div className="k-org-container">
         {/* Breadcrumb */}
-        <nav className="k-org-breadcrumb">
-          <Link to="/dashboard" className="k-org-breadcrumb-link">
-            <IoHomeOutline />
-            <span>{uiCopy("ផ្ទាំងគ្រប់គ្រង", "Dashboard")}</span>
+        <nav className="k-org-breadcrumb" aria-label={uiCopy("ទីតាំងទំព័រ", "Breadcrumb")}>
+          <Link to="/app/events" className="k-org-breadcrumb-link">
+            <IoHomeOutline aria-hidden="true" />
+            <span>{uiCopy("កម្មវិធីរបស់ខ្ញុំ", "My events")}</span>
           </Link>
-          <IoChevronForwardOutline className="k-org-breadcrumb-sep" />
+          <IoChevronForwardOutline className="k-org-breadcrumb-sep" aria-hidden="true" />
           <span className="k-org-breadcrumb-active">{uiCopy("ក្រុមការងារ និងកន្លែងធ្វើការ", "Teams & workspaces")}</span>
         </nav>
 
@@ -93,6 +93,13 @@ export default function OrganizationPage() {
           <ErrorState message={error} onRetry={loadOrganizations} />
         ) : loading && !organizations.length ? (
         <PageSkeleton layout="list" />
+      ) : organizations.length === 0 ? (
+        <EmptyState
+          title={uiCopy("មិនទាន់មានកន្លែងធ្វើការក្រុមនៅឡើយទេ", "No team workspaces yet")}
+          description={uiCopy("បង្កើតកន្លែងធ្វើការដំបូងរបស់អ្នក ដើម្បីអញ្ជើញអ្នករៀបចំការ និងបុគ្គលិកកត់ត្រាវត្តមាន ឬបញ្ចូលកូដអញ្ជើញខាងលើ។", "Create your first workspace to invite planners and check-in staff, or enter an invitation code above.")}
+          actionLabel={uiCopy("បង្កើតកន្លែងធ្វើការថ្មី", "Create workspace")}
+          onAction={() => setCreateModalOpen(true)}
+        />
       ) : (
           <div className="k-org-grid">
             {organizations.map((org) => (
