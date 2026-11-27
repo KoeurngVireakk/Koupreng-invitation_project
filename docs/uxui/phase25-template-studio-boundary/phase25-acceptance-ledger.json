@@ -1,0 +1,22 @@
+{
+  "phase": 25,
+  "title": "Admin Template Studio / CMS / Pipeline (Frontend User Boundary Only)",
+  "branch": "feat/phase25-template-studio-boundary",
+  "baseSha": "f0ed7a7d96758b93dbd7cb0670ad5188b4afb2af",
+  "status": "READY_FOR_CODEX_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P25-G01", "name": "No Admin Studio authoring screens or general CMS added to apps/frontend-user", "status": "PASS_LOCAL" },
+    { "id": "P25-G02", "name": "Immutable template IDs, registry mappings, and legacy aliases (classic, royal-khmer, presetIds) preserved", "status": "PASS_LOCAL" },
+    { "id": "P25-G03", "name": "Unknown block JSON & extension fields preserved cleanly across partial edits without prototype pollution", "status": "PASS_LOCAL" },
+    { "id": "P25-G04", "name": "Removed/unavailable templates render canonical TemplateUnavailable across preview & public routes without layout borrowing", "status": "PASS_LOCAL" },
+    { "id": "P25-G05", "name": "Embedded iframe origin, window source, and session nonce validation enforced fail-closed", "status": "PASS_LOCAL" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "257 files / 1977 tests passed (64.79s)",
+    "viteBuild": "passed (11.96s)",
+    "playwrightPhase25": "4 passed (desktop-chromium & mobile-chromium, 7.4s, 0px overflow, 0 Axe violations)"
+  }
+}
