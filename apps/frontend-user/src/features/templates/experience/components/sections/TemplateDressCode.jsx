@@ -22,9 +22,9 @@ export default function TemplateDressCode({ content }) {
                     subtitle="DRESS CODE"
                 />
 
-                <TemplateReveal className="tx-dress__palette" aria-label={lang === "en" ? "Color Palette" : "ក្ដារពណ៌"}>
+                <TemplateReveal role="list" className="tx-dress__palette" aria-label={lang === "en" ? "Color Palette" : "ក្ដារពណ៌"}>
                     {dress.colors.map((color) => (
-                        <div className="tx-dress__swatch" key={color.hex + color.name}>
+                        <div className="tx-dress__swatch" role="listitem" key={color.hex + color.name}>
                             <span
                                 className="tx-dress__chip"
                                 style={{ background: color.hex }}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { usePrefersReducedMotion } from "@/shared/hooks/usePrefersReducedMotion";
+import { safeImageUrl } from "../invitationFeatures";
 import "./CoverBackground.css";
 
 /**
@@ -8,11 +9,10 @@ import "./CoverBackground.css";
  */
 function resolveMediaUrl(val) {
   if (!val) return "";
-  if (typeof val === "string") return val.trim();
-  if (typeof val === "object") {
-    return (val.url || val.src || val.videoUrl || val.fileUrl || "").trim();
-  }
-  return "";
+  const raw = typeof val === "string"
+    ? val.trim()
+    : (typeof val === "object" ? (val.url || val.src || val.videoUrl || val.fileUrl || "").trim() : "");
+  return raw ? safeImageUrl(raw) : "";
 }
 
 /**

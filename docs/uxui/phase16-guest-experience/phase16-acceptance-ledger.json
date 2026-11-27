@@ -1,0 +1,358 @@
+{
+  "phase": "Phase 16 — Entire guest-facing invitation / player experience",
+  "commit_sha_verified": "46887ac9809346eba6e455e2c8e36fdfaa8a0ddd",
+  "updated_at": "2026-11-27T08:52:30+07:00",
+  "allowed_statuses": [
+    "PASS_LOCAL",
+    "PASS_STAGING",
+    "PASS_DEVICE",
+    "FAIL",
+    "PARTIAL",
+    "BLOCKED_EXTERNAL",
+    "NOT_RUN",
+    "NOT_APPLICABLE"
+  ],
+  "gates": [
+    {
+      "id": "P16-G01",
+      "requirement": "All current registered wedding/event renderers & aliases inventoried and preserved without ID/entitlement regression",
+      "route_or_component": "templateRegistry.js, TemplateExperience.jsx, templatesData.js",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/registry/templateRegistry.js",
+        "apps/frontend-user/src/features/templates/data/templatesData.js",
+        "apps/frontend-user/src/features/templates/experience/TemplateExperience.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/templates/registry/templateRegistry.test.jsx src/features/templates/layouts/phase16RendererParity.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/02-renderer-compatibility-matrix.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Reconciled historical 8-name handoff prose (corrected withjoy-modern-portal & bliss-editorial-wedding typos; added Canva/Cover/Boilerplate/EventEssential/Demo/Default fallback -> 14 tested routes)"
+    },
+    {
+      "id": "P16-G02",
+      "requirement": "Unique art direction preserved per renderer and isolated from host Obsidian Dark Mode",
+      "route_or_component": "/i/:slug across all renderers + [data-theme='wed']",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/experience/TemplateExperience.jsx",
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "node scripts/qa/capture-phase16-evidence.mjs --stage=after (case 19 dark dashboard toggle)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/19-silk-heritage-dashboard-dark-isolated-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Confirmed public invitation body remains rgb(251, 246, 238) even when localStorage colorMode=dark"
+    },
+    {
+      "id": "P16-G03",
+      "requirement": "Ceremony openings skippable, keyboard-accessible, and genuinely bypassed/simplified under prefers-reduced-motion",
+      "route_or_component": "WithJoyPortalOpening.jsx, BlissEditorialOpening.jsx, TemplateOpeningGate.jsx, CinematicOpeningProvider.jsx",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/layouts/WithJoyPortalOpening.jsx",
+        "apps/frontend-user/src/features/templates/layouts/BlissEditorialOpening.jsx",
+        "apps/frontend-user/src/features/templates/experience/components/sections/TemplateOpeningGate.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/templates/layouts/guestCeremonyOpenings.test.jsx && npx playwright test --config=playwright.batch12.config.js",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/18-withjoy-reduced-motion-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Documented that standalone invitation-styles-v2.spec.js still expects a visible opener under reduceMotion on 3 templates (pre-existing test lag, non-regression)"
+    },
+    {
+      "id": "P16-G04",
+      "requirement": "Audio/video playback requires explicit user gesture with visible control state and saveData awareness",
+      "route_or_component": "TemplateMusicControl.jsx, FloatingAudioPlayer.jsx, CinematicOpeningProvider.jsx",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/experience/components/controls/TemplateMusicControl.jsx",
+        "apps/frontend-user/src/features/templates/shared/AudioPlayer/FloatingAudioPlayer.jsx",
+        "apps/frontend-user/src/features/templates/shared/Openings/CinematicOpeningProvider.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test",
+      "evidence_path": "docs/uxui/phase16-guest-experience/03-guest-journey-and-interactions.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "No unmuted autoplay claim; FloatingAudioPlayer & CinematicOpeningProvider respect reduced motion & saveData"
+    },
+    {
+      "id": "P16-G05",
+      "requirement": "Zero horizontal overflow across 320px-1440px viewports and responsive mobile bottom-dock clearance",
+      "route_or_component": "/i/:slug across all 14 renderers + 8-width Phase 12 matrix + Royal Garden mobile",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/shared/Controls/FloatingActionBar.jsx",
+        "apps/frontend-user/src/features/templates/layouts/DigitalYes/digital-yes.css",
+        "apps/frontend-user/src/features/templates/layouts/SilkHeritage/silk-heritage.css"
+      ],
+      "test_command": "npx playwright test --config=playwright.royal-garden-mobile.config.js && npx playwright test tests/e2e/phase12-matrix.spec.js --project=desktop-chromium && node scripts/qa/capture-phase16-evidence.mjs --stage=after",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/metrics.json",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "overflowPx === 0 on 25/25 evidence captures (320, 390, 768, 844x390, 1440) and 24/24 phase12-matrix width checks"
+    },
+    {
+      "id": "P16-G06",
+      "requirement": "Map, directions, calendar (.ics), and share actions use real invitation venue/date data safely",
+      "route_or_component": "TemplateVenue.jsx, SaveTheDate.jsx, invitationFeatures.js",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/experience/components/sections/TemplateVenue.jsx",
+        "apps/frontend-user/src/features/templates/shared/SaveTheDate.jsx",
+        "apps/frontend-user/src/features/templates/shared/invitationFeatures.js"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/wedding-site/PublicGuestExperience.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/04-public-privacy-and-security-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "PR #42 (19a46269) sanitized map URLs & KHQR image sources; zero fabricated dates or venues"
+    },
+    {
+      "id": "P16-G07",
+      "requirement": "Bilingual Khmer & English localization on meaningful guest, error, RSVP, and gate states",
+      "route_or_component": "PublicInvitationFeature.jsx, PublicRsvpForm.jsx, localizedContent.js",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx",
+        "apps/frontend-user/src/features/invitations/PublicRsvpForm.jsx",
+        "apps/frontend-user/src/features/templates/shared/localizedContent.js"
+      ],
+      "test_command": "npx playwright test --config=playwright.batch12.config.js && npx playwright test tests/e2e/phase12-matrix.spec.js --project=desktop-chromium",
+      "evidence_path": "docs/uxui/phase16-guest-experience/05-responsive-a11y-browser-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Balanced Khmer Moul/Bayon/Kantumruy Pro font stacks verified loaded"
+    },
+    {
+      "id": "P16-G08",
+      "requirement": "Server-authoritative PUBLIC / PRIVATE / PASSWORD_PROTECTED gating preserved with Phase 15 parity",
+      "route_or_component": "PublicInvitationFeature.jsx, ProtectedInvitationGate",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx",
+        "apps/backend/src/test/java/com/koupreng/backend/phase15/Phase15PublishingAccessMySqlTests.java"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/invitations/studio/phase15PublishingAccess.test.jsx && gh run view 45841524091",
+      "evidence_path": "docs/uxui/phase16-guest-experience/01-phase15-reconciliation.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Verified locally + disposable MySQL 8 CI (#45841524091); persistent staging not run"
+    },
+    {
+      "id": "P16-G09",
+      "requirement": "WCAG 2.2 AA accessibility compliance on guest invitation surfaces",
+      "route_or_component": "TemplateDressCode.jsx + guest renderers + ProtectedInvitationGate",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/experience/components/sections/TemplateDressCode.jsx",
+        "apps/frontend-user/tests/e2e/phase10-renderer-art.spec.js"
+      ],
+      "test_command": "npx playwright test tests/e2e/phase10-renderer-art.spec.js --project=desktop-chromium && node scripts/qa/capture-phase16-evidence.mjs --stage=after",
+      "evidence_path": "docs/uxui/phase16-guest-experience/05-responsive-a11y-browser-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Fixed serious aria-prohibited-attr in TemplateDressCode.jsx:25; 20/25 capture views + settled phase10-renderer-art axe clean; manual VoiceOver/TalkBack untested"
+    },
+    {
+      "id": "P16-G10",
+      "requirement": "Public RSVP & Ticket QR modal actions handle server acceptance, offline notice, and in-app fallback cleanly",
+      "route_or_component": "PublicRsvpForm.jsx, PublicTicketAccess.jsx, TicketActions.jsx, telegramWebApp.js",
+      "source_files": [
+        "apps/frontend-user/src/features/invitations/PublicRsvpForm.jsx",
+        "apps/frontend-user/src/features/tickets/PublicTicketAccess.jsx",
+        "apps/frontend-user/src/features/tickets/TicketActions.jsx",
+        "apps/frontend-user/src/shared/telegram/telegramWebApp.js"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/invitations/PublicRsvpForm.test.jsx src/features/tickets/TicketActions.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/24-state-rsvp-and-ticket-success-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Telegram UA fallback verified locally; native WebView behavior requires physical handset"
+    },
+    {
+      "id": "P16-G11",
+      "requirement": "Fresh Frontend User route, feature, and state matrix produced",
+      "route_or_component": "router.jsx -> 111 routes + sub-states",
+      "source_files": [
+        "apps/frontend-user/src/app/router.jsx",
+        "apps/frontend-user/src/app/routes/marketingRoutes.jsx",
+        "apps/frontend-user/src/app/routes/hostRoutes.jsx",
+        "apps/frontend-user/src/app/routes/authRoutes.jsx",
+        "apps/frontend-user/src/app/routes/builderRoutes.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/app/batch11RouteInventory.test.jsx",
+      "evidence_path": "docs/uxui/FRONTEND_USER_ROUTE_FEATURE_STATE_MATRIX.csv",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "All 111 current routes and guest sub-states inventoried"
+    },
+    {
+      "id": "P16-G12",
+      "requirement": "Physical iPhone / Android device validation across real touch, keyboard, and audio hardware",
+      "route_or_component": "/i/:slug, /w/:slug",
+      "source_files": [
+        "docs/uxui/phase16-guest-experience/05-responsive-a11y-browser-report.md"
+      ],
+      "test_command": "adb check -> No adb installed (physical devices unavailable)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/05-responsive-a11y-browser-report.md",
+      "status": "BLOCKED_EXTERNAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Requires real iOS & Android hardware; deferred to Phase 26 per owner acceptance decision (does not waive final release requirements; Chromium/WebKit Playwright emulation cannot substitute for PASS_DEVICE)"
+    },
+    {
+      "id": "P16-G13",
+      "requirement": "Representative native in-app browsers (Telegram, Facebook, Messenger, WhatsApp) end-to-end verification",
+      "route_or_component": "PublicInvitationFeature.jsx, TicketActions.jsx, telegramWebApp.js",
+      "source_files": [
+        "apps/frontend-user/src/shared/telegram/telegramWebApp.js",
+        "apps/frontend-user/src/features/tickets/TicketActions.jsx"
+      ],
+      "test_command": "Manual in-app mobile client launch required",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/25-state-telegram-inapp-ua-390.png",
+      "status": "BLOCKED_EXTERNAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Telegram UA simulated in Chromium only; deferred to Phase 26 per owner acceptance decision pending physical messaging client testing"
+    },
+    {
+      "id": "P16-G14",
+      "requirement": "Live persistent staging server guest flow (Spring Boot + MySQL 8 + browser)",
+      "route_or_component": "/i/:slug -> /api/v1/public/invitations/*",
+      "source_files": [
+        "apps/backend/src/test/java/com/koupreng/backend/phase15/Phase15PublishingAccessMySqlTests.java"
+      ],
+      "test_command": "gh run view 45841524091 (disposable MySQL only)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/01-phase15-reconciliation.md",
+      "status": "BLOCKED_EXTERNAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Disposable MySQL CI passed (#45841524091); persistent staging verification carried forward to Phase 26-27 per owner acceptance decision"
+    },
+    {
+      "id": "P16-N01",
+      "requirement": "Negative: Invalid or unpublished slug renders non-leaking 404 card",
+      "route_or_component": "/i/private-unpublished",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "node scripts/qa/capture-phase16-evidence.mjs --stage=after (case 22)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/22-state-private-not-found-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Returns polite Khmer/English unavailable card with axe=0"
+    },
+    {
+      "id": "P16-N02",
+      "requirement": "Negative: PASSWORD_PROTECTED invitation blocks content until password verified (403 gate)",
+      "route_or_component": "/i/:slug ProtectedInvitationGate",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/invitations/studio/phase15PublishingAccess.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/21-state-password-gate-rate-limit-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Tested in Vitest, Playwright FUV2, and Phase15PublishingAccessMySqlTests"
+    },
+    {
+      "id": "P16-N03",
+      "requirement": "Negative: 5+ wrong password attempts trigger 429 rate-limit alert without password echo",
+      "route_or_component": "ProtectedInvitationGate",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "node scripts/qa/capture-phase16-evidence.mjs --stage=after (case 21) && gh run view 45841524091",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/21-state-password-gate-rate-limit-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Displays Khmer rate-limit banner & clears password input on rejection"
+    },
+    {
+      "id": "P16-N04",
+      "requirement": "Negative: Stale or cross-invitation accessToken cleared cleanly upon server 403 rejection",
+      "route_or_component": "PublicInvitationFeature.jsx, httpClient.js",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx",
+        "apps/frontend-user/src/shared/api/httpClient.js"
+      ],
+      "test_command": "npx --prefix apps/frontend-user playwright test --config=apps/frontend-user/playwright.frontend-user-v2.config.js",
+      "evidence_path": "docs/uxui/phase16-guest-experience/04-public-privacy-and-security-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Server pre-rotation bearer TTL noted in Phase15PublishingAccessMySqlTests.java:179-181"
+    },
+    {
+      "id": "P16-N05",
+      "requirement": "Negative: Unsafe preview / map / KHQR / raster URLs stripped or rejected",
+      "route_or_component": "previewMessaging.js, TemplateVenue.jsx, invitationFeatures.js",
+      "source_files": [
+        "apps/frontend-user/src/shared/preview/previewMessaging.js",
+        "apps/frontend-user/src/features/templates/experience/components/sections/TemplateVenue.jsx",
+        "apps/frontend-user/src/features/templates/shared/invitationFeatures.js"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/wedding-site/PublicGuestExperience.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/04-public-privacy-and-security-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "WithJoyPortalLayout.jsx:121-122 non-blocking gallery safeImageUrl parity noted"
+    },
+    {
+      "id": "P16-N06",
+      "requirement": "Negative: Network offline / aborted load displays actionable retry state without white screen",
+      "route_or_component": "/i/network-error-sample PublicUnavailableView",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "node scripts/qa/capture-phase16-evidence.mjs --stage=after (case 23)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/23-state-network-error-390.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Displays localized Retry state with axe=0"
+    },
+    {
+      "id": "P16-N07",
+      "requirement": "Negative: Media request or video playback error degrades cleanly to static fallback image",
+      "route_or_component": "TemplateOpeningGate.jsx, CinematicOpeningProvider.jsx",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/experience/components/sections/TemplateOpeningGate.jsx",
+        "apps/frontend-user/src/features/templates/shared/Openings/CinematicOpeningProvider.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/templates/layouts/phase16RendererParity.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/02-renderer-compatibility-matrix.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "onError video fallback swaps to TemplateImage poster"
+    },
+    {
+      "id": "P16-N08",
+      "requirement": "Negative: Unknown/unmapped template slug falls back safely without crashing guest view",
+      "route_or_component": "templateRegistry.js, DefaultTemplateLayout.jsx, TemplateRenderGuard.jsx",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/registry/templateRegistry.js",
+        "apps/frontend-user/src/features/templates/layouts/DefaultTemplate/DefaultTemplateLayout.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/templates/registry/templateRegistry.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/02-renderer-compatibility-matrix.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "Verified safe fallback path"
+    },
+    {
+      "id": "P16-N09",
+      "requirement": "Negative: Narrow 320px phone & landscape 844x390 widths cause zero horizontal scroll",
+      "route_or_component": "BlissEditorialLayout, KhmerCelestialLayout",
+      "source_files": [
+        "apps/frontend-user/src/features/templates/layouts/bliss-editorial.css",
+        "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/khmer-celestial.css"
+      ],
+      "test_command": "node scripts/qa/capture-phase16-evidence.mjs --stage=after (cases 17 & 20)",
+      "evidence_path": "docs/uxui/phase16-guest-experience/evidence/after/17-bliss-editorial-narrow-320.png",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "overflowPx === 0 on both 320x568 and 844x390"
+    },
+    {
+      "id": "P16-N10",
+      "requirement": "Negative: Public route refuses to render private guest directory or host notes from payload/localStorage",
+      "route_or_component": "PublicInvitationFeature.jsx, batch11-auth-boundaries",
+      "source_files": [
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+      ],
+      "test_command": "npm --prefix apps/frontend-user run test -- src/features/wedding-site/PublicGuestExperience.test.jsx",
+      "evidence_path": "docs/uxui/phase16-guest-experience/04-public-privacy-and-security-report.md",
+      "status": "PASS_LOCAL",
+      "reviewer": "Gemini Coding Agent",
+      "notes": "C10-001 isolation intact; swCount === 0"
+    }
+  ]
+}

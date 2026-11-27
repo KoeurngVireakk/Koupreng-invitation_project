@@ -161,4 +161,28 @@ describe("Phase 16 Renderer Parity, Typography, and Hosted Data Boundaries", () 
     expect(safeImageUrl("https://images.unsplash.com/photo-1")).toBe("https://images.unsplash.com/photo-1");
     expect(safeImageUrl("data:image/png;base64,iVBORw0KGgo=")).toBe("data:image/png;base64,iVBORw0KGgo=");
   });
+
+  it("WithJoyPortalLayout filters unsafe gallery and cover URLs via safeImageUrl", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <WithJoyPortalLayout
+          content={{
+            hasHostContent: true,
+            groom: "Sophal",
+            bride: "Channary",
+            coverImage: "javascript:alert(1)",
+            gallery: [
+              "javascript:alert(1)",
+              "//evil.example/leak.png",
+              "/uploads/valid-photo.webp",
+            ],
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    expect(container.querySelector('img[src^="javascript:"]')).toBeNull();
+    expect(container.querySelector('img[src*="evil.example"]')).toBeNull();
+    expect(container.querySelector('img[src="/uploads/valid-photo.webp"]')).toBeInTheDocument();
+  });
 });

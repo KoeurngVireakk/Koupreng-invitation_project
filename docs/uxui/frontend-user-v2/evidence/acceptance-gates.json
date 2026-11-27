@@ -5,12 +5,12 @@
   "owner": "Gemini Coding Agent",
   "total_gates": 44,
   "summary": {
-    "VERIFIED_LOCAL": 38,
+    "VERIFIED_LOCAL": 40,
     "VERIFIED_STAGING": 0,
-    "PARTIAL": 5,
+    "PARTIAL": 4,
     "FAILED": 0,
     "REVIEW_REQUIRED": 0,
-    "BLOCKED_EXTERNAL": 1,
+    "BLOCKED_EXTERNAL": 0,
     "NOT_APPLICABLE": 0
   },
   "gates": [
@@ -793,7 +793,7 @@
     {
       "id": "FUV2-G43",
       "title": "Phase 15 publishing acceptance separately completed before claiming Phase 15",
-      "status": "PARTIAL",
+      "status": "VERIFIED_LOCAL",
       "source_files": [
         "apps/frontend-user/src/features/invitations/InvitationForm.jsx",
         "apps/frontend-user/src/features/events/onboarding/EventDetails.jsx",
@@ -801,36 +801,41 @@
         "apps/frontend-user/src/features/invitations/studio/PublishReview.jsx",
         "apps/frontend-user/src/features/invitations/studio/StudioGuide.jsx",
         "apps/frontend-user/src/features/invitations/studio/publishReadiness.js",
-        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx"
+        "apps/frontend-user/src/features/wedding-site/PublicInvitationFeature.jsx",
+        "apps/backend/src/test/java/com/koupreng/backend/phase15/Phase15PublishingAccessMySqlTests.java"
       ],
       "commands": [
         "npm --prefix apps/frontend-user run test -- src/features/invitations/studio/phase15PublishingAccess.test.jsx src/features/invitations/studio/StudioGuide.test.jsx src/features/invitations/studio/useStudioPersistence.test.jsx src/features/invitations/InvitationForm.test.jsx src/features/events/onboarding/EventDetails.test.jsx",
-        "npx --prefix apps/frontend-user playwright test --config=apps/frontend-user/playwright.frontend-user-v2.config.js",
-        "mvnw.cmd -Dtest=*Invitation* test"
+        "npx --prefix apps/frontend-user playwright test --config=apps/frontend-user/playwright.frontend-user-v2.config.js --reporter=list",
+        "gh run view 45841524091 (job: Real HTTP MySQL Ownership, RBAC & Entitlements -> ./mvnw --batch-mode -Dtest=Phase7CollaborationMySqlTests,Phase9MediaMySqlTests,Phase15PublishingAccessMySqlTests test)"
       ],
-      "results": "Studio + EventDetails PublishReview wiring (visibility/password/hasSavedPassword/previewUrl), post-save password clearing via useStudioPersistence acknowledge + downloadEdits stripping, empty-password & missing-password server recovery, post-publish Visibility & password editing, QR SVG export, Share Atelier, Studio Unpublish, protected gate (/i/:slug 403/429 + stale token wipe), EventDetails.test.jsx 9/9, useStudioPersistence.test.jsx 9/9, InvitationForm.test.jsx 22/22, phase15PublishingAccess.test.jsx 5/5, StudioGuide.test.jsx 4/4, Playwright Studio & Event Settings E2E, and 57/57 backend *Invitation* JUnit tests VERIFIED_LOCAL; live Spring Boot + MySQL 8 HTTP staging journey pending configured disposable/staging DB",
+      "results": "Reconciled with commit 81f091e4 and GitHub Actions run #45841524091 on 46887ac9: Spring Boot real-HTTP + disposable MySQL 8 (phase7_disposable) Phase15PublishingAccessMySqlTests passed 1/1 (0 skipped, 3.422s) within 28 run / 0 failed / 2 Phase7 environment-gated skips across Phase7/9/15 MySQL tests — verifying publish 400 validation, PUBLIC publish/refresh, unpublish 404, PRIVATE 404/owner/guest-token, PASSWORD_PROTECTED 403/verify/accessToken, 5-attempt -> 6th HTTP 429 rate limit, password rotation (explicitly documenting in Phase15PublishingAccessMySqlTests.java:179-181 that pre-rotation issued bearer accessToken remains accepted until expiry), and zero accessPassword/$2 bcrypt leak. Local Vitest (253 files / 1935 tests) and cross-browser Playwright FUV2 (27 passed, 5 desktop-only skipped on mobile, 0 failed) also verified on 46887ac9. Explicitly NOT PASS_STAGING / VERIFIED_STAGING because MySQL in CI is ephemeral/disposable and browser tests use mocked APIs.",
       "screenshot": "docs/uxui/frontend-user-v2/evidence/after/16-studio-light-en-1440.png",
       "owner": "Gemini Coding Agent",
-      "timestamp": "2026-11-26T14:02:00+07:00",
-      "remaining_risk": "Live Spring Boot + MySQL 8 HTTP staging journey & bcrypt unlock smoke required before Phase 15 production sign-off"
+      "timestamp": "2026-11-26T22:28:00+07:00",
+      "remaining_risk": "PASS_STAGING NOT claimed from disposable MySQL CI. Persistent live staging HTTP E2E (browser -> live backend) and pre-rotation bearer accessToken revocation semantics on password change remain unverified live (see docs/uxui/phase16-guest-experience/01-phase15-reconciliation.md)."
     },
     {
       "id": "FUV2-G44",
       "title": "CI failure classification and safe Git publication gates recorded",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "VERIFIED_LOCAL",
       "source_files": [
+        ".github/workflows/ci.yml",
         "docs/uxui/frontend-user-v2/11-security-and-historical-carryover.md",
-        "docs/uxui/frontend-user-v2/12-Phase15-and-frontend-v2-handoff.md"
+        "docs/uxui/frontend-user-v2/12-Phase15-and-frontend-v2-handoff.md",
+        "docs/uxui/phase16-guest-experience/01-phase15-reconciliation.md"
       ],
       "commands": [
-        "git status --short",
-        "git diff --check"
+        "gh run list --repo KoeurngVireakk/Koupreng-invitation_project --limit 5",
+        "gh run view 45841524091 --repo KoeurngVireakk/Koupreng-invitation_project",
+        "gh run view 45841523965 --repo KoeurngVireakk/Koupreng-invitation_project",
+        "git remote -v && git branch -vv && git status --short"
       ],
-      "results": "Historical CI runs #44694507572 (Secret Scan, Browser E2E failed) and #45649809538 (Secret Scan, Admin Frontend failed; Browser E2E skipped) classified honestly via GitHub REST API; local checkpoint kept uncommitted cleanly pending owner review & push",
+      "results": "Reconciled on origin/main (KoeurngVireakk/Koupreng-invitation_project) at 46887ac9: CI run #45841524091 completed with conclusion=success across all 11 jobs (User Frontend, Admin Frontend, Fresh MySQL Flyway Migration, Telegram Bot, Backend Build/Test/Coverage, Backend Static Analysis, Real HTTP MySQL Ownership/RBAC/Entitlements, Browser E2E & Route Smoke, Dependency Vulnerability Audit, Secret Scan, Deployment Configuration & Docker Applicability) and CodeQL run #45841523965 completed success. Historical CI runs (#44694507572, #45649809538, and earlier vuln-audit failures) are resolved in current origin/main; fetch and push both verified against KoeurngVireakk/Koupreng-invitation_project.",
       "screenshot": "docs/uxui/frontend-user-v2/evidence/after/01-home-light-en-1440.png",
       "owner": "Gemini Coding Agent",
-      "timestamp": "2026-11-26T09:23:00+07:00",
-      "remaining_risk": "Remote CI green verification blocked until owner commits/pushes and resolves Secret Scan + Browser E2E workflow causes on GitHub Actions"
+      "timestamp": "2026-11-26T22:28:00+07:00",
+      "remaining_risk": "Preserve future PR gate and CodeQL/Secret/Vulnerability audit checks on subsequent Phase 17+ commits."
     }
   ]
 }
