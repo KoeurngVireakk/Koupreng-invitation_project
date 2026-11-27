@@ -36,6 +36,12 @@ When assigned an engineering task, follow this exact sequence:
 
 *If a task does not match a specialist skill, proceed using core repository rules without forcing an unnatural match.*
 
+For UI/UX and frontend requests, also follow the canonical [Design Engineering
+Standard V6.0](../DESIGN.md). Inspect the descriptions of all listed global
+collections during planning and final review. Run applicable original skills
+in focused phases, keeping this router's one-primary and two-supporting limit
+per phase. Record genuine incompatibility or inapplicability in the handoff.
+
 ---
 
 ## 3. Strict Precedence & Conflict Resolution

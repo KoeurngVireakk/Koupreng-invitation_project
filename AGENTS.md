@@ -11,6 +11,15 @@ their results, including failures and environmental limits.
 
 See [CODEX.md](CODEX.md) for the companion workflow and command examples.
 
+## Koupreng Design Engineering Standard V6.0
+
+For any UI/UX or frontend task, read the canonical [DESIGN.md](DESIGN.md) before
+planning or editing. Consider every collection in its integration matrix, then
+activate the original skills relevant to the requested surface. Work in focused
+phases so the router's one-primary, at-most-two-supporting-skills limit applies
+to each phase. Record inapplicable or unavailable collections in the handoff.
+The standard does not authorize application changes outside the user's request.
+
 ## Retained UX/UI master scope (2026-11-11)
 
 The user asked to read and retain the complete

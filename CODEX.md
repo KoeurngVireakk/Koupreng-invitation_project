@@ -17,6 +17,7 @@ Always begin interactions and shell executions from the project root (`Koupreng-
 3. Inspect the chosen skill's `SKILL.md` (e.g. `.agents/skills/koupreng-backend-standards/SKILL.md`).
 4. Read only specific reference files needed for the task (e.g. `.agents/skills/koupreng-backend-standards/references/architecture-rules.md`).
 5. Proceed to examine actual source code before generating patches.
+6. For UI/UX and frontend work, follow the canonical [Design Engineering Standard V6.0](DESIGN.md).
 
 ---
 
