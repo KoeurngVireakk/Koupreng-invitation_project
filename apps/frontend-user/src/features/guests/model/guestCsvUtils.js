@@ -80,6 +80,30 @@ export function exportDeliveryReportCsv(guests = [], eventTitle = "delivery-repo
   return triggerCsvDownload(headers, rows, "delivery_report", eventTitle);
 }
 
+export function exportRsvpsToCsv(rsvps = [], eventTitle = "rsvp-responses") {
+  if (!rsvps.length) return false;
+
+  const headers = [
+    "Guest Name",
+    "Phone",
+    "Response Status",
+    "Attendee Count",
+    "Responded At",
+    "Wish / Message",
+  ];
+
+  const rows = rsvps.map((r) => [
+    safeCsvCell(r.guestName || r.name || ""),
+    safeCsvCell(r.phone || ""),
+    safeCsvCell(r.responseStatus || r.status || "PENDING"),
+    safeCsvCell(r.pendingInvitation ? 0 : (r.attendeeCount ?? r.partySize ?? 0)),
+    safeCsvCell(r.respondedAt || r.updatedAt || r.createdAt || ""),
+    safeCsvCell(r.wish || r.message || ""),
+  ]);
+
+  return triggerCsvDownload(headers, rows, "rsvps", eventTitle);
+}
+
 export function downloadSampleGuestTemplateCsv() {
   const sampleHeaders = [
     "ឈ្មោះភ្ញៀវ",

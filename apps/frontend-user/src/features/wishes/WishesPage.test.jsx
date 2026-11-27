@@ -162,6 +162,7 @@ describe("WishesPage Feature & Deletion Error Safety", () => {
     await waitFor(() => {
       expect(screen.getByText("No Wishes Yet")).toBeInTheDocument();
       expect(screen.getByRole("link", { name: "Share your invitation" })).toBeInTheDocument();
+      expect(screen.getByText(/Private to event organizers by default/i)).toBeInTheDocument();
     });
   });
 });

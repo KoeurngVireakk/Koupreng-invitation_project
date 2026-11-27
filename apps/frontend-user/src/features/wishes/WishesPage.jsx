@@ -8,13 +8,16 @@ import Modal from "@/shared/ui/Modal";
 import { useWishes } from "./hooks/useWishes";
 import { WishList } from "./components/WishList";
 import { ErrorState, toast } from "@/shared/ui";
-import { MessageSquareHeart, Search, X, AlertTriangle } from "lucide-react";
+import { Lock, MessageSquareHeart, Search, X, AlertTriangle } from "lucide-react";
 import "./WishesPage.css";
 
 export default function WishesPage({ invitationId: propInvitationId }) {
   const params = useParams();
   const en = useLanguageStore((state) => state.lang) === "en";
   const workspace = useEventWorkspace();
+  const canManageWishes = workspace?.access
+    ? workspace.access.owner === true || Boolean(workspace.access.permissions?.includes("MANAGE_GUESTS"))
+    : workspace?.isOwner !== false;
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteError, setDeleteError] = useState("");
   const [search, setSearch] = useState("");
@@ -80,6 +83,14 @@ export default function WishesPage({ invitationId: propInvitationId }) {
               ? "Read congratulations and blessings sent by your friends and family."
               : "អានពាក្យជូនពរ និងមនោសញ្ចេតនាដ៏កក់ក្តៅពីមិត្តភក្តិ និងក្រុមគ្រួសាររបស់អ្នក។"}
           </p>
+          <p className="wishes-privacy-note">
+            <Lock size={13} aria-hidden="true" />
+            <span>
+              {en
+                ? "Private to event organizers by default; deleted wishes cannot be recovered."
+                : "សារទាំងនេះត្រូវបានរក្សាជាឯកជនសម្រាប់អ្នករៀបចំកម្មវិធី ហើយសារដែលបានលុបមិនអាចយកមកវិញបានទេ។"}
+            </span>
+          </p>
         </div>
       </header>
 
@@ -121,10 +132,10 @@ export default function WishesPage({ invitationId: propInvitationId }) {
 
           <WishList
             wishes={filteredWishes}
-            onDelete={(id) => {
+            onDelete={canManageWishes ? (id) => {
               setDeleteError("");
               setDeleteTarget(id);
-            }}
+            } : undefined}
             deletingId={deletingId}
           />
 

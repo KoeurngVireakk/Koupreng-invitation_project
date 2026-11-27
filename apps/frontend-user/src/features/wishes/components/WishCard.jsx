@@ -31,10 +31,9 @@ export function WishCard({ wish, onDelete, isDeleting }) {
             disabled={isDeleting}
             onClick={() => onDelete(wish.id)}
             title={en ? "Delete wish" : "លុបពាក្យជូនពរ"}
-            aria-label={en ? "Delete wish" : "លុបពាក្យជូនពរ"}
           >
             <Trash2 size={14} className="inline mr-1" aria-hidden="true" />
-            <span>{isDeleting ? "…" : en ? "Delete" : "លុប"}</span>
+            <span>{isDeleting ? "…" : en ? "Delete wish" : "លុបពាក្យជូនពរ"}</span>
           </button>
         )}
       </div>

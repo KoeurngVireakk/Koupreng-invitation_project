@@ -1,0 +1,54 @@
+{
+  "phase": "Phase 18",
+  "title": "RSVP lifecycle, guest interaction, wishes and privacy",
+  "branch": "feat/phase18-rsvp-lifecycle",
+  "baseOriginMainSha": "84a9fb990ac2e2f3fdcb123286244d645cd50716",
+  "recordedAt": "2026-11-27T10:14:30+07:00",
+  "verdict": "PASS_LOCAL",
+  "gates": [
+    {
+      "id": "P18-G01",
+      "title": "Public RSVP personalized vs general clarity, deadlines, plus-one limits & declining semantics",
+      "status": "PASS_LOCAL",
+      "evidence": "PublicRsvpForm.jsx + PublicInvitationFeature.jsx enforce rsvpDeadline lock, maxGuests cap, NOT_ATTENDING 0-seat auto-clear, noValidate accessible alerts, and personalized token scope; verified by PublicRsvpForm.test.jsx (8/8 tests) and after/07,08,09 PNGs (0 axe violations)"
+    },
+    {
+      "id": "P18-G02",
+      "title": "Conflict, expiry, offline & double-tap recovery",
+      "status": "PASS_LOCAL",
+      "evidence": "PublicRsvpForm.jsx maps 409, 403/404/410, 429, and offline states cleanly into Khmer/English alerts while blocking concurrent duplicate submissions; verified by PublicRsvpForm.test.jsx"
+    },
+    {
+      "id": "P18-G03",
+      "title": "Owner RSVP board RBAC gating & formula-safe CSV audit export",
+      "status": "PASS_LOCAL",
+      "evidence": "RsvpDashboardPage.jsx + RsvpGuestTable.jsx gate RsvpOwnerActions behind EventContext MANAGE_GUESTS and add exportRsvpsToCsv using safeCsvCell; verified by rsvp.test.jsx (3/3) and guestCsvUtils.test.js (3/3)"
+    },
+    {
+      "id": "P18-G04",
+      "title": "Wishes privacy compliance, moderation permissions & WCAG 2.2 AA contrast / label-in-name fixes",
+      "status": "PASS_LOCAL",
+      "evidence": "WishCard.jsx + WishesPage.css + WishesPage.jsx fixed .wishes-counter-badge color-contrast & Khmer button label-content-name-mismatch (2 before axe violations -> 0 after on 06-wishes-page-mobile-km-390.png), added Lock privacy notice, and gated deletion behind MANAGE_GUESTS; public wishes remain empty by policy"
+    },
+    {
+      "id": "P18-G05",
+      "title": "Lint, Knip, deps, Vite build & full Vitest suite",
+      "status": "PASS_LOCAL",
+      "evidence": "npm run lint (0), analyze:knip (0), analyze:deps (0), vite build (0), npm test (254/254 files, 1945/1945 tests passed in 39.89s)"
+    },
+    {
+      "id": "P18-G06",
+      "title": "Frontend User v2 cross-cutting Playwright E2E",
+      "status": "PASS_LOCAL",
+      "evidence": "playwright.frontend-user-v2.config.js: 27 passed, 5 skipped (desktop-only on chromium-mobile), 0 failed (1.2m)"
+    }
+  ],
+  "visualCaptures": {
+    "beforeCount": 9,
+    "afterCount": 9,
+    "overflowMaxPx": 0,
+    "phase18BeforeAxeDefects": 3,
+    "phase18AfterAxeDefects": 0,
+    "sharedShellOpenNotice": "Global header button[aria-haspopup=menu] carries pre-existing label-content-name-mismatch on desktop; documented outside Phase 18 scope"
+  }
+}

@@ -43,6 +43,14 @@ const englishLabels = {
     reminder: "Get a Telegram RSVP reminder",
     reminderOpen: "Open Telegram and press Start",
     reminderError: "Telegram reminders are unavailable. Try again later.",
+    personalScope: "Verified personal invitation",
+    generalScope: "Guest RSVP form",
+    deadlinePrefix: "Please reply by",
+    deadlineClosedTitle: "RSVP deadline has passed",
+    deadlineClosedText: "New RSVP responses are closed for this event. Please contact the hosts directly if your plans changed.",
+    maxGuestsHint: "Up to {max} guests",
+    maxGuestsError: "Please enter at most {max} guests per invitation.",
+    decliningCountHint: "0 seats reserved when unable to attend.",
 };
 
 const khmerLabels = {
@@ -76,7 +84,43 @@ const khmerLabels = {
     reminder: "ទទួលការរំលឹក RSVP តាម Telegram",
     reminderOpen: "បើក Telegram ហើយចុច Start",
     reminderError: "ការរំលឹកតាម Telegram មិនអាចប្រើបានទេ។ សូមព្យាយាមពេលក្រោយ។",
+    personalScope: "ការអញ្ជើញផ្ទាល់ខ្លួនដែលបានផ្ទៀងផ្ទាត់",
+    generalScope: "ទម្រង់ឆ្លើយតប RSVP សម្រាប់ភ្ញៀវ",
+    deadlinePrefix: "សូមឆ្លើយតបត្រឹមថ្ងៃ",
+    deadlineClosedTitle: "ការទទួល RSVP ត្រូវបានបិទ",
+    deadlineClosedText: "ថ្ងៃកំណត់ឆ្លើយតបបានផុតកំណត់ហើយ។ សូមទាក់ទងម្ចាស់កម្មវិធីដោយផ្ទាល់ ប្រសិនបើមានការផ្លាស់ប្តូរ។",
+    maxGuestsHint: "អតិបរមា {max} នាក់",
+    maxGuestsError: "សូមបញ្ចូលចំនួនភ្ញៀវមិនឱ្យលើសពី {max} នាក់។",
+    decliningCountHint: "រក្សាកៅអី 0 នៅពេលមិនអាចចូលរួម។",
 };
+
+function parseDeadlineDate(value) {
+    if (!value) return null;
+    const raw = String(value).trim();
+    const parsed = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? new Date(`${raw}T23:59:59`) : new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatRsvpSubmitError(err, language) {
+    const status = err?.status ?? err?.response?.status;
+    const kh = language === "kh";
+    if (status === 409) {
+        return kh
+            ? "ការឆ្លើយតប RSVP នេះមានរួចហើយ ឬមានការកែប្រែព្រមគ្នា។ សូមផ្ទុកទំព័រឡើងវិញដើម្បីពិនិត្យប័ណ្ណ QR។"
+            : "This RSVP already has a conflicting update. Reload the page to inspect your current confirmation.";
+    }
+    if (status === 410 || status === 404 || status === 403) {
+        return kh
+            ? "តំណអញ្ជើញនេះមិនត្រឹមត្រូវ ឬផុតកំណត់ហើយ។ សូមស្នើសុំតំណថ្មីពីម្ចាស់កម្មវិធី។"
+            : "This invitation link is invalid, expired, or closed. Please ask the host for an updated link.";
+    }
+    if (status === 429) {
+        return kh
+            ? "មានការស្នើសុំច្រើនពេក។ សូមរង់ចាំមួយភ្លែត រួចព្យាយាមម្ដងទៀត។"
+            : "Too many attempts right now. Please wait a moment and try again.";
+    }
+    return err?.message || (kh ? "មិនអាចផ្ញើ RSVP បានទេ។ សូមព្យាយាមម្ដងទៀត។" : "Could not submit RSVP");
+}
 
 export default function PublicRsvpForm(props) {
     // Each guest authority owns an independent state lifetime, including async writes.
@@ -91,11 +135,19 @@ function GuestRsvpSession({
     showPublicWishes = true,
     khmerLabels: useKhmerLabels = false,
     appearance,
+    rsvpDeadline,
+    maxGuests,
 }) {
     const language = languageMode ? normalizeInvitationLanguage(languageMode) : useKhmerLabels ? "kh" : "en";
     const labels = language === "kh" ? khmerLabels : language === "both"
         ? Object.fromEntries(Object.entries(englishLabels).map(([key, text]) => [key, `${khmerLabels[key]} / ${text}`]))
         : englishLabels;
+    const deadlineDate = parseDeadlineDate(rsvpDeadline);
+    const deadlineClosed = Boolean(deadlineDate && Date.now() > deadlineDate.getTime());
+    const formattedDeadline = deadlineDate
+        ? new Intl.DateTimeFormat(language === "kh" ? "km-KH" : "en-GB", { dateStyle: "medium" }).format(deadlineDate)
+        : "";
+    const parsedMaxGuests = Number.isFinite(Number(maxGuests)) && Number(maxGuests) > 0 ? Number(maxGuests) : null;
 
     const [form, setForm] = useState(initialForm);
     const countId = useId();
@@ -195,6 +247,16 @@ function GuestRsvpSession({
 
     const submit = async (event) => {
         event.preventDefault();
+        if (loading || deadlineClosed) return;
+        if ((!inviteToken || isEditing) && !String(form.guestName || "").trim()) {
+            setError(language === "kh" ? "សូមបញ្ចូលឈ្មោះរបស់អ្នក។" : "Please enter your name before submitting.");
+            return;
+        }
+        const countNum = Number(form.attendeeCount);
+        if (parsedMaxGuests && form.responseStatus !== "NOT_ATTENDING" && countNum > parsedMaxGuests) {
+            setError(labels.maxGuestsError.replace("{max}", String(parsedMaxGuests)));
+            return;
+        }
         if (typeof navigator !== "undefined" && navigator.onLine === false) {
             setError(language === "kh"
                 ? "គ្មានការតភ្ជាប់អ៊ីនធឺណិត។ សូមភ្ជាប់ឡើងវិញ រួចផ្ញើ RSVP ម្ដងទៀត។"
@@ -206,7 +268,7 @@ function GuestRsvpSession({
         try {
             const payload = {
                 ...form,
-                attendeeCount: Number(form.attendeeCount),
+                attendeeCount: form.responseStatus === "NOT_ATTENDING" ? 0 : countNum,
             };
             const response = inviteToken
                 ? await rsvpService.submitPublicWithToken(slug, inviteToken, payload)
@@ -253,7 +315,7 @@ function GuestRsvpSession({
                 loadWishes();
             }
         } catch (err) {
-            if (sessionActive.current) setError(err.message || "Could not submit RSVP");
+            if (sessionActive.current) setError(formatRsvpSubmitError(err, language));
         } finally {
             if (sessionActive.current) setLoading(false);
         }
@@ -297,7 +359,7 @@ function GuestRsvpSession({
                             <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "#78350f", marginBottom: "4px" }}>
                                 {labels.qrPassTitle}
                             </div>
-                            <p style={{ fontSize: "0.75rem", color: "#78716c", margin: "0 0 12px 0" }}>
+                            <p style={{ fontSize: "0.75rem", color: "#57534e", margin: "0 0 12px 0" }}>
                                 {labels.qrPassHint}
                             </p>
                             <div style={{
@@ -389,12 +451,23 @@ function GuestRsvpSession({
                         </button>
                     </div>
                 </div>
+            ) : deadlineClosed && !isEditing ? (
+                <div className="pub-rsvp-closed" role="status" style={{ padding: "1.25rem", borderRadius: "14px", border: "1px solid #d6c5ab", background: "#faf6ee", color: "#2a1f10", textAlign: "center" }}>
+                    <p className="pub-kicker">{labels.kicker}</p>
+                    <h2 style={{ margin: "0 0 6px" }}>{labels.deadlineClosedTitle}</h2>
+                    <p style={{ margin: 0, fontSize: "0.9rem", color: "#57534e" }}>{labels.deadlineClosedText}</p>
+                </div>
             ) : (
-                <form className="pub-rsvp-form" onSubmit={submit}>
+                <form className="pub-rsvp-form" noValidate onSubmit={submit}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
                         <div>
                             <p className="pub-kicker">{labels.kicker}</p>
                             <h2>{labels.title}</h2>
+                            <p style={{ margin: "4px 0 0", fontSize: "0.8rem", color: "#57534e" }}>
+                                {guestVerified ? labels.personalScope : labels.generalScope}
+                                {formattedDeadline ? ` · ${labels.deadlinePrefix} ${formattedDeadline}` : ""}
+                                {parsedMaxGuests ? ` · ${labels.maxGuestsHint.replace("{max}", String(parsedMaxGuests))}` : ""}
+                            </p>
                         </div>
                         {isEditing && (
                             <button
@@ -439,17 +512,24 @@ function GuestRsvpSession({
                             </select>
                         </label>}
                         {appearance === 'royal' ? <div className="rg-guest-count"><label htmlFor={countId}>{labels.attendeeCount}</label><div>
-                            <button type="button" aria-label={labels.fewerGuests} disabled={Number(form.attendeeCount) <= 0} onClick={() => update('attendeeCount', Math.max(0, Number(form.attendeeCount) - 1))}>−</button>
-                            <input id={countId} type="number" min="0" value={form.attendeeCount} onChange={event => update('attendeeCount', event.target.value)} />
-                            <button type="button" aria-label={labels.moreGuests} onClick={() => update('attendeeCount', Number(form.attendeeCount) + 1)}>+</button>
+                            <button type="button" aria-label={labels.fewerGuests} disabled={Number(form.attendeeCount) <= 0 || form.responseStatus === "NOT_ATTENDING"} onClick={() => update('attendeeCount', Math.max(0, Number(form.attendeeCount) - 1))}>−</button>
+                            <input id={countId} type="number" min="0" max={parsedMaxGuests || undefined} disabled={form.responseStatus === "NOT_ATTENDING"} value={form.responseStatus === "NOT_ATTENDING" ? 0 : form.attendeeCount} onChange={event => update('attendeeCount', event.target.value)} />
+                            <button type="button" aria-label={labels.moreGuests} disabled={form.responseStatus === "NOT_ATTENDING" || (parsedMaxGuests != null && Number(form.attendeeCount) >= parsedMaxGuests)} onClick={() => update('attendeeCount', Number(form.attendeeCount) + 1)}>+</button>
                         </div></div> : <label>
                             {labels.attendeeCount}
                             <input
                                 type="number"
                                 min="0"
-                                value={form.attendeeCount}
+                                max={parsedMaxGuests || undefined}
+                                disabled={form.responseStatus === "NOT_ATTENDING"}
+                                value={form.responseStatus === "NOT_ATTENDING" ? 0 : form.attendeeCount}
                                 onChange={(event) => update("attendeeCount", event.target.value)}
                             />
+                            {form.responseStatus === "NOT_ATTENDING" && (
+                                <small style={{ display: "block", marginTop: "4px", fontSize: "0.75rem", color: "#57534e" }}>
+                                    {labels.decliningCountHint}
+                                </small>
+                            )}
                         </label>}
                     </div>
                     <label>
