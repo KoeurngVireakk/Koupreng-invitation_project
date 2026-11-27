@@ -42,6 +42,7 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
   const [celebrationGiftAmount, setCelebrationGiftAmount] = useState("");
   const [celebrationGiftCurrency, setCelebrationGiftCurrency] = useState("USD");
   const [duplicateWarning, setDuplicateWarning] = useState(null);
+  const [scanOutcome, setScanOutcome] = useState(null);
   const [walkInModalOpen, setWalkInModalOpen] = useState(false);
   const [walkInForm, setWalkInForm] = useState(initialWalkIn);
   const [pendingWalkIn, setPendingWalkIn] = useState(null);
@@ -126,12 +127,15 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
     if (!result?.id || !result?.guestId) throw new Error("The server did not confirm attendance. Refresh before retrying.");
     if (result.alreadyCheckedIn) {
       onDuplicate?.();
-      setDuplicateWarning({ guestName: result.guestName || guest.guestName, checkedInAt: result.checkedInAt ? new Date(result.checkedInAt).toLocaleString() : "Previously", source: server ? "Server Record" : result.source });
+      const warning = { guestName: result.guestName || guest.guestName, checkedInAt: result.checkedInAt ? new Date(result.checkedInAt).toLocaleString() : "Previously", source: server ? "Server Record" : result.source };
+      setDuplicateWarning(warning);
+      setScanOutcome({ status: "DUPLICATE", ...warning });
       return false;
     }
     const next = [result, ...checkIns.filter((item) => String(item.guestId) !== String(result.guestId))];
     if (!server) { saveManualCheckIns(next, invitationId, { throwOnError: true }); setSummary(localSummary(guests, next)); }
     setCheckIns(next);
+    setScanOutcome({ status: "SUCCESS", guestName: result.guestName || guest.guestName, tableNumber: guest.tableNumber || result.tableNumber || "", checkedInAt: result.checkedInAt });
     if (celebrate) triggerCelebration(guest, result);
     return true;
   };
@@ -147,9 +151,20 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
     return existing ? { ...existing, alreadyCheckedIn: true } : { id: createHostRecordId("cin"), guestId: guest.id, guestName: guest.guestName, source, note, tableNumber: guest.tableNumber || "", groupName: guest.groupName || "", side: guest.side || "", checkedInAt: new Date().toISOString() };
   };
 
+  const isOfflineScanError = (err) => {
+    if (typeof navigator !== "undefined" && navigator.onLine === false) return true;
+    const msg = String(err?.message || "").toLowerCase();
+    return err?.code === "ERR_NETWORK" || msg.includes("network error") || msg.includes("failed to fetch");
+  };
+
   const performScan = async (value, withGift = false) => {
     if (!value?.trim() || busy.current || !invitation) return;
-    busy.current = true; setSaving(true); setError("");
+    if (server && typeof navigator !== "undefined" && navigator.onLine === false) {
+      const offlineMsg = "Network offline. Live server verification is required for QR check-in.";
+      setScanOutcome({ status: "OFFLINE", message: offlineMsg, retryToken: value.trim() });
+      return;
+    }
+    busy.current = true; setSaving(true); setError(""); setScanOutcome(null);
     try {
       const cleanToken = value.trim();
       const result = server ? await guestService.scanCheckIn(invitationId, cleanToken, note) : null;
@@ -166,7 +181,17 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
         }
       }
       if (withGift) { setToken(""); setNote(""); setTokenGiftAmount(""); }
-    } catch (err) { setError(err); }
+    } catch (err) {
+      if (err?.status === 401 || err?.status === 403 || err?.code === "ACCESS_DENIED") {
+        setError(err);
+      } else {
+        setScanOutcome({
+          status: isOfflineScanError(err) ? "OFFLINE" : "INVALID",
+          message: err?.message || "Invalid, expired, or unrecognized QR pass.",
+          retryToken: value.trim(),
+        });
+      }
+    }
     finally { busy.current = false; setSaving(false); }
   };
   const scan = (event) => { event?.preventDefault(); return performScan(token, true); };
@@ -174,12 +199,25 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
 
   const manual = async (guest) => {
     if (busy.current || !invitation) return;
-    busy.current = true; setSaving(true); setError("");
+    if (server && typeof navigator !== "undefined" && navigator.onLine === false) {
+      setScanOutcome({ status: "OFFLINE", message: "Network offline. Live server verification is required for check-in." });
+      return;
+    }
+    busy.current = true; setSaving(true); setError(""); setScanOutcome(null);
     try {
       const result = server ? await guestService.manualCheckIn(invitationId, guest.id, note) : localResult(guest, "Manual Desk");
       applyCheckIn(result, guest);
       if (server) await refreshCheckIns();
-    } catch (err) { setError(err); }
+    } catch (err) {
+      if (err?.status === 401 || err?.status === 403 || err?.code === "ACCESS_DENIED") {
+        setError(err);
+      } else {
+        setScanOutcome({
+          status: isOfflineScanError(err) ? "OFFLINE" : "INVALID",
+          message: err?.message || "Could not complete check-in for this guest.",
+        });
+      }
+    }
     finally { busy.current = false; setSaving(false); }
   };
 
@@ -239,5 +277,5 @@ export function useCheckInDesk(rawId, { onCheckIn, onDuplicate, limitedRoster = 
     finally { busy.current = false; setSaving(false); }
   };
 
-  return { invitationId, persistenceMode: scope.mode, invitation, guests, summary, checkIns, token, setToken, note, setNote, tokenGiftAmount, setTokenGiftAmount, tokenGiftCurrency, setTokenGiftCurrency, search, setSearch: value => { setSearch(value); setRosterPage(0); }, statusFilter, setStatusFilter: value => { setStatusFilter(value); setRosterPage(0); }, rosterPage, setRosterPage, rosterMeta, loading, saving, error, failure, celebrationData, setCelebrationData, celebrationGiftAmount, setCelebrationGiftAmount, celebrationGiftCurrency, setCelebrationGiftCurrency, duplicateWarning, setDuplicateWarning, walkInModalOpen, setWalkInModalOpen, walkInForm, setWalkInForm, pendingWalkIn, load, scan, handleCameraScan, manual, handleSaveCelebrationAndClose, handleCreateWalkInGuest, undoCheckIn };
+  return { invitationId, persistenceMode: scope.mode, invitation, guests, summary, checkIns, token, setToken, note, setNote, tokenGiftAmount, setTokenGiftAmount, tokenGiftCurrency, setTokenGiftCurrency, search, setSearch: value => { setSearch(value); setRosterPage(0); }, statusFilter, setStatusFilter: value => { setStatusFilter(value); setRosterPage(0); }, rosterPage, setRosterPage, rosterMeta, loading, saving, error, failure, scanOutcome, setScanOutcome, performScan, celebrationData, setCelebrationData, celebrationGiftAmount, setCelebrationGiftAmount, celebrationGiftCurrency, setCelebrationGiftCurrency, duplicateWarning, setDuplicateWarning, walkInModalOpen, setWalkInModalOpen, walkInForm, setWalkInForm, pendingWalkIn, load, scan, handleCameraScan, manual, handleSaveCelebrationAndClose, handleCreateWalkInGuest, undoCheckIn };
 }

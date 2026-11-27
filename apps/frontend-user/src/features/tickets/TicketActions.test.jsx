@@ -57,4 +57,17 @@ describe("Phase 16 Ticket & In-App Browser Controls", () => {
     expect(btn).toHaveAttribute("data-keyboard-hidden", "true");
     expect(btn).toHaveAttribute("tabindex", "-1");
   });
+
+  it("triggers print preview when Print / PDF is clicked on a ready ticket", () => {
+    const originalPrint = window.print;
+    const printSpy = vi.fn();
+    window.print = printSpy;
+    try {
+      render(<TicketActions ticket={{ kind: "GUEST", invitationUrl: "https://example.test/i/wed?token=secret-1" }} ready={true} languageMode="EN" />);
+      fireEvent.click(screen.getByRole("button", { name: "Print / PDF" }));
+      expect(printSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      window.print = originalPrint;
+    }
+  });
 });

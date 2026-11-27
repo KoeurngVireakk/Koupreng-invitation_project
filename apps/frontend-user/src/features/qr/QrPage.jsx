@@ -6,7 +6,7 @@ import { QrPreview } from "./components/QrPreview";
 import { QrDownloadButton } from "./components/QrDownloadButton";
 import { SkeletonCard } from "@/shared/ui";
 import { useLanguageStore } from "@/stores/useLanguageStore";
-import { Copy, Check, QrCode } from "lucide-react";
+import { Copy, Check, QrCode, Printer } from "lucide-react";
 import { useState } from "react";
 import { useEventWorkspace } from '@/features/events/workspace/EventContext';
 import { toast } from "@/shared/ui/toast";
@@ -72,6 +72,16 @@ export default function QrPage({ invitationId: propInvitationId, guestId: propGu
             </p>
           </div>}>
             <QrDownloadButton onDownload={downloadPng} downloading={downloading} disabled={!qrData?.qrCodeDataUri} />
+            {qrData?.qrCodeDataUri && (
+              <button
+                type="button"
+                className="workspace-button"
+                onClick={() => window.print?.()}
+              >
+                <Printer size={16} aria-hidden="true" />
+                <span>{en ? "Print QR" : "បោះពុម្ព QR"}</span>
+              </button>
+            )}
             {qrData?.invitationUrl && (
               <button
                 type="button"

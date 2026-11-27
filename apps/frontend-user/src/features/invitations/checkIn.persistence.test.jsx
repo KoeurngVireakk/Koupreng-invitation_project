@@ -160,4 +160,28 @@ describe("FE-004/005/006/007 durable check-in desk", () => {
     expect(await screen.findByText("Local storage full; not saved")).toBeInTheDocument();
     expect(container.querySelectorAll(".checkin-guest-table")[1]).not.toHaveTextContent("Known guest");
   });
+
+  it("enforces read-only attendance mode when collaborator lacks MANAGE_CHECKIN permission", async () => {
+    guestService.checkInRoster.mockResolvedValue({ items: [{ id: 2, guestName: "Known guest" }], totalElements: 1, totalPages: 1 });
+    guestService.checkInList.mockResolvedValue([result]);
+    show("10", { isOwner: false, can: (p) => p === "VIEW_EVENT" });
+    await ready();
+    expect(await screen.findByText(/MANAGE_CHECKIN permission is required/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Check in", exact: true })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Camera test scan" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+  });
+
+  it("blocks offline server check-in attempts explicitly instead of recording offline attendance", async () => {
+    const onLineSpy = vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(false);
+    try {
+      const { container } = show("10"); await ready();
+      await scanToken(container);
+      expect(await screen.findByText(/live server verification required/i)).toBeInTheDocument();
+      expect(guestService.scanCheckIn).not.toHaveBeenCalled();
+      expect(storage.saveManualCheckIns).not.toHaveBeenCalled();
+    } finally {
+      onLineSpy.mockRestore();
+    }
+  });
 });
