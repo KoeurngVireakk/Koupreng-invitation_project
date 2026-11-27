@@ -1,0 +1,150 @@
+{
+  "stage": "after",
+  "capturedAt": "2026-11-27T03:12:32.359Z",
+  "results": [
+    {
+      "name": "01-rsvp-dashboard-light-en-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/rsvp",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02-rsvp-dashboard-obsidian-km-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/rsvp",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03-rsvp-dashboard-mobile-dark-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/rsvp",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "04-rsvp-wishes-wall-obsidian-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/rsvp",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05-wishes-page-obsidian-en-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/wishes",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": 1,
+          "targets": [
+            "button[aria-haspopup=\"menu\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06-wishes-page-mobile-km-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/wishes",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "07-public-rsvp-general-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/i/sophal-channary",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "08-public-rsvp-mobile-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/i/sophal-channary",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "09-public-rsvp-qr-pass-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/i/sophal-channary?token=tok-responded",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    }
+  ]
+}

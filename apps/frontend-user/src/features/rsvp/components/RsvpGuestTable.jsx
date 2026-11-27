@@ -2,8 +2,9 @@ import { EmptyState, SearchInput, StatusBadge } from "@/shared/ui";
 import { Users } from "lucide-react";
 import RsvpOwnerActions from "./RsvpOwnerActions";
 
-export function RsvpGuestTable({ filteredRsvps = [], search = "", setSearch, statusFilter = "ALL", setStatusFilter, invitationId, onSaved, t, lang }) {
+export function RsvpGuestTable({ filteredRsvps = [], search = "", setSearch, statusFilter = "ALL", setStatusFilter, invitationId, canManage = true, onSaved, t, lang }) {
   const filtered = Boolean(search.trim() || statusFilter !== "ALL");
+  const showActions = Boolean(invitationId && canManage);
   const labels = ["guest", "status", "party", "date", "message", "actions"];
   const clear = () => { setSearch(""); setStatusFilter("ALL"); };
   return <section className="rsvp-board">
@@ -15,7 +16,7 @@ export function RsvpGuestTable({ filteredRsvps = [], search = "", setSearch, sta
     </div>
     {!filteredRsvps.length ? <EmptyState icon={Users} title={t(filtered ? "noMatches" : "emptyTitle")} description={t(filtered ? "noMatchesText" : "emptyText")} actionLabel={filtered ? t("clear") : undefined} onAction={filtered ? clear : undefined} /> :
       <div className="rsvp-table-wrapper"><table className="rsvp-table" role="table">
-        <thead><tr>{labels.filter(key => key !== "actions" || invitationId).map(key => <th key={key} scope="col">{t(key)}</th>)}</tr></thead>
+        <thead><tr>{labels.filter(key => key !== "actions" || showActions).map(key => <th key={key} scope="col">{t(key)}</th>)}</tr></thead>
         <tbody>{filteredRsvps.map((rsvp, index) => {
           const name = rsvp.guestName || rsvp.name || t("unnamed");
           const status = String(rsvp.responseStatus || rsvp.status || "PENDING").toUpperCase();
@@ -27,7 +28,7 @@ export function RsvpGuestTable({ filteredRsvps = [], search = "", setSearch, sta
             <td data-label={t("party")}><span className="rsvp-party-badge"><Users size={16} aria-hidden="true" />{rsvp.pendingInvitation ? `${rsvp.invitedSeats || 1} ${t('invitedSeats')}` : `${rsvp.attendeeCount ?? rsvp.partySize ?? 0} ${t("people")}`}</span></td>
             <td data-label={t("date")}><span className="rsvp-date-cell">{Number.isNaN(date.getTime()) ? "—" : new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "km-KH", { dateStyle: "medium", timeStyle: "short" }).format(date)}</span></td>
             <td data-label={t("message")}><div className="rsvp-wish-text">{rsvp.wish || rsvp.message || "—"}</div></td>
-            {invitationId && <td data-label={t("actions")}>{rsvp.pendingInvitation ? <span className="workspace-muted">{t('awaitingResponse')}</span> : <RsvpOwnerActions invitationId={invitationId} record={rsvp} onSaved={onSaved} text={t} />}</td>}
+            {showActions && <td data-label={t("actions")}>{rsvp.pendingInvitation ? <span className="workspace-muted">{t('awaitingResponse')}</span> : <RsvpOwnerActions invitationId={invitationId} record={rsvp} onSaved={onSaved} text={t} />}</td>}
           </tr>;
         })}</tbody>
       </table></div>}

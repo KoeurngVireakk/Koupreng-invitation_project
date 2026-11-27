@@ -1,17 +1,24 @@
 import { PageSkeleton, LoadingRegion } from '@/shared/ui/LoadingState';
 import { Link, useParams } from "react-router-dom";
-import { Users } from "lucide-react";
+import { Download, Users } from "lucide-react";
+import { useEventWorkspace } from "@/features/events/workspace/EventContext";
+import { exportRsvpsToCsv } from "@/features/guests/model/guestCsvUtils";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
 import { useRsvpDashboard } from "./hooks/useRsvpDashboard";
 import { RsvpKpiCards } from "./components/RsvpKpiCards";
 import { RsvpWishesWall } from "./components/RsvpWishesWall";
 import { RsvpGuestTable } from "./components/RsvpGuestTable";
-import { ErrorState } from "@/shared/ui";
+import { ErrorState, toast } from "@/shared/ui";
 import "./RsvpDashboardPage.css";
 
 export default function RsvpDashboardPage() {
   const { eventId, invitationId = eventId } = useParams();
   const { text: t, lang } = useBackendMessages("rsvp");
+  const en = lang === "en";
+  const workspace = useEventWorkspace();
+  const canManageGuests = workspace?.access
+    ? workspace.access.owner === true || Boolean(workspace.access.permissions?.includes("MANAGE_GUESTS"))
+    : workspace?.isOwner !== false;
   const {
     invitation,
     statusFilter,
@@ -59,6 +66,20 @@ export default function RsvpDashboardPage() {
             <p className="rsvp-subtitle">{invitation?.title}</p>
           </div>
           <div className="rsvp-actions">
+            {filteredRsvps.length > 0 && (
+              <button
+                type="button"
+                className="rsvp-back-btn"
+                onClick={() => {
+                  if (exportRsvpsToCsv(filteredRsvps, invitation?.title)) {
+                    toast.success(en ? "RSVP list exported (CSV)" : "បាននាំចេញបញ្ជី RSVP (CSV)");
+                  }
+                }}
+              >
+                <Download size={17} aria-hidden="true" />
+                <span>{en ? "Export CSV" : "នាំចេញ CSV"}</span>
+              </button>
+            )}
             <Link to={backLink} className="rsvp-back-btn">
               <Users size={18} aria-hidden="true" />
               <span>{t("guests")}</span>
@@ -86,6 +107,7 @@ export default function RsvpDashboardPage() {
         ) : (
           <RsvpGuestTable
             invitationId={invitationId}
+            canManage={canManageGuests}
             onSaved={() => load({ background: true })}
             filteredRsvps={filteredRsvps}
             search={search}

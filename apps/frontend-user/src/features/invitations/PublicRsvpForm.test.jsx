@@ -140,4 +140,40 @@ describe("PublicRsvpForm Feature", () => {
             expect(screen.getByRole("button", { name: /កែប្រែការឆ្លើយតប/i })).toBeInTheDocument();
         });
     });
+
+    it("locks new submissions after rsvpDeadline passes and shows closed status", () => {
+        render(<PublicRsvpForm slug="closed-wedding" rsvpDeadline="2020-01-01" languageMode="EN" showPublicWishes={false} />);
+        expect(screen.getByRole("status")).toHaveTextContent("RSVP deadline has passed");
+        expect(screen.queryByRole("button", { name: "Submit RSVP" })).toBeNull();
+    });
+
+    it("enforces maxGuests limit, sends 0 seats when declining, and maps 409 conflict cleanly", async () => {
+        const { rsvpService } = await import("@/features/rsvp/api/rsvpApi");
+        render(<PublicRsvpForm slug="cap-wedding" maxGuests={3} rsvpDeadline="2099-12-31" languageMode="EN" showPublicWishes={false} />);
+
+        fireEvent.change(screen.getByLabelText("Guest name"), { target: { value: "Bopha" } });
+        fireEvent.change(screen.getByLabelText("Attendee count"), { target: { value: "5" } });
+        fireEvent.click(screen.getByRole("button", { name: "Submit RSVP" }));
+
+        expect(await screen.findByRole("alert")).toHaveTextContent("at most 3 guests");
+        expect(rsvpService.submitPublic).not.toHaveBeenCalled();
+
+        // Conflict error recovery
+        fireEvent.change(screen.getByLabelText("Attendee count"), { target: { value: "2" } });
+        rsvpService.submitPublic.mockRejectedValueOnce({ status: 409, message: "Duplicate" });
+        fireEvent.click(screen.getByRole("button", { name: "Submit RSVP" }));
+        expect(await screen.findByRole("alert")).toHaveTextContent("conflicting update");
+
+        // Declining sends 0 attendeeCount
+        rsvpService.submitPublic.mockResolvedValueOnce({ id: 99, guestName: "Bopha", responseStatus: "NOT_ATTENDING", attendeeCount: 0 });
+        fireEvent.change(screen.getByLabelText("Response"), { target: { value: "NOT_ATTENDING" } });
+        fireEvent.click(screen.getByRole("button", { name: "Submit RSVP" }));
+        await waitFor(() =>
+            expect(rsvpService.submitPublic).toHaveBeenCalledWith(
+                "cap-wedding",
+                expect.objectContaining({ guestName: "Bopha", responseStatus: "NOT_ATTENDING", attendeeCount: 0 }),
+                expect.anything()
+            )
+        );
+    });
 });

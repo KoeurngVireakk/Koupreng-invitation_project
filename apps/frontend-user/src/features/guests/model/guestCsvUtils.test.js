@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { exportDeliveryReportCsv, exportGuestsToCsv } from "./guestCsvUtils";
+import { exportDeliveryReportCsv, exportGuestsToCsv, exportRsvpsToCsv } from "./guestCsvUtils";
 
 describe("guestCsvUtils CSV sanitization and exports", () => {
   afterEach(() => {
@@ -80,5 +80,17 @@ describe("guestCsvUtils CSV sanitization and exports", () => {
     const raw = await readCsvText();
     expect(raw).toContain("Send Status");
     expect(raw).toContain("\"'=cmd|' /C calc'!A0\"");
+  });
+
+  it("exports RSVP list with formula neutralization for wishes and names", async () => {
+    const { readCsvText } = captureDownloadedCsv();
+    const ok = exportRsvpsToCsv(
+      [{ guestName: "+Attack", phone: "012000111", responseStatus: "ATTENDING", attendeeCount: 2, wish: "=EVIL()" }],
+      "Wedding"
+    );
+    expect(ok).toBe(true);
+    const raw = await readCsvText();
+    expect(raw).toContain("\"'+Attack\"");
+    expect(raw).toContain("\"'=EVIL()\"");
   });
 });

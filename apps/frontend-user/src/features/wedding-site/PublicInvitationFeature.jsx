@@ -416,6 +416,8 @@ export default function PublicInvitationPage() {
                         inviteToken={inviteToken}
                         accessToken={effectiveAccessToken}
                         languageMode={publicDraft.languageMode}
+                        rsvpDeadline={publicDraft.rsvpDeadline || invitation?.rsvpDeadline}
+                        maxGuests={invitation?.maxGuestsPerInvite || publicDraft?.maxGuestsPerInvite}
                     />
                 )}
             </TemplateExperience>
