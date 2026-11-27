@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBackOutline, IoLockClosedOutline, IoQrCodeOutline, IoShieldCheckmarkOutline } from "react-icons/io5";
 import { useLanguageStore } from "@/stores/useLanguageStore";
@@ -6,6 +6,7 @@ import { packagePrice } from "../marketing/model/packagePresentation";
 
 import { getTemplateById, KEEP_TEMPLATE_CODE } from "../templates/data/templatesData";
 import { templateCatalogService } from "@/features/templates/api/templateCatalogApi";
+import { RETIRED_TEMPLATE_CODES } from "@/features/templates/model/catalogPolicy";
 import { paymentService } from "./paymentService";
 import { checkoutOffer } from "./checkoutOffer";
 import heroBg from "../../assets/icons/background.png";
@@ -14,27 +15,34 @@ import "./PaymentPages.css";
 export default function TemplateCheckoutPage() {
   const navigate = useNavigate();
   const lang = useLanguageStore(state => state.lang);
-  const copy = (kh, en) => lang === "en" ? en : kh;
+  const copy = useCallback((kh, en) => lang === "en" ? en : kh, [lang]);
   const { templateId = KEEP_TEMPLATE_CODE } = useParams();
   const [catalogList, setCatalogList] = useState([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
-
+  const [catalogRevision, setCatalogRevision] = useState(0);
 
   useEffect(() => {
     let active = true;
     setCatalogLoading(true);
     templateCatalogService
-      .list()
+      .list({ force: true })
       .then((templates) => {
         if (active) {
-          setCatalogList(templates || []);
+          setCatalogList(
+            (templates || []).filter(
+              (item) =>
+                (!item?.status || String(item.status).toUpperCase() === "ACTIVE") &&
+                !RETIRED_TEMPLATE_CODES.has(String(item?.code || item?.slug || "").toLowerCase())
+            )
+          );
+          setError("");
         }
       })
       .catch((err) => {
         if (active) {
-          setError(err.message || "Could not load template catalog");
+          setError(err.message || copy("មិនអាចផ្ទុកបញ្ជីគំរូបានទេ។", "Could not load template catalog"));
         }
       })
       .finally(() => {
@@ -45,7 +53,7 @@ export default function TemplateCheckoutPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [catalogRevision, copy]);
 
   const matchedTemplate = useMemo(() => {
     const fromCatalog = catalogList.find(
@@ -89,7 +97,7 @@ export default function TemplateCheckoutPage() {
 
   const createOrder = async () => {
     if (!checkout.templateId || !checkout.eligible) {
-      setError("Template catalog is not available yet. Please refresh and try again.");
+      setError(copy("បញ្ជីគំរូមិនទាន់មានការផ្ដល់ជូនសកម្មទេ។ សូមផ្ទុកឡើងវិញ ហើយសាកល្បងម្ដងទៀត។", "Template catalog is not available yet. Please refresh and try again."));
       return;
     }
     setCreating(true);
@@ -112,7 +120,11 @@ export default function TemplateCheckoutPage() {
 
     } catch (err) {
       console.error("Create static ABA payment order failed:", err);
-      setError(err.message || "Could not create payment order");
+      const status = Number(err?.status || err?.response?.status || 0);
+      if ([403, 404, 409].includes(status)) {
+        setCatalogRevision((value) => value + 1);
+      }
+      setError(err.message || copy("មិនអាចបង្កើតការបញ្ជាទិញបានទេ។", "Could not create payment order"));
     } finally {
       setCreating(false);
     }
@@ -125,7 +137,20 @@ export default function TemplateCheckoutPage() {
     <section className="checkout-main-container" aria-busy={creating || catalogLoading}>
       <nav className="checkout-nav-bar" aria-label={copy("ជម្រើសការទូទាត់", "Checkout navigation")}><Link className="checkout-back-btn" to="/templates"><IoArrowBackOutline aria-hidden="true"/>{copy("ត្រឡប់ទៅគំរូ", "Back to designs")}</Link><Link to="/app/payments">{copy("ប្រវត្តិការទូទាត់", "Payment history")}</Link></nav>
       <header className="checkout-header"><p className="checkout-kicker">{copy("សិទ្ធិប្រើគំរូ", "Template access")}</p><h1 className="checkout-title">{copy("ពិនិត្យមុនទូទាត់", "Review your template order")}</h1><p className="checkout-subtitle">{copy("ពិនិត្យគំរូ តម្លៃ និងរូបិយប័ណ្ណ។ ការបញ្ជាទិញនឹងត្រូវបង្កើតមុនបង្ហាញតំណទូទាត់។", "Check the design, amount and currency. Your order is created before its payment link is shown.")}</p></header>
-      {error && <div className="checkout-alert-error" role="alert">{error}</div>}
+      {error && (
+        <div className="checkout-alert-error" role="alert">
+          <span>{error}</span>
+          <button
+            type="button"
+            className="checkout-retry-btn"
+            disabled={catalogLoading || creating}
+            onClick={() => setCatalogRevision((value) => value + 1)}
+            style={{ marginInlineStart: "12px", minHeight: "36px", padding: "6px 12px", borderRadius: "8px", border: "1px solid currentColor", background: "transparent", color: "inherit", fontWeight: 700, cursor: "pointer" }}
+          >
+            {copy("ផ្ទុកការផ្ដល់ជូនឡើងវិញ", "Refresh offer")}
+          </button>
+        </div>
+      )}
       <div className="checkout-grid-layout">
         <div className="checkout-left-col">
           <article className="checkout-card checkout-template-card"><div className="checkout-template-media"><img src={matchedTemplate.image} alt={checkout.templateName} className="checkout-template-thumb"/></div><div className="checkout-template-info"><h2 className="checkout-template-name">{checkout.templateName}</h2><p>{copy("មើលគំរូនេះ និងពិនិត្យព័ត៌មាន មុនស្នើការបញ្ជាទិញ។", "Preview this design and review its details before creating an order.")}</p><Link to={previewPath}>{copy("មើលគំរូ", "Preview design")}</Link></div></article>

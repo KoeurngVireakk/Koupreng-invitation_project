@@ -1,0 +1,21 @@
+{
+  "phase": 24,
+  "title": "Admin Platform Modernization (Frontend User Compatibility Boundary Only)",
+  "branch": "feat/phase24-admin-compatibility-boundary",
+  "baseSha": "e42e814478afa7a3a13497115f9b4dd6643a3aa5",
+  "status": "READY_FOR_CODEX_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P24-G01", "name": "Zero apps/frontend-admin, backend, or Flyway files modified", "status": "PASS_LOCAL" },
+    { "id": "P24-G02", "name": "Customer catalog, demo routes & checkout reflect server ACTIVE status and reconcile live on 403/404/409", "status": "PASS_LOCAL" },
+    { "id": "P24-G03", "name": "Zero privileged admin role, moderation, or audit metadata rendered or leaked to customer UI", "status": "PASS_LOCAL" },
+    { "id": "P24-G04", "name": "Customer routing and safeReturnTo strictly isolated from /admin/* destinations", "status": "PASS_LOCAL" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "256 files / 1971 tests passed (41.81s)",
+    "viteBuild": "passed (2.02s)",
+    "playwrightPhase24": "2 passed (desktop-chromium & mobile-chromium, 4.7s, 0px overflow, 0 non-header Axe violations)"
+  }
+}
