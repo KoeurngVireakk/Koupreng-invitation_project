@@ -22,7 +22,7 @@
 1. **Private One-Time Invitation Codes (`InviteMemberModal`, `AcceptTeamInvitation`):**
    - Creating an invitation renders the 64-hex token strictly once for private sharing and explicitly notes no automatic email was sent.
    - Accepting requires matching the invited email account, validates 64-hex syntax, handles expired/revoked/duplicate acceptance errors visibly via `role="alert"`, and clears the input on confirmation.
-   - `MemberTable` explicitly explains `PENDING`, `EXPIRED`, `REVOKED`, and unaccepted legacy `ACTIVE` rows (`inviteAcceptedAt` check).
+   - `MemberTable` explicitly explains `INVITED` (pending acceptance), expired `INVITED` (derived from `inviteExpiresAt`), `REVOKED`, and legacy pre-V48 `ACTIVE` rows missing `inviteAcceptedAt` (even when `joinedAt` is populated).
 2. **Multi-Event Team Selection (`EventTeamPanel`):**
    - `selection` resyncs deterministically whenever `eventId` or `event.organizationId` changes.
    - Displays current event title + owner-only team filter (`teams.filter(team => team.ownerUserId === event.userId)`), plus a confirmation modal summarizing access grant or revocation before calling `linkTeam`.

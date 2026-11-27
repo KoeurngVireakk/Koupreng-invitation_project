@@ -37,6 +37,15 @@ export default function MemberTable({
             member.role === "OWNER" ||
             (member.userId && String(member.userId) === String(ownerUserId));
           const normalizedStatus = (member.status || "ACTIVE").toUpperCase();
+          const inviteExpiresAtMs = member.inviteExpiresAt ? new Date(member.inviteExpiresAt).getTime() : Number.NaN;
+          const isInviteExpired =
+            normalizedStatus === "EXPIRED" ||
+            ((normalizedStatus === "INVITED" || normalizedStatus === "PENDING") &&
+              !Number.isNaN(inviteExpiresAtMs) &&
+              inviteExpiresAtMs <= Date.now());
+          const displayStatus = isInviteExpired ? "EXPIRED" : normalizedStatus;
+          const isPendingInvite =
+            (normalizedStatus === "INVITED" || normalizedStatus === "PENDING") && !isInviteExpired;
 
           return (
             <tr key={member.id}>
@@ -60,18 +69,18 @@ export default function MemberTable({
                 <RoleBadge role={member.role} />
               </td>
               <td>
-                <StatusBadge status={normalizedStatus} />
-                {!isMemberOwner && normalizedStatus === "PENDING" && (
+                <StatusBadge status={displayStatus} />
+                {!isMemberOwner && isPendingInvite && (
                   <p className="k-org-invite-status-note">
                     {uiCopy("កំពុងរង់ចាំសមាជិកទទួលយកកូដអញ្ជើញ។", "Waiting for invitee to accept invitation code.")}
                   </p>
                 )}
-                {!isMemberOwner && (normalizedStatus === "EXPIRED" || normalizedStatus === "REVOKED") && (
+                {!isMemberOwner && (normalizedStatus === "REVOKED" || isInviteExpired) && (
                   <p className="k-org-invite-status-note">
                     {uiCopy("ការអញ្ជើញនេះមិនមានសុពលភាពទៀតទេ។ សូមបង្កើតកូដថ្មីប្រសិនបើត្រូវការ។", "This invitation is no longer valid. Issue a new code if access is still needed.")}
                   </p>
                 )}
-                {!isMemberOwner && normalizedStatus === "ACTIVE" && !member.inviteAcceptedAt && !member.joinedAt && (
+                {!isMemberOwner && normalizedStatus === "ACTIVE" && !member.inviteAcceptedAt && (
                   <p className="k-org-invite-status-note">
                     {uiCopy("សិទ្ធិកម្មវិធីត្រូវការការអញ្ជើញថ្មី និងការទទួលយក។", "Event access needs a new accepted invitation.")}
                   </p>

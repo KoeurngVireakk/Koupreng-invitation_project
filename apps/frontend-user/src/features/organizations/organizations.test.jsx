@@ -1,8 +1,9 @@
 import { useLanguageStore } from "@/stores/useLanguageStore";
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+afterEach(cleanup);
 beforeEach(() => useLanguageStore.setState({ lang: "en" }));
 import OrganizationCard from "./components/OrganizationCard";
 import MemberTable from "./components/MemberTable";
@@ -94,7 +95,7 @@ describe("Organization Feature Module", () => {
       expect(screen.queryByText(/👑/)).not.toBeInTheDocument();
     });
 
-    it("explains pending and revoked/expired invitation statuses in plain language", () => {
+    it("explains INVITED, expired INVITED, revoked, and legacy unaccepted ACTIVE statuses", () => {
       render(
         <MemberTable
           ownerUserId={101}
@@ -102,14 +103,48 @@ describe("Organization Feature Module", () => {
           onEditRole={vi.fn()}
           onRemove={vi.fn()}
           members={[
-            { id: 1, userId: 102, email: "pending@koupreng.com", role: "DESIGNER", status: "PENDING", invitedAt: "2026-02-01T00:00:00Z" },
-            { id: 2, userId: 103, email: "revoked@koupreng.com", role: "VIEWER", status: "REVOKED", invitedAt: "2026-01-15T00:00:00Z" },
+            {
+              id: 1,
+              userId: null,
+              email: "invited@koupreng.com",
+              role: "DESIGNER",
+              status: "INVITED",
+              invitedAt: "2026-11-25T00:00:00Z",
+              inviteExpiresAt: "2099-01-01T00:00:00Z",
+            },
+            {
+              id: 2,
+              userId: null,
+              email: "expired@koupreng.com",
+              role: "CHECK_IN_STAFF",
+              status: "INVITED",
+              invitedAt: "2026-01-01T00:00:00Z",
+              inviteExpiresAt: "2026-01-08T00:00:00Z",
+            },
+            {
+              id: 3,
+              userId: 103,
+              email: "revoked@koupreng.com",
+              role: "VIEWER",
+              status: "REVOKED",
+              invitedAt: "2026-01-15T00:00:00Z",
+            },
+            {
+              id: 4,
+              userId: 104,
+              email: "legacy@koupreng.com",
+              role: "MANAGER",
+              status: "ACTIVE",
+              joinedAt: "2026-01-05T00:00:00Z",
+              inviteAcceptedAt: null,
+            },
           ]}
         />
       );
 
-      expect(screen.getByText(/Waiting for invitee to accept invitation code/i)).toBeInTheDocument();
-      expect(screen.getByText(/This invitation is no longer valid/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Waiting for invitee to accept invitation code/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/This invitation is no longer valid/i).length).toBeGreaterThanOrEqual(2);
+      expect(screen.getAllByText(/Event access needs a new accepted invitation/i).length).toBeGreaterThan(0);
     });
 
   });

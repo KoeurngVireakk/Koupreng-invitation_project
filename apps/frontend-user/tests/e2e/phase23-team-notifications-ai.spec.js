@@ -29,7 +29,7 @@ const MOCK_ORGS = [
     members: [
       { id: 1, userId: 7, email: "sokha@example.test", role: "OWNER", status: "ACTIVE", joinedAt: "2026-09-01T08:00:00Z" },
       { id: 2, userId: 11, email: "planner@example.test", role: "MANAGER", status: "ACTIVE", inviteAcceptedAt: "2026-09-02T09:00:00Z", joinedAt: "2026-09-02T09:00:00Z" },
-      { id: 3, userId: null, email: "staff@example.test", role: "CHECK_IN_STAFF", status: "PENDING", invitedAt: "2026-11-20T09:00:00Z" },
+      { id: 3, userId: null, email: "staff@example.test", role: "CHECK_IN_STAFF", status: "INVITED", invitedAt: "2026-11-20T09:00:00Z", inviteExpiresAt: "2099-01-01T00:00:00Z" },
     ],
   },
 ];

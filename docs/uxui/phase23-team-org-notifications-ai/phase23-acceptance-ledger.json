@@ -35,9 +35,9 @@
   "verification": {
     "eslint": "0 errors",
     "knipAndDeps": "passed",
-    "vitestFull": "255 files / 1965 tests passed (69.55s)",
-    "viteBuild": "passed (2.25s)",
-    "playwrightPhase23": "4 passed (desktop-chromium & mobile-chromium, 12.1s)",
+    "vitestFull": "255 files / 1965 tests passed",
+    "viteBuild": "passed (1.96s)",
+    "playwrightPhase23": "4 passed (desktop-chromium & mobile-chromium, 14.6s)",
     "playwrightV2Baseline": "31 passed, 5 skipped (desktop-only on chromium-mobile), 0 failed",
     "screenshots": "10/10 after captures clean (0px overflow, 0 non-header Axe violations; fixed 17 baseline contrast violations)"
   }

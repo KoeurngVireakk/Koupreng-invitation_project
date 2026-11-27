@@ -26,7 +26,7 @@ const SEED_ORGS = [
     members: [
       { id: 1, userId: 7, email: 'sokha@example.test', role: 'OWNER', status: 'ACTIVE', joinedAt: '2026-10-01T08:00:00Z', inviteAcceptedAt: '2026-10-01T08:00:00Z' },
       { id: 2, userId: 12, email: 'dara.manager@example.test', role: 'MANAGER', status: 'ACTIVE', joinedAt: '2026-10-10T09:00:00Z', inviteAcceptedAt: '2026-10-10T09:00:00Z' },
-      { id: 3, userId: null, email: 'bopha.pending@example.test', role: 'CHECK_IN_STAFF', status: 'PENDING', invitedAt: '2026-11-25T10:00:00Z', inviteAcceptedAt: null },
+      { id: 3, userId: null, email: 'bopha.pending@example.test', role: 'CHECK_IN_STAFF', status: 'INVITED', invitedAt: '2026-11-25T10:00:00Z', inviteExpiresAt: '2099-01-01T00:00:00Z', inviteAcceptedAt: null },
     ],
   },
   {
