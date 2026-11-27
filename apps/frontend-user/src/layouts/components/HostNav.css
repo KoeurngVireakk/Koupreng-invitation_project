@@ -270,6 +270,10 @@
   object-fit: cover;
 }
 
+.host-profile-avatar[data-initial]::before {
+  content: attr(data-initial);
+}
+
 .host-profile-name {
   max-width: 120px;
   overflow: hidden;

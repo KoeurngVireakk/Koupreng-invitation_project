@@ -1,0 +1,481 @@
+{
+  "stage": "after",
+  "generatedAt": "2026-11-27T13:30:32.055Z",
+  "bundles": {
+    "jsTotalBytes": 3060180,
+    "jsTotalGzipBytes": 962645,
+    "cssTotalBytes": 1468698,
+    "cssTotalGzipBytes": 303439,
+    "mediaTotalBytes": 10423126,
+    "entryJs": {
+      "name": "index-DrBL6YOJ.js",
+      "bytes": 479460,
+      "gzipBytes": 141692
+    },
+    "entryCss": {
+      "name": "index-BkbsjD8Y.css",
+      "bytes": 276661,
+      "gzipBytes": 49182
+    },
+    "topJsChunks": [
+      {
+        "name": "index-DrBL6YOJ.js",
+        "bytes": 479460,
+        "gzipBytes": 141692
+      },
+      {
+        "name": "InvitationEditFeature-CRJ2GEFD.js",
+        "bytes": 251151,
+        "gzipBytes": 65445
+      },
+      {
+        "name": "InvitationCheckInPage-CIFTpL00.js",
+        "bytes": 186238,
+        "gzipBytes": 61907
+      },
+      {
+        "name": "TemplateExperience-BwdzXWN2.js",
+        "bytes": 130537,
+        "gzipBytes": 34695
+      },
+      {
+        "name": "useBackendMessages-xghX5alh.js",
+        "bytes": 112944,
+        "gzipBytes": 27937
+      },
+      {
+        "name": "proxy-4uqr5Owt.js",
+        "bytes": 78720,
+        "gzipBytes": 24707
+      },
+      {
+        "name": "RoyalGardenCinematicLayout-BJbOP5Lo.js",
+        "bytes": 70536,
+        "gzipBytes": 21791
+      },
+      {
+        "name": "EventCreatePage-R48MBZP6.js",
+        "bytes": 58148,
+        "gzipBytes": 14805
+      },
+      {
+        "name": "InvitationStudio-TIXd01rN.js",
+        "bytes": 56218,
+        "gzipBytes": 16451
+      },
+      {
+        "name": "MotionConfigContext-CluVpD3A.js",
+        "bytes": 55920,
+        "gzipBytes": 20439
+      }
+    ],
+    "topCssChunks": [
+      {
+        "name": "index-BkbsjD8Y.css",
+        "bytes": 276661,
+        "gzipBytes": 49182
+      },
+      {
+        "name": "TemplateExperience-ZUTNIGzJ.css",
+        "bytes": 106373,
+        "gzipBytes": 20492
+      },
+      {
+        "name": "RoyalGardenCinematicLayout-CcvxZ06_.css",
+        "bytes": 95828,
+        "gzipBytes": 19117
+      },
+      {
+        "name": "InvitationEditFeature-isB9_rLq.css",
+        "bytes": 70575,
+        "gzipBytes": 12932
+      },
+      {
+        "name": "GuestsPage-SD1V5arX.css",
+        "bytes": 63169,
+        "gzipBytes": 11531
+      },
+      {
+        "name": "WeddingSite-l0_oLjVb.css",
+        "bytes": 61017,
+        "gzipBytes": 12541
+      },
+      {
+        "name": "khmer-floral-gold-D0dBZ0XE.css",
+        "bytes": 55901,
+        "gzipBytes": 12207
+      },
+      {
+        "name": "InvitationPages-bdppkPQx.css",
+        "bytes": 48265,
+        "gzipBytes": 9248
+      }
+    ],
+    "topMediaAssets": [
+      {
+        "name": "Instrumental Wedding Music (VioSounds Cover)-CucJnB_X.m4a",
+        "bytes": 3918818,
+        "gzipBytes": 3885008
+      },
+      {
+        "name": "ថ្ងៃដែលរង់ចាំ-DghwgyVs.mp3",
+        "bytes": 2704609,
+        "gzipBytes": 2686317
+      },
+      {
+        "name": "background-E3mlAaLv.png",
+        "bytes": 2520889,
+        "gzipBytes": 2521625
+      },
+      {
+        "name": "Peony-Dfb5QLWR.png",
+        "bytes": 402915,
+        "gzipBytes": 402839
+      },
+      {
+        "name": "lily-uPsP74HM.png",
+        "bytes": 267409,
+        "gzipBytes": 267489
+      },
+      {
+        "name": "rose-CIIomXpK.png",
+        "bytes": 242245,
+        "gzipBytes": 242208
+      },
+      {
+        "name": "daisy-B3ZZsOVx.png",
+        "bytes": 236264,
+        "gzipBytes": 236322
+      },
+      {
+        "name": "orchid-DeYI59_S.png",
+        "bytes": 129977,
+        "gzipBytes": 129897
+      }
+    ]
+  },
+  "overflowFailureCount": 0,
+  "overflowFailures": [],
+  "responsiveMatrix": [
+    {
+      "route": "/",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/templates",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/login",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/app/events",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/app/events/101/guests",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/app/events/101/budget",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/app/events/101/reports",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    },
+    {
+      "route": "/i/audit-event",
+      "widths": {
+        "320": 0,
+        "360": 0,
+        "375": 0,
+        "390": 0,
+        "414": 0,
+        "430": 0,
+        "600": 0,
+        "768": 0,
+        "820": 0,
+        "1024": 0,
+        "1280": 0,
+        "1440": 0
+      }
+    }
+  ],
+  "a11yResults": [
+    {
+      "id": "01-landing-light-en",
+      "route": "/",
+      "lang": "en",
+      "theme": "light",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "02-landing-dark-km",
+      "route": "/",
+      "lang": "km",
+      "theme": "dark",
+      "width": 390,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "03-templates-dark-en",
+      "route": "/templates",
+      "lang": "en",
+      "theme": "dark",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "04-login-light-km",
+      "route": "/login",
+      "lang": "km",
+      "theme": "light",
+      "width": 390,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "05-events-dark-km",
+      "route": "/app/events",
+      "lang": "km",
+      "theme": "dark",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "06-guests-dark-en",
+      "route": "/app/events/101/guests",
+      "lang": "en",
+      "theme": "dark",
+      "width": 390,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "07-budget-light-km",
+      "route": "/app/events/101/budget",
+      "lang": "km",
+      "theme": "light",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "08-reports-dark-en",
+      "route": "/app/events/101/reports",
+      "lang": "en",
+      "theme": "dark",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "09-packages-dark-en",
+      "route": "/app/packages",
+      "lang": "en",
+      "theme": "dark",
+      "width": 1440,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "10-notifications-dark-km",
+      "route": "/app/notifications",
+      "lang": "km",
+      "theme": "dark",
+      "width": 390,
+      "overflowX": 0,
+      "h1Count": 1,
+      "violationCount": 0,
+      "violations": []
+    },
+    {
+      "id": "11-public-invite-light-km",
+      "route": "/i/audit-event",
+      "lang": "km",
+      "theme": "light",
+      "width": 390,
+      "overflowX": 0,
+      "h1Count": 2,
+      "violationCount": 0,
+      "violations": []
+    }
+  ],
+  "securityChecks": {
+    "unauthRedirectedToLogin": true,
+    "serviceWorkerCount": 0,
+    "manifestValid": true,
+    "xssNotExecutedOnPublicInvite": true
+  },
+  "perfLabMethod": "Local Vite preview Chromium headless, 1440x900, reduced-motion, 1 warmup + median of 3 runs (LAB DATA ONLY)",
+  "perfSummary": [
+    {
+      "route": "/",
+      "domContentLoadedMs": 58,
+      "loadMs": 838,
+      "fcpMs": 148,
+      "lcpMs": 148,
+      "cls": 0.003,
+      "jsTransferKb": 224,
+      "cssTransferKb": 49.1,
+      "taskMs": 163,
+      "scriptMs": 60,
+      "jsHeapUsedMB": 4.71
+    },
+    {
+      "route": "/templates",
+      "domContentLoadedMs": 91,
+      "loadMs": 861,
+      "fcpMs": 132,
+      "lcpMs": 464,
+      "cls": 0.0011,
+      "jsTransferKb": 224.3,
+      "cssTransferKb": 49.1,
+      "taskMs": 157,
+      "scriptMs": 74,
+      "jsHeapUsedMB": 5.01
+    },
+    {
+      "route": "/app/events",
+      "domContentLoadedMs": 59,
+      "loadMs": 821,
+      "fcpMs": 84,
+      "lcpMs": 448,
+      "cls": 0,
+      "jsTransferKb": 293,
+      "cssTransferKb": 72.4,
+      "taskMs": 170,
+      "scriptMs": 79,
+      "jsHeapUsedMB": 5.48
+    },
+    {
+      "route": "/i/audit-event",
+      "domContentLoadedMs": 61,
+      "loadMs": 860,
+      "fcpMs": 88,
+      "lcpMs": 832,
+      "cls": 0.0013,
+      "jsTransferKb": 411.4,
+      "cssTransferKb": 109,
+      "taskMs": 320,
+      "scriptMs": 97,
+      "jsHeapUsedMB": 6.33
+    }
+  ]
+}

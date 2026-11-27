@@ -24,38 +24,40 @@ export default function PublicTemplateCard({ template, lang, isAuthenticated, ca
 
   return (
     <article className="kp-design-card tp-card" data-template={template.identity}>
-      <Link
-        to={demo}
-        className="kp-design-media"
-        aria-label={`${broken || !template.image ? copy("រូបភាពគំរូមិនមាន។ ", "Preview image unavailable. ") : ""}${copy("មើលគំរូ", "Preview design")} ${template.name}`}
-      >
+      <div className="kp-design-media-wrap">
         <span className={`tp-card-badge tp-card-badge--${badgeClass}`} aria-hidden="true">
           {template.isPremium && <Sparkles size={12} aria-hidden="true" />}
           <span>{badgeLabel}</span>
         </span>
-        {template.image && !broken ? (
-          <img
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : undefined}
-            decoding="async"
-            {...publicTemplateImage(template.image, compact)}
-            width="720"
-            height="1080"
-            alt={template.name}
-            onError={() => setBroken(true)}
-          />
-        ) : (
-          <span className="kp-design-placeholder">
-            <ImageOff size={32} aria-hidden="true" />
-            {copy("រូបភាពគំរូមិនមាន", "Preview image unavailable")}
+        <Link
+          to={demo}
+          className="kp-design-media"
+          aria-label={`${broken || !template.image ? copy("រូបភាពគំរូមិនមាន ", "Preview image unavailable ") : ""}${copy("មើលគំរូ", "Preview design")} ${template.name}`}
+        >
+          {template.image && !broken ? (
+            <img
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : undefined}
+              decoding="async"
+              {...publicTemplateImage(template.image, compact)}
+              width="720"
+              height="1080"
+              alt={template.name}
+              onError={() => setBroken(true)}
+            />
+          ) : (
+            <span className="kp-design-placeholder">
+              <ImageOff size={32} aria-hidden="true" />
+              {copy("រូបភាពគំរូមិនមាន", "Preview image unavailable")}
+            </span>
+          )}{" "}
+          <span className="kp-design-preview">
+            <Eye size={16} aria-hidden="true" />
+            <span>{copy("មើលគំរូ", "Preview design")}</span>
+            <ArrowUpRight size={16} aria-hidden="true" />
           </span>
-        )}
-        <span className="kp-design-preview">
-          <Eye size={16} aria-hidden="true" />
-          <span>{copy("មើលគំរូ", "Preview design")}</span>
-          <ArrowUpRight size={16} aria-hidden="true" />
-        </span>
-      </Link>
+        </Link>
+      </div>
       <div className="kp-design-body">
         <div className="kp-design-meta-row">
           <p className="kp-design-category">{categoryLabel}</p>

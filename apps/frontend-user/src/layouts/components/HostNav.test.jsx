@@ -148,4 +148,16 @@ describe("HostNav component", () => {
     expect(mobileDrawer).toHaveAttribute("inert");
     expect(hamburger).toHaveFocus();
   });
+
+  it("keeps avatar initial decorative so profile trigger visible text matches its aria-label", () => {
+    render(
+      <MemoryRouter initialEntries={["/app/events"]}>
+        <HostNav />
+      </MemoryRouter>
+    );
+
+    const profileTrigger = screen.getByRole("button", { name: "Sokha Chan" });
+    expect(profileTrigger.textContent.trim()).toBe("Sokha Chan");
+    expect(profileTrigger.querySelector(".host-profile-avatar")).toHaveAttribute("data-initial", "S");
+  });
 });
