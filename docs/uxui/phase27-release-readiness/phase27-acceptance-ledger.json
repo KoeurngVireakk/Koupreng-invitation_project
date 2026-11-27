@@ -1,0 +1,23 @@
+{
+  "phase": 27,
+  "title": "Final Complete Frontend User Regression, Documentation & Release Readiness",
+  "branch": "feat/phase27-release-readiness",
+  "baseSha": "f037b63e90ee7d2632245702799d0de335ccba75",
+  "status": "READY_FOR_CODEX_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P27-G01", "name": "Canonical Frontend User Design, Motion, Art Direction, Accessibility, Performance & PWA/Security reports published", "status": "PASS_LOCAL" },
+    { "id": "P27-G02", "name": "Formal acceptance reports PHASE_22_ACCEPTANCE through PHASE_27_ACCEPTANCE reconciled against merged PRs #49-#53", "status": "PASS_LOCAL" },
+    { "id": "P27-G03", "name": "Complete Frontend User unit, build, policy, cross-browser v2, route smoke, and Phase 23-26 Playwright E2E regression green on main checkpoint", "status": "PASS_LOCAL" },
+    { "id": "P27-G04", "name": "Physical hardware, native in-app WebViews, and live persistent staging / ABA PayWay settlement cleanly separated as external blockers", "status": "BLOCKED_EXTERNAL" }
+  ],
+  "verification": {
+    "tokenSyncAndRouting": "sync-design-tokens passed; validate-agent-routing passed (10 pinned, 58 skills, 0 errors)",
+    "repositoryPolicyTests": "18 passed / 0 failed (953.57ms)",
+    "eslintKnipDeps": "passed (0 errors)",
+    "vitestFull": "257 files / 1979 tests passed (52.02s)",
+    "viteBuild": "passed (2.48s, dist/index.html 8.13 kB, entry index.js 479.46 kB / 142.84 kB gzip)",
+    "playwrightV2CrossBrowser": "31 passed, 5 skipped (desktop-only on mobile), 0 failed (2.0m)",
+    "playwrightRoutesAndPhases23to26": "62 passed, 0 failed (workers=2, 50.8s)"
+  }
+}
