@@ -40,7 +40,7 @@ export default function GuestStats({ guests = [], summary, t }) {
     <section className="pe-summary-grid" aria-label="Guest list statistics">
       <article className="pe-summary-card group">
         <div className="pe-summary-card-inner">
-          <div className="pe-summary-icon-wrap text-[#B98B42] bg-[#B98B42]/10">
+          <div className="pe-summary-icon-wrap pe-summary-icon-gold">
             <Users size={18} aria-hidden="true" />
           </div>
           <div className="pe-summary-details">
@@ -52,7 +52,7 @@ export default function GuestStats({ guests = [], summary, t }) {
 
       <article className="pe-summary-card group">
         <div className="pe-summary-card-inner">
-          <div className="pe-summary-icon-wrap text-emerald-700 bg-emerald-500/10">
+          <div className="pe-summary-icon-wrap pe-summary-icon-action">
             <Armchair size={18} aria-hidden="true" />
           </div>
           <div className="pe-summary-details">
@@ -64,7 +64,7 @@ export default function GuestStats({ guests = [], summary, t }) {
 
       <article className="pe-summary-card group">
         <div className="pe-summary-card-inner">
-          <div className="pe-summary-icon-wrap text-sky-700 bg-sky-500/10">
+          <div className="pe-summary-icon-wrap pe-summary-icon-info">
             <Send size={18} aria-hidden="true" />
           </div>
           <div className="pe-summary-details">
@@ -76,7 +76,7 @@ export default function GuestStats({ guests = [], summary, t }) {
 
       <article className="pe-summary-card group">
         <div className="pe-summary-card-inner">
-          <div className="pe-summary-icon-wrap text-teal-700 bg-teal-500/10">
+          <div className="pe-summary-icon-wrap pe-summary-icon-success">
             <CheckCircle2 size={18} aria-hidden="true" />
           </div>
           <div className="pe-summary-details">

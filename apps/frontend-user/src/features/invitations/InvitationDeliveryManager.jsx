@@ -1,9 +1,11 @@
 import { PageSkeleton } from '@/shared/ui/LoadingState';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { Check, Copy, RefreshCw, Search, Send, Share2, Users, SendHorizontal, Mail, X } from 'lucide-react';
+import { Check, Copy, Download, RefreshCw, Search, Send, Share2, Users, SendHorizontal, Mail, X } from 'lucide-react';
 import { deliveryService } from '@/features/invitations/api/deliveryApi';
 import { invitationService } from '@/features/invitations/api/invitationApi';
+import { exportDeliveryReportCsv } from '@/features/guests/model/guestCsvUtils';
+import { feedback } from '@/shared/feedback/feedback';
 import { useBackendMessages } from '@/shared/i18n/useBackendMessages';
 import { ResponsiveTable, StatusBadge, toast } from '@/shared/ui';
 import './DeliveryWorkspace.css';
@@ -17,6 +19,8 @@ export default function InvitationDeliveryManager() {
   const [busy, setBusy] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('ALL');
+  const [historyStatus, setHistoryStatus] = useState('ALL');
+  const [historyChannel, setHistoryChannel] = useState('ALL');
   const [selected, setSelected] = useState(() => new Set(params.get('guestId') ? [params.get('guestId')] : []));
   const [email, setEmail] = useState({ subject: '', message: '' });
   const [result, setResult] = useState(null);
@@ -142,7 +146,14 @@ export default function InvitationDeliveryManager() {
   const dispatch = (reminders) =>
     act(async () => {
       const targets = emailTargets.filter((g) => !reminders || !g.responded);
-      if (!targets.length || !window.confirm(t('confirmEmail', { count: targets.length }))) return;
+      if (!targets.length) return;
+      const confirmed = await feedback.confirm({
+        title: reminders ? t('remind') : t('sendEmail'),
+        message: t('confirmEmail', { count: targets.length }),
+        confirmText: reminders ? t('remind') : t('sendEmail'),
+        cancelText: lang === 'en' ? 'Cancel' : 'បោះបង់',
+      });
+      if (!confirmed) return;
       const payload = {
         guestIds: targets.map((g) => Number(guestId(g))),
         allEligible: false,
@@ -195,7 +206,7 @@ export default function InvitationDeliveryManager() {
           <p>{invitation.title}</p>
         </div>
         <Link className="workspace-button" to={`/app/events/${id}/guests`}>
-          <Users size={18} />
+          <Users size={18} aria-hidden="true" />
           {t('guests')}
         </Link>
       </header>
@@ -283,9 +294,9 @@ export default function InvitationDeliveryManager() {
                 className="workspace-icon-button"
                 style={{ width: '32px', height: '32px', border: 'none' }}
                 onClick={() => setQuery('')}
-                aria-label="Clear search"
+                aria-label={lang === 'en' ? 'Clear search' : 'សម្អាតការស្វែងរក'}
               >
-                <X size={15} />
+                <X size={15} aria-hidden="true" />
               </button>
             )}
           </label>
@@ -441,13 +452,19 @@ export default function InvitationDeliveryManager() {
               disabled={busy || !published}
               onClick={() =>
                 act(async () => {
-                  if (!window.confirm(t('manualConfirm'))) return;
+                  const confirmed = await feedback.confirm({
+                    title: t('manual'),
+                    message: t('manualConfirm'),
+                    confirmText: t('manual'),
+                    cancelText: lang === 'en' ? 'Cancel' : 'បោះបង់',
+                  });
+                  if (!confirmed) return;
                   await deliveryService.markShared(id, selectedGuests[0].guestId ?? selectedGuests[0].id);
                   await load();
                 })
               }
             >
-              <Check size={17} />
+              <Check size={17} aria-hidden="true" />
               {t('manual')}
             </button>
           </div>
@@ -505,19 +522,61 @@ export default function InvitationDeliveryManager() {
         <summary>
           {t('history')} · {events.length}
         </summary>
+        {guests.length > 0 && (
+          <div className="delivery-history-toolbar">
+            {events.length > 0 && (
+              <div className="delivery-history-filters">
+                <select
+                  aria-label={lang === 'en' ? 'Filter history by status' : 'ត្រងប្រវត្តិតាមស្ថានភាព'}
+                  value={historyStatus}
+                  onChange={(e) => setHistoryStatus(e.target.value)}
+                >
+                  <option value="ALL">{lang === 'en' ? 'All statuses' : 'គ្រប់ស្ថានភាព'}</option>
+                  {Array.from(new Set(events.map((e) => e.status).filter(Boolean))).map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <select
+                  aria-label={lang === 'en' ? 'Filter history by channel' : 'ត្រងប្រវត្តិតាមបណ្ដាញ'}
+                  value={historyChannel}
+                  onChange={(e) => setHistoryChannel(e.target.value)}
+                >
+                  <option value="ALL">{lang === 'en' ? 'All channels' : 'គ្រប់បណ្ដាញ'}</option>
+                  {Array.from(new Set(events.map((e) => e.channel).filter(Boolean))).map((ch) => (
+                    <option key={ch} value={ch}>{ch}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <button
+              type="button"
+              className="workspace-button"
+              onClick={() => {
+                if (exportDeliveryReportCsv(guests, invitation.title)) {
+                  toast.success(lang === 'en' ? 'Delivery report exported (CSV)' : 'បាននាំចេញរបាយការណ៍ផ្ញើ (CSV)');
+                }
+              }}
+            >
+              <Download size={16} aria-hidden="true" />
+              <span>{lang === 'en' ? 'Export delivery CSV' : 'នាំចេញរបាយការណ៍ CSV'}</span>
+            </button>
+          </div>
+        )}
         {!events.length ? (
           <p className="workspace-muted">{t('noHistory')}</p>
         ) : (
           <ul>
-            {events.map((e) => (
-              <li key={e.id}>
-                <strong>{e.guestName || invitation.title}</strong>
-                <StatusBadge status={e.status} label={status(e.status)} />
-                <span>{e.channel || '—'}</span>
-                <time>{date(e.createdAt)}</time>
-                {e.errorMessage && <p className="workspace-field-error">{e.errorMessage}</p>}
-              </li>
-            ))}
+            {events
+              .filter((e) => (historyStatus === 'ALL' || e.status === historyStatus) && (historyChannel === 'ALL' || e.channel === historyChannel))
+              .map((e) => (
+                <li key={e.id}>
+                  <strong>{e.guestName || invitation.title}</strong>
+                  <StatusBadge status={e.status} label={status(e.status)} />
+                  <span>{e.channel || '—'}</span>
+                  <time>{date(e.createdAt)}</time>
+                  {e.errorMessage && <p className="workspace-field-error">{e.errorMessage}</p>}
+                </li>
+              ))}
           </ul>
         )}
       </details>
