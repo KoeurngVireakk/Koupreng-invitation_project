@@ -648,28 +648,33 @@ function GoogleSignInButton({ clientId, onSuccess, onError, busy, onBusyChange, 
   useEffect(() => {
     let cancelled = false;
     function init() {
-      if (cancelled || !containerRef.current) return;
-      window.google.accounts.id.initialize({
-        client_id: clientId,
-        callback: async (response) => {
-          if (!response?.credential) { onError("Google did not return a credential."); return; }
-          debugSocialAuth("Google returned an ID token credential");
-          onBusyChange(true);
-          try { await onSuccess(response.credential); }
-          catch (e) { onError(e.message || "Google login failed."); }
-          finally { onBusyChange(false); }
-        },
-        ux_mode: "popup",
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-      containerRef.current.innerHTML = "";
-      window.google.accounts.id.renderButton(containerRef.current, {
-        type: "standard", theme: "outline", size: "large",
-        text: "continue_with", shape: "pill", logo_alignment: "left",
-        width: Math.min(400, Math.max(200, containerRef.current.offsetWidth || 320)),
-      });
-      if (!cancelled) setReady(true);
+      if (cancelled || !containerRef.current || !window.google?.accounts?.id) return;
+      try {
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: async (response) => {
+            if (!response?.credential) { onError("Google did not return a credential."); return; }
+            debugSocialAuth("Google returned an ID token credential");
+            onBusyChange(true);
+            try { await onSuccess(response.credential); }
+            catch (e) { onError(e.message || "Google login failed."); }
+            finally { onBusyChange(false); }
+          },
+          ux_mode: "popup",
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+        containerRef.current.innerHTML = "";
+        window.google.accounts.id.renderButton(containerRef.current, {
+          type: "standard", theme: "outline", size: "large",
+          text: "continue_with", shape: "pill", logo_alignment: "left",
+          width: Math.min(400, Math.max(200, containerRef.current.offsetWidth || 320)),
+        });
+        if (!cancelled) setReady(true);
+      } catch (err) {
+        debugSocialAuth("Google button init failed", err);
+        if (!cancelled) onError("Google sign-in is unavailable on this origin.");
+      }
     }
     loadScript(GOOGLE_GSI_ID, "https://accounts.google.com/gsi/client",
       () => Boolean(window.google?.accounts?.id))

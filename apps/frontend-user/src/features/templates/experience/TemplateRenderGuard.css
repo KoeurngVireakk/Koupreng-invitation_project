@@ -1,0 +1,63 @@
+.kp-template-unavailable.public-state {
+  display: grid;
+  place-items: center;
+  min-height: min(560px, 75dvh);
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--ui-theme-canvas, #fbf6ee);
+  color: var(--ui-theme-ink, #1f2421);
+  font-family: var(--ui-font, 'Kantumruy Pro', sans-serif);
+}
+
+.kp-template-unavailable-card {
+  width: min(460px, 100%);
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: var(--ui-theme-surface, #ffffff);
+  border: 1px solid var(--ui-theme-border, #e6dccb);
+  box-shadow: 0 14px 36px -14px rgba(31, 36, 33, 0.14);
+}
+
+.kp-template-unavailable-card h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--ui-theme-ink, #1f2421);
+}
+
+.kp-template-unavailable-card p {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ui-theme-muted, #59615c);
+}
+
+.kp-template-unavailable-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--ui-theme-action, #2e433a);
+  border-radius: 9999px;
+  background: var(--ui-theme-action, #2e433a);
+  color: var(--ui-theme-on-action, #ffffff);
+  font: 600 14px/1.4 var(--ui-font, 'Kantumruy Pro', sans-serif);
+  cursor: pointer;
+  transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kp-template-unavailable-card button:hover {
+  background: var(--ui-theme-action-hover, #22332c);
+}
+
+.kp-template-unavailable-card button:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-template-unavailable-card button {
+    transition: none;
+  }
+}

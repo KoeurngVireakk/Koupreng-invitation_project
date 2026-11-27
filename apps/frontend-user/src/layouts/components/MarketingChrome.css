@@ -28,6 +28,13 @@
   --kp-emerald: #2e433a;
   --kp-emerald-deep: #22332c;
   --kp-focus: var(--ui-theme-focus, #0f766e);
+  --kp-font: 'DM Sans', 'Kantumruy Pro', system-ui, sans-serif;
+  --kp-display: 'Koupreng Editorial', Georgia, serif;
+}
+
+.kp-marketing-shell:lang(km),
+:root[lang="km"] .kp-marketing-shell {
+  --kp-font: 'Kantumruy Pro', 'DM Sans', system-ui, sans-serif;
 }
 
 .kp-marketing-shell :is(a, button, summary, input, select, textarea):focus-visible {
@@ -78,7 +85,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 20px -6px rgba(38, 38, 34, 0.06);
-  transition: all 0.3s var(--kp-ease);
+  transition: background-color 0.25s var(--kp-ease), border-color 0.25s var(--kp-ease), box-shadow 0.25s var(--kp-ease), padding 0.25s var(--kp-ease);
 }
 
 .kp-header--scrolled { padding-block: 8px; }
@@ -122,7 +129,7 @@
   border: 0; 
   border-radius: var(--kp-radius-pill);
   cursor: pointer; 
-  transition: all 0.2s var(--kp-ease);
+  transition: background-color 0.18s var(--kp-ease), color 0.18s var(--kp-ease);
 }
 .kp-nav-link:hover { 
   color: var(--kp-ink); 
@@ -155,30 +162,61 @@
   box-shadow: 0 6px 18px -4px rgba(46, 67, 58, 0.45);
 }
 
-.kp-language { 
-  display: flex; 
-  align-items: center; 
-  gap: 3px; 
+.kp-nav-cta:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.kp-language {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 3px 5px;
   background: rgba(229, 222, 210, 0.45);
   border-radius: var(--kp-radius-pill);
 }
-.kp-language button { 
-  min-width: 40px; 
-  min-height: 36px; 
-  padding: 4px 10px; 
+.kp-language-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.kp-language-sep {
+  color: var(--kp-muted);
+  font-size: 12px;
+  user-select: none;
+}
+.kp-language button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 12px;
   color: var(--kp-muted); 
   border: 0; 
   background: transparent; 
   border-radius: var(--kp-radius-pill);
   font: 600 13px/1.4 var(--kp-font); 
   cursor: pointer; 
-  transition: all 0.2s var(--kp-ease);
+  transition: color 0.18s var(--kp-ease), transform 0.12s var(--kp-ease);
+}
+.kp-language button:active {
+  transform: scale(0.96);
+}
+.kp-language-pill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--kp-radius-pill);
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.kp-language-label {
+  position: relative;
+  z-index: 1;
 }
 .kp-language button[aria-pressed="true"] { 
   color: var(--kp-ink); 
-  background: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
 }
 
 .kp-menu-trigger, .kp-menu-close { 
@@ -191,7 +229,10 @@
   color: var(--kp-ink); 
   background: var(--kp-bg); 
   cursor: pointer; 
-  transition: all 0.2s var(--kp-ease);
+  transition: background-color 0.18s var(--kp-ease), border-color 0.18s var(--kp-ease), transform 0.15s var(--kp-ease);
+}
+.kp-menu-trigger:active, .kp-menu-close:active {
+  transform: scale(0.95);
 }
 .kp-menu-trigger:hover, .kp-menu-close:hover {
   background: var(--kp-surface);
@@ -367,30 +408,59 @@
 }
 .kp-marketing-shell .kp-text-link svg { flex: none; }
 
-.kp-public-support { 
-  position: fixed; 
-  z-index: 1100; 
-  right: max(20px, env(safe-area-inset-right)); 
-  bottom: max(20px, env(safe-area-inset-bottom)); 
+.kp-public-support {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   font: 400 15px/1.75 'Kantumruy Pro', sans-serif;
-  color: #262622; 
+  color: var(--kp-ink, #262622);
+}
+.kp-public-support.is-open {
+  position: fixed;
+  z-index: 1100;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  max-width: none;
+  padding: 0;
+}
+@media (min-width: 1520px) {
+  .kp-public-support {
+    position: fixed;
+    z-index: 1100;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    max-width: none;
+    padding: 0;
+  }
 }
 .kp-public-support:lang(en) { font-family: var(--ui-font); }
 .kp-public-support .kp-support-toggle { 
-  display: grid; 
-  place-items: center; 
-  width: 52px; 
-  height: 52px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 16px;
   border: 1px solid #2E433A; 
   border-radius: var(--kp-radius-pill); 
   background: #2E433A; 
   color: #FFFFFF; 
+  font: 600 14px/1.4 var(--kp-font, 'Kantumruy Pro', sans-serif);
   cursor: pointer; 
-  box-shadow: 0 6px 24px -6px rgba(38, 38, 34, 0.35); 
-  transition: all 0.25s var(--kp-ease);
+  box-shadow: 0 6px 24px -6px rgba(38, 38, 34, 0.28);
+  transition: background-color 0.2s var(--kp-ease), transform 0.2s var(--kp-ease);
 }
 .kp-public-support .kp-support-toggle:hover {
-  transform: scale(1.05);
+  transform: translateY(-1px);
+  background: #22332C;
+}
+.kp-public-support .kp-support-toggle:active {
+  transform: scale(0.98);
 }
 
 .kp-support-panel { 
@@ -409,8 +479,8 @@
 .kp-support-panel > div > button { 
   display: grid; 
   place-items: center; 
-  min-width: 40px; 
-  min-height: 40px; 
+  min-width: 44px;
+  min-height: 44px;
   border: 0; 
   background: #F2ECE2; 
   color: #262622; 
@@ -539,6 +609,9 @@
 
 :root[data-color-mode="dark"] .kp-language button[aria-pressed="true"] {
   color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .kp-language-pill {
   background: var(--ui-theme-raised);
 }
 

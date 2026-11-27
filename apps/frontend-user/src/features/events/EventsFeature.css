@@ -643,12 +643,56 @@
 
 :root[data-color-mode=dark] .event-card-countdown-tag {
     background: rgba(176, 146, 106, 0.18);
-    color: #f1dfb8;
+    color: var(--ui-theme-gold-bright, #edd18a);
 }
 
-:root[data-color-mode=dark] .event-card-countdown-tag.is-past {
+:root[data-color-mode="dark"] .event-card-template-tag {
+    background: var(--ui-theme-subtle, #1c1c1c);
+    color: var(--ui-theme-ink, #fafafa);
+    border: 1px solid var(--ui-theme-border, #303030);
+}
+
+:root[data-color-mode="dark"] .event-card-countdown-tag.is-past {
+    background: var(--ui-theme-subtle, #1c1c1c);
+    color: var(--ui-theme-muted, #a3a3a3);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--published {
+    background: rgba(15, 44, 28, 0.9);
+    color: #86efac;
+    border: 1px solid rgba(134, 239, 172, 0.35);
+    backdrop-filter: blur(6px);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--draft {
+    background: rgba(66, 30, 6, 0.9);
+    color: #fcd34d;
+    border: 1px solid rgba(252, 211, 77, 0.35);
+    backdrop-filter: blur(6px);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--unpublished {
     background: rgba(255, 255, 255, 0.08);
-    color: #9ca3af;
+    color: var(--ui-theme-muted, #a3a3a3);
+    border: 1px solid var(--ui-theme-border, #303030);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--local {
+    background: rgba(3, 105, 161, 0.25);
+    color: #7dd3fc;
+    border: 1px solid rgba(125, 211, 252, 0.28);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--sync-failed {
+    background: rgba(185, 28, 28, 0.28);
+    color: #fca5a5;
+    border: 1px solid rgba(252, 165, 165, 0.28);
+}
+
+:root[data-color-mode="dark"] .event-card-badge--shared {
+    background: rgba(126, 34, 206, 0.26);
+    color: #d8b4fe;
+    border: 1px solid rgba(216, 180, 254, 0.28);
 }
 
 .event-card-title {

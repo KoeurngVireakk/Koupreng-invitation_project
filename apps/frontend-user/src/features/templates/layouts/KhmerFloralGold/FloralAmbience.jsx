@@ -4,12 +4,12 @@ const petals = [[5,17.2,2], [13,16.8,9], [22,17.2,14], [30,18,5], [39,17.2,11], 
 const flights = [8,24,46,67,84,17,37,59,76,12,51,91,29,63,81];
 
 export function FloralSceneBackdrop({ enabled }) {
-  return enabled ? <div className="kfg-scene-backdrop" aria-hidden="true" inert><img src={`${root}/white-blossom-paper.jpg`} width="1600" height="1067" alt="" decoding="async" draggable={false} /></div> : null;
+  return enabled ? <div className="kfg-scene-backdrop" aria-hidden="true" inert><img src={`${root}/white-blossom-paper.jpg`} width="1600" height="1067" alt="" loading="lazy" decoding="async" draggable={false} /></div> : null;
 }
 
 export function FloralSceneCorners({ enabled }) {
   return <div className="kfg-scene-blossoms" data-effect="blossom-wind" aria-hidden="true" inert hidden={!enabled}>
-    {enabled && ['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(corner => <div key={corner} className={`kfg-blossom-corner kfg-blossom-corner--${corner}`}><img src={`${root}/blossom-branch.webp`} width="1536" height="1024" alt="" decoding="async" draggable={false} /></div>)}
+    {enabled && ['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(corner => <div key={corner} className={`kfg-blossom-corner kfg-blossom-corner--${corner}`}><img src={`${root}/blossom-branch.webp`} width="1536" height="1024" alt="" loading="lazy" decoding="async" draggable={false} /></div>)}
   </div>;
 }
 

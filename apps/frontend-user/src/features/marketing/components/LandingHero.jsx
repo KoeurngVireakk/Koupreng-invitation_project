@@ -47,7 +47,7 @@ export default function LandingHero({ copy }) {
           </div>
           <div className="kp-hero-highlight-item" role="listitem">
             <span className="kp-hero-highlight-dot" aria-hidden="true" />
-            <span>{copy("មើលគំរូសំបុត្រអញ្ជើញ", "Explore invitation designs")}</span>
+            <span>{copy("គាំទ្រភាសាខ្មែរ និងអង់គ្លេស", "Bilingual Khmer & English designs")}</span>
           </div>
         </div>
       </FadeContent>

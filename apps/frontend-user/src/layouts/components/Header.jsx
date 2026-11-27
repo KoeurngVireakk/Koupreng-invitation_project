@@ -1,11 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useLanguageStore } from "../../stores/useLanguageStore";
 import "./MarketingChrome.css";
 import DisplayPreferences from '@/shared/preferences/DisplayPreferences';
 import BrandLogo from '@/shared/branding/BrandLogo';
+
+function LanguageSwitch({ lang, setLang, copy, scope }) {
+  return (
+    <div className="kp-language" role="group" aria-label={copy("ជ្រើសរើសភាសា", "Choose language")}>
+      {[["km", "ខ្មែរ"], ["en", "EN"]].map(([code, label], index) => {
+        const active = lang === code;
+        return (
+          <span key={code} className="kp-language-slot">
+            {index > 0 && <span className="kp-language-sep" aria-hidden="true">/</span>}
+            <button type="button" lang={code} aria-pressed={active} onClick={() => setLang(code)}>
+              {active && (
+                <motion.span
+                  layoutId={`kp-lang-pill-${scope}`}
+                  className="kp-language-pill"
+                  aria-hidden="true"
+                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                />
+              )}
+              <span className="kp-language-label">{label}</span>
+            </button>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -54,13 +81,8 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const languageControl = (
-    <div className="kp-language" role="group" aria-label={copy("ជ្រើសរើសភាសា", "Choose language")}>
-      <button type="button" lang="km" aria-pressed={lang === "km"} onClick={() => setLang("km")}>ខ្មែរ</button>
-      <span aria-hidden="true">/</span>
-      <button type="button" lang="en" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
-    </div>
-  );
+  const desktopLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} scope="desktop" />;
+  const mobileLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} scope="mobile" />;
   const account = isAuthenticated ? (
     <><button type="button" className="kp-nav-link" onClick={() => { closeMenu(); logout(); navigate("/"); }}>{copy("ចាកចេញ", "Log out")}</button><Link to="/dashboard" className="kp-nav-cta" onClick={closeMenu}>{copy("ផ្ទាំងគ្រប់គ្រង", "Dashboard")}<ArrowUpRight size={16} aria-hidden="true" /></Link></>
   ) : (
@@ -77,7 +99,7 @@ export default function Header() {
           <nav className="kp-desktop-nav" aria-label={copy("ម៉ឺនុយចម្បង", "Main navigation")}>
             {items.map(([path, label]) => <Link key={path} to={path} className="kp-nav-link" aria-current={active(path) ? "page" : undefined}>{label}</Link>)}
           </nav>
-          <div className="kp-desktop-actions">{languageControl}<DisplayPreferences language={false}/>{account}</div>
+          <div className="kp-desktop-actions">{desktopLanguageControl}<DisplayPreferences language={false}/>{account}</div>
           <div className="kp-mobile-preferences"><DisplayPreferences compact /></div>
           <button className="kp-menu-trigger" type="button" aria-label={copy("បើកម៉ឺនុយ", "Open navigation menu")} aria-expanded={menuOpen} aria-controls="public-mobile-navigation" onClick={event => { event.currentTarget.focus(); dialog.current.showModal(); setMenuOpen(true); }}><Menu size={22} aria-hidden="true" /></button>
         </div>
@@ -87,7 +109,7 @@ export default function Header() {
         <div className="kp-mobile-inner">
           <div className="kp-mobile-head"><h2 id="kp-menu-title" aria-label={copy("ម៉ឺនុយ", "Navigation")}><BrandLogo variant="compact" decorative /></h2><button type="button" className="kp-menu-close" aria-label={copy("បិទម៉ឺនុយ", "Close navigation menu")} onClick={closeMenu} autoFocus><X aria-hidden="true" /></button></div>
           <nav aria-label={copy("ម៉ឺនុយទូរស័ព្ទ", "Mobile navigation")}>{items.map(([path, label]) => <Link key={path} to={path} aria-current={active(path) ? "page" : undefined} onClick={closeMenu}>{label}<ArrowUpRight size={20} aria-hidden="true" /></Link>)}</nav>
-          {languageControl}<div className="kp-mobile-account">{account}</div>
+          {mobileLanguageControl}<div className="kp-mobile-account">{account}</div>
         </div>
       </dialog>
     </>

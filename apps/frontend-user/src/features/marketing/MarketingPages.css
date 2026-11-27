@@ -2,11 +2,11 @@
 .kp-product-page { color: var(--kp-ink); background: var(--kp-bg); font: 400 16px/1.75 var(--kp-font); padding: 128px max(24px, env(safe-area-inset-left)) 72px; }
 .kp-product-page :is(h1,h2,h3,p,dl) { margin: 0; }
 .kp-product-page :is(h1,h2,h3,p,dt,dd,label,a,button) { overflow-wrap: break-word; min-width: 0; }
-.kp-product-page h1 { font-size: clamp(34px, 3.6vw, 50px); font-weight: 650; line-height: 1.6; white-space: pre-line; letter-spacing: normal; }
-.kp-product-page h2 { font-size: clamp(23px, 2.2vw, 30px); line-height: 1.6; font-weight: 600; white-space: pre-line; }
+.kp-product-page h1 { font-family: 'Kantumruy Pro', var(--kp-font); font-size: clamp(34px, 3.6vw, 50px); font-weight: 650; line-height: 1.5; white-space: pre-line; letter-spacing: normal; }
+.kp-product-page h2 { font-family: 'Kantumruy Pro', var(--kp-font); font-size: clamp(23px, 2.2vw, 30px); line-height: 1.55; font-weight: 600; white-space: pre-line; }
 .kp-product-page h3 { font-size: 18px; line-height: 1.7; font-weight: 600; }
-.kp-product-page:lang(en) h1 { line-height: 1.17; letter-spacing: -.025em; font-size: clamp(36px, 4vw, 56px); }
-.kp-product-page:lang(en) h2 { line-height: 1.3; letter-spacing: -.015em; }
+.kp-product-page:lang(en) h1 { font-family: var(--kp-display, 'Koupreng Editorial', Georgia, serif); line-height: 1.15; letter-spacing: -.02em; font-size: clamp(36px, 4.2vw, 58px); }
+.kp-product-page:lang(en) h2 { font-family: var(--kp-display, 'Koupreng Editorial', Georgia, serif); line-height: 1.25; letter-spacing: -.015em; }
 .kp-page-label { color: var(--ui-theme-link, #76572d); font-size: 14px; font-weight: 550; margin-bottom: 14px !important; }
 .kp-contact-page .kp-page-label { color: var(--ui-theme-muted); }
 .kp-contact-page .kp-field-error { color: var(--ui-theme-danger); }
@@ -32,7 +32,7 @@
 .kp-plan-card { display: flex; flex-direction: column; min-width: 0; padding: 32px; background: var(--kp-surface); border: 1px solid var(--kp-border); border-radius: 24px; box-shadow: 0 8px 24px -6px rgba(46, 67, 58, 0.06); transition: border-color .25s, transform .4s var(--kp-ease), box-shadow .25s; }
 .kp-plan-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -8px rgba(46, 67, 58, 0.14); }
 .kp-plan-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
-.kp-plan-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: var(--kp-radius-pill, 9999px); background: linear-gradient(135deg, rgba(195, 162, 107, 0.2), rgba(184, 134, 11, 0.25)); color: var(--kp-gold-text, #8b6914); border: 1px solid rgba(195, 162, 107, 0.4); font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.kp-plan-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: var(--kp-radius-pill, 9999px); background: #EFE8D9; color: #664B0F; border: 1px solid rgba(102, 75, 15, 0.3); font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 :root[data-color-mode="dark"] .kp-plan-badge { background: rgba(195, 162, 107, 0.25); color: #dfc499; border-color: rgba(195, 162, 107, 0.45); }
 .kp-plan-card h2 { font-size: 23px; }
 .kp-plan-price { font: 650 clamp(32px, 3vw, 44px)/1.4 var(--kp-font); font-variant-numeric: tabular-nums; padding-top: 18px; }

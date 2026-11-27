@@ -1,10 +1,13 @@
 import { Component, useState } from "react";
+import "./TemplateRenderGuard.css";
 
 export function TemplateUnavailable() {
-  return <div className="public-state" role="alert">
-    <h2>មិនអាចបើកគំរូបាន / Template unavailable</h2>
-    <p>The assigned design could not be loaded. Reload to retry, or contact support. Your saved invitation has not changed.</p>
-    <button type="button" onClick={() => window.location.reload()}>ព្យាយាមម្ដងទៀត / Reload template</button>
+  return <div className="public-state kp-template-unavailable" role="alert">
+    <div className="kp-template-unavailable-card">
+      <h2>មិនអាចបើកគំរូបាន / Template unavailable</h2>
+      <p>The assigned design could not be loaded. Reload to retry, or contact support. Your saved invitation has not changed.</p>
+      <button type="button" onClick={() => window.location.reload()}>ព្យាយាមម្ដងទៀត / Reload template</button>
+    </div>
   </div>;
 }
 

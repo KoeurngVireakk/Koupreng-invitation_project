@@ -103,7 +103,7 @@ export default function WaxSealEnvelope({
       {/* Instruction Prompt & Pulsing Button */}
       {!isFlapOpen && (
         <div className="flex flex-col items-center gap-3 animate-fade-in text-center px-4 tdy-font-kantumruy relative z-10">
-          <p className="text-xs text-amber-300/90 font-medium">
+          <p className="text-xs text-amber-100 font-medium bg-stone-950/75 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-amber-300/25">
             សូមចុចលើត្រាទៀនក្រមួន ដើម្បីបើកសំបុត្រ
           </p>
           <button
@@ -123,8 +123,7 @@ export default function WaxSealEnvelope({
       <button
         type="button"
         onClick={onSkip || onOpenEnvelope}
-        className="fixed top-20 right-4 z-50 text-xs text-amber-200 bg-stone-950/90 rounded-full underline px-4 py-2 min-h-[44px] cursor-pointer"
-        aria-label="រំលង (Skip)"
+        className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 text-xs text-amber-100 bg-stone-950/90 border border-amber-400/30 rounded-full underline px-4 py-2 min-h-[44px] cursor-pointer"
       >រំលង (Skip)</button>
     </div>
   );

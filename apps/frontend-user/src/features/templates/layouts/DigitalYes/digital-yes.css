@@ -152,7 +152,7 @@ body:has(.tdy-page-root),
 
 .tdy-flap-top.is-open {
   transform: rotateX(180deg);
-  z-index: 2;
+  z-index: 1;
 }
 
 .tdy-flap-face {
@@ -211,7 +211,7 @@ body:has(.tdy-page-root),
   height: 0;
   border-bottom: 450px solid #f2e2d0;
   border-right: 320px solid transparent;
-  opacity: 0.95;
+  opacity: 1;
 }
 
 .tdy-pocket-right {
@@ -222,7 +222,7 @@ body:has(.tdy-page-root),
   height: 0;
   border-bottom: 450px solid #eed9c2;
   border-left: 320px solid transparent;
-  opacity: 0.95;
+  opacity: 1;
 }
 
 .tdy-pocket-bottom {
@@ -321,15 +321,18 @@ body:has(.tdy-page-root),
   bottom: 15px;
   border-radius: 12px;
   background: #fffdf9;
-  z-index: 4;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
   overflow: hidden;
 }
 
 .tdy-card-preview.is-emerging {
   transform: translateY(-50%);
   z-index: 8;
+  opacity: 1;
   box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.25);
 }
 
