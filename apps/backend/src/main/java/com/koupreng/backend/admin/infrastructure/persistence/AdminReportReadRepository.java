@@ -24,14 +24,26 @@ public class AdminReportReadRepository {
             if (filter.dimension().equals("activePeriod")) {
                 clauses.add("r.startDate < :toUtc AND (r.endDate IS NULL OR r.endDate > :fromUtc)");
             } else if (filter.dimension().equals("eventDate")) clauses.add("r.eventDate >= :fromDate AND r.eventDate < :toDate");
-            else clauses.add(filter.period("r." + filter.dimension()));
+            else clauses.add(filter.period("r." + dateColumn(filter.dimension())));
         }
         filter.filters().forEach((key, value) -> {
             if (key.equals("search")) {
                 var search = AdminReportCatalog.definition(definition.code()).columns().stream().filter(c -> c.type().equals("TEXT"))
                     .map(c -> "LOWER(COALESCE(r." + c.key() + ",'')) LIKE :keyword ESCAPE '!' ").collect(Collectors.joining(" OR "));
                 clauses.add("(" + search + ")");
-            } else clauses.add("r." + (key.equals("paymentType") ? "productType" : key) + " = :" + key);
+            } else {
+                clauses.add(switch (key) {
+                    case "eventType" -> "r.eventType = :eventType";
+                    case "status" -> "r.status = :status";
+                    case "moderationStatus" -> "r.moderationStatus = :moderationStatus";
+                    case "paymentType" -> "r.productType = :paymentType";
+                    case "paymentStatus" -> "r.paymentStatus = :paymentStatus";
+                    case "provider" -> "r.provider = :provider";
+                    case "currency" -> "r.currency = :currency";
+                    case "packageId" -> "r.packageId = :packageId";
+                    default -> throw new IllegalArgumentException("Unsupported report filter");
+                });
+            }
         });
         return String.join(" AND ", clauses);
     }
@@ -44,8 +56,14 @@ public class AdminReportReadRepository {
     public List<Map<String, Object>> rows(Definition definition, AdminReportFilter filter, long offset, int size) {
         var params = new HashMap<>(filter.parameters()); params.put("limit", size); params.put("offset", offset);
         String columns = definition.columns().stream().map(c -> "r." + c.key()).collect(Collectors.joining(","));
-        String order = " ORDER BY r." + filter.sort() + " " + filter.direction();
-        if (!filter.sort().equals("id")) order += ",r.id " + filter.direction();
+        String sortColumn = AdminReportCatalog.definition(definition.code()).columns().stream()
+                .filter(column -> column.key().equals(filter.sort()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported report sort column"))
+                .key();
+        String direction = "ASC".equals(filter.direction()) ? " ASC" : " DESC";
+        String order = " ORDER BY r." + sortColumn + direction;
+        if (!sortColumn.equals("id")) order += ",r.id" + direction;
         return jdbc.query("SELECT " + columns + source(definition, filter) + order + " LIMIT :limit OFFSET :offset", params,
             (rs, rowNumber) -> {
                 var row = new LinkedHashMap<String, Object>();
@@ -128,14 +146,26 @@ public class AdminReportReadRepository {
             return row;
         };
     }
-    public List<Map<String, Object>> monthly(Definition definition, AdminReportFilter filter, String dateColumn, String amount) {
+    private String dateColumn(String dimension) {
+        return switch (dimension) {
+            case "createdAt" -> "createdAt";
+            case "publishedAt" -> "publishedAt";
+            case "paidAt" -> "paidAt";
+            case "confirmedAt" -> "confirmedAt";
+            case "activityAt" -> "activityAt";
+            default -> throw new IllegalArgumentException("Unsupported report date column");
+        };
+    }
+
+    public List<Map<String, Object>> monthly(Definition definition, AdminReportFilter filter, String dimension, boolean sumReceipts) {
         // DATETIME columns are UTC. Add 7 hours before extracting calendar months;
         // Phnom Penh has no DST. H2 MySQL mode and MySQL 8 share DATEADD via TIMESTAMPADD.
+        String dateColumn = dateColumn(dimension);
         String month = "CONCAT(YEAR(TIMESTAMPADD(HOUR,7,r." + dateColumn + ")), '-', LPAD(MONTH(TIMESTAMPADD(HOUR,7,r." + dateColumn + ")),2,'0'))";
-        String extra = amount == null ? "" : ",r.currency currency,SUM(r." + amount + ") amount";
+        String extra = sumReceipts ? ",r.currency currency,SUM(r.confirmedReceipt) amount" : "";
         return aggregates("SELECT " + month + " period,COUNT(*) count" + extra + source(definition, filter)
-            + (amount == null ? "" : " AND r.reconciliationOutcome='MATCHED'")
-            + " GROUP BY " + month + (amount == null ? "" : ",r.currency") + " ORDER BY period", filter);
+            + (sumReceipts ? " AND r.reconciliationOutcome='MATCHED'" : "")
+            + " GROUP BY " + month + (sumReceipts ? ",r.currency" : "") + " ORDER BY period", filter);
     }
     public Map<String, Object> executive(AdminReportFilter filter) {
         var params = filter.parameters();

@@ -87,7 +87,7 @@ test('E2E-07 venue uses the saved Google Maps CTA', async ({ page }) => {
   await save(page); expect(events.get(101).googleMapUrl).toContain('maps.google.com');
   expect(await mapInput.count()).toBeGreaterThan(0);
   await page.goto('/i/review-celestial'); await page.locator('.rg-open').click(); await page.locator('.rg-intro-controls button').last().click();
-  await expect(page.locator('#rg-venue .rg-button')).toHaveAttribute('href', /maps.google.com/);
+  await expect(page.locator('#rg-venue .rg-button')).toHaveAttribute('href', /^https:\/\/maps\.google\.com(?:\/|$)/);
 });
 test('E2E-08 reordered gallery images reach the public carousel', async ({ page }) => {
   const { events } = await setup(page); await studio(page); await chooseStudioSection(page, 'mediaOpening', 'Gallery');

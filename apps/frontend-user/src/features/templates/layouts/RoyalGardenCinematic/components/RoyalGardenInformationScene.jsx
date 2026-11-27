@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useEffect, useRef } from 'react';
 import { ROYAL_ASSETS } from '../model/royalGardenPresentation';
 import RoyalGardenMotionLayer from './RoyalGardenMotionLayer';
@@ -21,7 +22,7 @@ export default function RoyalGardenInformationScene({ presentation, reduced, act
   }, [active, info.enabled, info.reveal, reduced]);
   return <div ref={root} inert={gated || undefined} className="rg-paper" data-royal={info.enabled} data-fixed={info.fixed} data-view={active ? 'information' : 'video'} data-reveal={info.reveal} data-spacing={info.spacing} style={{ '--rg-information-overlay': info.overlay, '--rg-panel-opacity': info.panelOpacity }}>
     {info.enabled && <>
-      {info.background && !heritage && info.background !== ROYAL_ASSETS.information && <img className="rg-information-custom-background" src={info.background} alt="" style={{ objectPosition: info.position }} />}
+      {info.background && !heritage && info.background !== ROYAL_ASSETS.information && <img className="rg-information-custom-background" src={safeIntroMedia(info.background) || undefined} alt="" style={{ objectPosition: info.position }} />}
       <RoyalGardenArtworkFrame source={info.background ? (heritage ? ROYAL_ASSETS.heritageFrame : ROYAL_ASSETS.information) : ''} smallSource={heritage ? ROYAL_ASSETS.heritageFrameSmall : ROYAL_ASSETS.informationSmall} variant="information" className="rg-information-background" fill={info.background === ROYAL_ASSETS.information} />
       {active && <RoyalGardenMotionLayer settings={presentation.motion} reduced={reduced} />}
     </>}

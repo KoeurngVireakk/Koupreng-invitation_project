@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useState } from 'react';
 import { ROYAL_ASSETS, ROYAL_CANVAS_SIZES } from '../model/royalGardenPresentation';
 
@@ -7,6 +8,6 @@ export default function RoyalGardenArtworkFrame({ source, smallSource, tinySourc
   const [loaded, setLoaded] = useState(null), [failed, setFailed] = useState('');
   if (!source || failed === source) return null;
   return <div className={`rg-artwork-frame rg-artwork-frame--${variant} ${className}`} data-heritage={source === ROYAL_ASSETS.heritageFrame} data-supplied={source === ROYAL_ASSETS.arch || source === ROYAL_ASSETS.information} data-fill={fill} style={{ ...style, '--asset-royal-frame': loaded?.source === source ? `url(${JSON.stringify(loaded.url)})` : 'none' }} aria-hidden="true">
-    <img className="rg-frame-source" src={source} srcSet={smallSource ? `${tinySource ? `${tinySource} 480w, ` : ''}${smallSource} 640w, ${source} 1200w` : undefined} sizes={ROYAL_CANVAS_SIZES} alt="" width="1200" height="2133" decoding="async" fetchPriority="auto" onLoad={event => { setLoaded({ source, url: event.currentTarget.currentSrc || source }); onReady?.(); }} onError={() => { setFailed(source); onReady?.(); }} />
+    <img className="rg-frame-source" src={safeIntroMedia(source) || undefined} srcSet={smallSource ? `${tinySource ? `${tinySource} 480w, ` : ''}${smallSource} 640w, ${source} 1200w` : undefined} sizes={ROYAL_CANVAS_SIZES} alt="" width="1200" height="2133" decoding="async" fetchPriority="auto" onLoad={event => { setLoaded({ source, url: event.currentTarget.currentSrc || source }); onReady?.(); }} onError={() => { setFailed(source); onReady?.(); }} />
   </div>;
 }

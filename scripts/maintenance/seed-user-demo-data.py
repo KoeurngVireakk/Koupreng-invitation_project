@@ -450,15 +450,17 @@ def main():
     runner = MysqlRunner(executable, values["DB_USERNAME"], values.get("DB_PASSWORD", ""), host, port, database)
 
     # 2. Look up target user dynamically by phone
-    print(f"[*] Looking up user with phone '{args.phone}' in database '{database}'...")
-    user_lookup_sql = f"SELECT user_id, full_name, phone, role, status FROM users WHERE phone = '{args.phone}' AND deleted = 0 LIMIT 1;"
+    if not re.fullmatch(r"\+?[0-9]{1,20}", args.phone):
+        parser.error("--phone must contain digits and an optional leading plus sign")
+
+    print("[*] Looking up target user...")
+    user_lookup_sql = f"SELECT user_id FROM users WHERE phone = '{args.phone}' AND deleted = 0 LIMIT 1;"
     user_row = runner.query(user_lookup_sql)
     if not user_row:
-        raise ValueError(f"Target user with phone '{args.phone}' was not found in database '{database}'.")
+        raise ValueError("Target user was not found.")
 
-    user_id_str, full_name, phone, role, status = user_row.split("\t")
-    target_user_id = int(user_id_str)
-    print(f"[+] Found target user: ID={target_user_id}, Name='{full_name}', Phone='{phone}', Role={role}, Status={status}")
+    target_user_id = int(user_row)
+    print("[+] Found target user.")
 
     # 3. Build idempotent seed SQL
     sql, expected_counts = build_seed_sql(target_user_id)
@@ -477,15 +479,6 @@ def main():
 
     summary = {
         "status": "DRY_RUN" if args.dry_run else "SUCCESS",
-        "targetAccount": {
-            "userId": target_user_id,
-            "fullName": full_name,
-            "phone": phone,
-            "role": role,
-            "status": status,
-        },
-        "database": database,
-        "host": host,
         "totalRecords": total_records,
         "breakdown": expected_counts,
         "events": [
@@ -530,7 +523,7 @@ def main():
         return
 
     # 4. Execute SQL
-    print(f"[*] Executing seed transaction for user ID {target_user_id}...")
+    print("[*] Executing seed transaction...")
     runner.query(sql)
     print("[+] Seed transaction committed successfully.")
 

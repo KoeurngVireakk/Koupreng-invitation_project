@@ -1,15 +1,17 @@
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import { useEffect, useState } from "react";
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { IoImageOutline } from "react-icons/io5";
 
 export default function TemplateImage({ src, alt, className, loading = "lazy", ...props }) {
-    const [failed, setFailed] = useState(!src);
+    const source = safeIntroMedia(src);
+    const [failed, setFailed] = useState(!source);
 
     useEffect(() => {
-        setFailed(!src);
-    }, [src]);
+        setFailed(!source);
+    }, [source]);
 
-    if (failed) {
+    if (!source || failed) {
         return (
             <span className={`tx-image-fallback${className ? ` ${className}` : ""}`} role="img" aria-label={alt}>
                 <IoImageOutline aria-hidden="true" />
@@ -20,12 +22,12 @@ export default function TemplateImage({ src, alt, className, loading = "lazy", .
 
     return (
         <img
-            src={src}
             alt={alt}
             className={className}
             loading={loading}
             onError={() => setFailed(true)}
             {...props}
+            src={source}
         />
     );
 }

@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import InvitationLightbox from '../../shared/Gallery/InvitationLightbox';
 import IllustratedMap from '@/features/templates/shared/IllustratedMap';
@@ -246,7 +247,7 @@ export default function DigitalYesLayout({
       <FallingPetals />
 
       {/* Audio Element */}
-      <audio ref={audioRef} src={tpl.music || defaultMusicUrl} loop preload="auto" />
+      <audio ref={audioRef} src={safeIntroMedia(tpl.music || defaultMusicUrl) || undefined} loop preload="auto" />
 
       {/* Floating Header Toolbar */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 flex items-center justify-between pointer-events-auto w-full max-w-2xl px-4 sm:px-6">
@@ -433,7 +434,7 @@ export default function DigitalYesLayout({
               <div className="pt-2 pb-2 max-w-xs sm:max-w-sm mx-auto w-full">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-amber-400/40 shadow-2xl">
                   <img
-                    src={tpl.couplePhoto || tpl.coverImage}
+                    src={safeIntroMedia(tpl.couplePhoto || tpl.coverImage) || undefined}
                     alt={`${tpl.groom} & ${tpl.bride}`}
                     className="w-full h-full object-cover"
                     style={{
@@ -518,7 +519,7 @@ export default function DigitalYesLayout({
                         <span>គំនូសប្លង់ទីតាំង / Sketch Map</span>
                       </p>
                       <img
-                        src={tpl.sketchMapImage}
+                        src={safeIntroMedia(tpl.sketchMapImage) || undefined}
                         alt="Sketch Map"
                         className="max-h-56 w-auto mx-auto rounded-xl border border-amber-500/30 object-contain shadow-md"
                       />
@@ -574,7 +575,7 @@ export default function DigitalYesLayout({
                         className="relative aspect-square rounded-2xl overflow-hidden border border-amber-400/25 shadow-md group cursor-pointer"
                       >
                         <img
-                          src={img.src}
+                          src={safeIntroMedia(img.src) || undefined}
                           alt={img.alt || `Moment ${i + 1}`}
                           className="w-full h-full object-cover transition duration-300 group-hover:scale-108"
                         />
@@ -692,7 +693,7 @@ export default function DigitalYesLayout({
             <div className="w-52 h-52 mx-auto bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center border border-amber-400/30">
               {tpl.bankAccount?.qrUrl ? (
                 <img
-                  src={tpl.bankAccount.qrUrl}
+                  src={safeIntroMedia(tpl.bankAccount.qrUrl) || undefined}
                   alt="KHQR"
                   className="w-full h-full object-contain"
                 />

@@ -62,26 +62,26 @@ public class TemplatePaymentService {
     private static final String STATIC_ABA_PAYMENT_LINK = "https://pay.ababank.com/oRF8/vx2dp884";
     private static final List<TelegramAmountPattern> TELEGRAM_AMOUNT_PATTERNS = List.of(
             new TelegramAmountPattern(
-                    Pattern.compile("\\b(USD|KHR)\\s*([0-9]+(?:\\.[0-9]{1,2})?)\\b", Pattern.CASE_INSENSITIVE),
+                    Pattern.compile("\\b(USD|KHR)\\s*+([0-9]{1,18}(?:\\.[0-9]{1,2})?)(?!\\.[0-9])\\b", Pattern.CASE_INSENSITIVE),
                     2,
                     1,
                     null
             ),
             new TelegramAmountPattern(
-                    Pattern.compile("\\b([0-9]+(?:\\.[0-9]{1,2})?)\\s*(USD|KHR)\\b", Pattern.CASE_INSENSITIVE),
+                    Pattern.compile("(?<![\\w.])([0-9]{1,18}(?:\\.[0-9]{1,2})?)\\s*+(USD|KHR)(?!\\.[0-9])\\b", Pattern.CASE_INSENSITIVE),
                     1,
                     2,
                     null
             ),
             new TelegramAmountPattern(
-                    Pattern.compile("\\$\\s*([0-9]+(?:\\.[0-9]{1,2})?)\\b"),
+                    Pattern.compile("\\$\\s*+([0-9]{1,18}(?:\\.[0-9]{1,2})?)(?!\\.[0-9])\\b"),
                     1,
                     0,
                     "USD"
             ),
             new TelegramAmountPattern(
                     Pattern.compile(
-                            "\\b(?:Amount|Paid|Total|Received)\\s*[:=]?\\s*(USD|KHR|US\\$|\\$)\\s*([0-9]+(?:\\.[0-9]{1,2})?)\\b",
+                            "\\b(?:Amount|Paid|Total|Received)(?:\\s*+[:=])?\\s*+(USD|KHR|US\\$|\\$)\\s*+([0-9]{1,18}(?:\\.[0-9]{1,2})?)(?!\\.[0-9])\\b",
                             Pattern.CASE_INSENSITIVE
                     ),
                     2,
@@ -90,7 +90,7 @@ public class TemplatePaymentService {
             ),
             new TelegramAmountPattern(
                     Pattern.compile(
-                            "\\b(?:Amount|Paid|Total|Received)\\s*[:=]?\\s*([0-9]+(?:\\.[0-9]{1,2})?)\\s*(USD|KHR)\\b",
+                            "\\b(?:Amount|Paid|Total|Received)(?:\\s*+[:=])?\\s*+([0-9]{1,18}(?:\\.[0-9]{1,2})?)\\s*+(USD|KHR)(?!\\.[0-9])\\b",
                             Pattern.CASE_INSENSITIVE
                     ),
                     1,

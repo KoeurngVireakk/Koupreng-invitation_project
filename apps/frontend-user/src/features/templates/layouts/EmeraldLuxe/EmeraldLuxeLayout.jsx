@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
 import { useCinematicOpening } from "../../shared/Openings/cinematicOpeningContext";
 import SaveTheDate from '../../shared/SaveTheDate';
@@ -149,7 +150,7 @@ export default function EmeraldLuxeLayout({
         fontFamily: tpl.fontKhmer ? `${tpl.fontKhmer}, "Kantumruy Pro", system-ui, sans-serif` : undefined,
       }}
     >
-      <audio ref={audioRef} src={musicUrl} loop preload="none" />
+      <audio ref={audioRef} src={safeIntroMedia(musicUrl) || undefined} loop preload="none" />
 
       {/* Floating Audio Button */}
       <button

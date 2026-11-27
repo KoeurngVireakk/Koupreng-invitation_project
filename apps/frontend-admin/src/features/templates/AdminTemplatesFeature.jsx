@@ -77,10 +77,26 @@ function formatTemplateDescription(description) {
 }
 
 // Component: Reliable Template Thumbnail with Graceful Fallback
+function thumbnailSource(value) {
+  if (typeof value !== "string") return "";
+  const source = value.trim();
+  if (!source || source.includes("\\") || source.startsWith("//")) return "";
+  if (/^data:image\/(?:jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/i.test(source)) return source;
+  try {
+    const origin = window.location.origin;
+    const url = new URL(source, origin);
+    if (url.username || url.password || !["http:", "https:"].includes(url.protocol)) return "";
+    return url.origin === origin || url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
 function TemplateThumbnail({ src, alt, category }) {
+  const source = thumbnailSource(src);
   const [failed, setFailed] = useState(false);
 
-  if (!src || failed) {
+  if (!source || failed) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center p-6 text-amber-600/70 dark:text-amber-400/60 bg-gradient-to-br from-amber-500/10 via-amber-600/5 to-slate-900/40 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px] opacity-20" />
@@ -101,7 +117,7 @@ function TemplateThumbnail({ src, alt, category }) {
 
   return (
     <img
-      src={src}
+      src={source}
       alt={alt || "Template Thumbnail"}
       className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
       onError={() => setFailed(true)}
