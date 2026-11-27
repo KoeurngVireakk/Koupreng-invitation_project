@@ -24,12 +24,14 @@ export default function TemplateDemoPage({ backLink, backLabel, primaryCtaLabel 
     const targetId = aliasTargetId || id;
     const [remoteTpl, setRemoteTpl] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [unavailable, setUnavailable] = useState(false);
     const { isAuthenticated } = useAuth();
     const lang = useLanguageStore(state => state.lang);
 
     useEffect(() => {
         let active = true;
         setRemoteTpl(null);
+        setUnavailable(false);
         setLoading(true);
         const fetcher = /^\d+$/.test(targetId)
             ? templateService.getPublic(targetId)
@@ -38,6 +40,11 @@ export default function TemplateDemoPage({ backLink, backLabel, primaryCtaLabel 
         fetcher
             .then((res) => {
                 if (!res || Array.isArray(res) || !res.id || !res.code) throw new Error("Invalid template response");
+                if (res.status && String(res.status).toUpperCase() !== "ACTIVE") {
+                    const inactiveErr = new Error("Template unavailable");
+                    inactiveErr.status = 404;
+                    throw inactiveErr;
+                }
                 if (["garden-royal-khmer-wedding", "khmer-royal-lotus"].includes(res.code) || ["garden-royal-khmer-wedding", "khmer-royal-lotus"].includes(res.slug)) {
                     throw new Error("Template retired");
                 }
@@ -45,8 +52,12 @@ export default function TemplateDemoPage({ backLink, backLabel, primaryCtaLabel 
                     setRemoteTpl(res);
                 }
             })
-            .catch(() => {
-                // Keep local fallback on network error
+            .catch((err) => {
+                const status = Number(err?.status || err?.response?.status || 0);
+                if (active && [403, 404, 410].includes(status)) {
+                    setUnavailable(true);
+                }
+                // Keep local fallback on transient network errors for verified local templates
             }).finally(() => { if (active) setLoading(false); });
 
         return () => {
@@ -113,9 +124,9 @@ export default function TemplateDemoPage({ backLink, backLabel, primaryCtaLabel 
     const variant = resolveVariant(tpl, forcedVariant);
     const knownId = DB_TEMPLATE_ID_MAP[targetId] || targetId;
     const knownLocal = TEMPLATES.some((item) => [item.id, item.code, item.slug].includes(knownId));
-    if (!remoteTpl && !knownLocal) {
+    if (unavailable || (!remoteTpl && !knownLocal)) {
         if (loading) return <PageSkeleton layout="public" label="កំពុងផ្ទុកគំរូ… / Loading template…" />;
-        return <main className="public-state"><h1>រកគំរូមិនឃើញ / Template unavailable</h1><Link to="/templates" style={{ display: "inline-flex", alignItems: "center", minHeight: "44px", padding: "0 16px" }}>មើលគំរូសន្លឹកការ / Browse templates</Link></main>;
+        return <main className="public-state"><h1>រកគំរូមិនឃើញ / Template unavailable</h1><Link to={backLink || "/templates"} style={{ display: "inline-flex", alignItems: "center", minHeight: "44px", padding: "0 16px" }}>{backLabel || "មើលគំរូសន្លឹកការ / Browse templates"}</Link></main>;
     }
 
     return (

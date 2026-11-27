@@ -123,7 +123,13 @@ export default function SubscriptionPackagesPage() {
         catch { /* The created order and its explicit payment link stay available. */ }
       }
       if (isActivated(order)) await load();
-    } catch (err) { setCheckout(value => ({ ...value, validationError: err.message || copy("មិនអាចបង្កើតការទូទាត់បានទេ។ សូមពិនិត្យប្រវត្តិមុនព្យាយាមម្ដងទៀត។", "Could not create the order. Check history before retrying.") })); }
+    } catch (err) {
+      const status = Number(err?.status || err?.response?.status || 0);
+      if ([400, 403, 404, 409].includes(status)) {
+        void load();
+      }
+      setCheckout(value => ({ ...value, validationError: err.message || copy("មិនអាចបង្កើតការទូទាត់បានទេ។ សូមពិនិត្យប្រវត្តិមុនព្យាយាមម្ដងទៀត។", "Could not create the order. Check history before retrying.") }));
+    }
     finally { submitting.current = false; setSaving(false); }
   };
   useEffect(() => {

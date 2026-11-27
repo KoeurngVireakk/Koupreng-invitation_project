@@ -30,3 +30,25 @@ it('rejects an unconfirmed create response without inventing a status or navigat
  await waitFor(()=>expect(screen.getByRole('alert')).toHaveTextContent('server did not confirm'));
  expect(screen.queryByText('Confirmed order route')).toBeNull();
 });
+it('forces fresh catalog lookup and disables order when admin disables template mid-checkout',async()=>{
+ templateCatalogService.list
+  .mockResolvedValueOnce([template])
+  .mockResolvedValueOnce([{...template,status:'INACTIVE',checkoutEligible:false}]);
+ paymentService.createStaticPaymentOrder.mockRejectedValueOnce(Object.assign(new Error('Template unavailable'),{status:404}));
+ show();
+ await screen.findByText('$37.50');
+ expect(templateCatalogService.list).toHaveBeenCalledWith({force:true});
+ fireEvent.click(screen.getByRole('button',{name:'Create payment order'}));
+ await waitFor(()=>expect(screen.getByRole('alert')).toHaveTextContent('Template unavailable'));
+ await waitFor(()=>expect(screen.getByRole('button',{name:'Create payment order'})).toBeDisabled());
+});
+ it('preserves 409 order rejection message after catalog refresh resolves',async()=>{
+  templateCatalogService.list.mockResolvedValue([template]);
+  paymentService.createStaticPaymentOrder.mockRejectedValueOnce(Object.assign(new Error('Template already unlocked'),{status:409}));
+  show();
+  await screen.findByText('$37.50');
+  fireEvent.click(screen.getByRole('button',{name:'Create payment order'}));
+  await waitFor(()=>expect(templateCatalogService.list).toHaveBeenCalledTimes(2));
+  await waitFor(()=>expect(screen.getByRole('alert')).toHaveTextContent('Template already unlocked'));
+  expect(screen.getByRole('button',{name:'Create payment order'})).toBeDisabled();
+ });

@@ -25,3 +25,9 @@ it("rejects retired template codes even if backend returns them", async () => {
   expect(await screen.findByRole("heading", { name: /Template unavailable/ })).toBeInTheDocument();
 });
 
+it("blocks admin-disabled INACTIVE or 404 templates without borrowing local fallback designs", async () => {
+  templateService.getPublicBySlug.mockResolvedValue({ id: 4, code: "khmer-celestial", status: "INACTIVE", name: "Disabled Template" });
+  show("khmer-celestial");
+  expect(await screen.findByRole("heading", { name: /Template unavailable/ })).toBeInTheDocument();
+});
+
