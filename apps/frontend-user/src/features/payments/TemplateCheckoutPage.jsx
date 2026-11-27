@@ -20,8 +20,11 @@ export default function TemplateCheckoutPage() {
   const [catalogList, setCatalogList] = useState([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [creating, setCreating] = useState(false);
-  const [error, setError] = useState("");
+  const [catalogError, setCatalogError] = useState("");
+  const [orderError, setOrderError] = useState("");
+  const [orderConflict, setOrderConflict] = useState(false);
   const [catalogRevision, setCatalogRevision] = useState(0);
+  const error = orderError || catalogError;
 
   useEffect(() => {
     let active = true;
@@ -37,12 +40,12 @@ export default function TemplateCheckoutPage() {
                 !RETIRED_TEMPLATE_CODES.has(String(item?.code || item?.slug || "").toLowerCase())
             )
           );
-          setError("");
+          setCatalogError("");
         }
       })
       .catch((err) => {
         if (active) {
-          setError(err.message || copy("មិនអាចផ្ទុកបញ្ជីគំរូបានទេ។", "Could not load template catalog"));
+          setCatalogError(err.message || copy("មិនអាចផ្ទុកបញ្ជីគំរូបានទេ។", "Could not load template catalog"));
         }
       })
       .finally(() => {
@@ -97,11 +100,11 @@ export default function TemplateCheckoutPage() {
 
   const createOrder = async () => {
     if (!checkout.templateId || !checkout.eligible) {
-      setError(copy("បញ្ជីគំរូមិនទាន់មានការផ្ដល់ជូនសកម្មទេ។ សូមផ្ទុកឡើងវិញ ហើយសាកល្បងម្ដងទៀត។", "Template catalog is not available yet. Please refresh and try again."));
+      setOrderError(copy("បញ្ជីគំរូមិនទាន់មានការផ្ដល់ជូនសកម្មទេ។ សូមផ្ទុកឡើងវិញ ហើយសាកល្បងម្ដងទៀត។", "Template catalog is not available yet. Please refresh and try again."));
       return;
     }
     setCreating(true);
-    setError("");
+    setOrderError("");
 
     try {
       const response = await paymentService.createStaticPaymentOrder(checkout);
@@ -124,7 +127,10 @@ export default function TemplateCheckoutPage() {
       if ([403, 404, 409].includes(status)) {
         setCatalogRevision((value) => value + 1);
       }
-      setError(err.message || copy("មិនអាចបង្កើតការបញ្ជាទិញបានទេ។", "Could not create payment order"));
+      if (status === 409) {
+        setOrderConflict(true);
+      }
+      setOrderError(err.message || copy("មិនអាចបង្កើតការបញ្ជាទិញបានទេ។", "Could not create payment order"));
     } finally {
       setCreating(false);
     }
@@ -144,7 +150,12 @@ export default function TemplateCheckoutPage() {
             type="button"
             className="checkout-retry-btn"
             disabled={catalogLoading || creating}
-            onClick={() => setCatalogRevision((value) => value + 1)}
+            onClick={() => {
+              setOrderError("");
+              setOrderConflict(false);
+              setCatalogError("");
+              setCatalogRevision((value) => value + 1);
+            }}
             style={{ marginInlineStart: "12px", minHeight: "36px", padding: "6px 12px", borderRadius: "8px", border: "1px solid currentColor", background: "transparent", color: "inherit", fontWeight: 700, cursor: "pointer" }}
           >
             {copy("ផ្ទុកការផ្ដល់ជូនឡើងវិញ", "Refresh offer")}
@@ -157,7 +168,7 @@ export default function TemplateCheckoutPage() {
           <article className="checkout-card checkout-method-card"><h2 className="checkout-section-title"><IoQrCodeOutline aria-hidden="true"/>ABA PayWay</h2><p>{copy("QR នៅទំព័របន្ទាប់បើកតំណ PayWay។ វាមិនមែនជា KHQR ផ្ទាល់ខ្លួន ដែលកំណត់ចំនួនទឹកប្រាក់ជាមុនទេ។ សូមពិនិត្យអ្នកទទួល ចំនួនទឹកប្រាក់ និងរូបិយប័ណ្ណក្នុង PayWay។", "The QR on the next page opens a PayWay link. It is not a personalized KHQR payload with a locked amount. Check the recipient, amount and currency in PayWay.")}</p><p>{copy("ការស្នើពិនិត្យមិនបញ្ជាក់ការទូទាត់ទេ។ សិទ្ធិត្រូវបានផ្ដល់ក្រោយម៉ាស៊ីនមេផ្ទៀងផ្ទាត់ប៉ុណ្ណោះ។", "Requesting review does not confirm payment. Access follows verification by the server.")}</p></article>
         </div>
         <aside className="checkout-card checkout-summary-card"><h2 className="checkout-summary-heading">{copy("សង្ខេបការបញ្ជាទិញ", "Order summary")}</h2><dl className="checkout-summary-rows"><div className="checkout-summary-row"><dt>{copy("គំរូ", "Design")}</dt><dd>{checkout.templateName}</dd></div><div className="checkout-summary-row"><dt>{copy("តម្លៃដែលបានអនុម័ត", "Approved offer")}</dt><dd>{amountLabel || copy("មិនមានការផ្ដល់ជូនបច្ចុប្បន្ន", "Current offer unavailable")}</dd></div></dl><p>{copy("តម្លៃ និងសិទ្ធិប្រើប្រាស់នឹងត្រូវពិនិត្យម្ដងទៀតពេលម៉ាស៊ីនមេបង្កើតការបញ្ជាទិញ។", "The server checks the amount and eligibility again when creating your order.")}</p>
-          <button type="button" className="checkout-pay-btn" disabled={creating || catalogLoading || !checkout.templateId || !checkout.eligible || !amountLabel} onClick={createOrder}><IoLockClosedOutline aria-hidden="true"/>{creating ? copy("កំពុងបង្កើតការបញ្ជាទិញ…", "Creating order…") : catalogLoading ? copy("កំពុងផ្ទុកការផ្ដល់ជូន…", "Loading offer…") : copy("បង្កើតការបញ្ជាទិញ", "Create payment order")}</button>
+          <button type="button" className="checkout-pay-btn" disabled={creating || catalogLoading || orderConflict || !checkout.templateId || !checkout.eligible || !amountLabel} onClick={createOrder}><IoLockClosedOutline aria-hidden="true"/>{creating ? copy("កំពុងបង្កើតការបញ្ជាទិញ…", "Creating order…") : catalogLoading ? copy("កំពុងផ្ទុកការផ្ដល់ជូន…", "Loading offer…") : copy("បង្កើតការបញ្ជាទិញ", "Create payment order")}</button>
           {!catalogLoading && !checkout.eligible && <p role="status">{copy("មិនទាន់មានការផ្ដល់ជូនដែលបានអនុម័តសម្រាប់គំរូនេះទេ។ សូមត្រឡប់ទៅគំរូ ឬទាក់ទងក្រុមការងារ។", "An approved offer is unavailable for this design. Return to the catalog or contact support.")}</p>}
           <p className="checkout-guarantee-item"><IoShieldCheckmarkOutline aria-hidden="true"/>{copy("សិទ្ធិត្រូវការការផ្ទៀងផ្ទាត់ការទូទាត់", "Access requires verified payment")}</p><Link to="/contact">{copy("ជំនួយការទូទាត់", "Payment help")}</Link>
         </aside>

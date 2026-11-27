@@ -14,8 +14,8 @@
   "verification": {
     "eslint": "0 errors",
     "knipAndDeps": "passed",
-    "vitestFull": "256 files / 1971 tests passed (41.81s)",
-    "viteBuild": "passed (2.02s)",
-    "playwrightPhase24": "2 passed (desktop-chromium & mobile-chromium, 4.7s, 0px overflow, 0 non-header Axe violations)"
+    "vitestFull": "256 files / 1972 tests passed (42.62s)",
+    "viteBuild": "passed (1.50s)",
+    "playwrightPhase24": "2 passed (desktop-chromium & mobile-chromium, 9.1s, 0px overflow, 0 non-header Axe violations)"
   }
 }

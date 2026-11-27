@@ -19,6 +19,6 @@
 ## 2. Observed Verification Results
 - `eslint .`: passed (`0` errors)
 - `analyze:knip` & `analyze:deps`: passed
-- `vitest run`: **`256` files / `1,971` tests passed** (`41.81s`)
-- `vite build`: passed (`2.02s`)
-- Playwright `phase24-admin-boundary.spec.js`: **`2` passed** (`4.7s`, desktop & mobile Chromium, `0px` overflow, `0` non-header Axe violations)
+- `vitest run`: **`256` files / `1,972` tests passed** (`42.62s`)
+- `vite build`: passed (`1.50s`)
+- Playwright `phase24-admin-boundary.spec.js`: **`2` passed** (`9.1s`, desktop & mobile Chromium, `0px` overflow, `0` non-header Axe violations)
