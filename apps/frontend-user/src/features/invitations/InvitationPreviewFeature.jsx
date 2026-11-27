@@ -14,6 +14,7 @@ import { invitationService } from "@/features/invitations/api/invitationApi";
 import { mediaService } from "@/features/invitations/api/mediaApi";
 import { templateCatalogService } from "@/features/templates/api/templateCatalogApi";
 import { TemplateExperience, registerDynamicTemplates } from "@/features/templates";
+import { TemplateUnavailable } from "@/features/templates/experience/TemplateRenderGuard";
 import { draftToTemplate } from "@/features/wedding-builder/utils/draftToTemplate";
 import { publicInvitationToDraft } from "@/features/wedding-builder/utils/invitationDraftAdapter";
 import { createPreviewSession, postPreviewMessage } from "@/shared/preview/previewMessaging";
@@ -118,10 +119,10 @@ export default function InvitationPreviewPage() {
                             if (window.history.length > 1) {
                                 navigate(-1);
                             } else {
-                                navigate("/dashboard");
+                                navigate("/app/events");
                             }
                         }}
-                        title={uiCopy("ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង", "Back to dashboard")}
+                        title={uiCopy("ត្រឡប់ទៅកម្មវិធីរបស់ខ្ញុំ", "Back to events")}
                     >
                         <ArrowLeft size={15} />
                         <span className="inv-back-label">{uiCopy("ត្រឡប់", "Back")}</span>
@@ -189,9 +190,7 @@ export default function InvitationPreviewPage() {
                         />
                     </div>
                 ) : (
-                    <div className="inv-error" style={{ margin: "40px auto", maxWidth: 480 }}>
-                        {uiCopy("មិនអាចផ្ទុកគំរូដែលបានជ្រើសរើសទេ។", "Could not resolve the selected template.")}
-                    </div>
+                    <TemplateUnavailable />
                 )}
             </section>
         </div>
