@@ -44,6 +44,7 @@ export function GiftsFeature() {
                         {t("title")}
                     </h1>
                     <p className="wg-subtitle">{t("subtitle")}</p>
+                    <p className="wg-tx-scope-note">{lang === 'en' ? 'Owner-recorded wedding gifts & contributions (USD and KHR totaled separately; distinct from ABA PayWay orders).' : 'កំណត់ត្រាចំណងដៃដែលម្ចាស់កម្មវិធីកត់ត្រា (គណនា USD និង KHR ដាច់ដោយឡែកពីគ្នា មិនមែនជាការទូទាត់កញ្ចប់ ABA PayWay ទេ)។'}</p>
                 </div>
             </header>
 

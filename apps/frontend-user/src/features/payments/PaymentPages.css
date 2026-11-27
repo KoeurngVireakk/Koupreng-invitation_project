@@ -1788,3 +1788,190 @@
 :root[data-color-mode="dark"] .checkout-note {
   color: var(--ui-theme-muted);
 }
+
+:root[data-color-mode="dark"] .checkout-theme-wrapper {
+  --kp-dark: var(--ui-theme-ink, #f5f2eb);
+  --kp-muted: var(--ui-theme-muted, #b8b2a6);
+  --kp-surface: var(--ui-theme-surface, #141414);
+  --kp-border: var(--ui-theme-border, #2e2a23);
+  --kp-gold-600: var(--app-gold, #d8b875);
+  --kp-gold-700: var(--app-gold, #d8b875);
+}
+
+:root[data-color-mode="dark"] .checkout-template-card,
+:root[data-color-mode="dark"] .checkout-card,
+:root[data-color-mode="dark"] .payment-qr-card-lux,
+:root[data-color-mode="dark"] .payment-card {
+  background: var(--ui-theme-surface, #141414);
+  color: var(--ui-theme-ink, #f5f2eb);
+  border-color: var(--ui-theme-border, #2e2a23);
+}
+
+:root[data-color-mode="dark"] .checkout-template-name,
+:root[data-color-mode="dark"] .checkout-summary-heading,
+:root[data-color-mode="dark"] .checkout-section-title,
+:root[data-color-mode="dark"] .payment-title-lux,
+:root[data-color-mode="dark"] .payment-code-number {
+  color: var(--ui-theme-ink, #f5f2eb);
+}
+
+:root[data-color-mode="dark"] .payment-qr-box-lux {
+  background: #ffffff;
+  color: #1f2421;
+}
+
+:root[data-color-mode="dark"] .payment-qr-box-lux .payment-khqr-footer strong,
+:root[data-color-mode="dark"] .payment-qr-box-lux .payment-khqr-footer span,
+:root[data-color-mode="dark"] .payment-qr-box-lux .payment-khqr-sub,
+:root[data-color-mode="dark"] .payment-qr-box-lux .payment-qr-brand-label {
+  color: #3f2e16;
+}
+
+:root[data-color-mode="dark"] .payment-status-badge {
+  background: var(--ui-theme-subtle, #1f1d19);
+  color: var(--ui-theme-ink, #f5f2eb);
+  border-color: var(--ui-theme-border, #3a342a);
+}
+
+:root[data-color-mode="dark"] .payment-status-badge.pending,
+:root[data-color-mode="dark"] .payment-status-badge.qr_created,
+:root[data-color-mode="dark"] .payment-status-badge.checkout_created,
+:root[data-color-mode="dark"] .payment-status-badge.paid_pending_review {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+:root[data-color-mode="dark"] .payment-status-badge.paid {
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+:root[data-color-mode="dark"] .payment-status-badge.expired,
+:root[data-color-mode="dark"] .payment-status-badge.failed,
+:root[data-color-mode="dark"] .payment-status-badge.cancelled,
+:root[data-color-mode="dark"] .payment-status-badge.rejected {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+:root[data-color-mode="dark"] .payment-code-box-lux {
+  background: var(--ui-theme-subtle, #1c1a16);
+  border-color: rgba(216, 184, 117, 0.45);
+}
+
+:root[data-color-mode="dark"] .payment-copy-btn,
+:root[data-color-mode="dark"] .payment-action-secondary-btn {
+  background: var(--ui-theme-subtle, #1c1a16);
+  color: var(--ui-theme-ink, #f5f2eb);
+  border-color: var(--ui-theme-border, #3a342a);
+}
+
+:root[data-color-mode="dark"] .payment-countdown-lux {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+:root[data-color-mode="dark"] .payment-countdown-lux span,
+:root[data-color-mode="dark"] .payment-countdown-lux strong {
+  color: #6ee7b7;
+}
+
+:root[data-color-mode="dark"] .payment-instructions-lux {
+  color: var(--ui-theme-muted, #c8c2b6);
+}
+
+:root[data-color-mode="dark"] .payment-instructions-heading {
+  color: var(--ui-theme-ink, #f5f2eb);
+}
+
+:root[data-color-mode="dark"] .payment-instructions-note {
+  color: #6ee7b7;
+}
+
+:root[data-color-mode="dark"] .payment-confirmed-lux {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+:root[data-color-mode="dark"] .payment-confirmed-lux p {
+  color: #d1fae5;
+}
+
+:root[data-color-mode="dark"] .payment-footer-links a {
+  color: var(--app-gold, #d8b875);
+}
+
+.payment-tx-type-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--kp-border);
+  background: var(--app-subtle, #fdfaf5);
+  color: var(--app-ink, #1f2421);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+:root[data-color-mode="dark"] .payment-tx-type-bar {
+  background: var(--ui-theme-subtle, #1c1a16);
+  border-color: var(--ui-theme-border, #2e2a23);
+  color: var(--ui-theme-ink, #f5f2eb);
+}
+
+.payment-instructions-heading {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--kp-dark, #1f2421);
+}
+
+.payment-instructions-note {
+  margin-top: 12px;
+  color: #0f766e;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.payment-claim-btn-theme {
+  background: var(--app-accent, #1f2421);
+  color: var(--app-on-accent, #ffffff);
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.payment-claim-btn-theme:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.payment-renew-btn-lux {
+  background: #f59e0b;
+  color: #111827;
+  font-weight: 700;
+  border: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkout-theme-wrapper *,
+  .payment-qr-card-lux *,
+  .paid-templates-page * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media print {
+  body * { visibility: hidden !important; }
+  .receipt-box, .receipt-box * { visibility: visible !important; }
+  .receipt-box { position: fixed; inset: 24px auto auto 24px; width: calc(100% - 48px); box-shadow: none !important; border: 1px solid #333 !important; }
+}

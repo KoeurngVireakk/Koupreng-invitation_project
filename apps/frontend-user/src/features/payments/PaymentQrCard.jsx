@@ -175,6 +175,11 @@ export default function PaymentQrCard({ order, onStatusChange, onRetry }) {
         </span>
       </div>
 
+      <div className="payment-tx-type-bar">
+        <span>{copy("ប្រភេទប្រតិបត្តិការ៖ ទិញសិទ្ធិគំរូធៀប · ផ្ទៀងផ្ទាត់ដោយម៉ាស៊ីនមេ ABA PayWay", "Transaction: Template License Purchase · Server-Verified ABA Settlement")}</span>
+        <span>{copy("រក្សាទុកលេខកូដបញ្ជាទិញ មុនពេលបើកកម្មវិធី ABA Mobile", "Save order code before switching to ABA Mobile")}</span>
+      </div>
+
       {/* QR & Details Layout */}
       <div className="payment-qr-grid-lux">
         {/* Left: Pure Clean Vector QR Code */}
@@ -261,7 +266,7 @@ export default function PaymentQrCard({ order, onStatusChange, onRetry }) {
 
           {/* Instructions text (ISSUE-P1-05) */}
           <div className="payment-instructions-lux">
-            <h4 style={{ margin: "0 0 10px", fontSize: "15px", fontWeight: 700, color: "var(--kp-ink, #1f2421)" }}>
+            <h4 className="payment-instructions-heading">
               {copy("ជំហានទូទាត់", "Payment steps")}
             </h4>
             <ol style={{ margin: 0, paddingLeft: "20px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px", lineHeight: "1.6" }}>
@@ -278,7 +283,7 @@ export default function PaymentQrCard({ order, onStatusChange, onRetry }) {
                 <strong>{copy("ស្នើពិនិត្យការទូទាត់", "Request payment review")}</strong> — {copy("សំណើរបស់អ្នកមិនបញ្ជាក់ការទូទាត់ទេ។ សិទ្ធិត្រូវបានផ្ដល់ក្រោយការផ្ទៀងផ្ទាត់ពីម៉ាស៊ីនមេប៉ុណ្ណោះ។", "Your request does not confirm payment. Access follows verification by the server.")}
               </li>
             </ol>
-            <p style={{ marginTop: "12px", color: "var(--kp-teal, #0f766e)", fontWeight: 600, fontSize: "13px" }}>
+            <p className="payment-instructions-note">
               <strong>{isKm ? "ចំណាំ៖" : "Note:"}</strong> {isKm ? "សិទ្ធិប្រើគំរូនឹងបើកក្រោយការផ្ទៀងផ្ទាត់ការទូទាត់ដោយប្រព័ន្ធប៉ុណ្ណោះ។" : "Access follows verified payment confirmation from official bank alerts."}
             </p>
           </div>
@@ -340,19 +345,11 @@ export default function PaymentQrCard({ order, onStatusChange, onRetry }) {
             {waitingForPayment && !isExpired && (
               <button
                 type="button"
-                className="payment-action-gold-btn payment-claim-btn"
+                className="payment-action-gold-btn payment-claim-btn payment-claim-btn-theme"
                 disabled={claiming}
                 onClick={handleClaim}
-                style={{
-                  background: "var(--ui-action)",
-                  color: "#ffffff",
-                  fontWeight: 700,
-                  boxShadow: "0 4px 14px rgba(16, 185, 129, 0.4)",
-                  border: "none",
-                  cursor: claiming ? "not-allowed" : "pointer",
-                }}
               >
-                <IoSparkles />
+                <IoSparkles aria-hidden="true" />
                 <span>{claiming ? copy("កំពុងផ្ញើសំណើ…", "Requesting review…") : copy("ស្នើពិនិត្យការទូទាត់", "Request payment review")}</span>
               </button>
             )}
@@ -364,18 +361,17 @@ export default function PaymentQrCard({ order, onStatusChange, onRetry }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <IoOpenOutline /> {copy("បើកតំណ PayWay", "Open PayWay link")}
+                <IoOpenOutline aria-hidden="true" /> {copy("បើកតំណ PayWay", "Open PayWay link")}
               </a>
             )}
 
             {isExpired && onRetry && (
               <button
                 type="button"
-                className="payment-action-gold-btn"
+                className="payment-action-gold-btn payment-renew-btn-lux"
                 onClick={onRetry}
-                style={{ background: "#f59e0b", color: "#000" }}
               >
-                <IoRefreshOutline /> {copy("បង្កើតការបញ្ជាទិញថ្មី", "Create new order")}
+                <IoRefreshOutline aria-hidden="true" /> {copy("បង្កើតការបញ្ជាទិញថ្មី", "Create new order")}
               </button>
             )}
 
