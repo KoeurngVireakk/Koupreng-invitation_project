@@ -18,7 +18,7 @@ const bounded = (value, min, max, fallback) => Number.isFinite(Number(value)) ? 
 export function safeIntroMedia(value) {
   if (typeof value !== 'string') return '';
   const source = value.trim();
-  if (!source || source.includes('\\') || /[\u0000-\u001f\u007f]/.test(source)) return '';
+  if (!source || source.includes('\\') || [...source].some(char => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return '';
   if (/^\/(?!\/)/.test(source)) return source;
   if (/^data:image\/(?:png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/i.test(source)) return source;
 

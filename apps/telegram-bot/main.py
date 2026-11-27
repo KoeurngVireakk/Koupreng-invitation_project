@@ -67,11 +67,13 @@ PROCESSING_NOTIFICATION_IDS: set[str] = set()
 
 ORDER_CODE_RE = re.compile(r"\b(?:EVT[0-9]{9,10}|SUB[0-9]{10})\b", re.IGNORECASE)
 PAYWAY_TRX_RE = re.compile(
-    r"\b(?:Transaction|Txn|Trx)\.?[\t ]{0,16}(?:ID|No\.?|Number)[\t ]{0,16}[:#=][\t ]{0,16}([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
+    r"\b(?:Transaction|Txn|Trx)\.?[\t ]{0,16}(?:ID|No\.?|Number)[\t ]{0,16}[:#=][\t ]{0,16}"
+    r"([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
     re.IGNORECASE,
 )
 PAYWAY_APV_RE = re.compile(
-    r"\b(?:APV|Approval(?:[\t ]{0,16}(?:Code|No\.?|Number))?)\b(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
+    r"\b(?:APV|Approval(?:[\t ]{0,16}(?:Code|No\.?|Number))?)\b"
+    r"(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
     re.IGNORECASE,
 )
 PAYER_WITH_SUFFIX_RE = re.compile(
@@ -80,8 +82,14 @@ PAYER_WITH_SUFFIX_RE = re.compile(
     re.IGNORECASE,
 )
 PAYER_RE = re.compile(r"\bpaid by[\t ]{1,16}(.{1,120}?)(?:[\t ]{1,16}(?:via|on)\b|[.,]|$)", re.IGNORECASE)
-REMARK_RE = re.compile(r"\bRemark\b(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([^\s,.]{1,120})(?=[\s,.]|$)", re.IGNORECASE)
-TRANSACTION_DATE_RE = re.compile(r"\bon[\t ]{1,16}(.{1,120}?)(?=[\t ]{1,16}via\b|\.[\t ]{0,16}(?:Trx|Remark)\b|$)", re.IGNORECASE)
+REMARK_RE = re.compile(
+    r"\bRemark\b(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([^\s,.]{1,120})(?=[\s,.]|$)",
+    re.IGNORECASE,
+)
+TRANSACTION_DATE_RE = re.compile(
+    r"\bon[\t ]{1,16}(.{1,120}?)(?=[\t ]{1,16}via\b|\.[\t ]{0,16}(?:Trx|Remark)\b|$)",
+    re.IGNORECASE,
+)
 AMOUNT_PATTERNS = [
     re.compile(
         r"\b(?P<currency>USD|KHR)\s*(?P<amount>[0-9]+(?:\.[0-9]{1,2})?)(?![0-9.])\b",
