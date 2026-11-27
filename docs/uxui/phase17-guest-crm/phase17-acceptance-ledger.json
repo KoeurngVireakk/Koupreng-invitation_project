@@ -1,0 +1,53 @@
+{
+  "phase": "Phase 17",
+  "title": "Guest CRM, groups, import and delivery management",
+  "branch": "feat/phase17-guest-crm",
+  "baseOriginMainSha": "ae9f7c8395f56f18318575e2c8e36fdfaa8a0ddd",
+  "recordedAt": "2026-11-27T09:42:30+07:00",
+  "verdict": "PASS_LOCAL",
+  "gates": [
+    {
+      "id": "P17-G01",
+      "title": "Guest CRM contextual bulk actions & permission gating",
+      "status": "PASS_LOCAL",
+      "evidence": "GuestsPage.jsx contextual .guest-bulk-bar + EventContext MANAGE_GUESTS gating verified by GuestPage.test.jsx (4/4 tests) and after/06-guests-selected-bulk-1440.png (0px overflow, 0 axe violations)"
+    },
+    {
+      "id": "P17-G02",
+      "title": "Import modal Obsidian Dark Mode WCAG AA contrast parity",
+      "status": "PASS_LOCAL",
+      "evidence": "GuestImportModal.css semantic tokens reduced dark-mode Axe color-contrast violations from 1 (3 nodes) before edit to 0 after edit (07-guests-import-modal-dark-1440.png)"
+    },
+    {
+      "id": "P17-G03",
+      "title": "CSV formula injection defense, UTF-8 BOM & owner private notes labeling",
+      "status": "PASS_LOCAL",
+      "evidence": "guestCsvUtils.js safeCsvCell sanitization on exportGuestsToCsv + exportDeliveryReportCsv verified by guestCsvUtils.test.js (2/2 tests); GuestTable.jsx Lock privacy badge verified"
+    },
+    {
+      "id": "P17-G04",
+      "title": "Delivery confirmation dialogs, history filters & CSV audit report",
+      "status": "PASS_LOCAL",
+      "evidence": "InvitationDeliveryManager.jsx feedback.confirm replacement (zero window.confirm), history status/channel filters, exportDeliveryReportCsv verified by InvitationDeliveryManager.test.jsx (11/11 tests) and DeliveryWorkspace.css dark mode parity"
+    },
+    {
+      "id": "P17-G05",
+      "title": "Lint, Knip, dependency audit, Vite build & full Vitest regression suite",
+      "status": "PASS_LOCAL",
+      "evidence": "npm run lint (0), analyze:knip (0), analyze:deps (0), vite build (1.83s), npm test (254/254 files, 1941/1941 tests passed, 42.30s)"
+    },
+    {
+      "id": "P17-G06",
+      "title": "Playwright guest-workspace & Frontend User v2 E2E suites",
+      "status": "PASS_LOCAL",
+      "evidence": "guest-workspace.spec.js (23 passed, 1 skipped on mobile-chromium, 0 failed) & playwright.frontend-user-v2.config.js (27 passed, 5 skipped on mobile, 0 failed)"
+    }
+  ],
+  "visualCaptures": {
+    "beforeCount": 10,
+    "afterCount": 10,
+    "overflowMaxPx": 0,
+    "beforeAxeViolationScenes": 1,
+    "afterAxeViolationScenes": 0
+  }
+}

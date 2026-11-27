@@ -428,7 +428,7 @@
   padding: 10px 14px;
   border: 1.5px solid var(--ws-border-strong, #d8cbba);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--ws-surface, #ffffff);
   color: var(--ws-ink, #1f2421);
   font: inherit;
   font-size: 14px;
@@ -446,14 +446,40 @@
   margin-top: 14px;
   padding: 12px 18px;
   border-radius: 10px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
+  background: color-mix(in srgb, var(--ui-theme-success, #059669) 14%, var(--ws-surface, #ffffff));
+  border: 1px solid color-mix(in srgb, var(--ui-theme-success, #059669) 35%, transparent);
+  color: var(--ui-theme-success-ink, #166534);
   font-size: 14px;
   font-weight: 600;
 }
 
 /* Delivery History Timeline */
+.delivery-history-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.delivery-history-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.delivery-history-filters select {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--ws-border-strong, #d8cbba);
+  border-radius: 10px;
+  background: var(--ws-surface, #ffffff);
+  color: var(--ws-ink, #1f2421);
+  font: inherit;
+  font-size: 13.5px;
+}
+
 .delivery-history ul {
   padding: 0;
   margin: 12px 0 0;
@@ -470,7 +496,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: #ffffff;
+  background: var(--ws-surface, #ffffff);
   border: 1px solid var(--ws-border, #e8dfcf);
   border-radius: 10px;
   font-size: 13.5px;
@@ -543,7 +569,7 @@
     padding: 16px;
     border: 1.5px solid var(--ws-border, #e8dfcf);
     border-radius: 14px;
-    background: #ffffff;
+    background: var(--ws-surface, #ffffff);
     box-shadow: 0 2px 8px rgba(93, 67, 32, 0.04);
   }
 
@@ -576,5 +602,13 @@
 @media (max-width: 480px) {
   .delivery-workspace .workspace-summary {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .delivery-workspace *,
+  .delivery-workspace *::before {
+    animation: none !important;
+    transition: none !important;
   }
 }

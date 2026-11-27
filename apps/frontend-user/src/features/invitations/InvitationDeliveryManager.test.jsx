@@ -2,7 +2,13 @@ import { render, screen, waitFor, cleanup, fireEvent, within } from "@testing-li
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import InvitationDeliveryManager from "./InvitationDeliveryManager";
+import FeedbackHost from "@/shared/feedback/FeedbackHost";
+import { exportDeliveryReportCsv } from "@/features/guests/model/guestCsvUtils";
 import { useLanguageStore } from "@/stores/useLanguageStore";
+
+vi.mock("@/features/guests/model/guestCsvUtils", () => ({
+  exportDeliveryReportCsv: vi.fn(() => true),
+}));
 
 vi.mock("@/features/invitations/api/invitationApi", () => ({
   invitationService: {
@@ -184,5 +190,45 @@ describe("InvitationDeliveryManager", () => {
     fireEvent.click(screen.getByRole("button", { name: "Share: Sample guest", exact: true }));
     await waitFor(() => expect(navigator.share).toHaveBeenCalledTimes(1));
     expect(deliveryService.markShared).not.toHaveBeenCalled();
+  });
+
+  it("uses FeedbackHost confirmation dialog instead of window.confirm for manual mark-shared", async () => {
+    let guest = { guestId: 501, guestName: "Sample guest", invitationUrl: "https://koupreng.example/i/sample?token=personal-501", sendStatus: "PENDING" };
+    invitationService.get.mockResolvedValue({ id: 101, title: "Wedding", status: "PUBLISHED" });
+    deliveryService.summary.mockImplementation(async () => ({ totalGuests: 1, guests: [guest] }));
+    deliveryService.events.mockResolvedValue([
+      { id: "ev-1", guestName: "Sample guest", channel: "EMAIL", status: "SUCCESS", createdAt: "2026-11-27T08:00:00Z" },
+      { id: "ev-2", guestName: "Sample guest", channel: "TELEGRAM", status: "FAILED", createdAt: "2026-11-27T08:05:00Z" },
+    ]);
+    deliveryService.markShared.mockResolvedValue({ ...guest, sendStatus: "SENT" });
+
+    render(
+      <MemoryRouter initialEntries={["/app/events/101/delivery?guestId=501"]}>
+        <FeedbackHost />
+        <Routes><Route path="/app/events/:id/delivery" element={<InvitationDeliveryManager />} /></Routes>
+      </MemoryRouter>
+    );
+
+    const manualBtn = await screen.findByRole("button", { name: "Record manual share" });
+    fireEvent.click(manualBtn);
+
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await waitFor(() => expect(manualBtn).toBeEnabled());
+    expect(deliveryService.markShared).not.toHaveBeenCalled();
+
+    fireEvent.click(manualBtn);
+    const confirmDialog = await screen.findByRole("dialog");
+    fireEvent.click(within(confirmDialog).getByRole("button", { name: "Record manual share" }));
+    await waitFor(() => expect(deliveryService.markShared).toHaveBeenCalledWith("101", 501));
+
+    // History filter & CSV export
+    fireEvent.change(screen.getByLabelText("Filter history by channel"), { target: { value: "TELEGRAM" } });
+    const historyList = document.querySelector(".delivery-history ul");
+    expect(within(historyList).getByText("TELEGRAM")).toBeInTheDocument();
+    expect(within(historyList).queryByText("EMAIL")).toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: "Export delivery CSV" }));
+    expect(exportDeliveryReportCsv).toHaveBeenCalledTimes(1);
   });
 });

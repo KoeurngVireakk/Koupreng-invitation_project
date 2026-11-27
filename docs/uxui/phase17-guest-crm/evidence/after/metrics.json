@@ -1,0 +1,126 @@
+{
+  "stage": "after",
+  "capturedAt": "2026-11-27T02:39:36.539Z",
+  "results": [
+    {
+      "name": "01-guests-light-en-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "02-guests-obsidian-km-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "03-guests-tablet-dark-768.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 768,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "04-guests-mobile-light-km-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "05-guests-mobile-dark-430.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 430,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "06-guests-selected-bulk-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "07-guests-import-modal-dark-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "08-guests-empty-km-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/guests",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "09-delivery-dark-en-1440.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/delivery",
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "colorMode": "dark",
+        "bodyBg": "rgb(9, 9, 9)"
+      },
+      "axeViolations": []
+    },
+    {
+      "name": "10-delivery-mobile-km-390.png",
+      "stage": "after",
+      "metrics": {
+        "url": "/app/events/42/delivery",
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "colorMode": "light",
+        "bodyBg": "rgb(251, 246, 238)"
+      },
+      "axeViolations": []
+    }
+  ]
+}

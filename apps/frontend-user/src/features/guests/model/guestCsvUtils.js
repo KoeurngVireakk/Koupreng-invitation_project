@@ -1,7 +1,28 @@
 /**
- * Guest CSV Export and Import Utilities
- * Supports UTF-8 BOM encoding for flawless Khmer Unicode text display in Microsoft Excel.
+ * Guest & Delivery CSV Export and Import Utilities
+ * Supports UTF-8 BOM encoding for Khmer Unicode text display in Microsoft Excel
+ * and sanitizes spreadsheet formula injection via safeCsvCell.
  */
+import { safeCsvCell } from "./guestImport";
+
+function triggerCsvDownload(headers, rows, filePrefix, eventTitle) {
+  const csvContent = "\uFEFF" + [headers.map(safeCsvCell).join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const sanitizedTitle = (eventTitle || "wedding")
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/gi, "_");
+  const timestamp = new Date().toISOString().slice(0, 10);
+
+  link.setAttribute("href", url);
+  link.setAttribute("download", `${filePrefix}_${sanitizedTitle}_${timestamp}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  return true;
+}
 
 export function exportGuestsToCsv(guests = [], eventTitle = "guests") {
   if (!guests.length) return false;
@@ -15,44 +36,48 @@ export function exportGuestsToCsv(guests = [], eventTitle = "guests") {
     "លេខតុ (Table)",
     "ស្ថានភាព RSVP (RSVP)",
     "ចំនួនអ្នកចូលរួម (Attendees)",
-    "កំណត់ចំណាំ (Note)",
+    "កំណត់ចំណាំឯកជន (Owner Private Note)",
   ];
 
-  const escapeCsv = (val) => {
-    if (val === null || val === undefined) return '""';
-    const str = String(val).replace(/"/g, '""');
-    return `"${str}"`;
-  };
-
   const rows = guests.map((g) => [
-    escapeCsv(g.name || g.guestName || ""),
-    escapeCsv(g.phone || ""),
-    escapeCsv(g.email || ""),
-    escapeCsv(g.group || g.guestGroup || ""),
-    escapeCsv(g.side || g.sideType || ""),
-    escapeCsv(g.tableNumber || ""),
-    escapeCsv(g.rsvpStatus || (g.attending ? "Attending" : "Pending")),
-    escapeCsv(g.seatCount || g.pax || 1),
-    escapeCsv(g.note || g.wishes || ""),
+    safeCsvCell(g.name || g.guestName || ""),
+    safeCsvCell(g.phone || ""),
+    safeCsvCell(g.email || ""),
+    safeCsvCell(g.group || g.guestGroup || ""),
+    safeCsvCell(g.side || g.sideType || ""),
+    safeCsvCell(g.tableNumber || g.seat || ""),
+    safeCsvCell(g.rsvpStatus || (g.attending ? "Attending" : "Pending")),
+    safeCsvCell(g.seatCount || g.pax || g.count || 1),
+    safeCsvCell(g.note || g.wishes || ""),
   ]);
 
-  const csvContent = "\uFEFF" + [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+  return triggerCsvDownload(headers, rows, "guests", eventTitle);
+}
 
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const sanitizedTitle = (eventTitle || "wedding")
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]/gi, "_");
-  const timestamp = new Date().toISOString().slice(0, 10);
+export function exportDeliveryReportCsv(guests = [], eventTitle = "delivery-report") {
+  if (!guests.length) return false;
 
-  link.setAttribute("href", url);
-  link.setAttribute("download", `guests_${sanitizedTitle}_${timestamp}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-  return true;
+  const headers = [
+    "Guest Name",
+    "Phone",
+    "Email",
+    "Send Status",
+    "Last Sent At",
+    "Responded",
+    "Last Send Error",
+  ];
+
+  const rows = guests.map((g) => [
+    safeCsvCell(g.guestName || g.name || ""),
+    safeCsvCell(g.phone || ""),
+    safeCsvCell(g.email || ""),
+    safeCsvCell(g.sendStatus || "PENDING"),
+    safeCsvCell(g.lastSentAt || ""),
+    safeCsvCell(g.responded ? "YES" : "NO"),
+    safeCsvCell(g.lastSendError || ""),
+  ]);
+
+  return triggerCsvDownload(headers, rows, "delivery_report", eventTitle);
 }
 
 export function downloadSampleGuestTemplateCsv() {

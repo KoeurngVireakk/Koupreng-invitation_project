@@ -1,7 +1,7 @@
 import { LOCAL_MESSAGES } from "@/shared/i18n/messagesDictionary";
 import { guestOptionLabel } from "../model/guestLabels";
 import { useRef, useState } from "react";
-import { Armchair, Phone, Plus, SearchX, Upload, Users } from "lucide-react";
+import { Armchair, Lock, Phone, Plus, SearchX, Upload, Users } from "lucide-react";
 import { ResponsiveTable, StatusBadge } from "@/shared/ui";
 import { buildShareMessage, guestInviteUrl, initials } from "../model/guestMappers";
 import { SEND_STATUS } from "../model/guestConstants";
@@ -55,6 +55,7 @@ export default function GuestTable({
 
   const beginEdit = (guest) => {
     if (onEdit) { onEdit(guest); return; }
+    if (!onSaveGuest) return;
     setEditingGuestId(guest.id);
     setEditingGuest({ ...emptyGuestForm(groups, categories), ...guest, count: String(guest.count || 1) });
   };
@@ -102,7 +103,7 @@ export default function GuestTable({
         {guests.map((guest) => {
           const isEditing = editingGuestId != null && String(editingGuestId) === String(guest.id);
           const actions = <GuestRowActions guest={guest} saving={saving} onShowQr={onShowQr} onShowTicket={onShowTicket} deliveryPath={deliveryPath} inviteUrl={guestInviteUrl(currentDraft, guest, publicInvitation)} onCopyLink={onCopyLink} onMarkAsSent={onMarkAsSent} onEdit={beginEdit} onDelete={onDelete} onSave={saveEdit} onCancel={() => { setEditingGuestId(null); setEditingGuest(null); }} isEditing={isEditing} shareMessage={buildShareMessage(guest, currentDraft, publicInvitation, lang) || guestInviteUrl(currentDraft, guest, publicInvitation)} t={t} />;
-          return <tr key={guest.id} className="guest-record-row" onDoubleClick={() => !isEditing && beginEdit(guest)}>
+          return <tr key={guest.id} className="guest-record-row" onDoubleClick={() => !isEditing && (onEdit || onSaveGuest) && beginEdit(guest)}>
             {isEditing ? <><td colSpan="5">{editor(editingGuest, setEditingGuest)}</td><td>{actions}</td></> : <>
               <td className="guest-person-cell" data-label={text("thGuest", "ឈ្មោះភ្ញៀវ")}>
                 {onSelectionChange && <label className="guest-select-control"><input type="checkbox" aria-label={lang === 'en' ? `Select guest: ${guest.name}` : `ជ្រើសរើសភ្ញៀវ៖ ${guest.name}`} disabled={saving || guest.pending} checked={selectedIds.includes(String(guest.backendId || guest.id))} onDoubleClick={event => event.stopPropagation()} onChange={() => { const id = String(guest.backendId || guest.id); onSelectionChange(selectedIds.includes(id) ? selectedIds.filter(value => value !== id) : [...selectedIds, id]); }} /></label>}
@@ -119,7 +120,7 @@ export default function GuestTable({
                         text("contactMissing", "មិនមានលេខទូរស័ព្ទ")
                       )}
                     </span>
-                    {guest.note && <details className="guest-note"><summary>{text("fieldNote", "ចំណាំ")}</summary><p>{guest.note}</p></details>}
+                    {guest.note && <details className="guest-note"><summary><Lock size={12} aria-hidden="true" /> {text("fieldNote", "ចំណាំ")} · <span className="guest-note-private">{lang === "en" ? "Owner only" : "ឯកជន"}</span></summary><p>{guest.note}</p></details>}
                   </div>
                 </div>
               </td>

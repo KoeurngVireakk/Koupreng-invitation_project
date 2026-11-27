@@ -1,7 +1,8 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Download, QrCode, Upload, UserPlus, Users } from "lucide-react";
+import { Check, Download, QrCode, Trash2, Upload, UserPlus, Users, X } from "lucide-react";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
+import { feedback } from "@/shared/feedback/feedback";
 import { ErrorState, SkeletonTable, toast } from "@/shared/ui";
 import { useGuests } from "./hooks/useGuests";
 import { useGuestMutations } from "./hooks/useGuestMutations";
@@ -46,10 +47,14 @@ export default function GuestsPage() {
   const en = lang === "en";
   const workspace = useEventWorkspace();
   const ownerTools = workspace?.isOwner !== false;
+  const canManageGuests = workspace?.access
+    ? workspace.access.owner === true || Boolean(workspace.access.permissions?.includes("MANAGE_GUESTS"))
+    : ownerTools;
   const [serverQuery, setServerQuery] = useState({ page: 0, size: 25, search: '', group: '', category: '', status: '' });
   const debouncedQuery = useDebouncedGuestQuery(serverQuery);
   const [selectedIds, setSelectedIds] = useState([]);
   const [exporting, setExporting] = useState(false);
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   const {
     eventId,
@@ -97,12 +102,14 @@ export default function GuestsPage() {
     refreshData,
   });
 
-  const [groups] = useState(() =>
-    readList(scopedKey("koupreng.host.guestGroups", eventId), DEFAULT_GROUPS)
-  );
-  const [categories] = useState(() =>
-    readList(scopedKey("koupreng.host.guestCategories", eventId), DEFAULT_CATEGORIES)
-  );
+  const groups = readList(scopedKey("koupreng.host.guestGroups", eventId), DEFAULT_GROUPS);
+  const categories = readList(scopedKey("koupreng.host.guestCategories", eventId), DEFAULT_CATEGORIES);
+
+  useEffect(() => {
+    setSelectedIds([]);
+    setEditingGuest(null);
+    setBulkBusy(false);
+  }, [eventId]);
 
   const localFilters = useGuestFilters(guests);
   const serverMode = Boolean(backendInvitationId || /^[1-9]\d*$/.test(String(eventId || '')));
@@ -114,6 +121,7 @@ export default function GuestsPage() {
     clearFilters: () => changeQuery({ search: '', group: '', category: '', status: '' }), filteredGuests: guests,
   } : localFilters;
   const currentSelected = selectedIds.filter(id => guests.some(guest => String(guest.backendId || guest.id) === id && !guest.pending));
+  const selectedGuestRecords = guests.filter(guest => currentSelected.includes(String(guest.backendId || guest.id)));
   const totalRecords = serverMode ? overview?.guestRecords : guests.length;
   const matchingRecords = serverMode ? pageInfo?.totalElements : filteredGuests.length;
   const statusCount = value => serverMode ? overview?.[({ '': 'guestRecords', pending: 'toInviteRecords', responded: 'respondedRecords', checkedIn: 'checkedInRecords', attending: 'attendingRecords', declined: 'declinedRecords', maybe: 'maybeRecords', unanswered: 'unansweredRecords' })[value]] ?? '—' : guests.filter(guest => matchesGuestStatus(guest, value)).length;
@@ -123,6 +131,66 @@ export default function GuestsPage() {
     try { await guestService.exportSelection(backendInvitationId, currentSelected.map(Number)); toast.success(en ? 'Selected guest records exported' : 'បាននាំចេញកំណត់ត្រាភ្ញៀវដែលបានជ្រើស'); }
     catch (error) { toast.error(error.message || (en ? 'Could not export selected guests' : 'មិនអាចនាំចេញភ្ញៀវដែលបានជ្រើស')); }
     finally { setExporting(false); }
+  }
+
+  async function handleBulkMarkShared() {
+    if (!canManageGuests || !ownerTools || bulkBusy || !selectedGuestRecords.length) return;
+    const targets = selectedGuestRecords.filter(guest => !['SENT', 'OPENED', 'RESPONDED'].includes(guest.sendStatus));
+    if (!targets.length) {
+      toast.info(en ? 'All selected guests are already marked sent or responded' : 'ភ្ញៀវដែលបានជ្រើសទាំងអស់ត្រូវបានសម្គាល់ផ្ញើរួចហើយ');
+      return;
+    }
+    const confirmed = await feedback.confirm({
+      title: en ? 'Mark selected guests as sent?' : 'សម្គាល់ភ្ញៀវដែលបានជ្រើសថាបានផ្ញើ?',
+      message: en
+        ? `Mark ${targets.length} selected guest invitation(s) as sent? Existing links will stay valid.`
+        : `តើអ្នកចង់សម្គាល់ការអញ្ជើញចំនួន ${targets.length} ថាបានផ្ញើមែនទេ?`,
+      confirmText: en ? 'Mark sent' : 'សម្គាល់បានផ្ញើ',
+      cancelText: en ? 'Cancel' : 'បោះបង់',
+    });
+    if (!confirmed) return;
+    setBulkBusy(true);
+    try {
+      let updated = 0;
+      for (const guest of targets) {
+        if (await markGuestAsSent(guest)) updated += 1;
+      }
+      if (updated > 0) {
+        setSelectedIds([]);
+        if (serverMode) await refreshData();
+        toast.success(en ? `Marked ${updated} guest(s) as sent` : `បានសម្គាល់ភ្ញៀវចំនួន ${updated} ថាបានផ្ញើ`);
+      }
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (!canManageGuests || bulkBusy || !selectedGuestRecords.length) return;
+    const confirmed = await feedback.confirm({
+      title: en ? 'Delete selected guests?' : 'លុបឈ្មោះភ្ញៀវដែលបានជ្រើស?',
+      message: en
+        ? `Remove ${selectedGuestRecords.length} selected guest record(s) from this invitation? This cannot be undone.`
+        : `តើអ្នកប្រាកដថាចង់លុបកំណត់ត្រាភ្ញៀវចំនួន ${selectedGuestRecords.length} មែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។`,
+      confirmText: en ? 'Delete selected' : 'លុបដែលបានជ្រើស',
+      cancelText: en ? 'Cancel' : 'បោះបង់',
+      destructive: true,
+    });
+    if (!confirmed) return;
+    setBulkBusy(true);
+    try {
+      let deleted = 0;
+      for (const guest of selectedGuestRecords) {
+        if (await deleteGuest(guest)) deleted += 1;
+      }
+      if (deleted > 0) {
+        setSelectedIds([]);
+        if (serverMode) setServerQuery(current => ({ ...current, page: 0 }));
+        toast.success(en ? `Removed ${deleted} guest(s)` : `បានលុបភ្ញៀវចំនួន ${deleted}`);
+      }
+    } finally {
+      setBulkBusy(false);
+    }
   }
 
   const [deleteGuestTarget, setDeleteGuestTarget] = useState(null);
@@ -265,27 +333,29 @@ export default function GuestsPage() {
           {eventTitle && <p className="guest-event-name"><span aria-hidden="true" />{eventTitle}</p>}
           <h1>{t ? t("title") : "បញ្ជីភ្ញៀវកិត្តិយស"}</h1>
         </div>
-        <div className="guest-header-actions">
-          <button
-            type="button"
-            className="guest-button guest-button-primary guest-add-btn"
-            onClick={() => {
-              setEditingGuest(null);
-              setGuestFormFocus((v) => v + 1);
-              const nameInput = document.getElementById("guestForm-name");
-              if (nameInput) {
-                nameInput.focus();
-                nameInput.scrollIntoView({ behavior: "smooth", block: "center" });
-              }
-            }}
-          >
-            <UserPlus size={17} aria-hidden="true" />
-            <span>{t ? t("addGuestAction") : "បន្ថែមភ្ញៀវ"}</span>
-          </button>
-          <button type="button" className="guest-button guest-button-secondary" disabled={loading || !backendInvitationId} onClick={() => setImportModalOpen(true)}>
-            <Upload size={17} aria-hidden="true" /><span>{t("importBtn")}</span>
-          </button>
-        </div>
+        {canManageGuests && (
+          <div className="guest-header-actions">
+            <button
+              type="button"
+              className="guest-button guest-button-primary guest-add-btn"
+              onClick={() => {
+                setEditingGuest(null);
+                setGuestFormFocus((v) => v + 1);
+                const nameInput = document.getElementById("guestForm-name");
+                if (nameInput) {
+                  nameInput.focus();
+                  nameInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
+            >
+              <UserPlus size={17} aria-hidden="true" />
+              <span>{t ? t("addGuestAction") : "បន្ថែមភ្ញៀវ"}</span>
+            </button>
+            <button type="button" className="guest-button guest-button-secondary" disabled={loading || !backendInvitationId} onClick={() => setImportModalOpen(true)}>
+              <Upload size={17} aria-hidden="true" /><span>{t("importBtn")}</span>
+            </button>
+          </div>
+        )}
       </header>
 
       {(!serverMode || overview) && <GuestStats guests={guests} summary={serverMode ? overview : undefined} t={key => serverMode ? ({ statTotalGuests: en ? 'Guest records' : 'កំណត់ត្រាភ្ញៀវ', statTotalSeats: en ? 'Reserved seats' : 'កៅអីកក់', statSent: en ? 'Marked sent / opened' : 'បានសម្គាល់ផ្ញើ / បើក' })[key] || t(key) : t(key)} />}
@@ -331,13 +401,67 @@ export default function GuestsPage() {
           <button type="button" aria-label={en ? 'Next page' : 'ទំព័របន្ទាប់'} className="guest-button guest-button-secondary" disabled={loading || queryPending || serverQuery.page + 1 >= pageInfo.totalPages} onClick={() => { setSelectedIds([]); setServerQuery(current => ({ ...current, page: current.page + 1 })); }}>{en ? 'Next' : 'បន្ទាប់'}</button>
         </>}
       </nav>}
+      {serverMode && currentSelected.length > 0 && (
+        <div
+          className="guest-bulk-bar"
+          role="region"
+          aria-live="polite"
+          aria-label={en ? "Selected guest bulk actions" : "សកម្មភាពជាក្រុមសម្រាប់ភ្ញៀវដែលបានជ្រើស"}
+        >
+          <span className="guest-bulk-bar-count">
+            {en ? `${currentSelected.length} selected` : `បានជ្រើសរើស ${currentSelected.length} នាក់`}
+          </span>
+          <div className="guest-bulk-bar-actions">
+            <button
+              type="button"
+              className="guest-button guest-button-secondary"
+              disabled={loading || queryPending || exporting || bulkBusy}
+              onClick={handleExportCsv}
+            >
+              <Download size={15} aria-hidden="true" />
+              <span>{en ? "Export CSV" : "នាំចេញ CSV"}</span>
+            </button>
+            {canManageGuests && ownerTools && (
+              <button
+                type="button"
+                className="guest-button guest-button-secondary"
+                disabled={saving || loading || queryPending || bulkBusy}
+                onClick={handleBulkMarkShared}
+              >
+                <Check size={15} aria-hidden="true" />
+                <span>{en ? "Mark sent" : "សម្គាល់បានផ្ញើ"}</span>
+              </button>
+            )}
+            {canManageGuests && (
+              <button
+                type="button"
+                className="guest-button guest-button-danger"
+                disabled={saving || loading || queryPending || bulkBusy}
+                onClick={handleBulkDelete}
+              >
+                <Trash2 size={15} aria-hidden="true" />
+                <span>{en ? "Delete selected" : "លុបដែលបានជ្រើស"}</span>
+              </button>
+            )}
+            <button
+              type="button"
+              className="guest-button guest-button-secondary"
+              disabled={bulkBusy}
+              onClick={() => setSelectedIds([])}
+            >
+              <X size={15} aria-hidden="true" />
+              <span>{en ? "Clear selection" : "សម្អាតការជ្រើស"}</span>
+            </button>
+          </div>
+        </div>
+      )}
       {loading && !pageInfo ? (
         <SkeletonTable rows={5} columns={5} />
       ) : (
         <div className="pe-desktop-table-wrap">
           <GuestTable
-            inlineForm={<GuestInlineForm
-              key={editingGuest?.id ?? "new"}
+            inlineForm={canManageGuests ? <GuestInlineForm
+              key={`${eventId || "local"}:${editingGuest?.id ?? "new"}`}
               guest={editingGuest}
               onCancel={() => setEditingGuest(null)}
               onSave={handleSaveGuest}
@@ -347,7 +471,7 @@ export default function GuestsPage() {
               error={mutationError}
               focusRequest={guestFormFocus}
               t={t}
-            />}
+            /> : null}
             guests={filteredGuests}
             selectedIds={currentSelected}
             onSelectionChange={serverMode ? setSelectedIds : undefined}
@@ -357,7 +481,7 @@ export default function GuestsPage() {
             showQuickAdd={false}
             isFiltered={hasFilters}
             onClearFilters={clearFilters}
-            onOpenImport={() => setImportModalOpen(true)}
+            onOpenImport={canManageGuests ? () => setImportModalOpen(true) : undefined}
             emptyMessage={
               hasFilters
                 ? (t ? t("emptySearchDesc") : "មិនមានភ្ញៀវត្រូវនឹងការស្វែងរកនេះទេ")
@@ -365,9 +489,9 @@ export default function GuestsPage() {
             }
             currentDraft={draftMatch}
             publicInvitation={publicInvitation}
-            onSaveGuest={handleSaveGuest}
-            onEdit={handleOpenEditGuest}
-            onDelete={(g) => setDeleteGuestTarget(g)}
+            onSaveGuest={canManageGuests ? handleSaveGuest : undefined}
+            onEdit={canManageGuests ? handleOpenEditGuest : undefined}
+            onDelete={canManageGuests ? (g) => setDeleteGuestTarget(g) : undefined}
             onShowQr={ownerTools ? (g) => setQrGuestTarget(g) : undefined}
             onShowTicket={ownerTools && backendInvitationId ? guest => setTicketGuest(guest) : undefined}
             deliveryPath={ownerTools && backendInvitationId ? `/app/events/${backendInvitationId}/delivery` : undefined}
