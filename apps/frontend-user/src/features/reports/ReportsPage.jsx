@@ -1,6 +1,6 @@
 import { PageSkeleton, LoadingRegion } from '@/shared/ui/LoadingState';
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Eye, FileDown, Printer, X, ZoomIn, ZoomOut } from "lucide-react";
+import { Eye, FileDown, Printer, RefreshCw, X, ZoomIn, ZoomOut } from "lucide-react";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
 import { ErrorState, Modal } from "@/shared/ui";
 import { buildFinancialReport } from "./model/financialReport";
@@ -11,6 +11,7 @@ import "./ReportsPage.css";
 export default function FinancialReport() {
   const { text: t, lang } = useBackendMessages("reports");
   const { sourceData, generatedAt, loading, error, reload } = useActiveEventReport();
+  const [refreshCount, setRefreshCount] = useState(0);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [previewZoom, setPreviewZoom] = useState(100);
   const previewTrigger = useRef(null);
@@ -34,6 +35,11 @@ export default function FinancialReport() {
     if (wasPreview.current && !isPreviewMode) previewTrigger.current?.focus();
     wasPreview.current = isPreviewMode;
   }, [isPreviewMode]);
+
+  const handleRefresh = () => {
+    setRefreshCount((count) => count + 1);
+    reload();
+  };
 
   const handlePrint = () => {
     window.print();
@@ -140,6 +146,16 @@ export default function FinancialReport() {
           <div className="report-header-actions reports-screen-only flex flex-wrap items-center gap-2">
             <button
               type="button"
+              className="report-action-btn"
+              onClick={handleRefresh}
+              disabled={loading}
+              title={lang === "en" ? "Refresh report data" : "ផ្ទុកទិន្នន័យរបាយការណ៍ឡើងវិញ"}
+            >
+              <RefreshCw aria-hidden="true" size={16} />
+              {lang === "en" ? "Refresh" : "ផ្ទុកឡើងវិញ"}
+            </button>
+            <button
+              type="button"
               className="report-action-btn report-preview-btn"
               ref={previewTrigger}
               onClick={() => setIsPreviewMode(true)}
@@ -171,7 +187,7 @@ export default function FinancialReport() {
             </button>
           </div>
         </header>
-      {hasServerInvitation && <OwnerReportSummary invitationId={invitationId} />}
+      {hasServerInvitation && <OwnerReportSummary invitationId={invitationId} refreshKey={refreshCount} />}
 
       {loading && sourceData && <LoadingRegion />}
       {error && sourceData && <ErrorState message={error} onRetry={reload} />}
@@ -294,28 +310,22 @@ function ReportSurface({ preview, onClose, label, children }) {
 }
 
 function MoneyCard({ label, amounts, tone, detail }) {
-  const amountColor = tone === "income"
-    ? "text-emerald-700 dark:text-emerald-400"
-    : tone === "balance"
-      ? "text-rose-700 dark:text-rose-400"
-      : "text-amber-800 dark:text-amber-300";
-
   return (
-    <article className={`report-summary-card money-card is-${tone} bg-white dark:bg-[#1a221d] border border-[#f0e8dd] dark:border-[#2d3832] shadow-sm hover:shadow-md transition-all rounded-2xl p-5`}>
-      <span className="text-gray-700 dark:text-zinc-300 font-medium">{label}</span>
+    <article className={`report-summary-card money-card is-${tone} shadow-sm hover:shadow-md transition-all rounded-2xl p-5`}>
+      <span className="report-card-label">{label}</span>
       <div className="money-card-amounts">
-        <strong className={amountColor}>{formatAmount(amounts.USD, "USD")}</strong>
-        <strong className={amountColor}>{formatAmount(amounts.KHR, "KHR")}</strong>
+        <strong className={`report-amount report-amount--${tone}`}>{formatAmount(amounts.USD, "USD")}</strong>
+        <strong className={`report-amount report-amount--${tone}`}>{formatAmount(amounts.KHR, "KHR")}</strong>
       </div>
-      <small className="text-xs text-gray-600 dark:text-zinc-400">{detail}</small>
+      <small className="report-card-detail">{detail}</small>
     </article>
   );
 }
 
 function StatCard({ label, value }) {
   return (
-    <article className="report-summary-card stat-card bg-white border border-[#f0e8dd] shadow-sm hover:shadow-md transition-all rounded-2xl p-5">
-      <span>{label}</span>
+    <article className="report-summary-card stat-card shadow-sm hover:shadow-md transition-all rounded-2xl p-5">
+      <span className="report-card-label">{label}</span>
       <strong>{new Intl.NumberFormat("en-US").format(value)}</strong>
     </article>
   );

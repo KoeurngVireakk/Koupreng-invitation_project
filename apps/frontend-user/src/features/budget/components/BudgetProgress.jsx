@@ -22,42 +22,31 @@ export default function BudgetProgress({ budget }) {
   const overAmount = actual - total;
 
   return (
-    <div
-      style={{
-        background: isOver ? "#fff5f5" : "var(--brand-surface)",
-        border: `1px solid ${isOver ? "#feb2b2" : "var(--brand-border)"}`,
-        padding: "1.25rem",
-        borderRadius: "var(--radius-xl)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.75rem",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <strong style={{ fontSize: "0.9375rem", color: isOver ? "#c53030" : "var(--brand-text)" }}>
+    <div className={`budget-progress-card${isOver ? " is-over" : ""}`}>
+      <div className="budget-progress-header">
+        <strong className="budget-progress-title">
           {isOver
             ? isEn
-              ? `⚠️ Over budget by ${money(overAmount)}`
-              : `⚠️ លើសថវិកាចំនួន ${money(overAmount)}`
+              ? `Over budget by ${money(overAmount)}`
+              : `លើសថវិកាចំនួន ${money(overAmount)}`
             : isEn
             ? "Budget Progress"
             : "វឌ្ឍនភាពថវិកា"}
         </strong>
-        <span style={{ fontSize: "0.875rem", fontWeight: "700", color: isOver ? "#c53030" : "var(--brand-primary)" }}>
+        <span className="budget-progress-ratio">
           {money(actual)} / {money(total)} ({percentage}%)
         </span>
       </div>
 
-      <div style={{ background: "rgba(0, 0, 0, 0.06)", borderRadius: "999px", height: "12px", overflow: "hidden" }}>
-        <div
-          style={{
-            width: `${percentage}%`,
-            background: isOver ? "#e53e3e" : "var(--brand-primary)",
-            height: "100%",
-            borderRadius: "999px",
-            transition: "width 0.4s ease",
-          }}
-        />
+      <div
+        className="budget-progress-track"
+        role="progressbar"
+        aria-valuenow={percentage}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={isEn ? "Budget Progress" : "វឌ្ឍនភាពថវិកា"}
+      >
+        <div className="budget-progress-fill" style={{ width: `${percentage}%` }} />
       </div>
     </div>
   );

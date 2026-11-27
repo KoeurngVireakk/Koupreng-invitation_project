@@ -4,13 +4,27 @@
   --ws-gold: #967037;
   --ws-gold-dark: #6e4e1f;
   --ws-gold-light: #f7f1e5;
-  --ws-surface: #ffffff;
-  --ws-canvas: #fcfbf9;
-  --ws-border: #e3ded5;
-  --ws-border-strong: #c2b9aa;
-  --ws-ink: #1f2b24;
-  --ws-muted: #5e6f66;
+  --ws-surface: var(--app-surface, #ffffff);
+  --ws-canvas: var(--app-bg, #fcfbf9);
+  --ws-border: var(--app-border, #e3ded5);
+  --ws-border-strong: var(--app-control-border, #c2b9aa);
+  --ws-ink: var(--app-ink, #1f2b24);
+  --ws-muted: var(--app-muted, #5e6f66);
   --ws-emerald: #245740;
+}
+
+:root[data-color-mode="dark"] .attendance-analytics {
+  --ws-gold: var(--app-gold, #d8b875);
+  --ws-emerald: #34d399;
+}
+
+.analytics-range-error {
+  color: var(--ui-theme-danger, #b91c1c) !important;
+  font-weight: 700;
+}
+
+:root[data-color-mode="dark"] .analytics-range-error {
+  color: #fca5a5 !important;
 }
 
 .analytics-range {
@@ -156,7 +170,7 @@
 }
 
 .attendance-analytics tbody tr:hover {
-  background: #fbf9f4;
+  background: var(--app-subtle, #fbf9f4);
 }
 
 .attendance-analytics tbody tr:last-child th,
@@ -165,10 +179,17 @@
 }
 
 .attendance-analytics th[scope="col"] {
-  background: #fafcfb;
+  background: var(--app-subtle, #fafcfb);
   color: var(--ws-muted);
   font-size: 13px;
   font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attendance-analytics * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 .attendance-analytics p {

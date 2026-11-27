@@ -186,8 +186,8 @@
 :root[data-color-mode=dark] .dash-wrapper :is(input,textarea)::placeholder { color: var(--app-muted); opacity: 1; }
 :root[data-color-mode=dark] .dash-wrapper :is(.workspace-notice,.feature-access-card,.access-quota) { background: var(--app-subtle); border-color: var(--app-border); color: var(--app-ink); }
 :root[data-color-mode=dark] :is(.k-modal-container,.k-modal-header,.k-modal-body,.k-modal-footer,.k-confirm-dialog,.access-plan) { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); }
-:root[data-color-mode=dark] .k-modal-container :is(h2,h3,p,label,.access-note,.access-heading h3) { color: var(--app-ink); }
-:root[data-color-mode=dark] .k-modal-container :is(input,select,textarea) { background: var(--app-subtle); border-color: var(--app-control-border); color: var(--app-ink); }
+:root[data-color-mode=dark] .k-modal-container:not(.is-print-preview) :is(h2,h3,p,label,.access-note,.access-heading h3) { color: var(--app-ink); }
+:root[data-color-mode=dark] .k-modal-container:not(.is-print-preview) :is(input,select,textarea) { background: var(--app-subtle); border-color: var(--app-control-border); color: var(--app-ink); }
 :root[data-color-mode=dark] .access-dialog :is(.access-plan,.k-modal-footer) { background: var(--app-subtle); }
 :root[data-color-mode=dark] .feature-access-card :is(h3,p,button) { color: var(--app-ink); }
 :root[data-color-mode=dark] :is(.feature-access-card button,.access-dialog .access-actions>button,.access-dialog .access-actions>a) { background: var(--app-raised); border-color: var(--app-control-border); color: var(--app-ink); }
@@ -226,7 +226,7 @@
 :root[data-color-mode=dark] .enterprise-eyebrow { color: var(--app-gold); }
 :root[data-color-mode=dark] .notif-meta > span { color: var(--app-muted); }
 :root[data-color-mode=dark] :is(.k-org-breadcrumb-link span,.k-org-card a span) { color: var(--app-ink); }
-:root[data-color-mode=dark] .financial-report-page table thead th { color: var(--app-ink); background: var(--app-subtle); }
+:root[data-color-mode=dark] .financial-report-page:not(.is-print-preview) table thead th { color: var(--app-ink); background: var(--app-subtle); }
 
 /* RSVP, Notifications, Organizations, Analytics, and Reports dark-mode coherence */
 :root[data-color-mode=dark] .dash-wrapper .rsvp-page { color: var(--app-ink); --ws-ink: var(--app-ink); --ws-muted: var(--app-muted); }

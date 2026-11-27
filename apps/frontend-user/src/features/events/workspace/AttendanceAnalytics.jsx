@@ -13,6 +13,7 @@ function initialRange() { const to = today(), from = new Date(`${to}T00:00:00Z`)
 export default function AttendanceAnalytics() {
   const { eventId } = useEventWorkspace(), copy = useUiCopy();
   const [draft, setDraft] = useState(initialRange), [range, setRange] = useState(initialRange);
+  const [rangeError, setRangeError] = useState('');
   const [retry, setRetry] = useState(0), [state, setState] = useState({ loading: true, data: null, error: '' });
   useEffect(() => {
     let active = true;
@@ -29,10 +30,25 @@ export default function AttendanceAnalytics() {
   const labels = [copy('កាលបរិច្ឆេទ', 'Date'), copy('កំណត់ត្រាភ្ញៀវថ្មី', 'Guest records created'), copy('RSVP ចុងក្រោយ', 'Latest RSVP records'), copy('ចូលរួម', 'Attending records'), copy('មិនចូលរួម', 'Declined records'), copy('ប្រហែល', 'Maybe records'), copy('វត្តមានសកម្ម', 'Active check-in records')];
   return <main className="workspace-page attendance-analytics">
     <header className="workspace-heading"><h1>{copy('វិភាគការចូលរួម', 'Attendance analytics')}</h1><p>{copy('ទិន្នន័យភ្ញៀវ RSVP និងវត្តមានដែលបានរក្សាទុក។ ត្រូវការសិទ្ធិរបាយការណ៍ និងកញ្ចប់ម្ចាស់ដែលមានវិភាគកម្រិតខ្ពស់។', 'Stored guest, RSVP and check-in facts. Requires report permission and the owner’s Advanced Analytics entitlement.')}</p></header>
-    <form className="workspace-section analytics-range" onSubmit={event => { event.preventDefault(); setRange({ ...draft }); }}>
-      <label className="workspace-field">{copy('ចាប់ពី', 'From')}<input type="date" required value={draft.from} max={draft.to} onChange={event => setDraft(value => ({ ...value, from: event.target.value }))} /></label>
-      <label className="workspace-field">{copy('ដល់', 'To')}<input type="date" required value={draft.to} min={draft.from} onChange={event => setDraft(value => ({ ...value, to: event.target.value }))} /></label>
-      <button className="workspace-button primary" type="submit" disabled={state.loading}>{copy('មើលរបាយការណ៍', 'Apply dates')}</button><p>{copy('១–៣៦៦ ថ្ងៃ។ កាលបរិច្ឆេទទាំងពីរត្រូវបានរាប់បញ្ចូល តាមម៉ោងកម្ពុជា UTC+07។', '1–366 days, inclusive calendar dates in Asia/Phnom_Penh (UTC+07).')}</p>
+    <form className="workspace-section analytics-range" noValidate onSubmit={event => {
+      event.preventDefault();
+      if (!draft.from || !draft.to) {
+        setRangeError(copy('សូមជ្រើសរើសថ្ងៃចាប់ផ្ដើម និងថ្ងៃបញ្ចប់។', 'Please select both start and end dates.'));
+        return;
+      }
+      if (draft.from > draft.to) {
+        setRangeError(copy('ថ្ងៃចាប់ផ្ដើមមិនអាចក្រោយថ្ងៃបញ្ចប់បានទេ។', 'Start date cannot be after end date.'));
+        return;
+      }
+      setRangeError('');
+      setRange({ ...draft });
+    }}>
+      <label className="workspace-field">{copy('ចាប់ពី', 'From')}<input type="date" required value={draft.from} max={draft.to} onChange={event => { setRangeError(''); setDraft(value => ({ ...value, from: event.target.value })); }} /></label>
+      <label className="workspace-field">{copy('ដល់', 'To')}<input type="date" required value={draft.to} min={draft.from} onChange={event => { setRangeError(''); setDraft(value => ({ ...value, to: event.target.value })); }} /></label>
+      <button className="workspace-button primary" type="submit" disabled={state.loading}>{copy('មើលរបាយការណ៍', 'Apply dates')}</button>
+      <button className="workspace-button" type="button" disabled={state.loading} onClick={() => setRetry(value => value + 1)}>{copy('ផ្ទុកឡើងវិញ', 'Refresh')}</button>
+      {rangeError && <p role="alert" className="analytics-range-error">{rangeError}</p>}
+      <p>{copy('១–៣៦៦ ថ្ងៃ។ កាលបរិច្ឆេទទាំងពីរត្រូវបានរាប់បញ្ចូល តាមម៉ោងកម្ពុជា UTC+07។', '1–366 days, inclusive calendar dates in Asia/Phnom_Penh (UTC+07).')}</p>
     </form>
     {state.loading && (!data ? <PageSkeleton layout="chart" label={copy('កំពុងផ្ទុកទិន្នន័យ…', 'Loading attendance facts…')} /> : <LoadingRegion label={copy('កំពុងធ្វើបច្ចុប្បន្នភាព…', 'Refreshing…')} />)}
     {state.error && <AccessFailureState error={state.failure || state.error} feature="ADVANCED_ANALYTICS" permission="VIEW_REPORTS" onRetry={() => setRetry(value => value + 1)} />}

@@ -166,38 +166,47 @@
   }
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card, .budget-panel, .budget-table) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card, .budget-panel, .budget-table),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card, .budget-panel, .budget-table) {
   background: var(--app-surface);
   border-color: var(--app-border);
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td) {
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label) {
   color: var(--app-muted);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table thead th {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table thead th,
+:root[data-color-mode="dark"] .budget-page .budget-table thead th {
   background: var(--app-subtle);
   color: var(--app-ink);
 }
 
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table-wrap,
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table th,
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table td {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table td,
+:root[data-color-mode="dark"] .budget-page .budget-table-wrap,
+:root[data-color-mode="dark"] .budget-page .budget-table th,
+:root[data-color-mode="dark"] .budget-page .budget-table td {
   border-color: var(--app-border);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-table input, .budget-table select) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-item-form input, .budget-item-form select, .budget-total-form input, .budget-table input, .budget-table select),
+:root[data-color-mode="dark"] .budget-page :is(.budget-item-form input, .budget-item-form select, .budget-total-form input, .budget-table input, .budget-table select) {
   background: var(--app-subtle);
   border-color: var(--app-control-border);
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-alert, .budget-empty) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-alert, .budget-empty),
+:root[data-color-mode="dark"] .budget-page :is(.budget-alert, .budget-empty) {
   background: var(--app-subtle);
   border-color: var(--app-border);
   color: var(--app-ink);
@@ -205,6 +214,97 @@
 
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-alert.is-error,
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-summary-card.is-danger strong,
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-danger-btn {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-danger-btn,
+:root[data-color-mode="dark"] .budget-page .budget-alert.is-error,
+:root[data-color-mode="dark"] .budget-page .budget-summary-card.is-danger strong,
+:root[data-color-mode="dark"] .budget-page .budget-danger-btn {
   color: var(--app-danger);
+}
+
+.budget-progress-card {
+  background: var(--app-surface, var(--brand-surface, #fff));
+  border: 1px solid var(--app-border, var(--brand-border, #eadfce));
+  padding: 1.25rem;
+  border-radius: var(--radius-xl, 14px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.budget-progress-card.is-over {
+  background: #fff5f5;
+  border-color: #feb2b2;
+}
+
+.budget-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.budget-progress-title {
+  font-size: 0.9375rem;
+  color: var(--app-ink, var(--brand-text, #2a1f10));
+}
+
+.budget-progress-ratio {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--app-gold, var(--brand-primary, #8c6f4b));
+}
+
+.budget-progress-card.is-over .budget-progress-title,
+.budget-progress-card.is-over .budget-progress-ratio {
+  color: #b91c1c;
+}
+
+.budget-progress-track {
+  background: var(--app-subtle, #f0e6d8);
+  border-radius: 999px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.budget-progress-fill {
+  background: var(--app-gold, var(--brand-primary, #8c6f4b));
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.budget-progress-card.is-over .budget-progress-fill {
+  background: #b91c1c;
+}
+
+:root[data-color-mode="dark"] .budget-progress-card,
+:root.dark .budget-progress-card {
+  background: var(--app-surface, #141414);
+  border-color: var(--app-border, #2e2a23);
+}
+
+:root[data-color-mode="dark"] .budget-progress-card.is-over,
+:root.dark .budget-progress-card.is-over {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+:root[data-color-mode="dark"] .budget-progress-card.is-over .budget-progress-title,
+:root[data-color-mode="dark"] .budget-progress-card.is-over .budget-progress-ratio,
+:root.dark .budget-progress-card.is-over .budget-progress-title,
+:root.dark .budget-progress-card.is-over .budget-progress-ratio {
+  color: #fca5a5;
+}
+
+:root[data-color-mode="dark"] .budget-progress-track,
+:root.dark .budget-progress-track {
+  background: var(--app-subtle, #221f1a);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .budget-page * {
+    transition: none !important;
+    animation: none !important;
+  }
 }

@@ -34,3 +34,23 @@ it('has an empty state with a zero-record denominator', async () => {
   await screen.findByText('No stored activity in this date range.');
   expect(screen.queryByText('NaN%')).not.toBeInTheDocument();
 });
+it('blocks inverted date ranges with a visible alert and supports manual refresh', async () => {
+  api.get.mockResolvedValue({ data }); mount();
+  await screen.findByText('40.0%');
+  expect(api.get).toHaveBeenCalledTimes(1);
+
+  fireEvent.change(screen.getByLabelText('From'), { target: { value: '2026-11-28' } });
+  fireEvent.change(screen.getByLabelText('To'), { target: { value: '2026-11-20' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Apply dates' }));
+  expect(screen.getByRole('alert')).toHaveTextContent('Start date cannot be after end date.');
+  expect(api.get).toHaveBeenCalledTimes(1);
+  expect(screen.getByLabelText('From').closest('form')).toHaveAttribute('novalidate');
+
+  fireEvent.change(screen.getByLabelText('From'), { target: { value: '' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Apply dates' }));
+  expect(screen.getByRole('alert')).toHaveTextContent('Please select both start and end dates.');
+  expect(api.get).toHaveBeenCalledTimes(1);
+
+  fireEvent.click(screen.getByRole('button', { name: 'Refresh' }));
+  await waitFor(() => expect(api.get).toHaveBeenCalledTimes(2));
+});

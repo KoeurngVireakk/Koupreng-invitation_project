@@ -131,6 +131,83 @@
   box-shadow: 0 4px 12px rgba(23, 107, 85, 0.25);
 }
 
+.report-card-label {
+  color: var(--report-muted);
+  font-weight: 600;
+}
+
+.report-card-detail {
+  font-size: 0.75rem;
+  color: var(--report-muted);
+}
+
+.financial-report-page .report-amount--income {
+  color: #047857;
+}
+
+.financial-report-page .report-amount--budget,
+.financial-report-page .report-amount--expense {
+  color: #92400e;
+}
+
+.financial-report-page .report-amount--balance {
+  color: #b91c1c;
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview),
+:root.dark .financial-report-page:not(.is-print-preview) {
+  --report-ink: var(--app-ink, #f5f2eb);
+  --report-muted: var(--app-muted, #b8b2a6);
+  --report-line: var(--app-border, #2e2a23);
+  --report-paper: var(--app-surface, #141414);
+  --report-green: #34d399;
+  --report-gold: var(--app-gold, #d8b875);
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .financial-report-header h1,
+:root.dark .financial-report-page:not(.is-print-preview) .financial-report-header h1 {
+  color: var(--app-ink, #f5f2eb);
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--income,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--income {
+  color: #34d399;
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--budget,
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--expense,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--budget,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--expense {
+  color: #fbbf24;
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-amount--balance,
+:root.dark .financial-report-page:not(.is-print-preview) .report-amount--balance {
+  color: #f87171;
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) :is(.report-summary-card, .owner-report-summary, .report-section),
+:root.dark .financial-report-page:not(.is-print-preview) :is(.report-summary-card, .owner-report-summary, .report-section) {
+  background: var(--app-surface, #141414);
+  border-color: var(--app-border, #2e2a23);
+  color: var(--app-ink, #f5f2eb);
+}
+
+:root[data-color-mode="dark"] .financial-report-page:not(.is-print-preview) .report-action-btn:not(.report-print-button),
+:root.dark .financial-report-page:not(.is-print-preview) .report-action-btn:not(.report-print-button) {
+  background: var(--app-surface, #141414);
+  border-color: var(--app-border, #2e2a23);
+  color: var(--app-ink, #f5f2eb);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .financial-report-page *,
+  .report-summary-card {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 /* ============================================================
    Interactive Print Preview Mode
    Simulates authentic A4 sheet with toolbar and zoom controls
@@ -521,10 +598,10 @@
   font-weight: 700;
 }
 
-.money-card.is-income .money-card-amounts strong { color: #059669; }
+.money-card.is-income .money-card-amounts strong { color: #047857; }
 .money-card.is-budget .money-card-amounts strong,
-.money-card.is-expense .money-card-amounts strong { color: #d97706; }
-.money-card.is-balance .money-card-amounts strong { color: #f43f5e; }
+.money-card.is-expense .money-card-amounts strong { color: #92400e; }
+.money-card.is-balance .money-card-amounts strong { color: #b91c1c; }
 
 .money-card-amounts {
   display: grid;
@@ -534,9 +611,12 @@
 
 .money-card-amounts strong,
 .stat-card > strong {
-  color: var(--report-ink);
   font-size: 1.14rem;
   font-variant-numeric: tabular-nums;
+}
+
+.stat-card > strong {
+  color: var(--report-ink);
 }
 
 .money-card > small {

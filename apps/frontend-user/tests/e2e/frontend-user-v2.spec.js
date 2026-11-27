@@ -622,4 +622,157 @@ test.describe("Frontend User 2.0 cross-cutting architecture & Phase 15 acceptanc
     await expect(page.locator("form")).toBeVisible();
     await expect(page.locator(".chatbot-wrapper")).toHaveCount(0);
   });
+
+  test("Financial Report keeps screen Dark Mode while excluding A4 print preview from dark overrides", async ({ page }) => {
+    const installReportRoutes = async () => {
+      await page.route("**/api/v1/invitations/42/**", async (route) => {
+        const pathname = new URL(route.request().url()).pathname;
+        const json = (data) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ data }) });
+        if (pathname.endsWith("/gifts")) {
+          return json([
+            { id: 1, guestId: 501, name: "Chan Sophal", amount: 150, currency: "USD", method: "ABA QR", date: "2026-11-26", note: "VIP" },
+            { id: 2, guestId: 502, name: "Keo Sophea", amount: 400000, currency: "KHR", method: "Cash", date: "2026-11-26", note: "Table 2" },
+          ]);
+        }
+        if (pathname.endsWith("/budget") || pathname.endsWith("/budget-items")) {
+          const items = [
+            { id: 1, category: "Food & Catering", vendorName: "Kitchen", estimatedCost: 4500, actualCost: 3000, currency: "USD", date: "2026-12-01" },
+            { id: 2, category: "Decor & Flowers", vendorName: "Flora", estimatedCost: 1200000, actualCost: 1500000, currency: "KHR", date: "2026-11-28" },
+          ];
+          return json(pathname.endsWith("/budget") ? { totalBudget: 8000, currency: "USD", items } : items);
+        }
+        if (pathname.endsWith("/rsvps")) return json([{ id: 1, responseStatus: "ATTENDING", attendeeCount: 2 }]);
+        if (pathname.endsWith("/check-in/list")) return json([{ id: 901, guestId: 501, active: true }]);
+        if (pathname.endsWith("/reports/guests")) return json({ totalGuests: 48, sent: 44, opened: 39 });
+        if (pathname.endsWith("/reports/rsvp")) return json({ yesCount: 30, attendeeTotal: 74, pendingCount: 12 });
+        return route.fallback();
+      });
+    };
+
+    const readPreviewComputed = () => page.evaluate(() => {
+      const root = document.querySelector(".financial-report-page.is-print-preview");
+      const toolbar = root.querySelector(".report-preview-toolbar");
+      const sheet = root.querySelector(".report-sheet-simulation");
+      const h1 = sheet.querySelector(".financial-report-header h1");
+      const eventTitle = sheet.querySelector(".report-event-title");
+      const ownerH2 = sheet.querySelector(".owner-report-heading h2");
+      const ownerP = sheet.querySelector(".owner-report-heading p");
+      const h2 = sheet.querySelector(".report-section-heading h2");
+      const dataNote = sheet.querySelector(".report-data-note");
+      const card = sheet.querySelector(".report-summary-card");
+      const ownerSummary = sheet.querySelector(".owner-report-summary");
+      const section = sheet.querySelector(".report-section");
+      const income = sheet.querySelector(".report-amount--income");
+      const budget = sheet.querySelector(".report-amount--budget");
+      const expense = sheet.querySelector(".report-amount--expense");
+      const balance = sheet.querySelector(".report-amount--balance");
+      const th = sheet.querySelector(".report-table th");
+      const rows = sheet.querySelectorAll(".report-table tbody tr");
+      const tdOdd = rows[0]?.querySelector("td");
+      const tdEven = rows[1]?.querySelector("td");
+      const sigStrong = sheet.querySelector(".report-signature-block strong");
+      const rootStyle = getComputedStyle(root);
+      return {
+        reportInk: rootStyle.getPropertyValue("--report-ink").trim(),
+        reportMuted: rootStyle.getPropertyValue("--report-muted").trim(),
+        reportLine: rootStyle.getPropertyValue("--report-line").trim(),
+        reportPaper: rootStyle.getPropertyValue("--report-paper").trim(),
+        toolbarBg: getComputedStyle(toolbar).backgroundColor,
+        sheetBg: getComputedStyle(sheet).backgroundColor,
+        h1Color: getComputedStyle(h1).color,
+        eventTitleColor: getComputedStyle(eventTitle).color,
+        ownerH2Color: getComputedStyle(ownerH2).color,
+        ownerPColor: getComputedStyle(ownerP).color,
+        h2Color: getComputedStyle(h2).color,
+        dataNoteColor: getComputedStyle(dataNote).color,
+        cardBg: getComputedStyle(card).backgroundColor,
+        ownerSummaryBg: getComputedStyle(ownerSummary).backgroundColor,
+        sectionBg: getComputedStyle(section).backgroundColor,
+        incomeColor: getComputedStyle(income).color,
+        budgetColor: getComputedStyle(budget).color,
+        expenseColor: getComputedStyle(expense).color,
+        balanceColor: getComputedStyle(balance).color,
+        thBg: getComputedStyle(th).backgroundColor,
+        thColor: getComputedStyle(th).color,
+        tdOddColor: getComputedStyle(tdOdd).color,
+        trEvenBg: getComputedStyle(rows[1]).backgroundColor,
+        tdEvenColor: getComputedStyle(tdEven).color,
+        sigStrongColor: getComputedStyle(sigStrong).color,
+      };
+    });
+
+    // A & B. Normal screen Dark Mode + A4 Preview in Dark Mode
+    await installOwnerFixtures(page, { invitation: { ...MOCK_INVITATION, status: "PUBLISHED" }, colorMode: "dark", lang: "en" });
+    await installReportRoutes();
+    await page.goto("/app/events/42/reports", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".financial-report-page .report-summary-card").first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator(".financial-report-page .report-table tbody tr")).toHaveCount(4);
+
+    const screenDark = await page.evaluate(() => {
+      const root = document.querySelector(".financial-report-page");
+      const card = root.querySelector(".report-summary-card");
+      const tdEven = root.querySelectorAll(".report-table tbody tr")[1]?.querySelector("td");
+      const income = root.querySelector(".report-amount--income");
+      return {
+        isPreview: root.classList.contains("is-print-preview"),
+        cardBg: getComputedStyle(card).backgroundColor,
+        tdColor: getComputedStyle(tdEven).color,
+        incomeColor: getComputedStyle(income).color,
+        overflow: document.documentElement.scrollWidth - window.innerWidth,
+      };
+    });
+    expect(screenDark.isPreview).toBe(false);
+    expect(screenDark.cardBg).toBe("rgb(20, 20, 20)");
+    expect(screenDark.tdColor).toBe("rgb(250, 250, 250)");
+    expect(screenDark.incomeColor).toBe("rgb(134, 239, 172)");
+    expect(screenDark.overflow).toBe(0);
+    const screenDarkAxe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+    expect(screenDarkAxe.violations).toEqual([]);
+
+    await page.locator(".report-preview-btn").click();
+    await expect(page.locator(".financial-report-page.is-print-preview .report-sheet-simulation")).toBeVisible();
+    await expect(page.locator(".financial-report-page.is-print-preview")).toHaveCSS("opacity", "1");
+    const darkPreview = await readPreviewComputed();
+    expect(darkPreview.toolbarBg).toBe("rgb(31, 35, 38)");
+    expect(darkPreview.sheetBg).toBe("rgb(255, 255, 255)");
+    expect(darkPreview.reportInk).toBe("#24312e");
+    expect(darkPreview.reportMuted).toBe("#687570");
+    expect(darkPreview.reportLine).toBe("#dce4df");
+    expect(darkPreview.reportPaper).toBe("#fff");
+    expect(darkPreview.h1Color).toBe("rgb(31, 41, 55)");
+    expect(darkPreview.eventTitleColor).toBe("rgb(23, 107, 85)");
+    expect(darkPreview.ownerH2Color).toBe("rgb(31, 41, 55)");
+    expect(darkPreview.ownerPColor).toBe("rgb(107, 114, 128)");
+    expect(darkPreview.h2Color).toBe("rgb(31, 41, 55)");
+    expect(darkPreview.dataNoteColor).toBe("rgb(104, 117, 112)");
+    expect(darkPreview.cardBg).toBe("rgb(255, 255, 255)");
+    expect(darkPreview.ownerSummaryBg).toBe("rgb(255, 255, 255)");
+    expect(darkPreview.sectionBg).toBe("rgba(0, 0, 0, 0)");
+    expect(darkPreview.incomeColor).toBe("rgb(4, 120, 87)");
+    expect(darkPreview.budgetColor).toBe("rgb(146, 64, 14)");
+    expect(darkPreview.expenseColor).toBe("rgb(146, 64, 14)");
+    expect(darkPreview.balanceColor).toBe("rgb(185, 28, 28)");
+    expect(darkPreview.thBg).toBe("rgb(237, 243, 239)");
+    expect(darkPreview.thColor).toBe("rgb(64, 85, 76)");
+    expect(darkPreview.tdOddColor).toBe("rgb(36, 49, 46)");
+    expect(darkPreview.trEvenBg).toBe("rgb(250, 252, 251)");
+    expect(darkPreview.tdEvenColor).toBe("rgb(36, 49, 46)");
+    expect(darkPreview.sigStrongColor).toBe("rgb(17, 17, 17)");
+    const darkPreviewAxe = await new AxeBuilder({ page }).include(".financial-report-page.is-print-preview").withTags(["wcag2a", "wcag2aa"]).analyze();
+    expect(darkPreviewAxe.violations).toEqual([]);
+
+    // C. A4 Preview in Light Mode matches exact same A4 paper styling
+    await installOwnerFixtures(page, { invitation: { ...MOCK_INVITATION, status: "PUBLISHED" }, colorMode: "light", lang: "en" });
+    await installReportRoutes();
+    await page.goto("/app/events/42/reports", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".financial-report-page .report-summary-card").first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator(".financial-report-page .report-table tbody tr")).toHaveCount(4);
+    await page.locator(".report-preview-btn").click();
+    await expect(page.locator(".financial-report-page.is-print-preview .report-sheet-simulation")).toBeVisible();
+    await expect(page.locator(".financial-report-page.is-print-preview")).toHaveCSS("opacity", "1");
+    const lightPreview = await readPreviewComputed();
+    expect(darkPreview).toEqual(lightPreview);
+    const lightPreviewAxe = await new AxeBuilder({ page }).include(".financial-report-page.is-print-preview").withTags(["wcag2a", "wcag2aa"]).analyze();
+    expect(lightPreviewAxe.violations).toEqual([]);
+  });
 });

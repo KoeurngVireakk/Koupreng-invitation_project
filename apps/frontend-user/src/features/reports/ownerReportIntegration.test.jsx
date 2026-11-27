@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLanguageStore } from "@/stores/useLanguageStore";
 import OwnerReportSummary from "./components/OwnerReportSummary";
@@ -25,5 +25,13 @@ describe("BG-03 mounted owner report summary", () => {
     render(<OwnerReportSummary invitationId={43} />);
     await screen.findByRole("alert");
     expect(screen.queryByText("0")).not.toBeInTheDocument();
+  });
+  it("re-fetches backend guest and rsvp summaries when refreshKey increments", async () => {
+    reportsApi.getReport.mockResolvedValue({ totalGuests: 10, sent: 8, opened: 5, yesCount: 4, attendeeTotal: 6, pendingCount: 2 });
+    const { rerender } = render(<OwnerReportSummary invitationId={42} refreshKey={0} />);
+    await waitFor(() => expect(reportsApi.getReport).toHaveBeenCalledTimes(2));
+
+    rerender(<OwnerReportSummary invitationId={42} refreshKey={1} />);
+    await waitFor(() => expect(reportsApi.getReport).toHaveBeenCalledTimes(4));
   });
 });

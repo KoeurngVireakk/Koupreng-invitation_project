@@ -126,7 +126,7 @@ export function ExpensesList() {
             {/* Table */}
             {eventId && (
                 <ExpenseTable
-                onAddExpense={openAddModal}
+                    onAddExpense={openAddModal}
                     expenses={expenses}
                     selectedCat={selectedCat}
                     setSelectedCat={setSelectedCat}
@@ -137,6 +137,7 @@ export function ExpensesList() {
                     saving={saving}
                     t={t}
                     lang={lang}
+                    eventTitle={backendInvitation?.title || "expenses"}
                 />
             )}
         </div>

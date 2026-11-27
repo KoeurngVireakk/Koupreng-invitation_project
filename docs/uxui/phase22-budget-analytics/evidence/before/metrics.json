@@ -1,0 +1,124 @@
+[
+  {
+    "name": "01-expenses-budget-light-en-1440.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 3,
+        "targets": [
+          ".exp-hero-tag",
+          ".exp-row-over > td[data-label=\"Actual Spent\"] > .exp-amount",
+          ".exp-over-tag"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "02-expenses-budget-obsidian-km-1440.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".exp-row-over > td[data-label=\"ចំណាយជាក់ស្តែង\"] > .exp-amount"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "03-expenses-budget-mobile-390.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2,
+        "targets": [
+          ".exp-row-over > td[data-label=\"Actual Spent\"] > .exp-amount",
+          ".exp-over-tag"
+        ]
+      }
+    ],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "04-attendance-analytics-light-en-1440.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "05-attendance-analytics-obsidian-km-1440.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "06-financial-report-light-en-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 12,
+        "targets": [
+          ".report-summary-grid > .is-income.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-emerald-700.dark\\:text-emerald-400:nth-child(1)",
+          ".report-summary-grid > .is-income.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-emerald-700.dark\\:text-emerald-400:nth-child(2)",
+          ".is-budget > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(1)",
+          ".is-budget > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(2)",
+          ".report-summary-grid > .is-expense.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(1)",
+          ".report-summary-grid > .is-expense.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(2)",
+          ".text-rose-700.dark\\:text-rose-400:nth-child(1)",
+          ".text-rose-700.dark\\:text-rose-400:nth-child(2)",
+          ".report-channel-grid > .is-income.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-emerald-700.dark\\:text-emerald-400:nth-child(1)",
+          ".report-channel-grid > .is-income.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-emerald-700.dark\\:text-emerald-400:nth-child(2)",
+          ".report-channel-grid > .is-expense.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(1)",
+          ".report-channel-grid > .is-expense.money-card.dark\\:bg-\\[\\#1a221d\\] > .money-card-amounts > .text-amber-800.dark\\:text-amber-300:nth-child(2)"
+        ]
+      }
+    ],
+    "totalAxeRaw": 2
+  },
+  {
+    "name": "07-financial-report-obsidian-km-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "08-financial-report-mobile-390.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  }
+]

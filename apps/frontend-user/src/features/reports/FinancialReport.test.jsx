@@ -86,4 +86,41 @@ describe("user financial report", () => {
     render(<ReportsPage />);
     expect(screen.getByText(/No active event is available/)).toBeInTheDocument();
   });
+
+  it("uses semantic contrast classes without Tailwind dark leakage and reloads on Refresh", () => {
+    const reload = vi.fn();
+    reportState.useActiveEventReport.mockReturnValue({
+      sourceData: {
+        invitation: { id: 88, title: "Sokha's Birthday", eventType: "BIRTHDAY", eventDate: "2027-04-20" },
+        gifts: [{ id: 1, name: "Dara", amount: 40, currency: "USD", method: "Cash" }],
+        expenses: [{ id: 3, category: "Venue", estimatedCost: 100, actualCost: 60, currency: "USD" }],
+        guests: [],
+        rsvps: [],
+        checkIns: [],
+      },
+      generatedAt: new Date("2026-10-04T12:00:00Z"),
+      loading: false,
+      error: "",
+      reload,
+    });
+    const { container } = render(<ReportsPage />);
+    expect(container.querySelectorAll(".report-amount--income").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('[class*="dark:text-"]').length).toBe(0);
+
+    fireEvent.click(screen.getByRole("button", { name: "Refresh" }));
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it("isolates the A4 print preview inside .financial-report-page.is-print-preview", () => {
+    const { container } = render(<ReportsPage />);
+    const screenRoot = container.querySelector(".financial-report-page");
+    expect(screenRoot).toBeInTheDocument();
+    expect(screenRoot).not.toHaveClass("is-print-preview");
+
+    fireEvent.click(screen.getByRole("button", { name: /Preview/ }));
+    const previewRoot = document.querySelector(".financial-report-page.is-print-preview");
+    expect(previewRoot).toBeInTheDocument();
+    expect(previewRoot.querySelector(".report-sheet-simulation")).toBeInTheDocument();
+    expect(previewRoot.querySelector(".report-preview-toolbar")).toBeInTheDocument();
+  });
 });

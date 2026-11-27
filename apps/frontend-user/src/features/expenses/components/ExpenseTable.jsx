@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { EXPENSE_CATEGORIES, expenseCategoryLabel } from "../expenseCategories";
+import { exportFilteredExpensesCsv } from "../expenseCsv";
 import { formatLocalDate } from "@/shared/utils/localDate";
 import {
     IoCalendarClearOutline,
@@ -7,6 +9,7 @@ import {
     IoColorPaletteOutline,
     IoCreateOutline,
     IoCubeOutline,
+    IoDownloadOutline,
     IoFastFoodOutline,
     IoSearchOutline,
     IoShirtOutline,
@@ -36,12 +39,18 @@ export function ExpenseTable({
     t,
     lang = "en",
     onAddExpense,
+    eventTitle = "expenses",
 }) {
+    const [selectedCurrency, setSelectedCurrency] = useState("All");
+    const currencies = Array.from(new Set(expenses.map((item) => item.currency || "USD")));
+    const activeCurrency = currencies.includes(selectedCurrency) ? selectedCurrency : "All";
     const filtered = expenses.filter((e) => {
         const matchCat = selectedCat === "All" || e.category === selectedCat;
+        const matchCurrency = activeCurrency === "All" || (e.currency || "USD") === activeCurrency;
         const matchSearch = !search || (e.name || "").toLowerCase().includes(search.toLowerCase()) || (e.vendorName || "").toLowerCase().includes(search.toLowerCase());
-        return matchCat && matchSearch;
+        return matchCat && matchCurrency && matchSearch;
     });
+    const hasActiveFilters = selectedCat !== "All" || activeCurrency !== "All" || Boolean(search);
 
     return (
         <div className="exp-content">
@@ -72,15 +81,52 @@ export function ExpenseTable({
                         );
                     })}
                 </div>
-                <div className="exp-search-box">
-                    <IoSearchOutline aria-hidden="true" />
-                    <input
-                        type="search"
-                        aria-label={t ? t("searchPlaceholder") : "Search expenses"}
-                        placeholder={t ? t("searchPlaceholder") : "Search expenses..."}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
+                <div className="exp-toolbar-controls">
+                    <div className="exp-search-box">
+                        <IoSearchOutline aria-hidden="true" />
+                        <input
+                            type="search"
+                            aria-label={t ? t("searchPlaceholder") : "Search expenses"}
+                            placeholder={t ? t("searchPlaceholder") : "Search expenses..."}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                    {currencies.length > 1 && (
+                        <select
+                            className="exp-currency-filter"
+                            aria-label={lang === "en" ? "Filter by currency" : "តម្រៀបតាមរូបិយប័ណ្ណ"}
+                            value={activeCurrency}
+                            onChange={(e) => setSelectedCurrency(e.target.value)}
+                        >
+                            <option value="All">{lang === "en" ? "All currencies" : "គ្រប់រូបិយប័ណ្ណ"}</option>
+                            {currencies.map((code) => (
+                                <option key={code} value={code}>{code}</option>
+                            ))}
+                        </select>
+                    )}
+                    {hasActiveFilters && (
+                        <button
+                            type="button"
+                            className="workspace-button"
+                            onClick={() => {
+                                setSelectedCat("All");
+                                setSelectedCurrency("All");
+                                setSearch("");
+                            }}
+                        >
+                            {t ? t("clearFilters") : (lang === "en" ? "Clear filters" : "សម្អាតតម្រង")}
+                        </button>
+                    )}
+                    <button
+                        type="button"
+                        className="workspace-button"
+                        disabled={!filtered.length}
+                        onClick={() => exportFilteredExpensesCsv(filtered, eventTitle)}
+                    >
+                        <IoDownloadOutline aria-hidden="true" />
+                        {lang === "en" ? "Export CSV" : "នាំចេញ CSV"}
+                    </button>
                 </div>
             </div>}
 
@@ -89,7 +135,7 @@ export function ExpenseTable({
                     <div className="exp-empty-icon"><IoWalletOutline aria-hidden="true" /></div>
                     <h3>{t ? t(expenses.length ? "noMatches" : "emptyTitle") : "No expense records yet"}</h3>
                     <p>{t ? t(expenses.length ? "noMatchesText" : "emptyText") : "Start by recording your first wedding expense."}</p>
-                    {expenses.length > 0 && <button type="button" className="workspace-button" onClick={() => { setSelectedCat("All"); setSearch(""); }}>{t ? t("clearFilters") : "Clear filters"}</button>}
+                    {expenses.length > 0 && <button type="button" className="workspace-button" onClick={() => { setSelectedCat("All"); setSelectedCurrency("All"); setSearch(""); }}>{t ? t("clearFilters") : "Clear filters"}</button>}
                     {!expenses.length && onAddExpense && <button type="button" className="workspace-button primary" onClick={onAddExpense}>{lang === 'en' ? 'Record first expense' : 'កត់ត្រាចំណាយដំបូង'}</button>}
                 </div>
             ) : (
@@ -130,7 +176,7 @@ export function ExpenseTable({
                                             <span className="exp-budget-val">{item.currency === "KHR" ? `${item.budget.toLocaleString()} ៛` : `$${item.budget.toLocaleString()}`}</span>
                                         </td>
                                         <td data-label={t ? t("colAmount") : "Amount"}>
-                                            <span className="exp-amount" style={{ color: isItemOver ? "#ef4444" : "inherit" }}>
+                                            <span className={`exp-amount${isItemOver ? " is-over" : ""}`}>
                                                 {item.currency === "KHR" ? `${item.amount.toLocaleString()} ៛` : `$${item.amount.toLocaleString()}`}
                                             </span>
                                             {isItemOver && (

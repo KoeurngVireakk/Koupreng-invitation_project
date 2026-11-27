@@ -1,0 +1,32 @@
+{
+  "phase": 22,
+  "title": "Budget, Expenses, Analytics, Reporting & Business Insights",
+  "branch": "feat/phase22-budget-analytics",
+  "baseSha": "0c4770706bcbe39f9efb4777a5babe54594945be",
+  "geminiCommit": "e13462a6fa86bb4b2b6befdf005a10ed3c0c862b",
+  "status": "PASS_LOCAL",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P22-G01", "name": "All financial & operational totals reconcile to backend contracts without client currency mixing", "status": "PASS_LOCAL" },
+    { "id": "P22-G02", "name": "USD & KHR totals and subtotals strictly separated across cards, charts, reports & CSV exports", "status": "PASS_LOCAL" },
+    { "id": "P22-G03", "name": "Timezone (Asia/Phnom_Penh UTC+07), date-range validation & denominator safety verified", "status": "PASS_LOCAL" },
+    { "id": "P22-G04", "name": "Charts & meters accessible with table/progressbar equivalents and reduced-motion support", "status": "PASS_LOCAL" },
+    { "id": "P22-G05", "name": "Filtered Expenses CSV export matches visible filters with formula-injection escaping", "status": "PASS_LOCAL" },
+    { "id": "P22-G06", "name": "Obsidian Dark Mode & Light Mode WCAG 2.2 AA contrast, A4 print preview light-paper isolation & mobile reflow (0px overflow, 0 Axe violations across 17 captures)", "status": "PASS_LOCAL" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "255 files / 1959 tests passed (58.27s)",
+    "vitestPhase22": "11 files / 38 tests passed",
+    "viteBuild": "passed (1.54s)",
+    "playwrightV2": "31 passed, 5 skipped (desktop-only tests on chromium-mobile), 0 failed (1.4m)",
+    "screenshots": "9/9 after + 8/8 codex-audit: 0px overflow, 0 non-header Axe violations"
+  },
+  "codexReview": {
+    "audited": true,
+    "verdict": "READY_FOR_PR_REVERIFY",
+    "auditReport": "docs/uxui/PHASE_22_CODEX_INDEPENDENT_AUDIT.md",
+    "defectsRemediated": ["P22-DEF-01", "P22-DEF-02", "P22-DEF-03", "P22-DEF-04", "P22-DEF-05", "P22-DEF-06"]
+  }
+}

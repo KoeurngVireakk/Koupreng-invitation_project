@@ -46,11 +46,18 @@ export default function CategoryBreakdown({ items = [] }) {
               <span>{budgetCategoryLabel(c.value, isEn)}</span>
               <span>{budgetMoney(c.amount, c.currency)} ({c.percentage}% of {c.currency})</span>
             </div>
-            <div style={{ background: "rgba(107, 107, 196, 0.1)", borderRadius: "999px", height: "8px", overflow: "hidden" }}>
+            <div
+              role="progressbar"
+              aria-valuenow={c.percentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${budgetCategoryLabel(c.value, isEn)} (${c.currency})`}
+              style={{ background: "var(--app-subtle, #f0e6d8)", borderRadius: "999px", height: "8px", overflow: "hidden" }}
+            >
               <div
                 style={{
                   width: `${c.percentage}%`,
-                  background: "var(--brand-primary)",
+                  background: "var(--app-gold, var(--brand-primary))",
                   height: "100%",
                   borderRadius: "999px",
                   transition: "width 0.3s ease",
