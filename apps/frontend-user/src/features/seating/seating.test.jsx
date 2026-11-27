@@ -1,7 +1,9 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLanguageStore } from "@/stores/useLanguageStore";
+import { EventContext } from "@/features/events/workspace/EventContext";
+import FeedbackHost from "@/shared/feedback/FeedbackHost";
 import InvitationSeatingPage from "./InvitationSeatingPage";
 import { SeatingFloorPlan, calculateAutoArrangePositions } from "./components/SeatingFloorPlan";
 
@@ -194,6 +196,56 @@ describe("InvitationSeatingPage Feature", () => {
         expect(dist).toBeGreaterThanOrEqual(6.8);
       }
     }
+  });
+
+  it("gates seating mutations for read-only staff lacking MANAGE_SEATING", async () => {
+    render(
+      <EventContext.Provider value={{ eventId: "10", isOwner: false, access: { owner: false, permissions: ["VIEW_SEATING"] } }}>
+        <MemoryRouter initialEntries={["/dashboard/invitations/10/seating"]}>
+          <Routes>
+            <Route path="/dashboard/invitations/:invitationId/seating" element={<InvitationSeatingPage />} />
+          </Routes>
+        </MemoryRouter>
+      </EventContext.Provider>
+    );
+
+    await waitFor(() => expect(screen.getByRole("heading", { level: 3, name: "Table A1" })).toBeInTheDocument());
+    expect(screen.queryByRole("button", { name: "Create table" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Assign guest" })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Delete table/i })).toBeNull();
+    expect(screen.getByRole("button", { name: "Export CSV" })).toBeEnabled();
+
+    fireEvent.click(screen.getByTestId("tab-floor-plan"));
+    expect(await screen.findByRole("button", { name: /View table Table A1/i })).toBeInTheDocument();
+  });
+
+  it("warns via FeedbackHost dialog before exporting CSV when floor plan has unsaved edits", async () => {
+    vi.clearAllMocks();
+    const { seatingService } = await import("./seatingService");
+    render(
+      <MemoryRouter initialEntries={["/dashboard/invitations/10/seating"]}>
+        <FeedbackHost />
+        <Routes>
+          <Route path="/dashboard/invitations/:invitationId/seating" element={<InvitationSeatingPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => expect(screen.getByRole("heading", { level: 3, name: "Table A1" })).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId("tab-floor-plan"));
+    const tableBtn = await screen.findByRole("button", { name: "Move table Table A1" });
+    tableBtn.focus();
+    fireEvent.keyDown(tableBtn, { key: "ArrowRight" });
+
+    fireEvent.click(screen.getByRole("button", { name: "Export CSV" }));
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    expect(seatingService.exportCsv).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "Export CSV" }));
+    const confirmDialog = await screen.findByRole("dialog");
+    fireEvent.click(within(confirmDialog).getByRole("button", { name: "Export saved list" }));
+    await waitFor(() => expect(seatingService.exportCsv).toHaveBeenCalledWith("10"));
   });
 });
 

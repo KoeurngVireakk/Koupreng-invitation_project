@@ -97,3 +97,6 @@
 :root[data-color-mode="dark"] .dash-wrapper .seating-page .seating-capacity meter::-webkit-meter-bar {
   background: var(--app-subtle);
 }
+@media (prefers-reduced-motion: reduce) {
+  .seating-page *, .seating-page *::before { animation: none !important; transition: none !important; }
+}
