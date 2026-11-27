@@ -1,0 +1,74 @@
+[
+  {
+    "name": "01-expenses-budget-light-en-1440.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "02-expenses-budget-obsidian-km-1440.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "03-expenses-budget-mobile-390.png",
+    "route": "/app/events/42/budget",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  },
+  {
+    "name": "04-attendance-analytics-light-en-1440.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "05-attendance-analytics-obsidian-km-1440.png",
+    "route": "/app/events/42/analytics",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "06-financial-report-light-en-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "light",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "07-financial-report-obsidian-km-1440.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "km",
+    "axeViolations": [],
+    "totalAxeRaw": 1
+  },
+  {
+    "name": "08-financial-report-mobile-390.png",
+    "route": "/app/events/42/reports",
+    "overflowX": 0,
+    "theme": "dark",
+    "lang": "en",
+    "axeViolations": [],
+    "totalAxeRaw": 0
+  }
+]

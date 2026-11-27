@@ -35,7 +35,7 @@ export function ExpenseSummaryCards({ totalBudget = 0, totalSpent = 0, isOver, d
                     <span className="exp-sum-label">
                         {isOver ? (t ? t("sumOverBudget") : "Over Budget") : (t ? t("sumRemaining") : "Remaining Budget")}
                     </span>
-                    <span className="exp-sum-value" style={{ color: isOver ? "#ef4444" : "inherit" }}>
+                    <span className={`exp-sum-value${isOver ? " is-over" : ""}`}>
                         {isOver ? `+${money(diff)}` : money(diff)}
                     </span>
                 </div>
@@ -45,23 +45,18 @@ export function ExpenseSummaryCards({ totalBudget = 0, totalSpent = 0, isOver, d
                 <div style={{ flex: 1 }}>
                     <span className="exp-sum-label">{t ? t("sumPercent") : "Budget Used %"}</span>
                     <span className="exp-sum-value">{percent ?? 0}%</span>
-                    <div style={{
-                        marginTop: "8px",
-                        width: "100%",
-                        height: "6px",
-                        background: "#f0e6d8",
-                        borderRadius: "999px",
-                        overflow: "hidden"
-                    }}>
-                        <div style={{
-                            width: `${Math.min(percent, 100)}%`,
-                            height: "100%",
-                            background: isOver
-                                ? "linear-gradient(90deg, #ef4444, #dc2626)"
-                                : "linear-gradient(90deg, #B0926A, #8c6f4b)",
-                            borderRadius: "999px",
-                            transition: "width 0.4s ease"
-                        }} />
+                    <div
+                        className="exp-progress-track"
+                        role="progressbar"
+                        aria-valuenow={Math.min(percent ?? 0, 100)}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label={t ? t("sumPercent") : "Budget Used %"}
+                    >
+                        <div
+                            className={`exp-progress-fill${isOver ? " is-over" : ""}`}
+                            style={{ width: `${Math.min(percent, 100)}%` }}
+                        />
                     </div>
                 </div>
             </div>

@@ -1,0 +1,11 @@
+# Phase 22 Metric Definitions & Backend Source Map
+
+All operational metrics, financial aggregates, and analytical series are sourced directly from backend endpoints without client-side currency conversion or fabricated synthetic trends.
+
+| Module / Metric | UI Label (EN / KM) | Backend Endpoint / Computation Source | Semantic Definition & Constraints |
+| :--- | :--- | :--- | :--- |
+| **Event Budget Items** | Planned / Actual / Remaining (`USD` & `KHR`) | `/v1/invitations/:id/budget-items` (`expensesApi.listExpenses`), grouped cleanly by currency in `expenseTotals.js` | **Planned Budget**, **Actual Spent**, and **Over/Remaining** never merge `USD` and `KHR` into one number; separate KPI bands render per currency when multi-currency records exist. |
+| **Legacy Budget Summary** | Total Budget / Estimated / Actual / Category Breakdown | `/v1/invitations/:id/budget` (`budgetService.getBudget`), `currencyTotals.js` (`budgetMoney`), `CategoryBreakdown.jsx` | Per-currency breakdown (`${currency}:${cat}`) with accessible `role="progressbar"` meters (`0–100%`). |
+| **Event Gift Contributions** | Recorded Income (`USD` & `KHR`) & Channels | `/v1/invitations/:id/gifts`, aggregated by `financialReport.js` | Represents host-recorded ceremony gifts/envelopes (`ABA / KHQR`, `Cash`, `Transfer`); kept strictly distinct from KoupReng PayWay subscription/template checkout purchases. |
+| **Financial Report Totals** | Estimated Budget, Actual Expenses, Unpaid Balance, Gift Income | `/v1/invitations/:id/{gifts,budget-items,guests,rsvps,check-in/list}` + `/reports/{guests,rsvp}` | Distinguishes Planned (`estimatedCost`), Actual (`actualCost`), and Balance (`estimated - actual`) per currency (`USD`, `KHR`). Refresh control (`Refresh` / `ផ្ទុកឡើងវិញ`) re-syncs from server with generation timestamp. |
+| **Attendance Analytics** | Guest records, Reserved seats, RSVP response rate, Confirmed attendees, Checked-in guest records, Daily RSVP chart | `/v1/invitations/:id/analytics?from=YYYY-MM-DD&to=YYYY-MM-DD` (`AttendanceAnalytics.jsx`) | Current totals explicitly state they are independent of the `Asia/Phnom_Penh` (`UTC+07`) date range. Denominator `0` safely displays `—` (never `NaN%`). Daily bars display unit (`records`) and pair with an explicit accessible `<table>` (`Daily data equivalent for the chart above`). |

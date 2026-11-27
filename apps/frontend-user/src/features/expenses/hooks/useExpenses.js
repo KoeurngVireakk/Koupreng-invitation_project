@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { localDateString } from "@/shared/utils/localDate";
 import { useState, useEffect } from "react";
+import { feedback } from "@/shared/feedback/feedback";
 import {
     createHostRecordId,
     saveBudgetExpenses,
@@ -282,7 +283,11 @@ export function useExpenses() {
     };
 
     const deleteExpense = async (expenseId, confirmMsg) => {
-        if (!window.confirm(confirmMsg || "Are you sure you want to delete this expense?")) return;
+        const confirmed = await feedback.confirm({
+            description: confirmMsg || "Are you sure you want to delete this expense?",
+            destructive: true,
+        });
+        if (!confirmed) return;
         if (!eventId || !backendInvitation?.id || saving) return;
         setSaving(true);
         setError("");

@@ -9,6 +9,7 @@ import BudgetSummaryCards from "./components/BudgetSummaryCards";
 import CategoryBreakdown from "./components/CategoryBreakdown";
 import BudgetProgress from "./components/BudgetProgress";
 import { EmptyState, ErrorState, toast } from "@/shared/ui";
+import { feedback } from "@/shared/feedback/feedback";
 import "./BudgetPages.css";
 
 export default function BudgetPage() {
@@ -121,7 +122,14 @@ export default function BudgetPage() {
   };
 
   const deleteItem = async (itemId) => {
-    if (!window.confirm(isEn ? "Delete this budget item?" : "តើអ្នកប្រាកដជាចង់លុបចំណាយនេះទេ?")) {
+    const confirmed = await feedback.confirm({
+      title: isEn ? "Delete budget item" : "លុបចំណាយ",
+      description: isEn ? "Delete this budget item?" : "តើអ្នកប្រាកដជាចង់លុបចំណាយនេះទេ?",
+      confirmLabel: isEn ? "Delete" : "លុប",
+      cancelLabel: isEn ? "Cancel" : "បោះបង់",
+      destructive: true,
+    });
+    if (!confirmed) {
       return;
     }
     setSaving(true);

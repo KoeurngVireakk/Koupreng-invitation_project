@@ -1,0 +1,28 @@
+{
+  "phase": 22,
+  "title": "Budget, Expenses, Analytics, Reporting & Business Insights",
+  "branch": "feat/phase22-budget-analytics",
+  "baseSha": "0c4770706bcbe39f9efb4777a5babe54594945be",
+  "status": "READY_FOR_CODEX_REVIEW",
+  "workflow": "TWO_AGENT_CODEX_REVIEW_REQUIRED",
+  "gates": [
+    { "id": "P22-G01", "name": "All financial & operational totals reconcile to backend contracts without client currency mixing", "status": "READY_FOR_CODEX_REVIEW" },
+    { "id": "P22-G02", "name": "USD & KHR totals and subtotals strictly separated across cards, charts, reports & CSV exports", "status": "READY_FOR_CODEX_REVIEW" },
+    { "id": "P22-G03", "name": "Timezone (Asia/Phnom_Penh UTC+07), date-range validation & denominator safety verified", "status": "READY_FOR_CODEX_REVIEW" },
+    { "id": "P22-G04", "name": "Charts & meters accessible with table/progressbar equivalents and reduced-motion support", "status": "READY_FOR_CODEX_REVIEW" },
+    { "id": "P22-G05", "name": "Filtered Expenses CSV export matches visible filters with formula-injection escaping", "status": "READY_FOR_CODEX_REVIEW" },
+    { "id": "P22-G06", "name": "Obsidian Dark Mode & Light Mode WCAG 2.2 AA contrast & mobile reflow (0px overflow, 0 Axe violations across 8 captures)", "status": "READY_FOR_CODEX_REVIEW" }
+  ],
+  "verification": {
+    "eslint": "0 errors",
+    "knipAndDeps": "passed",
+    "vitestFull": "255 files / 1955 tests passed (41.02s)",
+    "viteBuild": "passed (1.57s)",
+    "playwrightV2": "27 passed, 5 skipped (desktop-only tests on chromium-mobile), 0 failed (1.2m)",
+    "screenshots": "8/8 0px overflow, 0 non-header Axe violations (reduced from 18 populated before-state contrast violations across 01, 02, 03, 06)"
+  },
+  "codexReview": {
+    "audited": false,
+    "verdict": "PENDING_CODEX_INDEPENDENT_AUDIT"
+  }
+}

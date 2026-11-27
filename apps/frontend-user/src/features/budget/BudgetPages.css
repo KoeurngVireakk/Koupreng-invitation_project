@@ -166,38 +166,47 @@
   }
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card, .budget-panel, .budget-table) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card, .budget-panel, .budget-table),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card, .budget-panel, .budget-table) {
   background: var(--app-surface);
   border-color: var(--app-border);
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card strong, .budget-table th, .budget-table td) {
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label),
+:root[data-color-mode="dark"] .budget-page :is(.budget-summary-card span, .budget-summary-card small, .budget-item-form label, .budget-total-form label, .budget-table label) {
   color: var(--app-muted);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table thead th {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table thead th,
+:root[data-color-mode="dark"] .budget-page .budget-table thead th {
   background: var(--app-subtle);
   color: var(--app-ink);
 }
 
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table-wrap,
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table th,
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table td {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-table td,
+:root[data-color-mode="dark"] .budget-page .budget-table-wrap,
+:root[data-color-mode="dark"] .budget-page .budget-table th,
+:root[data-color-mode="dark"] .budget-page .budget-table td {
   border-color: var(--app-border);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-table input, .budget-table select) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-item-form input, .budget-item-form select, .budget-total-form input, .budget-table input, .budget-table select),
+:root[data-color-mode="dark"] .budget-page :is(.budget-item-form input, .budget-item-form select, .budget-total-form input, .budget-table input, .budget-table select) {
   background: var(--app-subtle);
   border-color: var(--app-control-border);
   color: var(--app-ink);
 }
 
-:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-alert, .budget-empty) {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page :is(.budget-alert, .budget-empty),
+:root[data-color-mode="dark"] .budget-page :is(.budget-alert, .budget-empty) {
   background: var(--app-subtle);
   border-color: var(--app-border);
   color: var(--app-ink);
@@ -205,6 +214,16 @@
 
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-alert.is-error,
 :root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-summary-card.is-danger strong,
-:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-danger-btn {
+:root[data-color-mode="dark"] .dash-wrapper .budget-page .budget-danger-btn,
+:root[data-color-mode="dark"] .budget-page .budget-alert.is-error,
+:root[data-color-mode="dark"] .budget-page .budget-summary-card.is-danger strong,
+:root[data-color-mode="dark"] .budget-page .budget-danger-btn {
   color: var(--app-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .budget-page * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
