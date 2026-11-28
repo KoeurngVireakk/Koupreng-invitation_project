@@ -17,20 +17,11 @@ function mediaSource(value) {
   return value?.url || value?.src || "";
 }
 
-function reveal(reducedMotion, delay, overrides = {}) {
-  if (reducedMotion) return { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } };
-  return {
-    initial: { opacity: 0, y: 18, filter: "blur(5px)", ...overrides.initial },
-    animate: { opacity: 1, y: 0, filter: "blur(0px)", ...overrides.animate },
-    transition: { duration: 0.82, delay, ease: EASE, ...overrides.transition },
-  };
-}
-
 export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = true }) {
   const reducedMotion = usePrefersReducedMotion();
   const [videoFailed, setVideoFailed] = useState(false);
-  const openLabel = content.opening?.openButtonText || "Open invitation";
   const english = String(content.languageMode).toLowerCase() === "en";
+  const openLabel = content.opening?.openButtonText || (english ? "Open invitation" : "បើកសំបុត្រអញ្ជើញ");
   const guestName = content.guestName?.trim() || (english ? "Dear guest" : "ភ្ញៀវកិត្តិយស");
   const guestLabel = english ? "To our guest" : content.isPersonalizedGuest ? "សូមគោរពអញ្ជើញ" : "ជូនចំពោះ";
   const guestNameLength = Array.from(guestName.replace(/\s+/g, "")).length;
@@ -54,10 +45,8 @@ export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = 
       role="dialog"
       aria-modal="true"
       aria-labelledby="kc-opening-title"
-      initial={reducedMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={reducedMotion ? { display: "none" } : { opacity: 0, filter: "blur(7px)" }}
-      transition={{ duration: reducedMotion ? 0 : 1.12, ease: EASE }}
+      initial={false}
+      exit={{ display: "none" }}
     >
       <motion.div
         className="kc-opening__film"
@@ -95,24 +84,19 @@ export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = 
         transition={{ duration: reducedMotion ? 0 : 1.7, delay: reducedMotion ? 0 : 0.2, ease: EASE }}
       />
       <div className="kc-opening__shade" aria-hidden="true" />
-      <button type="button" className="kc-opening__skip" onClick={onSkip || onOpen}>{english ? 'Skip opening' : 'រំលង / Skip opening'}</button>
+      <button type="button" className="kc-opening__skip" onClick={onSkip || onOpen}>{english ? 'Skip opening' : 'រំលង'}</button>
       <CelestialHeritage />
       <CelestialLiveGarden className="kc-opening__garden" variant="opening" />
 
       <div className="kc-opening__content">
-        <motion.p id="kc-opening-title" className="kc-opening__eyebrow" style={celestialElementFont(content, "subtitle")} {...reveal(reducedMotion, 0.62)}>
+        <p id="kc-opening-title" className="kc-opening__eyebrow" style={celestialElementFont(content, "subtitle")}>
           {content.opening?.heading || content.title || "សិរីសួស្តីអាពាហ៍ពិពាហ៍"}
-        </motion.p>
+        </p>
 
         {content.subtitle && <p className="kc-opening__subtitle">{content.subtitle}</p>}
 
         {content.showBrandMark !== false && (
-          <motion.div
-            className="kc-opening__brand-wrap"
-            initial={reducedMotion ? false : { opacity: 0, y: 25, scale: 0.94, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: reducedMotion ? 0 : 1.35, delay: reducedMotion ? 0 : 1, ease: EASE }}
-          >
+          <div className="kc-opening__brand-wrap">
             {content.brandMark ? (
               <img
                 className="kc-opening__brand"
@@ -139,31 +123,22 @@ export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = 
               <BrandLogo variant="hero" priority />
             )}
             <span className="kc-opening__brand-highlight" aria-hidden="true" />
-          </motion.div>
+          </div>
         )}
 
-        <motion.div className="kc-opening__date-block" {...reveal(reducedMotion, 2.18)}>
+        <div className="kc-opening__date-block">
           {content.dateText ? <p className="kc-opening__date" style={celestialElementFont(content, "date")}>{content.dateText}</p> : null}
           {content.eventTime ? <p className="kc-opening__time" style={celestialElementFont(content, "time")}>{content.eventTime}</p> : null}
-        </motion.div>
+        </div>
 
-        <motion.p
+        <p
           className="kc-opening__guest-label"
           style={celestialElementFont(content, "guestLabel")}
-          {...reveal(reducedMotion, 2.42, {
-            initial: { y: 5, filter: "blur(3px)" },
-            transition: { duration: 0.58 },
-          })}
         >
           {guestLabel}
-        </motion.p>
+        </p>
 
-        <motion.div
-          className="kc-opening__guest-banner"
-          initial={reducedMotion ? false : { opacity: 0, y: 16, scale: 0.96, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: reducedMotion ? 0 : 0.96, delay: reducedMotion ? 0 : 2.54, ease: EASE }}
-        >
+        <div className="kc-opening__guest-banner">
           <img
             className="kc-opening__guest-banner-image"
             src={KHMER_CELESTIAL_ASSETS.guestNameBanner}
@@ -176,18 +151,14 @@ export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = 
             draggable="false"
           />
           <p className="kc-opening__guest-banner-content">
-            <motion.strong
+            <strong
               className={guestNameClass}
               style={celestialElementFont(content, "guestName")}
-              {...reveal(reducedMotion, 2.68, {
-                initial: { y: 7, filter: "blur(3px)" },
-                transition: { duration: 0.68 },
-              })}
             >
               {guestName}
-            </motion.strong>
+            </strong>
           </p>
-        </motion.div>
+        </div>
 
         <OpenInvitationCTA
           label={openLabel}

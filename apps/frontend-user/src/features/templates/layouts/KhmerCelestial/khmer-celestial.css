@@ -537,139 +537,42 @@ body:has(.kc-root[data-variant="khmer-celestial"]) .chatbot-wrapper {
   border-color: var(--kc-line);
 }
 
-.kc-opening__button {
-  min-width: min(244px, 100%);
-  color: var(--kc-green-deep);
-  background: rgba(255, 253, 248, 0.7);
-  border-color: var(--kc-line-gold);
-  box-shadow: 0 12px 34px rgba(36, 73, 52, 0.09);
-  font-weight: 600;
-}
-
-/* Khmer Celestial Open Invitation CTA */
+/* The cover uses a raised stationery clasp with a real, localized label. */
 .kc-opening__cta-wrapper {
-  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
   width: 100%;
-  margin: 16px auto 0;
-  isolation: isolate;
+  margin: 14px auto 0;
 }
 
-.kc-opening__cta-frame {
-  position: relative;
-  width: clamp(170px, 14vw, 200px);
-  max-width: 85vw;
-  margin: 0 auto;
-  border: none !important;
-  outline: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.kc-opening__cta-flash {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 140%;
-  height: 220%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 214, 120, 0.35) 0%,
-    rgba(212, 175, 55, 0.18) 45%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: screen;
-}
-
-.kc-opening__cta-particles {
-  position: absolute;
-  inset: -8px -10px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.kc-opening__cta-spark {
-  position: absolute;
-  display: block;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff7d6 20%, #e8bc44 70%, rgba(212, 175, 55, 0) 100%);
-  box-shadow: 0 0 6px rgba(255, 215, 0, 0.55);
-  pointer-events: none;
-}
-
-.kc-opening__cta-button,
-.kc-opening__cta-button:focus,
-.kc-opening__cta-button:focus-visible,
-.kc-opening__cta-button:active,
-.kc-opening__cta-button:hover {
-  position: relative;
-  z-index: 2;
-  display: block;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
+.kc-opening__cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  max-width: 100%;
+  padding: 9px 24px;
+  border: 1px solid #a88a4c;
+  border-radius: 8px;
+  background: #234535;
+  color: #fff8e6;
+  box-shadow: inset 0 0 0 3px #234535, inset 0 0 0 4px #dbc08f, 0 3px 0 #9b7841;
+  font: inherit;
+  font-weight: 650;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
   cursor: pointer;
   touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  will-change: transform, opacity;
+  transition: transform 160ms var(--kc-ease);
 }
 
-.kc-opening__cta-button:disabled {
-  cursor: default;
-  pointer-events: none;
-}
+.kc-opening__cta-button svg { flex-shrink: 0; }
+.kc-opening__cta-button:focus-visible { outline: 3px solid #234535; outline-offset: 5px; }
+.kc-opening__cta-button:active { transform: translateY(2px); }
 
-.kc-opening__cta-media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2172 / 724;
-  border: none !important;
-  outline: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.kc-opening__cta-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  border: none !important;
-  outline: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-@media (max-width: 1024px) {
-  .kc-opening__cta-frame {
-    width: clamp(160px, 20vw, 190px);
-  }
-}
-
-@media (max-width: 640px) {
-  .kc-opening__cta-wrapper {
-    margin-top: 12px;
-  }
-  .kc-opening__cta-frame {
-    width: clamp(150px, 42vw, 180px);
-  }
+@media (hover: hover) and (pointer: fine) {
+  .kc-opening__cta-button:hover:not(:active) { transform: translateY(-2px); }
 }
 
 .kc-toolbar {
@@ -2327,17 +2230,10 @@ body:has(.kc-root[data-variant="khmer-celestial"]) .chatbot-wrapper {
     font-size: clamp(0.6rem, 2.6vw, 0.68rem);
   }
 
-  .kc-opening__button {
-    min-height: 44px;
-  }
-
   .kc-opening__cta-wrapper {
     margin-top: 8px;
   }
 
-  .kc-opening__cta-frame {
-    width: clamp(135px, 38vw, 160px);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2353,9 +2249,7 @@ body:has(.kc-root[data-variant="khmer-celestial"]) .chatbot-wrapper {
   .kc-opening__film video,
   .kc-opening__brand-highlight,
   .kc-opening__butterfly,
-  .kc-opening__transition,
-  .kc-opening__cta-particles,
-  .kc-opening__cta-flash {
+  .kc-opening__transition {
     display: none !important;
   }
 
@@ -2374,6 +2268,18 @@ body:has(.kc-root[data-variant="khmer-celestial"]) .chatbot-wrapper {
     transform: translate(-50%, -50%);
   }
 }
-/* Static bypass stays reachable while the ceremonial CTA animates. */
+/* The bypass is readable even while the background artwork enters. */
 .kc-opening__skip { position: absolute; top: max(1rem, env(safe-area-inset-top)); right: 1rem; z-index: 30; min-width: 44px; min-height: 44px; padding: 8px 14px; border: 1px solid #8a6429; border-radius: 24px; background: #fffdf5; color: #4a3a24; cursor: pointer; font: inherit; }
 .kc-opening__skip:focus-visible { outline: 3px solid #4a3a24; outline-offset: 3px; }
+.kc-music-error {
+  position: fixed;
+  z-index: 450;
+  inset: auto max(68px, env(safe-area-inset-right)) max(90px, env(safe-area-inset-bottom)) auto;
+  max-width: min(260px, calc(100vw - 84px));
+  padding: 8px 12px;
+  border: 1px solid #a88a4c;
+  border-radius: 8px;
+  background: #fffdf5;
+  color: #4a3a24;
+  font-size: 14px;
+}

@@ -46,12 +46,10 @@
 @keyframes kfg-section-enter{from{opacity:.3;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 .kfg-locale-notice{padding:72px 24px 12px;font-size:14px;background:var(--kfg-paper)}
-.kfg-welcome-scene{position:relative;min-height:100svh;padding:clamp(92px,12vh,130px) 28px 40px;text-align:center;animation:kfg-welcome-story var(--kfg-welcome-duration,7000ms) ease-in-out both}
+.kfg-welcome-scene{position:relative;min-height:100svh;padding:clamp(92px,12vh,130px) 28px 40px;text-align:center}
 .kfg-welcome-scene>h2{margin-bottom:25px}.kfg-welcome-scene>p{max-width:440px;margin:20px auto;white-space:pre-line;line-height:2.1}.kfg-welcome-scene .kp-calendar{margin-top:24px}.kfg-welcome-scene .kp-date-presentation{margin-top:12px}.kfg-welcome-scene .kfg-divider{margin-bottom:30px}
 .kfg-continue{display:block;min-height:44px;padding:8px 18px;margin:22px auto 0;border:1px solid var(--kfg-frame-color,#b79a5f);border-radius:25px;background:#fffaf2d9;color:var(--kfg-gold);font-size:14px;cursor:pointer}
 .kfg-skip-welcome{pointer-events:auto;min-height:44px;padding:8px 14px;border:1px solid var(--kfg-frame-color,#b79a5f);border-radius:24px;background:#fffaf2ed;color:var(--kfg-gold);font-size:13px}.kfg-welcome-scene:focus{outline:none}
-.kfg-preview .kfg-welcome-scene{animation:none}
-@keyframes kfg-welcome-story{0%{opacity:0;transform:translateY(12px)}8%,94%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-10px)}}
 @media(max-height:850px){.kfg-welcome-scene{padding-top:80px;font-size:15px}.kfg-welcome-scene>p{margin:12px auto}.kfg-welcome-scene .kfg-divider{margin-block:10px 18px}.kfg-welcome-scene .kp-calendar{padding:14px}.kfg-welcome-scene .kp-calendar td{height:29px}}
 
 /* Original stationery composition: botanical corners belong to individual scenes. */
@@ -85,10 +83,8 @@
 
 .kfg-open:active{transform:scale(.97)}
 .kfg-skip-opening{position:absolute;right:20px;top:70px;min-height:44px;padding:8px 14px;border:1px solid var(--kfg-frame-color,#b79a5f);background:#fffaf2;color:#765b27;border-radius:24px;z-index:5}
-.is-opening .kfg-monogram,.is-opening .kfg-monogram-logo,.is-opening .kfg-opening h1{animation:kfg-unseal-top .8s cubic-bezier(.2,.65,.25,1) both}
-.is-opening .kfg-guest,.is-opening .kfg-cover-details,.is-opening .kfg-open{animation:kfg-unseal-bottom .8s cubic-bezier(.2,.65,.25,1) both}
-@keyframes kfg-unseal-top{to{opacity:0;transform:translateY(-45px) scale(1.04);filter:blur(2px)}}
-@keyframes kfg-unseal-bottom{to{opacity:0;transform:translateY(55px)}}
+.is-opening .kfg-monogram,.is-opening .kfg-monogram-logo{animation:kfg-unseal-top var(--kfg-opening-duration,800ms) cubic-bezier(.2,.65,.25,1) both}
+@keyframes kfg-unseal-top{to{transform:perspective(720px) translateY(-12px) rotateX(12deg) scale(.98)}}
 .kfg-content{padding-bottom:80px}.kfg-section{scroll-margin-top:76px}.kfg-portraits{filter:drop-shadow(3px 7px 7px #67513425)}
 .kfg-portraits figure>img{object-position:50% var(--kfg-portrait-y,50%)}
 .kfg-groom{transform:rotate(-2deg)}.kfg-bride{transform:rotate(2deg);margin-top:-46px!important}

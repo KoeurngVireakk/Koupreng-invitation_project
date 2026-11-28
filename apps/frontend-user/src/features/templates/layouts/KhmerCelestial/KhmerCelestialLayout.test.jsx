@@ -91,7 +91,7 @@ describe("KhmerCelestialLayout integration", () => {
     vi.restoreAllMocks();
   });
 
-  it("opens from a user gesture, starts configured music, and preserves the real RSVP child", async () => {
+  it("opens silently, plays configured music on request, and preserves the real RSVP child", async () => {
     const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
     render(
       <MemoryRouter>
@@ -107,6 +107,8 @@ describe("KhmerCelestialLayout integration", () => {
     expect(screen.getByRole("button", { name: "បើកសំបុត្រអញ្ជើញ" })).toHaveFocus();
     expect(play).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "បើកសំបុត្រអញ្ជើញ" }));
+    expect(play).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "បើកតន្ត្រី" }));
     expect(play).toHaveBeenCalledTimes(1);
     expect(screen.getAllByTestId("real-rsvp")).toHaveLength(1);
     expect(document.body.style.overflow).toBe("");
@@ -192,7 +194,8 @@ describe("KhmerCelestialLayout integration", () => {
     expect(bannerImage).toHaveAttribute("src", KHMER_CELESTIAL_ASSETS.guestNameBanner);
     expect(bannerImage).toHaveAttribute("alt", "");
     expect(banner).toBeVisible();
-    expect(banner).toHaveStyle({ opacity: "1", filter: "blur(0px)" });
+    expect(banner.style.opacity).toBe("");
+    expect(banner.style.filter).toBe("");
     expect(existsSync(resolve(testDirectory, "../../../../../public/invitations/khmer-celestial/guest-name-banner1.webp"))).toBe(true);
   });
 
@@ -219,7 +222,7 @@ describe("KhmerCelestialLayout integration", () => {
     expect(within(banner).queryByText("លោក រ៉ាន់ ណារ៉ាត់ ព្រមទាំងគ្រួសារ")).not.toBeInTheDocument();
   });
 
-  it("renders the ceremonial WEBP Open Invitation button with accessible label and asset path", () => {
+  it("renders the authored open label as readable button text", () => {
     render(
       <MemoryRouter>
         <TemplateExperience tpl={{ id: "khmer-celestial", name: "Khmer Celestial" }} content={content} showBreadcrumb={false} showActions={false} />
@@ -230,18 +233,13 @@ describe("KhmerCelestialLayout integration", () => {
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass("kc-opening__cta-button");
 
-    const image = button.querySelector(".kc-opening__cta-image");
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", KHMER_CELESTIAL_ASSETS.openButton);
-    expect(image).toHaveAttribute("alt", "");
-    expect(image).toHaveAttribute("loading", "eager");
-
-    expect(existsSync(resolve(testDirectory, "../../../../../public/invitations/khmer-celestial/butto_invitation.webp"))).toBe(true);
+    expect(button).toHaveTextContent("បើកសំបុត្រអញ្ជើញ");
   });
 
   it("falls back to Open invitation accessible label when no custom text is provided", () => {
     const defaultContent = {
       ...content,
+      languageMode: "EN",
       opening: {},
     };
 
