@@ -174,14 +174,14 @@ export default function ApiMonitorFeature() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 font-moul">
+                <h2 className={`text-xl font-bold leading-relaxed text-slate-900 dark:text-zinc-100 ${lang === 'km' ? 'font-moul' : 'tracking-tight'}`}>
                   {lang === "km" ? "ឧបករណ៍តាមដានសំណើ API ផ្ទាល់ (Developer API Monitor V2.0)" : "Developer API Live Monitor V2.0"}
                 </h2>
                 <span className="rounded-full bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
                   V2.1 Tracing
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
+              <p className="text-xs text-slate-700 dark:text-zinc-300">
                 {lang === "km"
                   ? "តាមដានរាល់សំណើ HTTP ជាក់ស្ដែង គំនូសតាង Waterfall, Action Tracing, SQL Diagnostics និង QA Sessions"
                   : "End-to-end request tracing, waterfall timing, action correlation, SQL diagnostics & QA sessions"}
@@ -201,7 +201,7 @@ export default function ApiMonitorFeature() {
           >
             <Keyboard className="h-3.5 w-3.5 text-amber-500" />
             <span>Command Palette</span>
-            <kbd className="rounded bg-slate-100 px-1 py-0.2 font-mono text-[10px] text-slate-500 dark:bg-zinc-700 dark:text-zinc-400">
+            <kbd className="rounded bg-slate-100 px-1 py-0.2 font-mono text-[10px] text-slate-700 dark:bg-zinc-700 dark:text-zinc-200">
               Ctrl+K
             </kbd>
           </button>

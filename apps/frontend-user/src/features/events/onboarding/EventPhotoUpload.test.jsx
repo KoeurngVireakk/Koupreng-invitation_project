@@ -116,13 +116,14 @@ describe("EventPhotoUpload Component", () => {
   });
 
   it("renders preview card and allows focal point selection and removal", () => {
+    const previewUrl = `blob:${window.location.origin}/preview-123`;
     const handleFocalChange = vi.fn();
     const handleRemove = vi.fn();
 
     render(
       <EventPhotoUpload
         file={new File([""], "couple.jpg", { type: "image/jpeg" })}
-        previewUrl="blob:http://localhost/preview-123"
+        previewUrl={previewUrl}
         focalPoint="center"
         eventType="WEDDING"
         en={true}
@@ -135,7 +136,7 @@ describe("EventPhotoUpload Component", () => {
     // Preview image is displayed
     const previewImg = screen.getByAltText("Event photo preview");
     expect(previewImg).toBeInTheDocument();
-    expect(previewImg).toHaveAttribute("src", "blob:http://localhost/preview-123");
+    expect(previewImg).toHaveAttribute("src", previewUrl);
 
     // Click focal point buttons
     const topBtn = screen.getByText("Top");

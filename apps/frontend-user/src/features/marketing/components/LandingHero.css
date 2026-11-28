@@ -21,9 +21,9 @@
   flex-shrink: 0;
 }
 .kp-hero--live .kp-hero-category { margin: 0 0 16px; color: var(--kp-gold-ink); font: 500 15px/1.8 var(--kp-font); }
-.kp-landing .kp-hero--live h1 { max-width: 13ch; margin: 0; font-size: clamp(40px, 4.6vw, 66px); font-weight: 600; letter-spacing: -.025em; }
-.kp-landing[lang="en"] .kp-hero--live h1 { line-height: 1.14; }
-.kp-landing[lang="km"] .kp-hero--live h1 { max-width: 16ch; line-height: 1.75; letter-spacing: 0; }
+.kp-landing .kp-hero--live h1 { max-width: 15.5ch; margin: 0; font-size: clamp(38px, 4.4vw, 62px); font-weight: 600; letter-spacing: -.02em; }
+.kp-landing[lang="en"] .kp-hero--live h1 { font-family: var(--kp-display, 'Koupreng Editorial', Georgia, serif); line-height: 1.12; }
+.kp-landing[lang="km"] .kp-hero--live h1 { max-width: 19ch; font-family: 'Kantumruy Pro', var(--kp-font, sans-serif); font-size: clamp(34px, 3.8vw, 56px); line-height: 1.48; letter-spacing: 0; }
 .kp-hero--live h1 > span { display: block; }
 .kp-hero--live .kp-hero-lead { max-width: 47ch; margin-block: 24px 28px; }
 .kp-hero--live .kp-hero-proof { max-width: 43ch; margin-top: 20px; }

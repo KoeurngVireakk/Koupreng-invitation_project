@@ -211,12 +211,6 @@ export default function KhmerCelestialLayout({
   }, [opened, preview]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || opened) return;
-    const img = new Image();
-    img.src = KHMER_CELESTIAL_ASSETS.openButton;
-  }, [opened]);
-
-  useEffect(() => {
     const channel = previewChannel || readEmbeddedPreviewChannel();
     if (!channel) return undefined;
     const onMessage = (event) => {
@@ -304,8 +298,8 @@ export default function KhmerCelestialLayout({
   const handleOpen = useCallback(() => {
     if (transitionEnabled) setOpenTransitionActive(true);
     setOpened(true);
-    if (!startCinematic(() => void startMusic(), transitionEnabled ? 500 : 0)) void startMusic();
-  }, [startMusic, transitionEnabled, startCinematic]);
+    startCinematic();
+  }, [transitionEnabled, startCinematic]);
   const handleSkip = () => {
     playback.stop();
     setOpenTransitionActive(false);
@@ -693,18 +687,24 @@ export default function KhmerCelestialLayout({
       </main>
 
       <GuestSectionNavigation rootRef={mainRef} visible={opened && !playback.active} english={languageMode === "en"} sectionKeys={JSON.stringify(content.enabledSections)} />
-      {musicEnabled && opened && musicState !== "error" ? (
+      {musicEnabled && opened ? (
         <button
           type="button"
           className={`kc-music-fab${musicState === "playing" ? " is-playing" : ""}`}
           onClick={toggleMusic}
-          aria-label={musicState === "playing" ? "ផ្អាកតន្ត្រី" : "បើកតន្ត្រី"}
+          aria-label={languageMode === "en"
+            ? (musicState === "playing" ? "Pause music" : "Play music")
+            : (musicState === "playing" ? "ផ្អាកតន្ត្រី" : "បើកតន្ត្រី")}
           aria-pressed={musicState === "playing"}
         >
           <Music2 aria-hidden="true" />
-          <span className="kc-sr-only">Wedding music</span>
         </button>
       ) : null}
+      {musicEnabled && musicState === "error" && (
+        <p className="kc-music-error" role="status">
+          {languageMode === "en" ? "Music could not play." : "មិនអាចចាក់តន្ត្រីបានទេ។"}
+        </p>
+      )}
     </div></CelestialMotion>
   );
 }

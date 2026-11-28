@@ -772,7 +772,7 @@ function WeddingTemplateExperience({
                 </div>
             )}
 
-            {content.music && <audio ref={musicAudioRef} src={safeIntroMedia(content.music) || undefined} loop preload="auto" />}
+            {content.music && <audio ref={musicAudioRef} src={safeIntroMedia(content.music) || undefined} loop preload="none" />}
             {gateOpen && <TemplateMusicControl controller={musicController} />}
             {gateOpen && showStickyCta && heroOpened && (
                 <TemplateQuickNav

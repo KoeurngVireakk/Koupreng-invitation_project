@@ -60,7 +60,7 @@ export default function VelvetCurtainOpening({
           <Sparkles className="w-10 h-10 text-emerald-950" aria-hidden="true" />
         </button>
         <h2 style={{ fontFamily: '"Moul", "Noto Sans Khmer", serif', lineHeight: 1.8, overflowWrap: 'anywhere', fontSize: "clamp(1.25rem, 5vw, 1.75rem)", color: "var(--el-gold-light)", marginBottom: "0.5rem" }}>
-          {groom} &amp; {bride}
+          {groom && bride ? `${groom} & ${bride}` : (groom || bride || "កឿង វីរៈ & ឡុង សុម៉ាលី")}
         </h2>
         <p style={{ color: "#cbd5e0", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
           សិរីមង្គលអាពាហ៍ពិពាហ៍ប្រណិត
@@ -69,7 +69,7 @@ export default function VelvetCurtainOpening({
           type="button"
           className="el-open-btn"
           onClick={onOpenCurtain}
-          aria-label="បើកសំបុត្រអញ្ជើញ (Open invitation)"
+          aria-label="បើកសំបុត្រអញ្ជើញ (OPEN)"
         >
           បើកសំបុត្រអញ្ជើញ (OPEN)
         </button>
@@ -80,7 +80,6 @@ export default function VelvetCurtainOpening({
             e.stopPropagation();
             (onSkip || onOpenCurtain)?.();
           }}
-          aria-label="រំលងការបើក (Skip opening)"
         >
           រំលង (Skip)
         </button>

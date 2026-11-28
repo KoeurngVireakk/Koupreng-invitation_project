@@ -5,7 +5,7 @@ import { IoArrowBackOutline, IoSparkles, IoShieldCheckmarkOutline } from "react-
 import PaymentQrCard from "./PaymentQrCard";
 import { statusMessage } from "./paymentStatus";
 import { paymentService } from "./paymentService";
-import heroBg from "../../assets/icons/background.png";
+import heroBg from "../../assets/icons/background.webp";
 import "./PaymentPages.css";
 import { packagePrice } from "../marketing/model/packagePresentation";
 import { useLanguageStore } from '@/stores/useLanguageStore';

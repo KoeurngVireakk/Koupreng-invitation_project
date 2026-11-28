@@ -112,13 +112,15 @@ describe('Floral guest music', () => {
     const content = buildTemplateContent(mapped.tpl, mapped.variant);
     expect(floralMusic(content)).toBe(selected.musicTrackId === 'none' || !Object.keys(selected).length ? '' : song);
   });
-  it('starts silently, plays on opening, and keeps one audio node through scenes/language', async () => {
+  it('opens silently, plays on request, and keeps one audio node through scenes and languages', async () => {
     const view = render(layout());
     const audio = view.container.querySelector('audio');
     expect(audio).toHaveAttribute('preload', 'none');
     expect(audio.loop).toBe(true);
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
     fireEvent.click(view.container.querySelector('.kfg-open'));
+    expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
+    fireEvent.click(view.container.querySelector('.kfg-music'));
     await waitFor(() => expect(view.container.querySelector('.kfg-music')).toHaveAttribute('aria-pressed', 'true'));
     expect(audio.volume).toBe(.5);
     fireEvent.change(view.container.querySelector('.kfg-language select'), { target: { value: 'km' } });
@@ -136,6 +138,7 @@ describe('Floral guest music', () => {
     HTMLMediaElement.prototype.play.mockRejectedValueOnce(new DOMException('Blocked', 'NotAllowedError'));
     const view = render(layout());
     fireEvent.click(view.container.querySelector('.kfg-open'));
+    fireEvent.click(view.container.querySelector('.kfg-music'));
     await screen.findByText('Music could not play. Use the music button to try again.');
     expect(view.container.querySelector('.kfg-content')).toBeInTheDocument();
     fireEvent.click(view.container.querySelector('.kfg-music'));
@@ -149,7 +152,7 @@ describe('Floral guest music', () => {
     let resolve;
     HTMLMediaElement.prototype.play.mockReturnValueOnce(new Promise(done => { resolve = done; }));
     const view = render(layout());
-    fireEvent.click(view.container.querySelector('.kfg-open'));
+    fireEvent.click(view.container.querySelector('.kfg-music'));
     view.rerender(layout({ ...base, music: '/new.mp3' }));
     await act(async () => { resolve(); });
     expect(view.container.querySelector('.kfg-music')).toHaveAttribute('aria-pressed', 'false');

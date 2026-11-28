@@ -9,7 +9,7 @@ import { templateCatalogService } from "@/features/templates/api/templateCatalog
 import { RETIRED_TEMPLATE_CODES } from "@/features/templates/model/catalogPolicy";
 import { paymentService } from "./paymentService";
 import { checkoutOffer } from "./checkoutOffer";
-import heroBg from "../../assets/icons/background.png";
+import heroBg from "../../assets/icons/background.webp";
 import "./PaymentPages.css";
 
 export default function TemplateCheckoutPage() {

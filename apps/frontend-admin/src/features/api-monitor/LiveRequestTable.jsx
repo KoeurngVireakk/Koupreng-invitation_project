@@ -149,7 +149,7 @@ export function LiveRequestTable({
         <p className="mt-3 text-sm font-medium text-slate-600 dark:text-zinc-300">
           {lang === "km" ? "មិនទាន់មានសំណើ HTTP នៅឡើយទេ" : "No HTTP requests observed yet"}
         </p>
-        <p className="mt-1 text-xs text-slate-400 dark:text-zinc-500">
+        <p className="mt-1 text-xs text-slate-600 dark:text-zinc-300">
           {lang === "km"
             ? "សូមធ្វើសកម្មភាពនៅលើ User Web ឬ Admin Dashboard ដើម្បីមើលឃើញទិន្នន័យជាក់ស្ដែងភ្លាមៗ"
             : "Perform actions in User Web or Admin Dashboard to see real-time requests streamed here."}
@@ -338,7 +338,7 @@ export function LiveRequestTable({
                         )}
                       </div>
                       {event.matchedPattern && event.matchedPattern !== event.path && (
-                        <span className="font-mono text-[10px] text-slate-400 dark:text-zinc-500">
+                        <span className="font-mono text-[10px] text-slate-600 dark:text-zinc-300">
                           {event.matchedPattern}
                         </span>
                       )}
@@ -357,7 +357,7 @@ export function LiveRequestTable({
                           {event.clientApp || "external"}
                         </span>
                         {event.clientAction && (
-                          <span className="font-mono text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                          <span className="font-mono text-[10px] font-semibold text-amber-800 dark:text-amber-300">
                             {event.clientAction}
                           </span>
                         )}
@@ -369,7 +369,7 @@ export function LiveRequestTable({
                             e.stopPropagation();
                             if (onFilterByAction) onFilterByAction(event.actionId);
                           }}
-                          className="text-left font-mono text-[10px] text-slate-400 hover:text-amber-600 dark:text-zinc-500 dark:hover:text-amber-400"
+                          className="text-left font-mono text-[10px] text-slate-600 hover:text-amber-800 dark:text-zinc-300 dark:hover:text-amber-300"
                           title="Click to filter by action"
                         >
                           {event.actionId}
@@ -386,7 +386,7 @@ export function LiveRequestTable({
                         <span
                           className={`font-semibold tabular-nums ${
                             event.slow
-                              ? "text-amber-600 dark:text-amber-400"
+                              ? "text-amber-800 dark:text-amber-300"
                               : "text-slate-800 dark:text-zinc-200"
                           }`}
                         >
@@ -398,7 +398,7 @@ export function LiveRequestTable({
                           className={`flex items-center gap-1 text-[10px] tabular-nums ${
                             event.nPlusOneDetected
                               ? "rounded bg-rose-100 px-1 py-0.2 font-bold text-rose-700 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-300 dark:border-rose-800"
-                              : "text-slate-400 dark:text-zinc-500"
+                              : "text-slate-600 dark:text-zinc-300"
                           }`}
                           title={event.nPlusOneDetected ? "POTENTIAL_N_PLUS_ONE detected" : `${event.sqlQueryCount} SQL queries`}
                         >
@@ -423,7 +423,7 @@ export function LiveRequestTable({
                   </td>
 
                   {/* Timestamp */}
-                  <td className={`px-3 ${rowPadding} whitespace-nowrap font-mono text-[11px] text-slate-400 dark:text-zinc-500 tabular-nums`}>
+                  <td className={`px-3 ${rowPadding} whitespace-nowrap font-mono text-[11px] text-slate-600 dark:text-zinc-300 tabular-nums`}>
                     {formatTime(event.timestamp)}
                   </td>
 
@@ -433,7 +433,7 @@ export function LiveRequestTable({
                       <button
                         type="button"
                         onClick={(e) => handleCopyCurl(event, e)}
-                        className="rounded p-1 text-slate-400 opacity-0 group-hover:opacity-100 hover:bg-slate-200/60 hover:text-slate-700 dark:text-zinc-500 dark:hover:bg-zinc-700 dark:hover:text-zinc-200 transition"
+                        className="rounded p-1 text-slate-400 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-slate-200/60 hover:text-slate-700 dark:text-zinc-500 dark:hover:bg-zinc-700 dark:hover:text-zinc-200 transition"
                         title="Copy as cURL"
                       >
                         {copiedId === event.id ? (

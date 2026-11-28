@@ -8,7 +8,7 @@ import { EmptyState } from "@/shared/ui/vendor";
 import { usePrefersReducedMotion } from "../../shared/hooks/usePrefersReducedMotion";
 
 // Import Background ដូច Homepage
-import heroBg from "../../assets/icons/background.png";
+import heroBg from "../../assets/icons/background.webp";
 import { useBackendMessages } from "../../shared/i18n/useBackendMessages";
 import "./VenuesFeature.css";
 

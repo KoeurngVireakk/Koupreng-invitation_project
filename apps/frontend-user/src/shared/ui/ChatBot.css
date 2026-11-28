@@ -61,8 +61,10 @@
 
 .close-bubble {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 2px;
+  right: 2px;
+  min-width: 44px;
+  min-height: 44px;
   background: none;
   border: none;
   color: #999;

@@ -192,7 +192,7 @@ function LegacyCinematicVideoOpening({
           poster={effectivePoster}
           playsInline
           autoPlay
-          preload="auto"
+          preload="metadata"
           muted={isMuted}
           onEnded={handleVideoEnded}
           className="absolute inset-0 w-full h-full object-cover"

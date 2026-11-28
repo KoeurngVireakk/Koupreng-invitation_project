@@ -2,9 +2,22 @@ import { useMemo } from "react";
 import { Users, Armchair, Send, CheckCircle2 } from "lucide-react";
 import { SEND_STATUS } from "../model/guestConstants";
 
+function statCountOrUnavailable(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : "—";
+}
+
 export default function GuestStats({ guests = [], summary, t }) {
   const stats = useMemo(() => {
-    if (summary) return { totalCount: summary.guestRecords, totalSeats: summary.reservedSeats, sentCount: summary.markedSentRecords, respondedCount: summary.respondedRecords };
+    if (summary) {
+      return {
+        totalCount: statCountOrUnavailable(summary.guestRecords),
+        totalSeats: statCountOrUnavailable(summary.reservedSeats),
+        sentCount: statCountOrUnavailable(summary.markedSentRecords),
+        respondedCount: statCountOrUnavailable(summary.respondedRecords),
+      };
+    }
     let totalCount = 0;
     let totalSeats = 0;
     let sentCount = 0;

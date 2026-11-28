@@ -1,0 +1,25 @@
+command,working_directory,result,exit_code,passed,failed,skipped,duration_seconds,evidence_and_limit
+npm --prefix apps/frontend-user run test -- --maxWorkers=5,repository root,PASS_INDEPENDENT,0,1981,0,0,64.66,Independent unit suite;258files; before final CSS/Bokeh-feedback correction
+npm --prefix apps/frontend-admin test,repository root,PASS_INDEPENDENT,0,206,0,0,,Independent unit suite;38files; fresh CI also required
+npm --prefix apps/frontend-user run lint,repository root,PASS,0,,,,,output/sss-plus-user-lint-final.log
+npm --prefix apps/frontend-admin run lint,repository root,PASS,0,,,,,output/sss-plus-admin-lint-final.log
+npm --prefix apps/frontend-user run analyze:knip; npm --prefix apps/frontend-user run analyze:deps,repository root,PASS,0,,,,,Both exit0; output/sss-plus-user-knip-final.log and sss-plus-user-deps-final.log
+npm --prefix apps/frontend-admin run analyze:knip; npm --prefix apps/frontend-admin run analyze:deps,repository root,PASS,0,,,,,Both exit0; output/sss-plus-admin-knip-final.log and sss-plus-admin-deps-final.log
+VITE_USER_APP_URL=http://127.0.0.1:4173 npm --prefix apps/frontend-admin run build,repository root,PASS,0,,,,0.443,Environment assignment shown portably; PowerShell env set before npm; output/sss-plus-admin-build-final.log
+npm --prefix apps/frontend-user run build,repository root,PASS,0,,,,1.5,output/sss-plus-user-build-final2.log; missing local VITE_PUBLIC_APP_URL warning
+.\mvnw.cmd --batch-mode test,apps/backend,PASS_WITH_SKIPS,0,606,0,94,117,700discovered; output/sss-plus-backend-final.log; container tests skipped
+python -m pytest -q,apps/telegram-bot,ENVIRONMENT_FAILURE,1,,,,,System Python lacks pytest; output/sss-plus-telegram-final.log
+<original-checkout>/apps/telegram-bot/.venv/Scripts/python.exe -m pytest -q,apps/telegram-bot,PASS,0,77,0,0,1.6,Sanitized interpreter prefix; output/sss-plus-telegram-final-venv.log; one dependency deprecation warning
+"node scripts/qa/capture-platform-contracts.mjs --stage=after --user=http://127.0.0.1:4173 --admin=http://127.0.0.1:4174 --widths=390,1440 --axe=1 --name=final-reviewed",repository root,FAIL_FIXTURE_CONTRACT,1,268,2,0,,270renders; exact Celestial new-template catalog read missing; retained results; no runtime/Axe/overflow/write failures
+"node scripts/qa/capture-platform-contracts.mjs --stage=after --user=http://127.0.0.1:4173 --admin=http://127.0.0.1:4174 --widths=390,1440 --axe=1 --name=final-acceptance",repository root,PASS,0,270,0,0,,evidence/platform-contract-results.json; output/sss-plus-contract-acceptance.log
+npm --prefix apps/frontend-user run test:e2e -- --config=playwright.batch12.config.js --workers=1,repository root,PASS,0,189,0,0,263.766,output/sss-plus-batch12-final.log; strict route content plus bounded interaction scenarios;3engines;0flaky
+node output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/review.mjs,repository root,PASS_INDEPENDENT,0,6,0,0,,evidence/independent-fix-results.json; Chromium scope; no saves
+node output/playwright/sss-plus-v2/inspect-guest-labels.mjs before; node output/playwright/sss-plus-v2/inspect-guest-labels.mjs after,repository root,PASS_SCOPED,0,8,0,0,,evidence/guest-label-contrast.json;8computedlabels;2.715to7.303minimum
+python output/playwright/sss-plus-v2/verify-installation-integrity.py,repository root,PASS,0,76,0,0,,12cleanupstreamrepos;38installedtrees/host; generated Python caches archived; evidence/skill-integrity.json
+python scripts/validate-agent-routing.py,repository root,PASS,0,58,0,0,,58validskills;10pinned;0routingerrors
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-ai-skills.ps1 -VerifyOnly,repository root,PASS,0,58,0,0,,Verify-only; no installation or upstream modification
+node <W11-evidence>/measure.mjs,repository root,MIXED_HARNESS_ATTEMPTS,1,33,9,0,,Original method archived as measure-original.mjs; nine invalid results retained and excluded
+node <W11-evidence>/measure.mjs --retry-invalid,repository root,PAUSED_BY_OWNER,,2,0,7,,Two completed corrected results retained; remaining seven resumed separately
+node <W11-evidence>/measure-resume.mjs,repository root,PASS_MEASUREMENT,0,7,0,0,,Remaining corrected attempts; all source/build/fixture inputs matched
+node <W11-evidence>/measure-home-confirmation.mjs --groups=home,repository root,PASS_MEASUREMENT,0,10,0,0,,Five separate Home pairs; slower candidate LCP in four pairs
+python <W11-evidence>/reconcile.py,repository root,PASS_RECONCILIATION,0,42,0,0,,evidence/w11-controlled-performance.json; seven-surface sample and separate Home confirmation

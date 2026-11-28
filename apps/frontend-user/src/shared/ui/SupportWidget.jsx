@@ -4,7 +4,7 @@ import { MessageSquare, X, ArrowUpRight } from "lucide-react";
 import { useLanguageStore } from "../../stores/useLanguageStore";
 
 const LegacyChat = lazy(() => import("./ChatBot"));
-const publicRoutes = new Set(["/", "/pricing", "/contact", "/templates"]);
+const publicRoutes = new Set(["/", "/pricing", "/contact", "/templates", "/venues"]);
 
 function PublicSupport() {
   const lang = useLanguageStore(state => state.lang);
@@ -19,13 +19,13 @@ function PublicSupport() {
   }, []);
   useEffect(() => { if (open) close.current?.focus(); }, [open]);
   const dismiss = () => { setOpen(false); toggle.current?.focus(); };
-  return <aside className="kp-public-support" lang={lang}>
+  return <aside className={`kp-public-support${open ? " is-open" : ""}`} lang={lang}>
     {open && <div id="public-support-chat" className="kp-support-panel" role="region" aria-label={copy("ជំនួយ និងការគាំទ្រ", "Help & Support")} onKeyDown={event => { if (event.key === "Escape") dismiss(); }}>
       <div><h2>{copy("តើអាចជួយអ្វីបានខ្លះ?", "How can we help?")}</h2><button type="button" ref={close} onClick={dismiss} aria-label={copy("បិទការជជែក", "Close support chat")}><X size={20} aria-hidden="true" /></button></div>
       <p>{copy("ស្វែងយល់ពីគំរូ កញ្ចប់ និងការប្រើប្រាស់ Koupreng។", "Find a design, understand packages or ask about using Koupreng.")}</p>
       {[["/templates", copy("មើលគំរូសន្លឹកការ", "Explore templates")], ["/pricing", copy("មើលកញ្ចប់ និងតម្លៃ", "View packages & pricing")], ["/contact", copy("ទាក់ទងក្រុមការងារ", "Contact the team")]].map(([path, label]) => <Link to={path} key={path} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={17} aria-hidden="true" /></Link>)}
     </div>}
-    <button type="button" ref={toggle} className="chat-toggle-btn kp-support-toggle" aria-controls="public-support-chat" aria-expanded={open} aria-label={open ? copy("បិទការជជែក", "Close support chat") : copy("បើកការជជែកជំនួយ", "Open support chat")} onClick={() => open ? dismiss() : setOpen(true)}>{open ? <X size={22} aria-hidden="true" /> : <MessageSquare size={22} aria-hidden="true" />}</button>
+    <button type="button" ref={toggle} className="chat-toggle-btn kp-support-toggle" aria-controls="public-support-chat" aria-expanded={open} aria-label={open ? copy("បិទការជជែក", "Close support chat") : copy("ជំនួយ · បើកការជជែក", "Help · Open support chat")} onClick={() => open ? dismiss() : setOpen(true)}>{open ? <X size={20} aria-hidden="true" /> : <MessageSquare size={20} aria-hidden="true" />}{!open && <span className="kp-support-label">{copy("ជំនួយ", "Help")}</span>}</button>
   </aside>;
 }
 

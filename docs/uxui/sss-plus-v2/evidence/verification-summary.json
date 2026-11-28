@@ -1,0 +1,134 @@
+{
+  "reviewDate": "2026-11-28",
+  "verdict": "PARTIAL_AUDIT_BLOCKED",
+  "base": "11c8ea41c4c3425561c21d65ed795d7628fc4e1a",
+  "implementationRevision": "e6756d9e358c9eccd29b19d620e58e611de2a8e8",
+  "sourceSnapshot": "source-manifest.json",
+  "fixtureBoundary": "Synthetic, source-shaped bounded reads and explicit interaction-test writes only. No live provider or persistent staging certification.",
+  "routeContracts": {
+    "engine": "156.0.8078.4",
+    "renders": 270,
+    "applications": {
+      "frontend-admin": 48,
+      "frontend-user": 222
+    },
+    "widths": [
+      390,
+      1440
+    ],
+    "pairs": [
+      {
+        "width": 390,
+        "language": "km",
+        "theme": "dark"
+      },
+      {
+        "width": 1440,
+        "language": "en",
+        "theme": "light"
+      }
+    ],
+    "reducedMotion": true,
+    "acceptanceFailures": 0,
+    "runtimeErrors": 0,
+    "overflow": 0,
+    "axeViolations": 0,
+    "writes": 0,
+    "unknownReads": 0
+  },
+  "browserInteraction": {
+    "engines": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "passed": 189,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationSeconds": 263.76587700000005
+  },
+  "independentUnit": {
+    "userFiles": 258,
+    "userPassed": 1981,
+    "userDurationSeconds": 64.66,
+    "adminFiles": 38,
+    "adminPassed": 206,
+    "note": "Independent earlier run; final head also runs in CI"
+  },
+  "backend": {
+    "discovered": 700,
+    "executed": 606,
+    "skipped": 94,
+    "failures": 0,
+    "errors": 0,
+    "durationSeconds": 117,
+    "note": "Local container-dependent tests skipped; not passed"
+  },
+  "telegram": {
+    "passed": 77,
+    "warnings": 1,
+    "durationSeconds": 1.6
+  },
+  "responsiveFollowup": {
+    "cases": 52,
+    "widths": [
+      320,
+      360,
+      375,
+      390,
+      414,
+      430,
+      600,
+      768,
+      820,
+      1024,
+      1280,
+      1440,
+      1920
+    ],
+    "families": [
+      "check-in",
+      "payments"
+    ],
+    "note": "Earlier scoped fixture snapshot; full roles/states/zoom not certified"
+  },
+  "rendererStillSnapshot": {
+    "cases": 39,
+    "registeredEntries": 14,
+    "capturedAt": "2026-11-28T10:18:15.050Z",
+    "note": "Separate earlier still snapshot; reading position and finite entrance readiness recorded per case. No whole-platform acceptance inferred."
+  },
+  "motion": {
+    "cases": 8,
+    "capturedAt": "2026-11-28T10:04:30.881Z",
+    "note": "Normal/reduced, complete/interrupted lab recordings; RAF is main-thread scheduling, not compositor frames or physical-device60fps. Independent Floral content entrance had26 low-opacity samples."
+  },
+  "guestLabelContrast": {
+    "count": 8,
+    "minimumBefore": 2.715203240390604,
+    "minimumAfter": 7.303265196814809,
+    "scope": "KM dark390px pseudo-element labels; owner computed-color and image check"
+  },
+  "skillIntegrity": {
+    "upstreamRepositories": 12,
+    "installedTrees": 76,
+    "failures": 0
+  },
+  "independentCorrectionReview": {
+    "cases": 6,
+    "status": "FIXES_VERIFIED_SCOPED",
+    "evidence": "independent-fix-results.json"
+  },
+  "externalCertification": "All unresolved; see UXUI_EXTERNAL_CERTIFICATION_REGISTER.md",
+  "controlledLoading": {
+    "surfaces": 7,
+    "validComparisons": 42,
+    "invalidOriginalAttempts": 9,
+    "homeConfirmationPairs": 5,
+    "homeSlowerLcpPairs": 4,
+    "evidence": "w11-controlled-performance.json",
+    "status": "PARTIAL"
+  },
+  "ci": "Exact new-head CI and CodeQL run links recorded in PR56; no result inferred from the previous head"
+}

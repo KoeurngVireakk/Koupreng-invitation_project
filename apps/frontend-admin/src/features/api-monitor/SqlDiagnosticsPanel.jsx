@@ -58,7 +58,7 @@ export function SqlDiagnosticsPanel({ events, onSelectEvent, selectedEventId, la
               {stats.totalQueries}
             </span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {stats.requestsWithSql} {lang === "km" ? "សំណើមានការសួរទិន្នន័យ" : "requests triggered DB queries"}
           </p>
         </div>
@@ -90,7 +90,7 @@ export function SqlDiagnosticsPanel({ events, onSelectEvent, selectedEventId, la
               {stats.avgQueries}
             </span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {lang === "km" ? "សម្រាប់សំណើដែលចូល DB" : "For DB-active requests"}
           </p>
         </div>
@@ -106,7 +106,7 @@ export function SqlDiagnosticsPanel({ events, onSelectEvent, selectedEventId, la
               Hibernate StatementInspector
             </span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             100% exact AST query count & template tracking
           </p>
         </div>
@@ -168,7 +168,7 @@ export function SqlDiagnosticsPanel({ events, onSelectEvent, selectedEventId, la
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative min-w-[240px] flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-600" />
           <input
             type="text"
             value={searchTerm}
@@ -256,7 +256,7 @@ export function SqlDiagnosticsPanel({ events, onSelectEvent, selectedEventId, la
                             {event.path}
                           </span>
                           {event.matchedPattern && (
-                            <span className="font-mono text-[10px] text-slate-400 dark:text-zinc-500">
+                            <span className="font-mono text-[10px] text-slate-600 dark:text-zinc-300">
                               {event.matchedPattern}
                             </span>
                           )}

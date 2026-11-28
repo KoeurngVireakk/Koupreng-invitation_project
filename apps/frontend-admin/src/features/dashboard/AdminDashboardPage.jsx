@@ -80,7 +80,7 @@ export default function AdminDashboardPage() {
       <RefreshStatus active={busy} error={Boolean(error)} onRetry={refresh} />
       <CoreMetricsBox data={data} lang={lang} t={t} />
 
-      <div className="dashboard-grid">
+      <div className="dashboard-grid dashboard-grid--operations">
         <AnimatedTrendChart lang={lang} report={analytics.revenue} loading={analytics.revenue === undefined} data={data} />
         <ConversionHealthBox analytics={analytics} lang={lang} loading={analyticsLoading} />
       </div>

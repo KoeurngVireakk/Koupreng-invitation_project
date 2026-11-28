@@ -1,0 +1,286 @@
+{
+  "base": "11c8ea41c4c3425561c21d65ed795d7628fc4e1a",
+  "method": "SHA256 of LF-normalized source/test/harness bytes; no docs or generated exports",
+  "files": [
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/ApiMonitorFeature.jsx",
+      "sha256_lf_normalized": "78bf5987c8acb0e869d153b639f832552a0494ca6db8e0c25b624275385a6915"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/LiveRequestTable.jsx",
+      "sha256_lf_normalized": "a94f2584b15c6bc92ed75fc4c38c7ca5d48e9778cce5746cdff9e8660c071564"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/MonitorOverview.jsx",
+      "sha256_lf_normalized": "83c196ebad6476c8060114c52f8c23ee7b26c8271c52a43e7b5da9c504f16f09"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/QaSessionBar.jsx",
+      "sha256_lf_normalized": "91a6ebcfb987c9e1230f012ef912306d1394267ca4551775eb1f099f4e59186f"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/RequestMetricsChart.jsx",
+      "sha256_lf_normalized": "f36cfaa4240b5de3ad6fb9675b1ac2688085e0135ff56de00956dbffa5124ea8"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/api-monitor/SqlDiagnosticsPanel.jsx",
+      "sha256_lf_normalized": "6b1a006d5c2d2e7635d4abd42ff4a43af3a525c9e49d2a52113a7836b0caca21"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/dashboard/AdminDashboardPage.css",
+      "sha256_lf_normalized": "3cf9a2c60545cfccb5bd41d0a86c5780e8d67544e8202db0d75657e2676044ae"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/dashboard/AdminDashboardPage.jsx",
+      "sha256_lf_normalized": "58c1dbbc3fcace1570d915e9376beda346e2b49d2771c978ba469a616de5fa97"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/notifications/AdminNotificationsFeature.jsx",
+      "sha256_lf_normalized": "c47879e63f3f9178248babff527c19c997f321a6d5d69b1048ee4c61aee88f7f"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/packages/AdminPackagesFeature.jsx",
+      "sha256_lf_normalized": "4454900945dbe2d2751f738139d5f74c3437d2ab79039da45b49fdf2b49b2df9"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/system-logs/AdminSystemLogsFeature.jsx",
+      "sha256_lf_normalized": "cb8332d6acf9171d2fee73bf7f7aa434dc2c593ed3ebf21d488bb719e864460c"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/templates/AdminTemplateEditFeature.jsx",
+      "sha256_lf_normalized": "e113aae498923b30015565639cda505857ea6ea65b4c5a19250a73b59e56ee1c"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/templates/AdminTemplatesFeature.jsx",
+      "sha256_lf_normalized": "37cd515be74a2ea9f58039d47fc7cbd4c8af513df169faa3b07f6b65e7c739ca"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/templates/TemplateStudio.css",
+      "sha256_lf_normalized": "8eb184103753c9dab6ca3b1be745519de988b38b016f81d7a37508c8e6472594"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/templates/components/TemplateUnifiedSectionsManager.jsx",
+      "sha256_lf_normalized": "9156c448820118489f978933b0685483a6af48db228abe226f681ad336e972bf"
+    },
+    {
+      "path": "apps/frontend-admin/src/features/users/AdminUserDetailFeature.jsx",
+      "sha256_lf_normalized": "4b17166dbc775057564bebfc2408a31f39307b02af1084c6f93a3e597d261152"
+    },
+    {
+      "path": "apps/frontend-admin/src/layouts/AdminLayout.css",
+      "sha256_lf_normalized": "2ac437e6d7f295602590f504a4f683b6a44b5b2a8e2af65c6256a50aeba50d48"
+    },
+    {
+      "path": "apps/frontend-admin/src/layouts/AdminLayout.jsx",
+      "sha256_lf_normalized": "77581862dacb305472f148052de694056f8c7b6d2427fb9d4d5c0c9da80f983f"
+    },
+    {
+      "path": "apps/frontend-admin/src/layouts/AdminLayout.test.jsx",
+      "sha256_lf_normalized": "b5c70f9c2d7bc9ec7317fa3abb172fb9b56cf2b6f6383892b904beda8b91ddf6"
+    },
+    {
+      "path": "apps/frontend-admin/src/layouts/components/AdminSidebar.jsx",
+      "sha256_lf_normalized": "792fc2fb522c3b35dcafdd67db5c62bea5aae96f5482ee15eeb68ba553226d9f"
+    },
+    {
+      "path": "apps/frontend-admin/src/layouts/components/adminNavigation.js",
+      "sha256_lf_normalized": "e3c940d1ee5046d974592a4ebf87a807bf02698997111dae2976872d831b1306"
+    },
+    {
+      "path": "apps/frontend-admin/src/shared/ui/AdminSkeleton.css",
+      "sha256_lf_normalized": "ef3759a2d2c4fcbd24aa8f1c7fd94ab4e191a4b5c2a257af4c8a8df0a637be2b"
+    },
+    {
+      "path": "apps/frontend-admin/src/shared/ui/AdminUI.jsx",
+      "sha256_lf_normalized": "4351dd999f4484884c054322e1c1a724b3240ac95ca7067bb9cedf2f25aeaf8d"
+    },
+    {
+      "path": "apps/frontend-user/src/features/enterprise/EnterprisePages.css",
+      "sha256_lf_normalized": "ef8040ef8f3893a5a81e631901b6c7a436b6b9bf6aa6362fede6b58ab00f53de"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/EventsFeature.css",
+      "sha256_lf_normalized": "1f75475c7cf4023503978e37b95d5bdf846c6591a81109ba7eba634e0a57e8b9"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/EventsFeature.jsx",
+      "sha256_lf_normalized": "0be04a510022eecf93e0ec5b9adfb2184af341fe87c2105066a3b12022261d4a"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/onboarding/EventDetails.css",
+      "sha256_lf_normalized": "514f9015dbf0005c792c064651df41b8cfc7da035714545826685616d1738c30"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/onboarding/LocalizedEventEditor.jsx",
+      "sha256_lf_normalized": "87c7a9d8e2a5526bf8f75b28708808ee610441ce9ecbd6cd1d597939b22bbab2"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/onboarding/LocalizedEventEditor.test.jsx",
+      "sha256_lf_normalized": "09c50dfdfad68a41452df997aaaec1705ce64614f50b0c373a896be94aa20906"
+    },
+    {
+      "path": "apps/frontend-user/src/features/events/workspace/EventWorkspace.css",
+      "sha256_lf_normalized": "4187c84af9ecd83bf7583ace48ee2f9ab8cf3d9ede2c799f5317507ec8b57b6e"
+    },
+    {
+      "path": "apps/frontend-user/src/features/guests/GuestWorkspace.css",
+      "sha256_lf_normalized": "78506028cfa8f5e0889dcd53bf23fb4ce021bf5d60f147a968073949dc5c500d"
+    },
+    {
+      "path": "apps/frontend-user/src/features/invitations/InvitationCheckInPage.jsx",
+      "sha256_lf_normalized": "b8830eaf0fde2ba4b749326d24d3c97fac663af909b8f488a7c6e6a047b9ec95"
+    },
+    {
+      "path": "apps/frontend-user/src/features/invitations/InvitationPages.css",
+      "sha256_lf_normalized": "7ae7bc87ef276f48c7b2226b99dbc1d75374509963ffcdf711743d08c36c2c38"
+    },
+    {
+      "path": "apps/frontend-user/src/features/invitations/MediaLibrary.css",
+      "sha256_lf_normalized": "9e344085e59aecaf809cb099243a990f99c45e085e4f32d7dba1c8a1a750f0d8"
+    },
+    {
+      "path": "apps/frontend-user/src/features/invitations/studio/invitation-style-editor.css",
+      "sha256_lf_normalized": "705c2e30247f3a90f392a44806e5608f6b6dc4f7e2f046af934e60f34000f97b"
+    },
+    {
+      "path": "apps/frontend-user/src/features/notifications/NotificationPages.css",
+      "sha256_lf_normalized": "fddd357497ce4e8ffa5463c2da3b849592062bce68a3545d46bced8fc51d442c"
+    },
+    {
+      "path": "apps/frontend-user/src/features/payments/PaymentHistoryPage.jsx",
+      "sha256_lf_normalized": "53becb6c3664e79a28cade31ecbaccdb29992c42f7e7cbf212fb7b2326574d3f"
+    },
+    {
+      "path": "apps/frontend-user/src/features/payments/PaymentPages.css",
+      "sha256_lf_normalized": "deb4e122f3b8f035886b5bc06b2852513b07e04f2b1fe1528b238a4c283ff6e1"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/experience/TemplateExperience.test.jsx",
+      "sha256_lf_normalized": "9fa1272975fb2f090faec8f7c451558daa550e08f7a719be3c7fa8cbe9d16bbd"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/EventEssentialLayout.jsx",
+      "sha256_lf_normalized": "1535383295ce71e95c9fb7ee355e4b084f3c210630ba06d4d686c4d92ec818e7"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/KhmerCelestialLayout.jsx",
+      "sha256_lf_normalized": "fe08e1e5a2f37cf3d50aa731cb0427f4c66383ea2439c46f3d45b71c60719110"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/KhmerCelestialLayout.test.jsx",
+      "sha256_lf_normalized": "17f1189142fb33c76a189cdb8edae62aeb142e70a8567d3139767b204bc3a261"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/components/CelestialOpening.jsx",
+      "sha256_lf_normalized": "53bdaf0f9e91be4beced0b0703e865d782fbff69040009715e9936ef8efc4dba"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/components/OpenInvitationCTA.jsx",
+      "sha256_lf_normalized": "dfdc2e24cd3d91c472378e094aeafdea12e73a0e07f66be59af85bebd057e507"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerCelestial/khmer-celestial.css",
+      "sha256_lf_normalized": "3b0ceb2d043b525dbb36e7103fd4e21d2a9dcd4bb5e57f760314df6ded0f87e2"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerFloralGold/FloralRegal.test.jsx",
+      "sha256_lf_normalized": "f0ba98bbf06bc04a1a264265b87658fa0cd71bb0c836d61eda854746568e4357"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerFloralGold/KhmerFloralGoldLayout.jsx",
+      "sha256_lf_normalized": "d672f6ea1fe5490de3bcc5730e017c588b7529a6c608b1b2e69cc6dc2b33e13a"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/KhmerFloralGold/khmer-floral-gold.css",
+      "sha256_lf_normalized": "1966ec3d21553942bfac2afb8e6fd86a6a27b437fa07ae77490c6efbb790eaea"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/SilkHeritage/silk-heritage.css",
+      "sha256_lf_normalized": "21024837f1eccd30ea44284b65e8b713ccb56a6cd2198891ad9e66b364645ba7"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/layouts/withjoy-portal.css",
+      "sha256_lf_normalized": "02a89460a196ce0ce7ce92c6feee5b66dcccb299fbe227d211ae3efc95c00bcf"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/pages/BrowseTemplates.css",
+      "sha256_lf_normalized": "70b96c0ff48a56fedd4c48d21c23292d1b1b21f32d75ce00bde345c4fedd1f97"
+    },
+    {
+      "path": "apps/frontend-user/src/features/templates/pages/BrowseTemplatesFeature.jsx",
+      "sha256_lf_normalized": "8c868d21192607aae850128cd2b1c37d45b2ba3e17a4948775e72b159854e31e"
+    },
+    {
+      "path": "apps/frontend-user/src/layouts/OwnerExperience.css",
+      "sha256_lf_normalized": "758bb7e764893bb16f1399b9b2d14cc7ae92ad9b13c71c16cfbd8aed9d3f0620"
+    },
+    {
+      "path": "apps/frontend-user/src/shared/styles/app-experience.css",
+      "sha256_lf_normalized": "b73ea7f38f71808477d9e0fbb2a67db7d6d867236ca9f3840a9f422d6c024322"
+    },
+    {
+      "path": "apps/frontend-user/src/shared/ui/ChatBot.jsx",
+      "sha256_lf_normalized": "b7765845ac4726b183eeb5a1231bd78700a0a357f1dcd5f0a72d61d82365467c"
+    },
+    {
+      "path": "apps/frontend-user/src/shared/ui/DatePicker.css",
+      "sha256_lf_normalized": "240b4d6edc26e8dcd6a13411ce1d42ab5854f075cb3c0e089d669cea56f48b40"
+    },
+    {
+      "path": "apps/frontend-user/src/shared/ui/Skeleton.css",
+      "sha256_lf_normalized": "0bebd5c2b2e4e8f7e338d998df720245242a0ef68e749c1da34a5607caab409c"
+    },
+    {
+      "path": "apps/frontend-user/src/shared/ui/TimePicker.css",
+      "sha256_lf_normalized": "48d844475e740eea40a7a5e3a643e113c07b811fc5a083950e933e48820a73da"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/batch12-core-hardening.spec.js",
+      "sha256_lf_normalized": "feb17b4d734587f31556493d4662609c7ac98acf30ffc97039f9fcdc77dcb752"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/batch12-owner-scroll-access.spec.js",
+      "sha256_lf_normalized": "97ecf295de04201daed94110e47db2e504ea37dd80fedc52187ff1997879dc5e"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/floral-v5-regal.spec.js",
+      "sha256_lf_normalized": "13e83d36da2b68d8dd3df7c9d40538bfe8fc41144a7652e19a14347dae984100"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/khmer-floral-gold.spec.js",
+      "sha256_lf_normalized": "329d82344c12898aa3ee79d94af39fec77dd4a943ff8f105aa20d1bf9805be00"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/phase02-foundations.spec.js",
+      "sha256_lf_normalized": "a50a3fde970536c22755c92dd2b64ca91f2670cd2733886baaf1dacba79871c3"
+    },
+    {
+      "path": "apps/frontend-user/tests/e2e/support/batch12RouteContracts.js",
+      "sha256_lf_normalized": "3aa1ef4fd042d941347cf294f3255e343978156a45cf54698049f712da610b30"
+    },
+    {
+      "path": "scripts/qa/audit-user-route-ui.mjs",
+      "sha256_lf_normalized": "57f41e1fe64146ba8d82217edc3f46e721ce33742494d92b43024ffeb1590a15"
+    },
+    {
+      "path": "scripts/qa/capture-phase16-evidence.mjs",
+      "sha256_lf_normalized": "a4e25132941d521717ffab0dcd393c4e32c5c69495328c4b0a5f3204b0066835"
+    },
+    {
+      "path": "scripts/qa/capture-platform-contracts.mjs",
+      "sha256_lf_normalized": "85b012d237cd4a60bc8ee860ffc7678d22f541c294e68381dc68d75fa1756d5c"
+    },
+    {
+      "path": "scripts/qa/capture-sss-admin.mjs",
+      "sha256_lf_normalized": "a5d4e21154e0b0fbe0df0e9fc29e2ad7d5067f5e08f6ba5982cb45904aac59a3"
+    },
+    {
+      "path": "scripts/qa/review-motion-recordings.mjs",
+      "sha256_lf_normalized": "375db18e817b038393136dd300160bc92061166d2caae8b24eeeb698ec894414"
+    },
+    {
+      "path": "scripts/qa/verify-renderer-qr-fixture.mjs",
+      "sha256_lf_normalized": "feefbb1b1385102d4ef2c734046b9e23e7f3b6c2e1339156fd9cbe76d18e302f"
+    }
+  ]
+}

@@ -375,7 +375,7 @@ export default function AdminNotificationsPage() {
                 aria-describedby="notif-action-url-help"
                 readOnly
               />
-              <p id="notif-action-url-help" className="text-xs text-slate-600 mt-1">
+                <p id="notif-action-url-help" className="text-xs text-slate-600 dark:text-zinc-300 mt-1">
                 {lang === "en"
                   ? "Action links are unavailable: the notification service does not support them."
                   : "តំណសកម្មភាពមិនទាន់អាចប្រើបាន៖ សេវាជូនដំណឹងមិនគាំទ្រតំណនេះទេ។"}

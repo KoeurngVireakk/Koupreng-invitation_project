@@ -19,10 +19,17 @@ export function safeIntroMedia(value) {
   if (typeof value !== 'string') return '';
   const source = value.trim();
   if (!source || source.includes('\\') || [...source].some(char => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return '';
-  if (/^\/(?!\/)/.test(source)) return source;
-  if (/^data:image\/(?:png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/i.test(source)) return source;
+  const image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,([A-Za-z0-9+/]+={0,2})$/i.exec(source);
+  if (image) return `data:image/${image[1].toLowerCase()};base64,${image[2]}`;
 
   try {
+    if (source.startsWith('/')) {
+      const base = 'https://koupreng.invalid';
+      const url = new URL(source, base);
+      if (url.origin !== base || url.pathname.startsWith('//')) return '';
+      return url.pathname + url.search + url.hash;
+    }
+
     const url = new URL(source);
     if (url.username || url.password) return '';
     if (url.protocol === 'blob:') {

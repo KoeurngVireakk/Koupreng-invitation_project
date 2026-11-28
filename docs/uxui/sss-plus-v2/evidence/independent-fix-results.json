@@ -1,0 +1,464 @@
+{
+  "provenance": "Focused independent Chromium re-review; fictional bounded API reads; local unsaved Bokeh edits only; no persistence, comparative-performance or physical-device claim",
+  "revision": "f6cfa1bbb34c6e763d2f383ac6f6e0f0f86f99c8",
+  "engine": "156.0.8078.4",
+  "rows": [
+    {
+      "name": "bokeh-en-375",
+      "lang": "en",
+      "width": 375,
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-375-image.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-375-added.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-375-removed.png"
+      ],
+      "stages": [
+        {
+          "stage": "image",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 31,
+              "right": 145.75,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 151.75,
+              "right": 226.359375,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "added",
+          "buttons": [
+            {
+              "name": "Remove video",
+              "width": 93,
+              "height": 44,
+              "left": 31,
+              "right": 124,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 130,
+              "right": 204.609375,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "removed",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 31,
+              "right": 145.75,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 151.75,
+              "right": 226.359375,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "writes": [],
+      "unknownReads": [],
+      "addedToast": "Burgundy Bokeh video added.",
+      "removedToast": "Video removed. The cover now uses an image.",
+      "scriptAssets": [
+        "/assets/index-MmG2B5Hy.js"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "bokeh-en-1440",
+      "lang": "en",
+      "width": 1440,
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-1440-image.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-1440-added.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-en-1440-removed.png"
+      ],
+      "stages": [
+        {
+          "stage": "image",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 455.828125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "added",
+          "buttons": [
+            {
+              "name": "Remove video",
+              "width": 93,
+              "height": 44,
+              "left": 477.578125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "removed",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 455.828125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "writes": [],
+      "unknownReads": [],
+      "addedToast": "Burgundy Bokeh video added.",
+      "removedToast": "Video removed. The cover now uses an image.",
+      "scriptAssets": [
+        "/assets/index-MmG2B5Hy.js"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "bokeh-km-375",
+      "lang": "km",
+      "width": 375,
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-375-image.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-375-added.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-375-removed.png"
+      ],
+      "stages": [
+        {
+          "stage": "image",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 31,
+              "right": 145.75,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 151.75,
+              "right": 226.359375,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "added",
+          "buttons": [
+            {
+              "name": "\ud83d\uddd1\ufe0f \u178a\u1780\u179c\u17b8\u178a\u17c1\u17a2\u17bc\u1785\u17c1\u1789",
+              "width": 93.046875,
+              "height": 44,
+              "left": 31,
+              "right": 124.046875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 130.046875,
+              "right": 204.65625,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "removed",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 31,
+              "right": 145.75,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 151.75,
+              "right": 226.359375,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "writes": [],
+      "unknownReads": [],
+      "addedToast": "\u1794\u17b6\u1793\u1794\u1793\u17d2\u1790\u17c2\u1798 Burgundy Bokeh Video \u2713",
+      "removedToast": "\u1794\u17b6\u1793\u178a\u1780\u1785\u17c1\u1789\u179c\u17b8\u178a\u17c1\u17a2\u17bc (\u1794\u17d2\u178f\u17bc\u179a\u1791\u17c5\u1787\u17b6\u179a\u17bc\u1794\u1797\u17b6\u1796\u179f\u17bb\u1791\u17d2\u1792)",
+      "scriptAssets": [
+        "/assets/index-MmG2B5Hy.js"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "bokeh-km-1440",
+      "lang": "km",
+      "width": 1440,
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-1440-image.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-1440-added.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/bokeh-km-1440-removed.png"
+      ],
+      "stages": [
+        {
+          "stage": "image",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 455.828125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "added",
+          "buttons": [
+            {
+              "name": "\ud83d\uddd1\ufe0f \u178a\u1780\u179c\u17b8\u178a\u17c1\u17a2\u17bc\u1785\u17c1\u1789",
+              "width": 93.046875,
+              "height": 44,
+              "left": 477.53125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        },
+        {
+          "stage": "removed",
+          "buttons": [
+            {
+              "name": "+ Burgundy Bokeh",
+              "width": 114.75,
+              "height": 44,
+              "left": 455.828125,
+              "right": 570.578125,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            },
+            {
+              "name": "Upload",
+              "width": 74.609375,
+              "height": 44,
+              "left": 576.578125,
+              "right": 651.1875,
+              "textLineCount": 1,
+              "whiteSpace": "nowrap",
+              "contained": true
+            }
+          ],
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "writes": [],
+      "unknownReads": [],
+      "addedToast": "\u1794\u17b6\u1793\u1794\u1793\u17d2\u1790\u17c2\u1798 Burgundy Bokeh Video \u2713",
+      "removedToast": "\u1794\u17b6\u1793\u178a\u1780\u1785\u17c1\u1789\u179c\u17b8\u178a\u17c1\u17a2\u17bc (\u1794\u17d2\u178f\u17bc\u179a\u1791\u17c5\u1787\u17b6\u179a\u17bc\u1794\u1797\u17b6\u1796\u179f\u17bb\u1791\u17d2\u1792)",
+      "scriptAssets": [
+        "/assets/index-MmG2B5Hy.js"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "event-essential-footer-390",
+      "width": 390,
+      "interfaceLang": "km",
+      "authoredLanguage": "EN",
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/event-essential-footer-390.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/event-essential-footer-390-detail.png"
+      ],
+      "logo": {
+        "width": 148,
+        "height": 54.4375,
+        "objectFit": "contain",
+        "naturalWidth": 148,
+        "naturalHeight": 54,
+        "aspectRatio": "1968 / 724",
+        "currentSrc": "/branding/webp/koupreng-logo-160w.webp",
+        "left": 121,
+        "right": 269
+      },
+      "scriptAssets": [
+        "/color-mode.js",
+        "/js/telegram-web-app.js",
+        "/assets/index-CtS7uUzP.js"
+      ],
+      "status": "PASS",
+      "errors": [],
+      "writes": [],
+      "unknownReads": []
+    },
+    {
+      "name": "event-essential-footer-1440",
+      "width": 1440,
+      "interfaceLang": "en",
+      "authoredLanguage": "EN",
+      "screenshots": [
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/event-essential-footer-1440.png",
+        "output/playwright/sss-plus-v2/independent-fix-rereview-20261128-1840/event-essential-footer-1440-detail.png"
+      ],
+      "logo": {
+        "width": 176,
+        "height": 64.734375,
+        "objectFit": "contain",
+        "naturalWidth": 176,
+        "naturalHeight": 65,
+        "aspectRatio": "1968 / 724",
+        "currentSrc": "/branding/webp/koupreng-logo-192w.webp",
+        "left": 632,
+        "right": 808
+      },
+      "scriptAssets": [
+        "/color-mode.js",
+        "/js/telegram-web-app.js",
+        "/assets/index-CtS7uUzP.js"
+      ],
+      "status": "PASS",
+      "errors": [],
+      "writes": [],
+      "unknownReads": []
+    }
+  ],
+  "failures": []
+}

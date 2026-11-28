@@ -1,0 +1,8 @@
+surface,trigger,purpose,duration,easing,interruptibility,focus,reduced_motion,verification
+Admin navigation,pointer hover,Indicate target,160ms,Shared standard,Immediate route activation,Existing main focus and dialog restoration,No transition,Desktop rail and mobile drawer capture
+Admin dashboard action,Pointer press,Confirm action target,120ms,Shared ease-out,Releases on pointer-up,Native link or button,No transition,Dashboard interaction and responsive proof
+Admin Studio preview,Device or scene selection,Switch simulation within existing iframe,Immediate,Native pressed state,Switch again any time,Button retains focus,Same controls,Fixture authoring sections and mobile Preview
+Khmer Celestial,Opening load,Reveal film and botanical layers without covering stable text and actions,1600–1700ms,Existing ease-out,Skip button remains visible,Existing opener focus and main handoff,Static botanical fallback,Chromium renderer evidence
+Khmer Celestial,Open or skip,Enter details with separate guest music consent,Immediate title and controls,Native button,Skip bypass remains available,Main on open or skip,Static opening and details,Renderer unit and browser checks
+Khmer Floral Gold,Open,Move the ornament as a raised object while guest information remains readable,350–1300ms by preset,Ease-out,Skip opening and skip welcome,Focus welcome or details,Direct details and no ornament motion,Renderer baseline and candidate
+Khmer Floral Gold,Open or music toggle,Allow independent access to wedding details and audio,Immediate control feedback,Existing token,Explicit play/pause,Music button remains reachable,Audio remains opt-in,Renderer unit and browser checks

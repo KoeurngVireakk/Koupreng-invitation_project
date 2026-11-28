@@ -52,45 +52,30 @@ export default function AdminLayout() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Tavola-style: with slim left floating dock (w-14, left-4), desktop padding is lg:pl-20
-  const sidebarPadding = "lg:pl-20";
-
   return (
-    <div className="admin-shell min-h-screen w-full overflow-x-hidden bg-background text-foreground">
+    <div className="admin-shell">
       <a className="admin-skip-link" href="#admin-main">{lang === "en" ? "Skip to content" : "រំលងទៅមាតិកា"}</a>
-
-      {/* Modern Tavola-Style Left Floating Dock */}
-      <AdminSidebar
+      <AdminHeader
+        onShowSidebar={() => setIsMobileOpen(value => !value)}
         isMobileOpen={isMobileOpen}
-        onNavigate={() => {
-          if (window.innerWidth < 1024) setIsMobileOpen(false);
-        }}
+        isDark={isDark}
+        onToggleTheme={() => setIsDark(value => !value)}
       />
 
-      {/* Main Content Area */}
-      <div
-        className={`${sidebarPadding} min-w-0 max-w-full transition-all duration-300 flex flex-col min-h-screen relative`}
-      >
-        <AdminHeader
-          onShowSidebar={() => setIsMobileOpen(!isMobileOpen)}
-          isMobileOpen={isMobileOpen}
-          isDark={isDark}
-          onToggleTheme={() => setIsDark(!isDark)}
-        />
+      <AdminSidebar
+        isMobileOpen={isMobileOpen}
+        onNavigate={() => setIsMobileOpen(false)}
+      />
 
-        <main id="admin-main" tabIndex={-1} className="flex-1 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <nav className="admin-breadcrumb" aria-label={lang === 'en' ? 'Breadcrumb' : 'ទីតាំងទំព័រ'}>
-            <Link to="/dashboard">{lang === 'en' ? 'Workspace' : 'កន្លែងធ្វើការ'}</Link>
-            {currentPage && <><span aria-hidden="true">/</span><span aria-current="page">{currentPage.label}</span></>}
-          </nav>
-          <div
-            key={location.pathname}
-            className="w-full max-w-full min-w-0 page-transition"
-          >
-            <Suspense fallback={<AdminSkeleton />}><Outlet /></Suspense>
-          </div>
-        </main>
-      </div>
+      <main id="admin-main" tabIndex={-1} className="admin-main">
+        <nav className="admin-breadcrumb" aria-label={lang === 'en' ? 'Breadcrumb' : 'ទីតាំងទំព័រ'}>
+          <Link to="/dashboard">{lang === 'en' ? 'Workspace' : 'កន្លែងធ្វើការ'}</Link>
+          {currentPage && <><span aria-hidden="true">/</span><span aria-current="page">{currentPage.label}</span></>}
+        </nav>
+        <div key={location.pathname} className="min-w-0">
+          <Suspense fallback={<AdminSkeleton />}><Outlet /></Suspense>
+        </div>
+      </main>
     </div>
   );
 }

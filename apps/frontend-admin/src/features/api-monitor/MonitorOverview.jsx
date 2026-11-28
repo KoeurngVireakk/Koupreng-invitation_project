@@ -48,7 +48,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
             </span>
           </div>
 
-          <span className="hidden text-xs text-slate-400 dark:text-zinc-600 sm:inline">•</span>
+          <span className="hidden text-xs text-slate-600 dark:text-zinc-300 sm:inline">•</span>
 
           <span className="text-xs text-slate-500 dark:text-zinc-400">
             {lang === "km" ? "ច្រកត្រួតពិនិត្យ" : "Endpoint"}:{" "}
@@ -110,7 +110,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">{total}</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {stats?.userAppCount ?? 0} user / {stats?.adminAppCount ?? 0} admin
           </p>
         </div>
@@ -124,7 +124,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{successRate}%</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {success} {lang === "km" ? "ជោគជ័យ" : "2xx / 3xx ok"}
           </p>
         </div>
@@ -138,7 +138,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{clientErr}</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {clientErr > 0 ? (lang === "km" ? "ទាមទារការពិនិត្យ" : "4xx validation/auth") : (lang === "km" ? "គ្មានកំហុស" : "None")}
           </p>
         </div>
@@ -154,7 +154,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
               {serverErr}
             </span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {serverErr > 0 ? (lang === "km" ? "ត្រូវការដោះស្រាយជាបន្ទាន់" : "Immediate attention") : (lang === "km" ? "មានស្ថេរភាព" : "Zero errors")}
           </p>
         </div>
@@ -170,7 +170,7 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
               {slow}
             </span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {slow > 0 ? (lang === "km" ? "កម្រិតខ្ពស់ជាងធម្មតា" : "Above threshold") : (lang === "km" ? "ដំណើរការលឿន" : "Optimal")}
           </p>
         </div>
@@ -183,9 +183,9 @@ export function MonitorOverview({ stats, status, isPaused, onTogglePause, onReco
           </div>
           <div className="mt-2 flex items-baseline gap-1.5">
             <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">{avgDuration}ms</span>
-            <span className="text-xs text-slate-400 dark:text-zinc-500">/ {p95Duration}ms</span>
+          <span className="text-xs text-slate-600 dark:text-zinc-300">/ {p95Duration}ms</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400 dark:text-zinc-500">
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-zinc-300">
             {lang === "km" ? "រង្វាស់ Monotonic clock" : "Monotonic clock ms"}
           </p>
         </div>

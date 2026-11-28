@@ -20,7 +20,7 @@
 .tpl-royal-garden .rg-entrance-photo .cover-bg-media { object-position:var(--rg-cover-x) var(--rg-cover-y); transform:translateY(var(--rg-cover-pan-y,0%)) scale(var(--rg-cover-zoom,1.1)); transform-origin:var(--rg-cover-x) var(--rg-cover-y); }
 .tpl-royal-garden .rg-entrance-photo .cover-bg-scrim { opacity:0; }
 .tpl-royal-garden .rg-entrance-vignette { position:absolute; inset:45% 10% 0; z-index:1; pointer-events:none; background:linear-gradient(transparent,rgb(4 27 57 / .78)); }
-.tpl-royal-garden .rg-entrance-composition { position:absolute; inset:0; z-index:4; display:grid; grid-template-rows:var(--rg-heading-band,29cqw) minmax(0,1fr) auto auto auto; gap:6px; padding:37cqw 7% 31cqw; text-align:center; color:var(--rg-royal-gold); }
+.tpl-royal-garden .rg-entrance-composition { position:absolute; inset:0; z-index:4; display:grid; grid-template-rows:var(--rg-heading-band,27cqw) minmax(0,1fr) auto auto auto; gap:6px; padding:26cqw 7% 31cqw; text-align:center; color:var(--rg-royal-gold); }
 .tpl-royal-garden .rg-entrance-lettering { width:82%; justify-self:center; background:radial-gradient(ellipse,rgb(4 27 57 / .3),transparent 72%); display:grid; place-items:center; min-height:0; min-width:0; align-self:stretch; transform:scale(var(--rg-artwork-scale)); }
 .tpl-royal-garden .rg-entrance-lettering img { width:100%; height:100%; min-width:0; min-height:0; object-fit:contain; filter:drop-shadow(0 2px 3px var(--rg-royal-deep)); }
 .tpl-royal-garden .rg-entrance-lettering h1:not(.rg-sr-only) { font-size:clamp(24px,7cqw,34px); line-height:1.75; text-shadow:0 2px 3px var(--rg-royal-deep); }
@@ -45,7 +45,7 @@
 .tpl-royal-garden .rg-royal-open[data-button-style=text] { width:auto; max-width:90%; height:auto; padding:8px 18px; border-radius:8px; }
 .tpl-royal-garden .rg-royal-open:active { transform:scale(.97); }
 .tpl-royal-garden :is(.rg-royal-open,.rg-entrance-skip):focus-visible { outline:3px solid var(--rg-royal-white); outline-offset:4px; }
-.tpl-royal-garden .rg-entrance-skip { position:absolute; z-index:10; top:max(64px,calc(env(safe-area-inset-top) + 56px)); right:12px; min-height:44px; padding:6px 14px; border:1px solid var(--rg-royal-gold); border-radius:30px; background:var(--rg-royal-deep); color:var(--rg-royal-white); }
+.tpl-royal-garden .rg-entrance-skip { position:absolute; z-index:10; top:max(64px,calc(env(safe-area-inset-top) + 56px)); right:max(12px, calc(50% - var(--rg-canvas-width) / 2 + 16px)); min-height:44px; padding:6px 14px; border:1px solid var(--rg-royal-gold); border-radius:30px; background:var(--rg-royal-deep); color:var(--rg-royal-white); }
 .tpl-royal-garden[data-stage=VIDEO_PREPARING] .rg-royal-entrance { position:absolute; inset:0; z-index:20; }
 .tpl-royal-garden .rg-royal-entrance[data-scene=VIDEO_PREPARING] .rg-entrance-stage { animation:rg-royal-away 900ms ease both; }
 /* One viewport, one inner scroll area, stationary source-proportional border. */
