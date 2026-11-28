@@ -355,7 +355,7 @@ describe("TemplateExperience opening gate", () => {
             tpl: { id: "khmer-celestial", name: "Khmer Celestial" },
         });
         await openInvitation();
-        expect(play).toHaveBeenCalledTimes(1);
+        expect(play).not.toHaveBeenCalled();
         expect(screen.getByRole("button", { name: "បើកគម្របម្តងទៀត" })).toBeVisible();
     });
 });

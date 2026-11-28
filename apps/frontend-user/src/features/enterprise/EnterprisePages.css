@@ -14,7 +14,7 @@
 
 .enterprise-eyebrow {
     display: block;
-    color: #6f7c4f;
+    color: #52613a;
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
@@ -128,6 +128,11 @@
 
 .enterprise-table-wrap {
     overflow-x: auto;
+}
+
+.enterprise-table-wrap:focus-visible {
+    outline: 3px solid var(--ring, #0f766e);
+    outline-offset: 3px;
 }
 
 .enterprise-table {

@@ -97,7 +97,7 @@ export default function AdminSystemLogsPage() {
             <FileText className="h-5 w-5 text-amber-500" />
             {t("systemLogs.title", "System Logs")}
           </h2>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-slate-700 dark:text-zinc-300 mt-0.5">
             {t(
               "systemLogs.subtitle",
               "Auditable administrative actions and system security events"

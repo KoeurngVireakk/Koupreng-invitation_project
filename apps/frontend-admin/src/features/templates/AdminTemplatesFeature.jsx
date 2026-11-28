@@ -353,8 +353,9 @@ export default function AdminTemplatesPage() {
       />
 
       {/* 4 Stat Summary Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
+          className="min-w-0 [&>div>span]:whitespace-normal [&>div>span]:tracking-normal"
           label={lang === "en" ? "All Templates" : "គំរូទាំងអស់"}
           value={stats.total}
           note={lang === "en" ? "Total templates in system" : "ចំនួនគំរូសរុបក្នុងប្រព័ន្ធ"}
@@ -362,6 +363,7 @@ export default function AdminTemplatesPage() {
           tone="amber"
         />
         <StatCard
+          className="min-w-0 [&>div>span]:whitespace-normal [&>div>span]:tracking-normal"
           label={lang === "en" ? "Premium Templates" : "គំរូ PREMIUM"}
           value={stats.premium}
           note={lang === "en" ? "For paid tier packages" : "សម្រាប់គណនីបង់ប្រាក់"}
@@ -369,6 +371,7 @@ export default function AdminTemplatesPage() {
           tone="purple"
         />
         <StatCard
+          className="min-w-0 [&>div>span]:whitespace-normal [&>div>span]:tracking-normal"
           label={lang === "en" ? "Free Templates" : "គំរូឥតគិតថ្លៃ (FREE)"}
           value={stats.free}
           note={lang === "en" ? "Available for all users" : "សម្រាប់អតិថិជនទូទៅ"}
@@ -376,6 +379,7 @@ export default function AdminTemplatesPage() {
           tone="emerald"
         />
         <StatCard
+          className="min-w-0 [&>div>span]:whitespace-normal [&>div>span]:tracking-normal"
           label={lang === "en" ? "Active Templates" : "កំពុងដំណើរការ (ACTIVE)"}
           value={stats.active}
           note={lang === "en" ? "Visible on public site" : "បង្ហាញលើគេហទំព័រ"}
@@ -488,7 +492,7 @@ export default function AdminTemplatesPage() {
           <h3 className="text-base font-bold text-slate-800 dark:text-zinc-200">
             រកមិនឃើញគំរូសំបុត្រអញ្ជើញឡើយ
           </h3>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
             មិនមានគំរូដែលត្រូវនឹងការស្វែងរករបស់អ្នកទេ។ សូមសាកល្បងប្ដូរពាក្យគន្លឹះ ឬបង្កើតគំរូថ្មី។
           </p>
           <div className="mt-5">
@@ -556,10 +560,10 @@ export default function AdminTemplatesPage() {
                 {/* Card Body */}
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="inline-block rounded-lg bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    <span className="inline-block rounded-lg bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 border border-amber-500/20">
                       {template.category || "TRADITIONAL"}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-400 dark:text-zinc-500">
+                    <span className="text-[11px] font-mono text-slate-600 dark:text-zinc-300">
                       ID #{template.id}
                     </span>
                   </div>
@@ -572,7 +576,7 @@ export default function AdminTemplatesPage() {
                     {formatTemplateDescription(template.description)}
                   </p>
 
-                  <div className="mt-3 pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] text-slate-400 dark:text-zinc-500">
+                  <div className="mt-3 pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] text-slate-600 dark:text-zinc-300">
                     <span>បង្កើត៖ {formatDate(template.createdAt)}</span>
                   </div>
 
@@ -589,7 +593,7 @@ export default function AdminTemplatesPage() {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                         isPremium
                           ? "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 shadow-xs"
-                          : "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 shadow-xs"
+                          : "border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 shadow-xs"
                       }`}
                       title={isPremium ? "ចុចដើម្បីប្ដូរទៅ Free 🎁" : "ចុចដើម្បីប្ដូរទៅ Premium 👑"}
                     >
@@ -709,7 +713,7 @@ export default function AdminTemplatesPage() {
                         </div>
                       </td>
                       <td className="px-3 py-4">
-                        <span className="inline-block rounded-md bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        <span className="inline-block rounded-md bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-800 dark:text-amber-300 border border-amber-500/20">
                           {template.category || "TRADITIONAL"}
                         </span>
                       </td>
@@ -720,7 +724,7 @@ export default function AdminTemplatesPage() {
                             <span>PREMIUM</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
                             <Gift className="h-3 w-3" />
                             <span>FREE</span>
                           </span>
@@ -732,7 +736,7 @@ export default function AdminTemplatesPage() {
                           tone={isActive ? "green" : "rose"}
                         />
                       </td>
-                      <td className="px-3 py-4 text-xs text-slate-500 dark:text-zinc-400">
+                      <td className="px-3 py-4 text-xs text-slate-700 dark:text-zinc-300">
                         {formatDate(template.createdAt)}
                       </td>
                       <td className="py-4 pl-3 pr-6 text-right">

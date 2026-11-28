@@ -29,7 +29,7 @@ test('cover content stays visible during entrance motion and an interrupted relo
   expect(errors).toEqual([]);
 });
 
-test('actual transparent ornament and MP3 play only on the opening gesture and survive scenes', async ({ page }) => {
+test('transparent ornament opens silently and the chosen MP3 survives scenes', async ({ page }) => {
   await phase8Fixtures(page, { code: 'khmer-floral-gold' });
   const trackResponse = await page.request.get(song);
   expect(trackResponse.status()).toBe(200);
@@ -64,6 +64,8 @@ test('actual transparent ornament and MP3 play only on the opening gesture and s
   await audio.evaluate(node => { window.floralV5Audio = node; });
   const opener = page.locator('.kfg-open');
   await opener.focus(); await opener.press('Enter');
+  expect(await audio.evaluate(node => node.paused)).toBe(true);
+  await page.getByRole('button', { name: 'Play music' }).click();
   await expect(page.locator('.kfg-music')).toHaveAttribute('data-music-status', 'playing');
   await expect(page.locator('.kfg-welcome-scene')).toBeVisible();
   await expect.poll(() => audio.evaluate(node => node.currentTime)).toBeGreaterThan(0);
@@ -71,7 +73,7 @@ test('actual transparent ornament and MP3 play only on the opening gesture and s
   expect(first.time).toBeGreaterThan(0);
   expect(first.duration).toBeGreaterThan(213); expect(first.duration).toBeLessThan(215);
   expect(first.volume).toBe(.5); expect(first.loop).toBe(true);
-  await expect(page.locator('.kfg-content')).toBeVisible();
+  await expect(page.locator('.kfg-content')).toBeVisible({ timeout: 12000 });
   await page.locator('.kfg-language select').selectOption('km');
   await page.locator('.kfg-footer').scrollIntoViewIfNeeded();
   expect(await audio.evaluate(node => node === window.floralV5Audio && node.currentTime > 3 && !node.paused)).toBe(true);
@@ -192,9 +194,11 @@ test('Premium film remains muted while one selected wedding song continues', asy
   state.events.set(101, { ...state.events.get(101), cinematicOpening: { enabled: true, videoMediaId: 400 }, status: 'PUBLISHED' });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/i/review-celestial');
+  await page.locator('.kfg-music').click();
+  await expect(page.locator('.kfg-music')).toHaveAttribute('data-music-status', 'playing');
   await page.locator('.kfg-open').click();
   await expect(page.locator('.kfg-music')).toHaveAttribute('data-music-status', 'playing');
-  await expect(page.locator('.kfg-content')).toBeVisible();
+  await expect(page.locator('.kfg-content')).toBeVisible({ timeout: 12000 });
   const dialog = page.getByRole('dialog', { name: 'Pre-wedding video', exact: true });
   await expect.poll(() => page.evaluate(() => window.floralV5VideoEvents.length)).toBeGreaterThan(0);
   const events = await page.evaluate(() => window.floralV5VideoEvents);

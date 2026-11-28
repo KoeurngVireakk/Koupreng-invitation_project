@@ -2,6 +2,7 @@ import { serializeTemplateConfig } from "./templatePersistence";
 import useStudioPanelLayout from './useStudioPanelLayout';
 import StudioPanelResize from './components/StudioPanelResize';
 import StudioPreviewFrame from './components/StudioPreviewFrame';
+import AdminDialog from '../../layouts/components/AdminDialog';
 import './TemplateStudio.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -62,6 +63,7 @@ const TEMPLATE_LAYOUT_OPTIONS = [
     name: "Khmer Celestial",
     labelKh: "ផ្កា & ពន្លឺមាសប្រណិត",
     desc: "រចនាបទផ្កា ស៊ុម Botanical ព័ទ្ធជុំវិញ និងពន្លឺផ្កាយមាស (Flagship)",
+    descEn: "Botanical florals with radiant gold star sparkles",
     badge: "Flagship",
     badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
     icon: "🌸",
@@ -71,6 +73,7 @@ const TEMPLATE_LAYOUT_OPTIONS = [
     name: "The Digital Yes",
     labelKh: "ស្រោមសំបុត្រ 3D & ផ្កាធ្លាក់",
     desc: "ស្រោមសំបុត្របិទត្រា Wax Seal ចុចរបើកហូតសំបុត្រ + ផ្កាធ្លាក់",
+    descEn: "3D envelope · Wax Seal",
     badge: "Interactive",
     badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
     icon: "💌",
@@ -80,6 +83,7 @@ const TEMPLATE_LAYOUT_OPTIONS = [
     name: "Emerald Luxe",
     labelKh: "កាត 3D Flip & វាំងននកម្ញី",
     desc: "វាំងននកម្ញី Velvet បៃតងត្បូងមរកត + បង្វិលកាត 3D Flip",
+    descEn: "Velvet · 3D Flip",
     badge: "Luxury",
     badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
     icon: "🌿",
@@ -89,6 +93,7 @@ const TEMPLATE_LAYOUT_OPTIONS = [
     name: "Custom Boilerplate",
     labelKh: "គំរូ Starter ថ្មីសម្រាប់ Custom",
     desc: "Layout គំរូស្រាល លឿន សម្រាប់ Developer កែប្រែតាមចិត្ត",
+    descEn: "Starter layout for custom templates",
     badge: "Starter",
     badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     icon: "🚀",
@@ -97,10 +102,11 @@ const TEMPLATE_LAYOUT_OPTIONS = [
 
 // Preset Theme Styles
 const THEME_PRESETS = [
-  { id: 'KHMER_FLORAL_GOLD', name: 'សិរីមង្គលផ្កាមាស / Khmer Floral Gold', primary: '#876326', secondary: '#d5b77a', bg: '#fffdf8', badge: 'Khmer Floral Gold', amp: '&', fontKhmer: 'Moul', fontLatin: 'Cormorant Garamond', dressColors: [], backgroundImage: '' },
+  { id: 'KHMER_FLORAL_GOLD', name: 'សិរីមង្គលផ្កាមាស / Khmer Floral Gold', nameEn: 'Khmer Floral Gold', primary: '#876326', secondary: '#d5b77a', bg: '#fffdf8', badge: 'Khmer Floral Gold', amp: '&', fontKhmer: 'Moul', fontLatin: 'Cormorant Garamond', dressColors: [], backgroundImage: '' },
   {
     id: "SILK_HERITAGE",
     name: "សូត្រមង្គល / Silk Heritage",
+    nameEn: "Silk Heritage",
     primary: "#672C39",
     secondary: "#B39460",
     bg: "#F6F0E5",
@@ -118,6 +124,7 @@ const THEME_PRESETS = [
   {
     id: "GOLD_LUXURY",
     name: "Gold Luxury (មាសប្រណិត)",
+    nameEn: "Gold Luxury",
     primary: "#D4AF37",
     secondary: "#F3E5AB",
     bg: "#FFFDF7",
@@ -135,6 +142,7 @@ const THEME_PRESETS = [
   {
     id: "EMERALD_GREEN",
     name: "Emerald Green (ត្បូងមរកត)",
+    nameEn: "Emerald Green",
     primary: "#0F4C3A",
     secondary: "#2D8A6E",
     bg: "#F7FAF8",
@@ -152,6 +160,7 @@ const THEME_PRESETS = [
   {
     id: "RUBY_RED",
     name: "Ruby Red (ក្រហមទុំមាស)",
+    nameEn: "Ruby Red",
     primary: "#8B1E2D",
     secondary: "#D4AF37",
     bg: "#FFFDF7",
@@ -169,6 +178,7 @@ const THEME_PRESETS = [
   {
     id: "CHAMPAGNE",
     name: "Champagne (សាំប៉ាញប្រណិត)",
+    nameEn: "Champagne",
     primary: "#C5A880",
     secondary: "#E8D8C8",
     bg: "#FAF8F5",
@@ -186,6 +196,7 @@ const THEME_PRESETS = [
   {
     id: "ROYAL_KHMER",
     name: "Royal Khmer (រាជវាំងខ្មែរ)",
+    nameEn: "Royal Khmer",
     primary: "#8B1E2D",
     secondary: "#D4AF37",
     bg: "#FFFDF7",
@@ -203,6 +214,7 @@ const THEME_PRESETS = [
   {
     id: "KHMER_CELESTIAL",
     name: "Khmer Celestial (ខ្មែរចន្ទតារា)",
+    nameEn: "Khmer Celestial",
     primary: "#541722",
     secondary: "#B88A3A",
     bg: "#F7F0E4",
@@ -221,6 +233,7 @@ const THEME_PRESETS = [
   {
     id: "MODERN_MINIMAL",
     name: "Modern Minimal (សម័យសាមញ្ញ)",
+    nameEn: "Modern Minimal",
     primary: "#0F172A",
     secondary: "#64748B",
     bg: "#FFFFFF",
@@ -733,6 +746,7 @@ export default function AdminTemplateEditPage() {
   });
   const [selectedFontElement, setSelectedFontElement] = useState("couple");
   const [showFontModal, setShowFontModal] = useState(false);
+  const fontDialogTriggerRef = useRef(null);
   const [fontModalTab, setFontModalTab] = useState("google"); // 'google' | 'file'
   const [newFontName, setNewFontName] = useState("");
   const [newFontCategory, setNewFontCategory] = useState("khmer");
@@ -1160,7 +1174,7 @@ export default function AdminTemplateEditPage() {
       dressColors: preset.dressColors,
       backgroundImage: preset.backgroundImage !== undefined ? preset.backgroundImage : prev.backgroundImage,
     }));
-    show(`បានកំណត់ Theme "${preset.name}" ✓`);
+    show(isEn ? `Theme selected: ${preset.nameEn}` : `បានកំណត់ Theme "${preset.name}" ✓`);
   };
 
   // Schedule management
@@ -1417,7 +1431,7 @@ export default function AdminTemplateEditPage() {
   const handleSave = async () => {
     if (loading || loadError || saving) return;
     if (!form.name.trim()) {
-      show("សូមបញ្ចូលឈ្មោះគំរូសំបុត្រអញ្ជើញ (Template Name)", "error");
+      show(lang === "en" ? "Enter a template name in Catalog settings." : "សូមបញ្ចូលឈ្មោះគំរូសំបុត្រអញ្ជើញ", "error");
       return;
     }
 
@@ -1506,11 +1520,11 @@ export default function AdminTemplateEditPage() {
         ? await adminManagementService.createTemplate(payload)
         : await adminManagementService.updateTemplate(templateId, payload);
 
-      show("បានរក្សាទុក និងផ្សព្វផ្សាយគំរូសំបុត្រអញ្ជើញជោគជ័យ ✓");
+      show(lang === "en" ? "Template saved." : "បានរក្សាទុកគំរូសំបុត្រអញ្ជើញ។");
       setBaseline(editSnapshot);
       navigate(`/templates/${res.id || templateId}`, { replace: true });
     } catch (err) {
-      show(err?.message || "បរាជ័យក្នុងការរក្សាទុកគំរូ", "error");
+      show(err?.message || (lang === "en" ? "Could not save the template." : "បរាជ័យក្នុងការរក្សាទុកគំរូ"), "error");
     } finally {
       setSaving(false);
     }
@@ -1535,8 +1549,8 @@ export default function AdminTemplateEditPage() {
       else if (event.target.closest('#template-studio-preview')) setMobilePanel('preview');
     }}>
       {/* 1. TOP STUDIO TOOLBAR */}
-      <header className="template-studio-toolbar flex min-h-16 shrink-0 flex-wrap gap-3 items-center justify-between border-b border-zinc-800/80 bg-zinc-900/90 px-4 py-3 backdrop-blur-md">
-        <div className="flex flex-1 basis-full xl:basis-auto items-center gap-3 min-w-0">
+      <header className="template-studio-toolbar">
+        <div className="studio-toolbar-heading">
           <Link
             to="/templates"
             onClick={event => { if (dirty && !window.confirm(lang === "en" ? "Discard unsaved template changes?" : "បោះបង់ការកែប្រែគំរូដែលមិនទាន់រក្សាទុក?")) event.preventDefault(); }}
@@ -1546,68 +1560,12 @@ export default function AdminTemplateEditPage() {
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">{t("templateEditor.back", "ត្រឡប់ទៅបញ្ជីគំរូ")}</span>
           </Link>
-          <div className="h-6 w-px bg-zinc-800 shrink-0" />
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-amber-500 shrink-0" />
-              <h1 className="text-sm font-bold text-white tracking-wide truncate max-w-xs md:max-w-md">
-                {isNew
-                  ? (lang === "en" ? "✨ Create New Template (Studio)" : "✨ បង្កើតគំរូថ្មី (Template Visual Studio)")
-                  : (lang === "en" ? `🎨 Edit: ${form.name}` : `🎨 កែសម្រួល: ${form.name}`)}
-              </h1>
-              <span className="hidden sm:inline-flex shrink-0 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-400 border border-amber-500/20">
-                Studio Editor v2
-              </span>
-            </div>
-            <p className="text-[11px] text-zinc-400 truncate">
-              {lang === "en"
-                ? "Configure Themes, Layouts, Couple Info, and Live Realtime Preview"
-                : "រៀបចំ Themes, Layouts, ព័ត៌មានកូនកំលោះ-កូនក្រមុំ និងកម្មវិធី Live Realtime"}
-            </p>
+          <div className="studio-toolbar-title">
+            <h1>{isNew ? (lang === "en" ? "New template" : "គំរូថ្មី") : form.name}</h1>
+            <p role="status">{dirty
+              ? (lang === "en" ? "Unsaved changes" : "ការកែប្រែមិនទាន់រក្សាទុក")
+              : (lang === "en" ? "Template Studio" : "ផ្ទាំងកែសម្រួលគំរូ")}</p>
           </div>
-        </div>
-
-        {/* Device Mode Switcher */}
-        <div className="studio-device-switch items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-950/70 p-1">
-          <button
-            type="button"
-            onClick={() => setDeviceView("mobile")}
-            aria-pressed={deviceView === 'mobile'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "mobile"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Smartphone className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.mobileView", "Mobile (380px)")}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setDeviceView("tablet")}
-            aria-pressed={deviceView === 'tablet'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "tablet"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Tablet className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.tabletView", "Tablet (680px)")}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setDeviceView("desktop")}
-            aria-pressed={deviceView === 'desktop'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "desktop"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Monitor className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.desktopView", "Desktop")}</span>
-          </button>
         </div>
 
         {/* Actions */}
@@ -1658,7 +1616,11 @@ export default function AdminTemplateEditPage() {
             className="btn-primary flex h-9 items-center gap-2 rounded-xl px-5 text-xs font-bold transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             <Save className="h-4 w-4" />
-            <span>{saving ? t("templateEditor.saving", "កំពុងរក្សាទុក...") : t("templateEditor.save", "រក្សាទុក & ផ្សព្វផ្សាយ")}</span>
+            <span>{saving
+              ? t("templateEditor.saving", "កំពុងរក្សាទុក...")
+              : form.status === "ACTIVE"
+                ? (lang === "en" ? "Save & publish" : "រក្សាទុក និងផ្សព្វផ្សាយ")
+                : (lang === "en" ? "Save as inactive" : "រក្សាទុកដោយមិនផ្សព្វផ្សាយ")}</span>
           </button>
         </div>
       </header>
@@ -1682,8 +1644,8 @@ export default function AdminTemplateEditPage() {
           className="template-studio-controls"
         >
           {/* Studio Navigation Tabs - Clean 5 Symmetrical Tabs on 1 Single Row */}
-          <div className="border-b border-zinc-800/80 bg-zinc-950/80 p-3">
-            <div className="studio-section-tabs rounded-2xl border border-zinc-800/80 bg-zinc-900/50 p-1.5" role="group" aria-label={lang === 'en' ? 'Authoring sections' : 'ផ្នែកកែសម្រួល'}>
+          <div className="studio-section-bar">
+            <div className="studio-section-tabs" role="group" aria-label={lang === 'en' ? 'Authoring sections' : 'ផ្នែកកែសម្រួល'}>
               {[
                 { id: "theme", label: lang === "en" ? "Theme & Styles" : "រចនាបថ", icon: Palette },
                 { id: "couple", label: lang === "en" ? "Couple Info" : "សាមីខ្លួន", icon: Heart },
@@ -1706,14 +1668,9 @@ export default function AdminTemplateEditPage() {
                         handleSetGate(true);
                       }
                     }}
-                    className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-center transition-all cursor-pointer ${
-                      active
-                        ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
-                        : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/70"
-                    }`}
                   >
-                    <Icon className={`h-4 w-4 shrink-0 ${active ? "text-slate-950" : "text-amber-400/90"}`} />
-                    <span className="text-xs font-semibold leading-none">{tab.label}</span>
+                    <Icon size={16} aria-hidden="true" />
+                    <span>{tab.label}</span>
                   </button>
                 );
               })}
@@ -1727,9 +1684,10 @@ export default function AdminTemplateEditPage() {
             {activeTab === "theme" && (
               <div className="space-y-6 animate-in fade-in">
                 {/* Sub-tab Pill Switcher */}
-                <div className="flex items-center gap-1 rounded-xl border border-zinc-800 bg-zinc-950/80 p-1">
+                <div className="studio-theme-tabs rounded-xl border border-zinc-800 bg-zinc-950/80 p-1" role="group" aria-label={t('templateEditor.themeTab', 'Theme & Styles')}>
                   <button
                     type="button"
+                    aria-pressed={themeSubTab === 'layouts'}
                     onClick={() => {
                       setThemeSubTab("layouts");
                       handleSetGate(true);
@@ -1745,6 +1703,7 @@ export default function AdminTemplateEditPage() {
                   </button>
                   <button
                     type="button"
+                    aria-pressed={themeSubTab === 'presets'}
                     onClick={() => {
                       setThemeSubTab("presets");
                       handleSetGate(true);
@@ -1756,10 +1715,11 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Palette className="h-3.5 w-3.5" />
-                    <span>ពណ៌ & ពុម្ពអក្សរ (Colors & Fonts)</span>
+                    <span>{isEn ? t('templateEditor.colorsFonts', 'Colors & Fonts') : 'ពណ៌ & ពុម្ពអក្សរ (Colors & Fonts)'}</span>
                   </button>
                   <button
                     type="button"
+                    aria-pressed={themeSubTab === 'frames'}
                     onClick={() => {
                       setThemeSubTab("frames");
                       handleSetGate(true);
@@ -1771,10 +1731,11 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Sparkles className="h-3.5 w-3.5" />
-                    <span>ក្បាច់ & ក្រដាស (Frames & Textures)</span>
+                    <span>{isEn ? 'Frames & Textures' : 'ក្បាច់ & ក្រដាស (Frames & Textures)'}</span>
                   </button>
                   <button
                     type="button"
+                    aria-pressed={themeSubTab === 'cover'}
                     onClick={() => {
                       setThemeSubTab("cover");
                       handleSetGate(false);
@@ -1786,7 +1747,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Layers className="h-3.5 w-3.5" />
-                    <span>ស្រោម & ពាក្យជូនពរ (Cover & Hero)</span>
+                    <span>{isEn ? 'Cover & Hero' : 'ស្រោម & ពាក្យជូនពរ (Cover & Hero)'}</span>
                   </button>
                 </div>
 
@@ -1820,7 +1781,7 @@ export default function AdminTemplateEditPage() {
                             disabled={!isNew}
                             onClick={() => {
                               setField("code", layout.code);
-                              show(`បានប្តូរទៅកាន់ម៉ូដ: ${layout.name}`, "success");
+                              show(isEn ? `Selected layout: ${layout.name}` : `បានប្តូរទៅកាន់ម៉ូដ: ${layout.name}`, "success");
                             }}
                             className={`group relative text-left p-3.5 rounded-2xl border transition-all cursor-pointer ${
                               isSelected
@@ -1828,10 +1789,10 @@ export default function AdminTemplateEditPage() {
                                 : "bg-zinc-900/70 border-zinc-800/80 hover:bg-zinc-850 hover:border-zinc-700"
                             }`}
                           >
-                            <div className="flex items-start justify-between gap-3">
-                              <div className="flex items-center gap-3">
+                            <div className="studio-layout-header">
+                              <div className="studio-layout-identity">
                                 <div
-                                  className={`text-2xl p-2.5 rounded-xl border ${
+                                  className={`shrink-0 text-2xl p-2.5 rounded-xl border ${
                                     isSelected
                                       ? "bg-amber-500/20 border-amber-500/40"
                                       : "bg-zinc-800 border-zinc-700/60 group-hover:border-zinc-600"
@@ -1839,8 +1800,8 @@ export default function AdminTemplateEditPage() {
                                 >
                                   {layout.icon}
                                 </div>
-                                <div>
-                                  <div className="flex items-center gap-2">
+                                <div className="min-w-0">
+                                  <div className="studio-layout-meta">
                                     <h4
                                       className={`text-sm font-bold ${
                                         isSelected ? "text-amber-300" : "text-zinc-100 group-hover:text-white"
@@ -1849,14 +1810,12 @@ export default function AdminTemplateEditPage() {
                                       {layout.name}
                                     </h4>
                                     <span
-                                      className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${layout.badgeColor}`}
+                                      className={`studio-layout-badge text-[10px] font-medium px-2 py-0.5 rounded-full border ${layout.badgeColor}`}
                                     >
                                       {layout.badge}
                                     </span>
                                   </div>
-                                  <div className="text-xs text-amber-400/90 font-medium mt-0.5">
-                                    {layout.labelKh}
-                                  </div>
+                                  {!isEn && <div className="text-xs text-amber-400/90 font-medium mt-0.5">{layout.labelKh}</div>}
                                 </div>
                               </div>
 
@@ -1864,17 +1823,17 @@ export default function AdminTemplateEditPage() {
                                 {isSelected ? (
                                   <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
                                     <Check className="h-3 w-3" />
-                                    <span>កំពុងប្រើ</span>
+                                    <span>{isEn ? 'Applied' : 'កំពុងប្រើ'}</span>
                                   </span>
                                 ) : (
-                                  <span className="text-[11px] font-medium text-zinc-500 group-hover:text-amber-400 px-2.5 py-1 rounded-lg border border-transparent group-hover:border-zinc-700 group-hover:bg-zinc-800/60 transition">
-                                    ជ្រើសរើស
+                                  <span className="text-xs font-medium text-zinc-300 group-hover:text-amber-400 px-2.5 py-1 rounded-lg border border-transparent group-hover:border-zinc-700 group-hover:bg-zinc-800/60 transition">
+                                    {isEn ? 'Select' : 'ជ្រើសរើស'}
                                   </span>
                                 )}
                               </div>
                             </div>
-                            <p className="text-xs text-zinc-400 mt-2 pl-12 leading-relaxed">
-                              {layout.desc}
+                            <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
+                              {isEn ? layout.descEn : layout.desc}
                             </p>
                           </button>
                         );
@@ -1888,10 +1847,10 @@ export default function AdminTemplateEditPage() {
                     <div>
                       <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-amber-500" />
-                        <span>រចនាបថគំរូ Preset Styles</span>
+                        <span>{isEn ? 'Preset Styles' : 'រចនាបថគំរូ Preset Styles'}</span>
                       </h3>
                       <p className="text-xs text-zinc-400 mb-4">
-                        ជ្រើសរើស Style មេមួយ ដើម្បីកំណត់ Theme Color និង Font ដោយស្វ័យប្រវត្តិ
+                        {isEn ? 'Choose a preset to apply its colors and fonts.' : 'ជ្រើសរើស Style មេមួយ ដើម្បីកំណត់ Theme Color និង Font ដោយស្វ័យប្រវត្តិ'}
                       </p>
                       <div className="grid grid-cols-2 gap-3">
                         {THEME_PRESETS.map((preset) => (
@@ -1906,7 +1865,7 @@ export default function AdminTemplateEditPage() {
                             }`}
                           >
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs font-bold text-zinc-100">{preset.name}</span>
+                              <span className="text-xs font-bold text-zinc-100">{isEn ? preset.nameEn : preset.name}</span>
                               <span className="text-xs">{preset.amp}</span>
                             </div>
                             <div className="flex items-center gap-1.5 mt-auto">
@@ -1927,21 +1886,23 @@ export default function AdminTemplateEditPage() {
 
                     {/* Custom Color Overrides */}
                     <div>
-                      <h3 className="text-sm font-bold text-white mb-3">ពណ៌ចម្បង (Custom Colors)</h3>
-                      <div className="grid grid-cols-3 gap-4">
+                      <h3 className="text-sm font-bold text-white mb-3">{isEn ? 'Custom Colors' : 'ពណ៌ចម្បង (Custom Colors)'}</h3>
+                      <div className="studio-color-fields grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div>
                           <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                            ពណ៌គោល (Primary)
+                            {isEn ? 'Primary' : 'ពណ៌គោល (Primary)'}
                           </label>
                           <div className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 p-2">
                             <input
                               type="color"
+                              aria-label={isEn ? 'Primary' : 'ពណ៌គោល (Primary)'}
                               value={form.primaryColor}
                               onChange={(e) => setField("primaryColor", e.target.value)}
                               className="h-7 w-7 rounded-lg border-0 bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
+                              aria-label={isEn ? 'Primary HEX' : 'ពណ៌គោល (Primary HEX)'}
                               value={form.primaryColor}
                               onChange={(e) => setField("primaryColor", e.target.value)}
                               className="w-full bg-transparent text-xs text-zinc-200 outline-none uppercase font-mono"
@@ -1950,17 +1911,19 @@ export default function AdminTemplateEditPage() {
                         </div>
                         <div>
                           <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                            ពណ៌បន្ទាប់បន្សំ (Secondary)
+                            {isEn ? 'Secondary' : 'ពណ៌បន្ទាប់បន្សំ (Secondary)'}
                           </label>
                           <div className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 p-2">
                             <input
                               type="color"
+                              aria-label={isEn ? 'Secondary' : 'ពណ៌បន្ទាប់បន្សំ (Secondary)'}
                               value={form.secondaryColor}
                               onChange={(e) => setField("secondaryColor", e.target.value)}
                               className="h-7 w-7 rounded-lg border-0 bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
+                              aria-label={isEn ? 'Secondary HEX' : 'ពណ៌បន្ទាប់បន្សំ (Secondary HEX)'}
                               value={form.secondaryColor}
                               onChange={(e) => setField("secondaryColor", e.target.value)}
                               className="w-full bg-transparent text-xs text-zinc-200 outline-none uppercase font-mono"
@@ -1969,17 +1932,19 @@ export default function AdminTemplateEditPage() {
                         </div>
                         <div>
                           <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                            ផ្ទៃខាងក្រោយ (Background)
+                            {isEn ? 'Background' : 'ផ្ទៃខាងក្រោយ (Background)'}
                           </label>
                           <div className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 p-2">
                             <input
                               type="color"
+                              aria-label={isEn ? 'Background' : 'ផ្ទៃខាងក្រោយ (Background)'}
                               value={form.backgroundColor}
                               onChange={(e) => setField("backgroundColor", e.target.value)}
                               className="h-7 w-7 rounded-lg border-0 bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
+                              aria-label={isEn ? 'Background HEX' : 'ផ្ទៃខាងក្រោយ (Background HEX)'}
                               value={form.backgroundColor}
                               onChange={(e) => setField("backgroundColor", e.target.value)}
                               className="w-full bg-transparent text-xs text-zinc-200 outline-none uppercase font-mono"
@@ -1993,18 +1958,19 @@ export default function AdminTemplateEditPage() {
 
                     {/* Typography & Fonts */}
                     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 space-y-4">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <h3 className="text-sm font-bold text-white flex items-center gap-2">
                             <Type className="h-4 w-4 text-amber-500" />
-                            <span>ពុម្ពអក្សរសំបុត្រអញ្ជើញ (Typography & Fonts)</span>
+                            <span>{isEn ? 'Typography & Fonts' : 'ពុម្ពអក្សរសំបុត្រអញ្ជើញ (Typography & Fonts)'}</span>
                           </h3>
                           <p className="text-[11px] text-zinc-400 mt-0.5">
-                            កំណត់ Font រួម ឬបំបែកកំណត់តាម Element ទាំង ៦ លើក្របសំបុត្រ
+                            {isEn ? 'Choose a font for the cover or an individual element.' : 'កំណត់ Font រួម ឬបំបែកកំណត់តាម Element ទាំង ៦ លើក្របសំបុត្រ'}
                           </p>
                         </div>
                         <button
                           type="button"
+                          ref={fontDialogTriggerRef}
                           onClick={() => setShowFontModal(true)}
                           className="flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 transition cursor-pointer shadow-sm shrink-0"
                         >
@@ -2031,17 +1997,18 @@ export default function AdminTemplateEditPage() {
                           <div id="typography-element-settings" className="space-y-3 p-3.5 rounded-xl border border-amber-500/20 bg-amber-500/5 transition-all duration-300">
                             <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-zinc-800/80">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <label className="text-xs font-semibold text-zinc-400">
+                                <label htmlFor="studio-font-element" className="text-xs font-semibold text-zinc-400">
                                   Element:
                                 </label>
                                 <select
+                                  id="studio-font-element"
                                   value={selectedFontElement}
                                   onChange={(e) => setSelectedFontElement(e.target.value)}
                                   className="text-xs font-bold bg-zinc-900 border border-amber-500/40 rounded-lg px-2.5 py-1 text-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
                                 >
                                   {TYPOGRAPHY_ELEMENTS.map((elem) => (
                                     <option key={elem.id} value={elem.id}>
-                                      {elem.label}
+                                      {isEn ? elem.sub : elem.label}
                                     </option>
                                   ))}
                                 </select>
@@ -2050,7 +2017,7 @@ export default function AdminTemplateEditPage() {
                                 </span>
                               </div>
                               <span className="text-[10px] text-zinc-400 hidden sm:inline-flex items-center gap-1 font-medium">
-                                ⚡ ចុចលើអក្សរក្នុង Live Simulator ដើម្បីរើស
+                                {isEn ? 'Select text in the Live Simulator to edit it.' : '⚡ ចុចលើអក្សរក្នុង Live Simulator ដើម្បីរើស'}
                               </span>
                             </div>
 
@@ -2093,7 +2060,7 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "couple" && (
                               <div className="space-y-2 p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>💑 កែប្រែឈ្មោះកូនកំលោះ & កូនក្រមុំ (Couple Names):</span>
+                                  <span>{isEn ? 'Couple Names:' : '💑 កែប្រែឈ្មោះកូនកំលោះ & កូនក្រមុំ (Couple Names):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">Live Edit</span>
                                 </label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -2101,14 +2068,14 @@ export default function AdminTemplateEditPage() {
                                     type="text"
                                     value={form.groomName || ""}
                                     onChange={(e) => setField("groomName", e.target.value)}
-                                    placeholder="ឧ. លោក វីរៈ (Groom)"
+                                    placeholder={isEn ? "e.g. Vireak (Groom)" : "ឧ. លោក វីរៈ (Groom)"}
                                     className="h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                                   />
                                   <input
                                     type="text"
                                     value={form.brideName || ""}
                                     onChange={(e) => setField("brideName", e.target.value)}
-                                    placeholder="ឧ. កញ្ញា សុម៉ាលី (Bride)"
+                                    placeholder={isEn ? "e.g. Somaly (Bride)" : "ឧ. កញ្ញា សុម៉ាលី (Bride)"}
                                     className="h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                                   />
                                 </div>
@@ -2118,7 +2085,7 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "date" && (
                               <div className="space-y-1.5 p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>📅 កែប្រែកាលបរិច្ឆេទ (Wedding Date):</span>
+                                  <span>{isEn ? 'Wedding Date:' : '📅 កែប្រែកាលបរិច្ឆេទ (Wedding Date):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">DatePicker</span>
                                 </label>
                                 <DatePicker
@@ -2127,7 +2094,7 @@ export default function AdminTemplateEditPage() {
                                     setField("weddingDate", dateVal);
                                     if (isoVal) setField("targetDate", isoVal);
                                   }}
-                                  placeholder="ជ្រើសរើសថ្ងៃមង្គលការ"
+                                  placeholder={isEn ? "Choose wedding date" : "ជ្រើសរើសថ្ងៃមង្គលការ"}
                                 />
                               </div>
                             )}
@@ -2135,13 +2102,13 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "time" && (
                               <div className="space-y-1.5 p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>⏰ កែប្រែពេលវេលា (Wedding Time):</span>
+                                  <span>{isEn ? 'Wedding Time:' : '⏰ កែប្រែពេលវេលា (Wedding Time):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">TimePicker</span>
                                 </label>
                                 <TimePicker
                                   value={form.weddingTime}
                                   onChange={(timeVal) => setField("weddingTime", timeVal)}
-                                  placeholder="ជ្រើសរើសម៉ោង"
+                                  placeholder={isEn ? "Choose time" : "ជ្រើសរើសម៉ោង"}
                                 />
                               </div>
                             )}
@@ -2149,14 +2116,14 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "subtitle" && (
                               <div className="space-y-1 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>💌 កែប្រែខ្លឹមសារពាក្យអញ្ជើញ (Subtitle Text):</span>
+                                  <span>{isEn ? 'Subtitle Text:' : '💌 កែប្រែខ្លឹមសារពាក្យអញ្ជើញ (Subtitle Text):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">Live Edit</span>
                                 </label>
                                 <input
                                   type="text"
                                   value={form.invitationSubtitle || ""}
                                   onChange={(e) => setField("invitationSubtitle", e.target.value)}
-                                  placeholder="ឧ. យើងខ្ញុំមានកិត្តិយសសូមគោរពអញ្ជើញ..."
+                                  placeholder={isEn ? "e.g. We warmly invite you..." : "ឧ. យើងខ្ញុំមានកិត្តិយសសូមគោរពអញ្ជើញ..."}
                                   className="h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                                 />
                               </div>
@@ -2165,14 +2132,14 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "guestLabel" && (
                               <div className="space-y-1 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>🏷️ កែប្រែពាក្យស្វាគមន៍ / ហៅភ្ញៀវ (Guest Label):</span>
+                                  <span>{isEn ? 'Guest Label:' : '🏷️ កែប្រែពាក្យស្វាគមន៍ / ហៅភ្ញៀវ (Guest Label):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">Live Edit</span>
                                 </label>
                                 <input
                                   type="text"
                                   value={form.guestLabel || ""}
                                   onChange={(e) => setField("guestLabel", e.target.value)}
-                                  placeholder="ជូនចំពោះ:"
+                                  placeholder={isEn ? "To:" : "ជូនចំពោះ:"}
                                   className="h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                                 />
                               </div>
@@ -2181,14 +2148,14 @@ export default function AdminTemplateEditPage() {
                             {selectedFontElement === "guestName" && (
                               <div className="space-y-1 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800">
                                 <label className="text-[11px] font-medium text-amber-300 flex items-center justify-between">
-                                  <span>👤 កែប្រែឈ្មោះភ្ញៀវតេស្ត (Preview Guest Name):</span>
+                                  <span>{isEn ? 'Preview Guest Name:' : '👤 កែប្រែឈ្មោះភ្ញៀវតេស្ត (Preview Guest Name):'}</span>
                                   <span className="text-[10px] text-zinc-400 font-mono">Live Edit</span>
                                 </label>
                                 <input
                                   type="text"
                                   value={form.guestName || ""}
                                   onChange={(e) => setField("guestName", e.target.value)}
-                                  placeholder="លោកអ្នក និងក្រុមគ្រួសារ"
+                                  placeholder={isEn ? "You and your family" : "លោកអ្នក និងក្រុមគ្រួសារ"}
                                   className="h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                                 />
                               </div>
@@ -2201,7 +2168,7 @@ export default function AdminTemplateEditPage() {
                       {customFonts.length > 0 && (
                         <div className="pt-2 border-t border-zinc-800/60">
                           <span className="block text-[11px] font-bold text-zinc-400 mb-2">
-                            ⭐ Custom Fonts ដែលបានបន្ថែម ({customFonts.length})
+                            {isEn ? 'Custom Fonts' : '⭐ Custom Fonts ដែលបានបន្ថែម'} ({customFonts.length})
                           </span>
                           <div className="flex flex-wrap gap-2">
                             {customFonts.map((cf, idx) => (
@@ -2213,7 +2180,8 @@ export default function AdminTemplateEditPage() {
                                 <span className="text-[10px] text-zinc-400 uppercase">({cf.category})</span>
                                 <button
                                   type="button"
-                                  title="លុប Font នេះ"
+                                  title={isEn ? 'Delete font' : 'លុប Font នេះ'}
+                                  aria-label={isEn ? `Delete font ${cf.value}` : `លុប Font នេះ ${cf.value}`}
                                   onClick={() => handleDeleteCustomFont(cf.id, cf.value, cf.category)}
                                   className="text-zinc-400 hover:text-rose-400 transition ml-1 cursor-pointer p-0.5"
                                 >
@@ -2236,14 +2204,14 @@ export default function AdminTemplateEditPage() {
                         <div className="flex items-center justify-between mb-1">
                           <h3 className="text-sm font-bold text-white flex items-center gap-2">
                             <Sparkles className="h-4 w-4 text-amber-500" />
-                            <span>ក្បាច់ក្បាលលើ (Top Arch Frames)</span>
+                            <span>{isEn ? 'Top Arch Frames' : 'ក្បាច់ក្បាលលើ (Top Arch Frames)'}</span>
                           </h3>
                           <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
                             {form.decorativeFrame || "none"}
                           </span>
                         </div>
                         <p className="text-xs text-zinc-400">
-                          ជ្រើសរើសក្បាច់ខ្មែរ ឬស៊ុមផ្កាសម្រាប់តុបតែងក្បាលទំព័រខាងលើ។
+                          {isEn ? 'Choose a Khmer arch or floral frame for the top of the page.' : 'ជ្រើសរើសក្បាច់ខ្មែរ ឬស៊ុមផ្កាសម្រាប់តុបតែងក្បាលទំព័រខាងលើ។'}
                         </p>
                       </div>
 
@@ -2391,28 +2359,28 @@ export default function AdminTemplateEditPage() {
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
                           <Sparkles className="h-4 w-4 text-amber-500" />
-                          <span>ម៉ូដក្រប Cover បើកសំបុត្រ (Cover Styles)</span>
+                          <span>{isEn ? "Cover Styles" : "ម៉ូដក្រប Cover បើកសំបុត្រ (Cover Styles)"}</span>
                         </label>
                         <span className="text-[10px] font-bold text-amber-400/90 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                           {(form.gateStyle === "cinematic-video")
                             ? "Full Video Mode"
                             : (form.videoUrl || form.openingVideoUrl)
                             ? "Video & Image Mode"
-                            : "Image Mode (រូបភាពសុទ្ធ)"}
+                            : (isEn ? "Image Mode" : "Image Mode (រូបភាពសុទ្ធ)")}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 gap-2.5">
                         {[
                           {
                             id: "celestial-cover",
-                            name: "ខ្មែរចន្ទតារា",
+                            name: isEn ? "Khmer Celestial" : "ខ្មែរចន្ទតារា",
                             sub: "Khmer Celestial",
                             icon: "✨",
-                            tag: (form.videoUrl || form.openingVideoUrl) ? "Video & Image" : "រូបភាព (Image)",
+                            tag: (form.videoUrl || form.openingVideoUrl) ? "Video & Image" : (isEn ? "Image" : "រូបភាព (Image)"),
                           },
                           {
                             id: "cinematic-video",
-                            name: "វីដេអូបើកឆាក",
+                            name: isEn ? "Opening Video" : "វីដេអូបើកឆាក",
                             sub: "Cinematic Pre-wedding",
                             icon: "🎬",
                             tag: "Full Video",
@@ -2472,7 +2440,7 @@ export default function AdminTemplateEditPage() {
                             : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
                         }`}
                       >
-                        <span>🎨 ផ្ទៃ &amp; វីដេអូ</span>
+                        <span>{isEn ? "Media" : "🎨 ផ្ទៃ & វីដេអូ"}</span>
                       </button>
                       {(form.gateStyle || "celestial-cover") !== "cinematic-video" && (
                         <button
@@ -2484,7 +2452,7 @@ export default function AdminTemplateEditPage() {
                               : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
                           }`}
                         >
-                          <span>👑 គ្រឿងលម្អ</span>
+                          <span>{isEn ? "Ornaments" : "👑 គ្រឿងលម្អ"}</span>
                         </button>
                       )}
                       <button
@@ -2496,7 +2464,7 @@ export default function AdminTemplateEditPage() {
                             : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
                         }`}
                       >
-                        <span>✍️ អត្ថបទ Cover</span>
+                        <span>{isEn ? "Cover Text" : "✍️ អត្ថបទ Cover"}</span>
                       </button>
                       <button
                         type="button"
@@ -2507,7 +2475,7 @@ export default function AdminTemplateEditPage() {
                             : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
                         }`}
                       >
-                        <span>🎵 ភ្លេងកំដរ</span>
+                        <span>{isEn ? "Music" : "🎵 ភ្លេងកំដរ"}</span>
                       </button>
                     </div>
 
@@ -2530,7 +2498,7 @@ export default function AdminTemplateEditPage() {
                           <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 space-y-3">
                             <div className="flex items-center justify-between">
                               <label className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                                <span>🎬 វីដេអូបើកឆាកអាពាហ៍ពិពាហ៍ (Fullscreen Video)</span>
+                                <span>{isEn ? "Fullscreen Wedding Video" : "🎬 វីដេអូបើកឆាកអាពាហ៍ពិពាហ៍ (Fullscreen Video)"}</span>
                               </label>
                               <div className="flex items-center gap-1.5">
                                 <button
@@ -2555,7 +2523,7 @@ export default function AdminTemplateEditPage() {
                             </div>
 
                             <div className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-[11px] text-zinc-400 leading-relaxed">
-                              ✨ ម៉ូដ Full Video នឹងចាក់វីដេអូអាពាហ៍ពិពាហ៍ពេញអេក្រង់ទូរស័ព្ទ អមដោយប៊ូតុងសំឡេង និងប៊ូតុងរំលង (Skip) ចូលមើលសំបុត្រដោយស្វ័យប្រវត្តិ។
+                              {isEn ? "Full Video shows the wedding film full screen, with sound and skip controls before the invitation." : "✨ ម៉ូដ Full Video នឹងចាក់វីដេអូអាពាហ៍ពិពាហ៍ពេញអេក្រង់ទូរស័ព្ទ អមដោយប៊ូតុងសំឡេង និងប៊ូតុងរំលង (Skip) ចូលមើលសំបុត្រដោយស្វ័យប្រវត្តិ។"}
                             </div>
                           </div>
                         )}
@@ -2563,20 +2531,20 @@ export default function AdminTemplateEditPage() {
                         {/* 1.2 BOKEH VIDEO (FOR HYBRID CELESTIAL COVER) */}
                         {(form.gateStyle || "celestial-cover") === "celestial-cover" && (
                           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-3.5 space-y-2.5">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-zinc-200 flex items-center gap-1.5">
-                                <span>🎬 វីដេអូ Bokeh ផ្ទៃខាងក្រោយ</span>
+                            <div className="flex flex-wrap items-start justify-between gap-2">
+                              <span className="text-xs font-bold text-zinc-200 flex flex-wrap items-center gap-1.5 min-w-0">
+                                <span>{isEn ? "Bokeh Background Video" : "🎬 វីដេអូ Bokeh ផ្ទៃខាងក្រោយ"}</span>
                                 {(form.videoUrl || form.openingVideoUrl) ? (
                                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                                    កំពុងប្រើ
+                                    {isEn ? "Active" : "កំពុងប្រើ"}
                                   </span>
                                 ) : (
                                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 font-medium">
-                                    គ្មានវីដេអូ (រូបភាពសុទ្ធ)
+                                    {isEn ? "Image only" : "គ្មានវីដេអូ (រូបភាពសុទ្ធ)"}
                                   </span>
                                 )}
                               </span>
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex flex-wrap items-center gap-1.5">
                                 {(form.videoUrl || form.openingVideoUrl) ? (
                                   <button
                                     type="button"
@@ -2584,11 +2552,11 @@ export default function AdminTemplateEditPage() {
                                       setField("videoUrl", "");
                                       setField("openingVideoUrl", "");
                                       setField("showCoverVideo", false);
-                                      show("បានដកចេញវីដេអូ (ប្តូរទៅជារូបភាពសុទ្ធ)");
+                                      show(isEn ? "Video removed. The cover now uses an image." : "បានដកចេញវីដេអូ (ប្តូរទៅជារូបភាពសុទ្ធ)");
                                     }}
-                                    className="text-[11px] font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-2 py-0.5 rounded-lg border border-red-500/20 transition cursor-pointer"
+                                    className="shrink-0 whitespace-nowrap text-[11px] font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-2 py-0.5 rounded-lg border border-red-500/20 transition cursor-pointer"
                                   >
-                                    🗑️ ដកវីដេអូចេញ
+                                    {isEn ? "Remove video" : "🗑️ ដកវីដេអូចេញ"}
                                   </button>
                                 ) : (
                                   <button
@@ -2597,9 +2565,9 @@ export default function AdminTemplateEditPage() {
                                       setField("videoUrl", "/invitations/khmer-celestial/burgundy-bokeh.mp4");
                                       setField("openingVideoUrl", "/invitations/khmer-celestial/burgundy-bokeh.mp4");
                                       setField("showCoverVideo", true);
-                                      show("បានបន្ថែម Burgundy Bokeh Video ✓");
+                                      show(isEn ? "Burgundy Bokeh video added." : "បានបន្ថែម Burgundy Bokeh Video ✓");
                                     }}
-                                    className="text-[11px] font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 rounded-lg border border-amber-500/20 transition cursor-pointer"
+                                    className="shrink-0 whitespace-nowrap text-[11px] font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 rounded-lg border border-amber-500/20 transition cursor-pointer"
                                   >
                                     + Burgundy Bokeh
                                   </button>
@@ -2607,7 +2575,7 @@ export default function AdminTemplateEditPage() {
                                 <button
                                   type="button"
                                   onClick={() => videoFileInputRef.current?.click()}
-                                  className="text-[11px] font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-0.5 rounded-lg border border-zinc-700 transition flex items-center gap-1 cursor-pointer"
+                                  className="shrink-0 whitespace-nowrap text-[11px] font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-0.5 rounded-lg border border-zinc-700 transition flex items-center gap-1 cursor-pointer"
                                 >
                                   <Upload className="h-3 w-3" />
                                   <span>Upload</span>
@@ -2622,7 +2590,7 @@ export default function AdminTemplateEditPage() {
                                 className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-amber-500 focus:ring-amber-500"
                               />
                               <span className="text-xs font-medium text-zinc-300">
-                                🦋 បង្ហាញមេអំបៅហោះ (Floating Butterflies)
+                                {isEn ? "Show floating butterflies" : "🦋 បង្ហាញមេអំបៅហោះ (Floating Butterflies)"}
                               </span>
                             </label>
                           </div>
@@ -2633,7 +2601,7 @@ export default function AdminTemplateEditPage() {
                           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 space-y-3">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-bold text-zinc-200">
-                                🌿 រូបភាពស៊ុមផ្កា &amp; ផ្ទៃខាងក្រោយ (Frame Styles)
+                                {isEn ? "Floral Frame & Background" : "🌿 រូបភាពស៊ុមផ្កា & ផ្ទៃខាងក្រោយ (Frame Styles)"}
                               </span>
                               <div className="flex items-center gap-1.5">
                                 <button
@@ -2838,7 +2806,6 @@ export default function AdminTemplateEditPage() {
                                       isBrandMarkActive ? "bg-amber-500" : "bg-zinc-700"
                                     }`}
                                     title={isBrandMarkActive ? (lang === "en" ? "Click to disable" : "ចុចដើម្បីបិទ") : (lang === "en" ? "Click to enable" : "ចុចដើម្បីបើក")}
-                                    title={isBrandMarkActive ? "ចុចដើម្បីបិទ" : "ចុចដើម្បីបើក"}
                                   >
                                     <span
                                       className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
@@ -2873,25 +2840,25 @@ export default function AdminTemplateEditPage() {
                                       />
                                     ) : (
                                       <div className="flex flex-col items-center justify-center text-[9px] font-bold text-zinc-500">
-                                        <span>បិទ</span>
+                                      <span>{isEn ? "Off" : "បិទ"}</span>
                                       </div>
                                     )}
                                   </div>
                                   <div className="min-w-0">
                                     <div className="flex items-center gap-2">
                                       <span className="block text-xs font-bold text-zinc-100 whitespace-nowrap">
-                                        បូទ្រឈ្មោះភ្ញៀវ (Guest Ribbon Banner)
+                                        {isEn ? "Guest Ribbon Banner" : "បូទ្រឈ្មោះភ្ញៀវ (Guest Ribbon Banner)"}
                                       </span>
                                       <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border shrink-0 ${
                                         isGuestBannerActive
                                           ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
                                           : "text-zinc-500 border-zinc-800 bg-zinc-900"
                                       }`}>
-                                        {isGuestBannerActive ? "កំពុងបើក" : "បានបិទ"}
+                                        {isGuestBannerActive ? (isEn ? "Enabled" : "កំពុងបើក") : (isEn ? "Disabled" : "បានបិទ")}
                                       </span>
                                     </div>
                                     <span className="block text-[10px] text-zinc-400">
-                                      ផ្ទៃខាងក្រោយសម្រាប់ឈ្មោះភ្ញៀវ
+                                      {isEn ? "Background for the guest name" : "ផ្ទៃខាងក្រោយសម្រាប់ឈ្មោះភ្ញៀវ"}
                                     </span>
                                   </div>
                                 </div>
@@ -2917,10 +2884,10 @@ export default function AdminTemplateEditPage() {
                                         type="button"
                                         onClick={() => setForm((prev) => ({ ...prev, showGuestBanner: false, guestNameBanner: "" }))}
                                         className="flex items-center gap-1 text-[11px] font-medium text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 hover:text-rose-300 px-2 py-1 rounded-lg border border-rose-500/20 transition cursor-pointer"
-                                        title="បិទមិនប្រើបូទ្រឈ្មោះ"
+                                        title={isEn ? "Disable guest ribbon" : "បិទមិនប្រើបូទ្រឈ្មោះ"}
                                       >
                                         <Trash2 className="h-3 w-3" />
-                                        <span>បិទ</span>
+                                        <span>{isEn ? "Off" : "បិទ"}</span>
                                       </button>
                                     </>
                                   ) : (
@@ -2934,7 +2901,7 @@ export default function AdminTemplateEditPage() {
                                       className="flex items-center gap-1 text-[11px] font-bold text-amber-400 bg-amber-500/15 hover:bg-amber-500/25 px-2.5 py-1 rounded-lg border border-amber-500/30 transition cursor-pointer"
                                     >
                                       <Plus className="h-3 w-3" />
-                                      <span>បើកប្រើ Banner</span>
+                                      <span>{isEn ? "Enable Banner" : "បើកប្រើ Banner"}</span>
                                     </button>
                                   )}
 
@@ -2957,7 +2924,7 @@ export default function AdminTemplateEditPage() {
                                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
                                       isGuestBannerActive ? "bg-amber-500" : "bg-zinc-700"
                                     }`}
-                                    title={isGuestBannerActive ? "ចុចដើម្បីបិទ" : "ចុចដើម្បីបើក"}
+                                    title={isGuestBannerActive ? (isEn ? "Click to disable" : "ចុចដើម្បីបិទ") : (isEn ? "Click to enable" : "ចុចដើម្បីបើក")}
                                   >
                                     <span
                                       className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
@@ -2992,25 +2959,25 @@ export default function AdminTemplateEditPage() {
                                       />
                                     ) : (
                                       <div className="flex flex-col items-center justify-center text-[9px] font-bold text-zinc-500">
-                                        <span>បិទ</span>
+                                      <span>{isEn ? "Off" : "បិទ"}</span>
                                       </div>
                                     )}
                                   </div>
                                   <div className="min-w-0">
                                     <div className="flex items-center gap-2">
                                       <span className="block text-xs font-bold text-zinc-100 whitespace-nowrap">
-                                        ប៊ូតុងបើកមាស (Open Button Graphic)
+                                        {isEn ? "Open Button Graphic" : "ប៊ូតុងបើកមាស (Open Button Graphic)"}
                                       </span>
                                       <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border shrink-0 ${
                                         isOpenButtonActive
                                           ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
                                           : "text-zinc-500 border-zinc-800 bg-zinc-900"
                                       }`}>
-                                        {isOpenButtonActive ? "កំពុងបើក" : "បានបិទ"}
+                                        {isOpenButtonActive ? (isEn ? "Enabled" : "កំពុងបើក") : (isEn ? "Disabled" : "បានបិទ")}
                                       </span>
                                     </div>
                                     <span className="block text-[10px] text-zinc-400">
-                                      ប៊ូតុងចុចដើម្បីបើកសំបុត្រអញ្ជើញ
+                                      {isEn ? "Button to open the invitation" : "ប៊ូតុងចុចដើម្បីបើកសំបុត្រអញ្ជើញ"}
                                     </span>
                                   </div>
                                 </div>
@@ -3036,10 +3003,10 @@ export default function AdminTemplateEditPage() {
                                         type="button"
                                         onClick={() => setForm((prev) => ({ ...prev, showOpenButton: false, openButtonImage: "" }))}
                                         className="flex items-center gap-1 text-[11px] font-medium text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 hover:text-rose-300 px-2 py-1 rounded-lg border border-rose-500/20 transition cursor-pointer"
-                                        title="បិទមិនប្រើប៊ូតុងក្រាហ្វិក"
+                                        title={isEn ? "Disable button graphic" : "បិទមិនប្រើប៊ូតុងក្រាហ្វិក"}
                                       >
                                         <Trash2 className="h-3 w-3" />
-                                        <span>បិទ</span>
+                                        <span>{isEn ? "Off" : "បិទ"}</span>
                                       </button>
                                     </>
                                   ) : (
@@ -3053,7 +3020,7 @@ export default function AdminTemplateEditPage() {
                                       className="flex items-center gap-1 text-[11px] font-bold text-amber-400 bg-amber-500/15 hover:bg-amber-500/25 px-2.5 py-1 rounded-lg border border-amber-500/30 transition cursor-pointer"
                                     >
                                       <Plus className="h-3 w-3" />
-                                      <span>បើកប្រើ Button</span>
+                                      <span>{isEn ? "Enable Button" : "បើកប្រើ Button"}</span>
                                     </button>
                                   )}
 
@@ -3076,7 +3043,7 @@ export default function AdminTemplateEditPage() {
                                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
                                       isOpenButtonActive ? "bg-amber-500" : "bg-zinc-700"
                                     }`}
-                                    title={isOpenButtonActive ? "ចុចដើម្បីបិទ" : "ចុចដើម្បីបើក"}
+                                    title={isOpenButtonActive ? (isEn ? "Click to disable" : "ចុចដើម្បីបិទ") : (isEn ? "Click to enable" : "ចុចដើម្បីបើក")}
                                   >
                                     <span
                                       className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
@@ -3102,26 +3069,26 @@ export default function AdminTemplateEditPage() {
                         {/* 3.1 ឈ្មោះគូស្នេហ៍លើ COVER */}
                         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-3.5 space-y-2.5">
                           <span className="block text-xs font-bold text-amber-400">
-                            💑 ឈ្មោះគូស្នេហ៍លើ Cover (Couple Names)
+                              {isEn ? "Couple Names on Cover" : "💑 ឈ្មោះគូស្នេហ៍លើ Cover (Couple Names)"}
                           </span>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ឈ្មោះកូនកំលោះ (Groom)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Groom Name" : "ឈ្មោះកូនកំលោះ (Groom)"}</label>
                               <input
                                 type="text"
                                 value={form.groomName || ""}
                                 onChange={(e) => setField("groomName", e.target.value)}
-                                placeholder="ឧ. លោក វីរៈ"
+                                placeholder={isEn ? "e.g. Vireak" : "ឧ. លោក វីរៈ"}
                                 className="h-8 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 text-xs text-zinc-100 outline-none focus:border-amber-500 font-bold"
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ឈ្មោះកូនក្រមុំ (Bride)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Bride Name" : "ឈ្មោះកូនក្រមុំ (Bride)"}</label>
                               <input
                                 type="text"
                                 value={form.brideName || ""}
                                 onChange={(e) => setField("brideName", e.target.value)}
-                                placeholder="ឧ. កញ្ញា សុម៉ាលី"
+                                placeholder={isEn ? "e.g. Somaly" : "ឧ. កញ្ញា សុម៉ាលី"}
                                 className="h-8 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 text-xs text-zinc-100 outline-none focus:border-amber-500 font-bold"
                               />
                             </div>
@@ -3131,26 +3098,26 @@ export default function AdminTemplateEditPage() {
                         {/* 3.2 កាលបរិច្ឆេទ & ម៉ោងលើ COVER */}
                         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-3.5 space-y-2.5">
                           <span className="block text-xs font-bold text-amber-400">
-                            📅 កាលបរិច្ឆេទ & ម៉ោង (Date & Time)
+                              {isEn ? "Date & Time" : "📅 កាលបរិច្ឆេទ & ម៉ោង (Date & Time)"}
                           </span>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ថ្ងៃមង្គលការ (Date)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Wedding Date" : "ថ្ងៃមង្គលការ (Date)"}</label>
                               <DatePicker
                                 value={form.weddingDate}
                                 onChange={(dateVal, isoVal) => {
                                   setField("weddingDate", dateVal);
                                   if (isoVal) setField("targetDate", isoVal);
                                 }}
-                                placeholder="ជ្រើសរើសថ្ងៃមង្គលការ"
+                                placeholder={isEn ? "Choose wedding date" : "ជ្រើសរើសថ្ងៃមង្គលការ"}
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ម៉ោងកម្មវិធី (Time)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Event Time" : "ម៉ោងកម្មវិធី (Time)"}</label>
                               <TimePicker
                                 value={form.weddingTime}
                                 onChange={(timeVal) => setField("weddingTime", timeVal)}
-                                placeholder="ជ្រើសរើសម៉ោង"
+                                placeholder={isEn ? "Choose time" : "ជ្រើសរើសម៉ោង"}
                               />
                             </div>
                           </div>
@@ -3159,26 +3126,26 @@ export default function AdminTemplateEditPage() {
                         {/* 3.3 ស្លាកភ្ញៀវ & ឈ្មោះសាកល្បង */}
                         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-3.5 space-y-2.5">
                           <span className="block text-xs font-bold text-amber-400">
-                            ✉️ ស្លាកអញ្ជើញភ្ញៀវ (Guest Card Info)
+                              {isEn ? "Guest Card Info" : "✉️ ស្លាកអញ្ជើញភ្ញៀវ (Guest Card Info)"}
                           </span>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ពាក្យហៅភ្ញៀវ (Guest Label)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Guest Label" : "ពាក្យហៅភ្ញៀវ (Guest Label)"}</label>
                               <input
                                 type="text"
                                 value={form.guestLabel || ""}
                                 onChange={(e) => setField("guestLabel", e.target.value)}
-                                placeholder="ជូនចំពោះ:"
+                                placeholder={isEn ? "To:" : "ជូនចំពោះ:"}
                                 className="h-8 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 text-xs text-zinc-100 outline-none focus:border-amber-500"
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] text-zinc-400 mb-1">ឈ្មោះភ្ញៀវតេស្ត (Preview Name)</label>
+                              <label className="block text-[10px] text-zinc-400 mb-1">{isEn ? "Preview Guest Name" : "ឈ្មោះភ្ញៀវតេស្ត (Preview Name)"}</label>
                               <input
                                 type="text"
                                 value={form.guestName || ""}
                                 onChange={(e) => setField("guestName", e.target.value)}
-                                placeholder="លោកអ្នក និងក្រុមគ្រួសារ"
+                                placeholder={isEn ? "You and your family" : "លោកអ្នក និងក្រុមគ្រួសារ"}
                                 className="h-8 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 text-xs text-zinc-100 outline-none focus:border-amber-500"
                               />
                             </div>
@@ -3188,23 +3155,23 @@ export default function AdminTemplateEditPage() {
                         {/* 3.4 ពាក្យស្វាគមន៍ & ជូនពរ */}
                         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-3.5 space-y-2.5">
                           <span className="block text-xs font-bold text-zinc-300">
-                            📝 ពាក្យស្វាគមន៍ & ជូនពរ
+                              {isEn ? "Greeting & Blessing" : "📝 ពាក្យស្វាគមន៍ & ជូនពរ"}
                           </span>
                           <div>
                             <label className="block text-[10px] text-zinc-400 mb-1">
-                              ពាក្យស្វាគមន៍ (Subtitle / Greeting)
+                                {isEn ? "Subtitle / Greeting" : "ពាក្យស្វាគមន៍ (Subtitle / Greeting)"}
                             </label>
                             <input
                               type="text"
                               value={form.invitationSubtitle || ""}
                               onChange={(e) => setField("invitationSubtitle", e.target.value)}
-                              placeholder="ឧ. យើងខ្ញុំមានកិត្តិយសសូមគោរពអញ្ជើញ..."
+                              placeholder={isEn ? "e.g. We warmly invite you..." : "ឧ. យើងខ្ញុំមានកិត្តិយសសូមគោរពអញ្ជើញ..."}
                               className="h-8 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 text-xs text-zinc-100 outline-none focus:border-amber-500"
                             />
                           </div>
                           <div>
                             <label className="block text-[10px] text-zinc-400 mb-1">
-                              ពាក្យជូនពរផ្លូវការ (Formal Blessing Message)
+                                {isEn ? "Formal Blessing Message" : "ពាក្យជូនពរផ្លូវការ (Formal Blessing Message)"}
                             </label>
                             <textarea
                               rows={2}
@@ -3254,7 +3221,7 @@ export default function AdminTemplateEditPage() {
                                     ? "bg-amber-500 text-black shadow-amber-500/30 ring-2 ring-amber-400"
                                     : "bg-amber-500/20 text-amber-300 hover:bg-amber-500 hover:text-black border border-amber-500/40"
                                 }`}
-                                title={isPlayingMusic ? "ផ្អាក (Pause)" : "ចាក់ស្តាប់ (Play)"}
+                              title={isPlayingMusic ? (isEn ? "Pause" : "ផ្អាក (Pause)") : (isEn ? "Play" : "ចាក់ស្តាប់ (Play)")}
                               >
                                 {isPlayingMusic ? (
                                   <Pause className="h-5 w-5 fill-current" />
@@ -3264,7 +3231,7 @@ export default function AdminTemplateEditPage() {
                               </button>
                               <div className="min-w-0">
                                 <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
-                                  <span>{isPlayingMusic ? "កំពុងចាក់ស្តាប់..." : "បទភ្លេងមង្គលការបច្ចុប្បន្ន"}</span>
+                              <span>{isPlayingMusic ? (isEn ? "Playing..." : "កំពុងចាក់ស្តាប់...") : (isEn ? "Current wedding music" : "បទភ្លេងមង្គលការបច្ចុប្បន្ន")}</span>
                                   {isPlayingMusic && (
                                     <span className="flex items-center gap-0.5 text-amber-400">
                                       <span className="w-1 h-3 bg-amber-400 rounded-full animate-pulse" />
@@ -3277,7 +3244,7 @@ export default function AdminTemplateEditPage() {
                                   {form.bgMusicUrl ? (
                                     MUSIC_PRESETS.find((p) => p.url === form.bgMusicUrl)?.title || form.bgMusicUrl
                                   ) : (
-                                    <span className="text-zinc-500 italic">🔇 បានបិទភ្លេង (គ្មានសំឡេង)</span>
+                          <span className="text-zinc-500 italic">{isEn ? "Music off (silent)" : "🔇 បានបិទភ្លេង (គ្មានសំឡេង)"}</span>
                                   )}
                                 </div>
                               </div>
@@ -3299,7 +3266,7 @@ export default function AdminTemplateEditPage() {
                         {/* Presets List */}
                         <div className="space-y-2">
                           <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
-                            ជ្រើសរើសបទភ្លេងគំរូ (Wedding Music Presets)
+                          {isEn ? "Wedding Music Presets" : "ជ្រើសរើសបទភ្លេងគំរូ (Wedding Music Presets)"}
                           </label>
                           <div className="space-y-1.5">
                             {MUSIC_PRESETS.map((track) => {
@@ -3333,7 +3300,7 @@ export default function AdminTemplateEditPage() {
                                       isSelected ? "bg-amber-500 text-black font-bold" : "bg-zinc-800 text-zinc-400"
                                     }`}
                                   >
-                                    {isSelected ? "✓ ជ្រើសរើស" : track.tag}
+                                {isSelected ? (isEn ? "Selected" : "✓ ជ្រើសរើស") : track.tag}
                                   </span>
                                 </button>
                               );
@@ -3354,8 +3321,8 @@ export default function AdminTemplateEditPage() {
                                   <VolumeX className="h-4 w-4" />
                                 </div>
                                 <div>
-                                  <div className="text-xs font-bold leading-tight">បិទសំឡេង (គ្មានភ្លេងកំដរ)</div>
-                                  <div className="text-[10px] text-zinc-500">បើកសំបុត្រដោយស្ងាត់ (Silent Mode)</div>
+                              <div className="text-xs font-bold leading-tight">{isEn ? "No background music" : "បិទសំឡេង (គ្មានភ្លេងកំដរ)"}</div>
+                              <div className="text-[10px] text-zinc-500">{isEn ? "Open the invitation silently" : "បើកសំបុត្រដោយស្ងាត់ (Silent Mode)"}</div>
                                 </div>
                               </div>
                               <span
@@ -3363,7 +3330,7 @@ export default function AdminTemplateEditPage() {
                                   !form.bgMusicUrl ? "bg-amber-500 text-black font-bold" : "bg-zinc-800 text-zinc-400"
                                 }`}
                               >
-                                {!form.bgMusicUrl ? "✓ បានបិទ" : "Mute"}
+                            {!form.bgMusicUrl ? (isEn ? "Muted" : "✓ បានបិទ") : "Mute"}
                               </span>
                             </button>
                           </div>
@@ -3381,11 +3348,11 @@ export default function AdminTemplateEditPage() {
                 {/* Groom Info */}
                 <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-3">
                   <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>🤵 ព័ត៌មានខាងកូនកំលោះ (Groom)</span>
+                      <span>{isEn ? "Groom Details" : "🤵 ព័ត៌មានខាងកូនកំលោះ (Groom)"}</span>
                   </h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះខ្មែរ</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Khmer Name" : "ឈ្មោះខ្មែរ"}</label>
                       <input
                         type="text"
                         value={form.groomName}
@@ -3394,7 +3361,7 @@ export default function AdminTemplateEditPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះឡាតាំង</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Latin Name" : "ឈ្មោះឡាតាំង"}</label>
                       <input
                         type="text"
                         value={form.groomNameEn}
@@ -3405,7 +3372,7 @@ export default function AdminTemplateEditPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះឪពុក</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Father Name" : "ឈ្មោះឪពុក"}</label>
                       <input
                         type="text"
                         value={form.groomFather}
@@ -3414,7 +3381,7 @@ export default function AdminTemplateEditPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះម្តាយ</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Mother Name" : "ឈ្មោះម្តាយ"}</label>
                       <input
                         type="text"
                         value={form.groomMother}
@@ -3428,11 +3395,11 @@ export default function AdminTemplateEditPage() {
                 {/* Bride Info */}
                 <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4 space-y-3">
                   <h4 className="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>👰 ព័ត៌មានខាងកូនក្រមុំ (Bride)</span>
+                      <span>{isEn ? "Bride Details" : "👰 ព័ត៌មានខាងកូនក្រមុំ (Bride)"}</span>
                   </h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះខ្មែរ</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Khmer Name" : "ឈ្មោះខ្មែរ"}</label>
                       <input
                         type="text"
                         value={form.brideName}
@@ -3441,7 +3408,7 @@ export default function AdminTemplateEditPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះឡាតាំង</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Latin Name" : "ឈ្មោះឡាតាំង"}</label>
                       <input
                         type="text"
                         value={form.brideNameEn}
@@ -3452,7 +3419,7 @@ export default function AdminTemplateEditPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះឪពុក</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Father Name" : "ឈ្មោះឪពុក"}</label>
                       <input
                         type="text"
                         value={form.brideFather}
@@ -3461,7 +3428,7 @@ export default function AdminTemplateEditPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] text-zinc-400 mb-1">ឈ្មោះម្តាយ</label>
+                      <label className="block text-[11px] text-zinc-400 mb-1">{isEn ? "Mother Name" : "ឈ្មោះម្តាយ"}</label>
                       <input
                         type="text"
                         value={form.brideMother}
@@ -3489,7 +3456,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Calendar className="h-3.5 w-3.5" />
-                    <span>កាលវិភាគកម្មវិធី (Schedule)</span>
+                    <span>{isEn ? "Schedule" : "កាលវិភាគកម្មវិធី (Schedule)"}</span>
                   </button>
                   <button
                     type="button"
@@ -3501,7 +3468,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <ImageIcon className="h-3.5 w-3.5" />
-                    <span>វិចិត្រសាល & Story (Gallery)</span>
+                    <span>{isEn ? "Gallery & Story" : "វិចិត្រសាល & Story (Gallery)"}</span>
                   </button>
                 </div>
 
@@ -3576,7 +3543,7 @@ export default function AdminTemplateEditPage() {
                               <TimePicker
                                 value={item.time}
                                 onChange={(timeVal) => handleUpdateScheduleItem(item.id, "time", timeVal)}
-                                placeholder="ជ្រើសរើសម៉ោង"
+                                placeholder={isEn ? "Choose time" : "ជ្រើសរើសម៉ោង"}
                               />
                             </div>
                             <div>
@@ -3664,7 +3631,7 @@ export default function AdminTemplateEditPage() {
                         rows={3}
                         value={form.storyText || ""}
                         onChange={(e) => setField("storyText", e.target.value)}
-                        placeholder="ពីការជួបគ្នាដំបូង រហូតដល់ថ្ងៃសន្យារួមដំណើរជីវិត..."
+                        placeholder={isEn ? "From the first meeting to a lifetime together..." : "ពីការជួបគ្នាដំបូង រហូតដល់ថ្ងៃសន្យារួមដំណើរជីវិត..."}
                         className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 p-3 text-xs text-zinc-100 outline-none focus:border-amber-500 leading-relaxed shadow-inner transition-colors"
                       />
                     </div>
@@ -3688,7 +3655,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>ទីតាំងសាល & Google Map</span>
+                    <span>{isEn ? "Venue & Map" : "ទីតាំងសាល & Google Map"}</span>
                   </button>
                   <button
                     type="button"
@@ -3700,7 +3667,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Shirt className="h-3.5 w-3.5" />
-                    <span>សម្លៀកបំពាក់ & QR ចងដៃ</span>
+                    <span>{isEn ? "Dress & Gift QR" : "សម្លៀកបំពាក់ & QR ចងដៃ"}</span>
                   </button>
                 </div>
 
@@ -3708,37 +3675,37 @@ export default function AdminTemplateEditPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        ឈ្មោះសាលមង្គលការ (Venue / Hall Name)
+                        {isEn ? "Venue / Hall Name" : "ឈ្មោះសាលមង្គលការ (Venue / Hall Name)"}
                       </label>
                       <input
                         type="text"
                         value={form.venueName}
                         onChange={(e) => setField("venueName", e.target.value)}
-                        placeholder="ឧ. សណ្ឋាគារ សុខា ភ្នំពេញ"
+                        placeholder={isEn ? "e.g. Sokha Hotel, Phnom Penh" : "ឧ. សណ្ឋាគារ សុខា ភ្នំពេញ"}
                         className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        អគារ / បន្ទប់ (Building / Room)
+                        {isEn ? "Building / Room" : "អគារ / បន្ទប់ (Building / Room)"}
                       </label>
                       <input
                         type="text"
                         value={form.venueHall}
                         onChange={(e) => setField("venueHall", e.target.value)}
-                        placeholder="អគារ A (Building A)"
+                        placeholder={isEn ? "Building A" : "អគារ A (Building A)"}
                         className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        អាសយដ្ឋានលម្អិត (Address)
+                        {isEn ? "Address" : "អាសយដ្ឋានលម្អិត (Address)"}
                       </label>
                       <input
                         type="text"
                         value={form.venueAddress}
                         onChange={(e) => setField("venueAddress", e.target.value)}
-                        placeholder="ឧ. ផ្លូវសុធារស សង្កាត់ទន្លេបាសាក់ រាជធានីភ្នំពេញ"
+                        placeholder={isEn ? "e.g. Sothearos Boulevard, Tonle Bassac, Phnom Penh" : "ឧ. ផ្លូវសុធារស សង្កាត់ទន្លេបាសាក់ រាជធានីភ្នំពេញ"}
                         className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                       />
                     </div>
@@ -3760,9 +3727,9 @@ export default function AdminTemplateEditPage() {
                 {venueSubTab === "dress" && (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-sm font-bold text-white mb-1">ពណ៌សម្លៀកបំពាក់ភ្ញៀវ (Dress Code)</h3>
+                      <h3 className="text-sm font-bold text-white mb-1">{isEn ? "Guest Dress Code" : "ពណ៌សម្លៀកបំពាក់ភ្ញៀវ (Dress Code)"}</h3>
                       <p className="text-xs text-zinc-400 mb-4">
-                        កំណត់ពណ៌ និងឈ្មោះពណ៌ដែលភ្ញៀវត្រូវស្លៀកពាក់ចូលរួម
+                        {isEn ? "Set the colors and color names guests should wear." : "កំណត់ពណ៌ និងឈ្មោះពណ៌ដែលភ្ញៀវត្រូវស្លៀកពាក់ចូលរួម"}
                       </p>
                       <div className="grid grid-cols-2 gap-3">
                         {form.dressColors.map((color, idx) => (
@@ -3788,7 +3755,7 @@ export default function AdminTemplateEditPage() {
                                 newColors[idx] = { ...newColors[idx], name: e.target.value };
                                 setField("dressColors", newColors);
                               }}
-                              placeholder="ឈ្មោះពណ៌ (ឧ. មាស)"
+                              placeholder={isEn ? "Color name (e.g. Gold)" : "ឈ្មោះពណ៌ (ឧ. មាស)"}
                               className="w-full bg-transparent text-xs text-zinc-100 outline-none"
                             />
                           </div>
@@ -3808,7 +3775,7 @@ export default function AdminTemplateEditPage() {
                             <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          ឈ្មោះធនាគារ (Bank Name)
+                          {isEn ? "Bank Name" : "ឈ្មោះធនាគារ (Bank Name)"}
                         </label>
                         <input
                           type="text"
@@ -3820,7 +3787,7 @@ export default function AdminTemplateEditPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          លេខគណនី (Account Number)
+                          {isEn ? "Account Number" : "លេខគណនី (Account Number)"}
                         </label>
                         <input
                           type="text"
@@ -3833,7 +3800,7 @@ export default function AdminTemplateEditPage() {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        ឈ្មោះគណនីធនាគារ (Account Name)
+                        {isEn ? "Account Name" : "ឈ្មោះគណនីធនាគារ (Account Name)"}
                       </label>
                       <input
                         type="text"
@@ -3878,7 +3845,7 @@ export default function AdminTemplateEditPage() {
                     }`}
                   >
                     <Crown className="h-3.5 w-3.5" />
-                    <span>កំណត់ Catalog & តម្លៃ</span>
+                    <span>{isEn ? "Catalog & Pricing" : "កំណត់ Catalog & តម្លៃ"}</span>
                   </button>
                 </div>
 
@@ -3912,7 +3879,7 @@ export default function AdminTemplateEditPage() {
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="template-catalog-name" className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        ឈ្មោះគំរូសំបុត្រអញ្ជើញ (Template Name) *
+                        {lang === "en" ? "Template name" : "ឈ្មោះគំរូសំបុត្រអញ្ជើញ"} *
                       </label>
                       <input
                         id="template-catalog-name"
@@ -3927,56 +3894,60 @@ export default function AdminTemplateEditPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          ប្រភេទ (Category)
+                        <label htmlFor="template-catalog-category" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Category" : "ប្រភេទ"}
                         </label>
                         <select
+                          id="template-catalog-category"
                           value={form.category}
                           onChange={(e) => setField("category", e.target.value)}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="TRADITIONAL">ប្រពៃណីខ្មែរ (TRADITIONAL)</option>
-                          <option value="LUXURY">ប្រណិតរាជវាំង (LUXURY)</option>
-                          <option value="MODERN">សម័យទំនើប (MODERN)</option>
-                          <option value="FLORAL">ផ្កាស្រស់ (FLORAL)</option>
-                          <option value="MINIMALIST">សាមញ្ញ (MINIMALIST)</option>
-                          <option value="OTHER">ផ្សេងៗ (OTHER)</option>
+                          <option value="TRADITIONAL">{lang === "en" ? "Traditional" : "ប្រពៃណីខ្មែរ"}</option>
+                          <option value="LUXURY">{lang === "en" ? "Luxury" : "ប្រណិតរាជវាំង"}</option>
+                          <option value="MODERN">{lang === "en" ? "Modern" : "សម័យទំនើប"}</option>
+                          <option value="FLORAL">{lang === "en" ? "Floral" : "ផ្កាស្រស់"}</option>
+                          <option value="MINIMALIST">{lang === "en" ? "Minimalist" : "សាមញ្ញ"}</option>
+                          <option value="OTHER">{lang === "en" ? "Other" : "ផ្សេងៗ"}</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          ស្ថានភាព (Status)
+                        <label htmlFor="template-catalog-status" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Status" : "ស្ថានភាព"}
                         </label>
                         <select
+                          id="template-catalog-status"
                           value={form.status}
                           onChange={(e) => setField("status", e.target.value)}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="ACTIVE">ACTIVE (ផ្សព្វផ្សាយ)</option>
-                          <option value="INACTIVE">INACTIVE (ព្រាងទុក)</option>
+                          <option value="ACTIVE">{lang === "en" ? "Active" : "ផ្សព្វផ្សាយ"}</option>
+                          <option value="INACTIVE">{lang === "en" ? "Inactive" : "ព្រាងទុក"}</option>
                         </select>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          កម្រិតសេវាកម្ម (Pricing Tier)
+                        <label htmlFor="template-catalog-tier" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Pricing tier" : "កម្រិតសេវាកម្ម"}
                         </label>
                         <select
+                          id="template-catalog-tier"
                           value={form.premium ? "true" : "false"}
                           onChange={(e) => setField("premium", e.target.value === "true")}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="false">FREE (ឥតគិតថ្លៃ)</option>
-                          <option value="true">PREMIUM (បង់ប្រាក់)</option>
+                          <option value="false">{lang === "en" ? "Free" : "ឥតគិតថ្លៃ"}</option>
+                          <option value="true">{lang === "en" ? "Premium" : "បង់ប្រាក់"}</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          តម្លៃ (Price in USD)
+                        <label htmlFor="template-catalog-price" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Price (USD)" : "តម្លៃ (USD)"}
                         </label>
                         <input
+                          id="template-catalog-price"
                           type="number"
                           step="0.01"
                           value={form.price}
@@ -3988,10 +3959,11 @@ export default function AdminTemplateEditPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        រូប Thumbnail Card (URL)
+                      <label htmlFor="template-catalog-thumbnail" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                        {lang === "en" ? "Thumbnail URL" : "តំណរូបភាពគំរូ"}
                       </label>
                       <input
+                        id="template-catalog-thumbnail"
                         type="text"
                         value={form.thumbnailUrl}
                         onChange={(e) => setField("thumbnailUrl", e.target.value)}
@@ -4010,58 +3982,27 @@ export default function AdminTemplateEditPage() {
           onChange={setLeftWidthPercent} workspaceRef={workspaceRef} onDraggingChange={setIsDraggingDivider} english={lang === 'en'} />
 
         <main id="template-studio-preview" className="studio-preview-panel">
-          {/* Subtle Ambient Glow */}
-          <div
-            aria-hidden="true"
-            className="absolute top-0 right-0 h-96 w-96 max-h-full max-w-full rounded-full blur-[140px] opacity-20 pointer-events-none"
-            style={{ backgroundColor: form.primaryColor }}
-          />
-
-          {/* Single Clean Live Control Bar */}
-          <div
-            className={`studio-preview-toolbar mb-3 flex items-center justify-between w-full px-1 z-10 gap-2 ${
-              deviceView === "mobile"
-                ? "max-w-[380px]"
-                : deviceView === "tablet"
-                ? "max-w-[620px]"
-                : "max-w-4xl"
-            }`}
-          >
-            <div className="flex items-center gap-2 shrink-0">
-              <div className="flex items-center gap-1.5 rounded-xl bg-zinc-900/90 px-2.5 py-1 text-xs font-semibold text-zinc-300 border border-zinc-800 shadow-sm whitespace-nowrap">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="tracking-tight text-zinc-200">Live Simulator</span>
-              </div>
+          <div className="studio-preview-toolbar">
+            <div className="studio-device-switch" role="group" aria-label={lang === "en" ? "Preview device" : "ឧបករណ៍មើលជាមុន"}>
+              {[
+                { id: "mobile", icon: Smartphone, label: lang === "en" ? "Phone" : "ទូរស័ព្ទ" },
+                { id: "tablet", icon: Tablet, label: lang === "en" ? "Tablet" : "ថេប្លេត" },
+                { id: "desktop", icon: Monitor, label: lang === "en" ? "Desktop" : "កុំព្យូទ័រ" },
+              ].map(({ id, icon: Icon, label }) => (
+                <button key={id} type="button" aria-pressed={deviceView === id} onClick={() => setDeviceView(id)}>
+                  <Icon size={15} aria-hidden="true" />
+                  <span>{label}</span>
+                </button>
+              ))}
             </div>
-
-            {/* Fast Gate Toggle Switcher */}
-            <div className="flex items-center gap-1 rounded-xl border border-zinc-800 bg-zinc-900/90 p-1 shadow-lg backdrop-blur-md shrink-0">
-              <button
-                type="button"
-                onClick={() => handleSetGate(false)}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
-                  !previewGateOpen
-                    ? "bg-amber-500 text-slate-950 shadow-sm font-bold"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-              >
-                <Layers className="h-3.5 w-3.5" />
-                <span>ស្រោមសំបុត្រ (Cover)</span>
+            <div className="studio-gate-switch" role="group" aria-label={lang === "en" ? "Invitation preview state" : "ស្ថានភាពមើលសំបុត្រជាមុន"}>
+              <button type="button" aria-pressed={!previewGateOpen} onClick={() => handleSetGate(false)}>
+                <Layers size={15} aria-hidden="true" />
+                <span>{lang === "en" ? "Cover" : "ស្រោមសំបុត្រ"}</span>
               </button>
-              <button
-                type="button"
-                onClick={() => handleSetGate(true)}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
-                  previewGateOpen
-                    ? "bg-amber-500 text-slate-950 shadow-sm font-bold"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-              >
-                <Eye className="h-3.5 w-3.5" />
-                <span>មាតិកាពេញ (Full)</span>
+              <button type="button" aria-pressed={previewGateOpen} onClick={() => handleSetGate(true)}>
+                <Eye size={15} aria-hidden="true" />
+                <span>{lang === "en" ? "Invitation" : "សំបុត្រអញ្ជើញ"}</span>
               </button>
             </div>
           </div>
@@ -4070,18 +4011,7 @@ export default function AdminTemplateEditPage() {
             '--primary-color': form.primaryColor,
             '--secondary-color': form.secondaryColor,
           }}>
-            {/* Mockup Mobile Status Bar */}
-            <div className="flex h-7 shrink-0 items-center justify-between px-6 bg-black/80 text-[10px] text-zinc-300 font-semibold border-b border-black/10 z-20">
-              <span>9:41</span>
-              <div className="h-3.5 w-20 rounded-full bg-black mx-auto" />
-              <div className="flex items-center gap-1.5">
-                <span>5G</span>
-                <span>100%</span>
-              </div>
-            </div>
-
-            {/* REAL-TIME LIVE TEMPLATE SIMULATOR */}
-            <div className="flex-1 w-full h-full relative bg-zinc-950">
+            <div className="studio-preview-content">
               <iframe
                 key={form.code || form.presetId || "template-preview"}
                 ref={iframeRef}
@@ -4128,8 +4058,13 @@ export default function AdminTemplateEditPage() {
       {/* CUSTOM FONT MODAL (GOOGLE FONTS & LOCAL FILE UPLOAD) */}
       {/* ============================================================== */}
       {showFontModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-lg rounded-3xl border border-zinc-800 bg-zinc-950 p-6 shadow-2xl space-y-5">
+        <AdminDialog
+          label={lang === 'en' ? 'Add Custom Font' : 'បន្ថែមពុម្ពអក្សរផ្ទាល់ខ្លួន'}
+          className="studio-font-dialog"
+          returnFocusRef={fontDialogTriggerRef}
+          onClose={() => setShowFontModal(false)}
+        >
+          <div className="p-6 space-y-5">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
@@ -4137,14 +4072,15 @@ export default function AdminTemplateEditPage() {
                   <Type className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">បន្ថែមពុម្ពអក្សរផ្ទាល់ខ្លួន (Add Custom Font)</h3>
-                  <p className="text-[11px] text-zinc-400">ប្រើ Google Font ឬ Upload file .ttf / .woff2</p>
+                  <h2 className="text-sm font-bold text-white">{lang === 'en' ? 'Add Custom Font' : 'បន្ថែមពុម្ពអក្សរផ្ទាល់ខ្លួន'}</h2>
+                  <p className="text-[11px] text-zinc-400">{isEn ? 'Use Google Fonts or upload a font file' : 'ប្រើ Google Font ឬ Upload file .ttf / .woff2'}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowFontModal(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
+                aria-label={t('common.close', 'Close')}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -4155,6 +4091,7 @@ export default function AdminTemplateEditPage() {
               <button
                 type="button"
                 onClick={() => setFontModalTab("google")}
+                aria-pressed={fontModalTab === 'google'}
                 className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   fontModalTab === "google"
                     ? "bg-amber-500 text-black font-bold shadow-sm"
@@ -4167,6 +4104,7 @@ export default function AdminTemplateEditPage() {
               <button
                 type="button"
                 onClick={() => setFontModalTab("file")}
+                aria-pressed={fontModalTab === 'file'}
                 className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   fontModalTab === "file"
                     ? "bg-amber-500 text-black font-bold shadow-sm"
@@ -4174,37 +4112,39 @@ export default function AdminTemplateEditPage() {
                 }`}
               >
                 <Upload className="h-3.5 w-3.5" />
-                <span>Upload File Font</span>
+                <span>{isEn ? 'Upload File Font' : 'ផ្ទុកឯកសារពុម្ពអក្សរ'}</span>
               </button>
             </div>
 
             {/* Category Selector: Khmer vs Latin */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                ប្រភេទ Font (Font Target)
-              </label>
+              <p className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                {isEn ? 'Font Target' : 'ប្រភេទ Font (Font Target)'}
+              </p>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setNewFontCategory("khmer")}
+                  aria-pressed={newFontCategory === 'khmer'}
                   className={`py-2 px-3 rounded-xl border text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-2 ${
                     newFontCategory === "khmer"
                       ? "border-amber-500 bg-amber-500/10 text-amber-300 font-bold"
                       : "border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700"
                   }`}
                 >
-                  <span>🇰🇭 អក្សរខ្មែរ (Khmer)</span>
+                  <span>{isEn ? 'Khmer' : '🇰🇭 អក្សរខ្មែរ (Khmer)'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setNewFontCategory("latin")}
+                  aria-pressed={newFontCategory === 'latin'}
                   className={`py-2 px-3 rounded-xl border text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-2 ${
                     newFontCategory === "latin"
                       ? "border-amber-500 bg-amber-500/10 text-amber-300 font-bold"
                       : "border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700"
                   }`}
                 >
-                  <span>🔤 អក្សរឡាតាំង (Latin)</span>
+                  <span>{isEn ? 'Latin' : '🔤 អក្សរឡាតាំង (Latin)'}</span>
                 </button>
               </div>
             </div>
@@ -4213,10 +4153,11 @@ export default function AdminTemplateEditPage() {
             {fontModalTab === "google" && (
               <div className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                    ឈ្មោះ Google Font (Family Name)
+                  <label htmlFor="studio-google-font-name" className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    {isEn ? 'Google Font Family Name' : 'ឈ្មោះ Google Font (Family Name)'}
                   </label>
                   <input
+                    id="studio-google-font-name"
                     type="text"
                     value={newFontName}
                     onChange={(e) => {
@@ -4227,7 +4168,7 @@ export default function AdminTemplateEditPage() {
                     }}
                     placeholder={
                       newFontCategory === "khmer"
-                        ? "ឧ. Odor Mean Chey, Koh Santepheap, Kdam Thmor Pro..."
+                        ? (isEn ? "e.g. Odor Mean Chey, Koh Santepheap, Kdam Thmor Pro..." : "ឧ. Odor Mean Chey, Koh Santepheap, Kdam Thmor Pro...")
                         : "e.g. MonteCarlo, Italianno, Parisienne, Marck Script..."
                     }
                     className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
@@ -4237,7 +4178,7 @@ export default function AdminTemplateEditPage() {
                 {/* Popular Suggestions Chips */}
                 <div>
                   <span className="block text-[10px] font-semibold text-zinc-400 mb-1.5">
-                    💡 ពុម្ពអក្សរពេញនិយម (ចុចដើម្បីជ្រើសរើសភ្លាមៗ)៖
+                    {isEn ? 'Popular fonts — choose one to preview' : '💡 ពុម្ពអក្សរពេញនិយម (ចុចដើម្បីជ្រើសរើសភ្លាមៗ)៖'}
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {POPULAR_GOOGLE_FONTS_SUGGESTIONS
@@ -4265,7 +4206,7 @@ export default function AdminTemplateEditPage() {
                 {/* Live Preview Box */}
                 {newFontName.trim() && (
                   <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-center space-y-1">
-                    <span className="text-[10px] uppercase font-mono tracking-wider text-amber-400">Live Preview:</span>
+                    <span className="text-[10px] font-mono text-amber-400">{isEn ? 'Live Preview:' : 'មើលជាមុន:'}</span>
                     <div
                       className="text-base text-zinc-100 py-1"
                       style={{ fontFamily: `"${newFontName.trim()}", sans-serif` }}
@@ -4282,7 +4223,7 @@ export default function AdminTemplateEditPage() {
                   className="btn-primary w-full h-10 rounded-xl disabled:opacity-50 font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <Plus className="h-4 w-4" />
-                  <span>+ Add & Apply This Google Font</span>
+                  <span>{isEn ? '+ Add & Apply This Google Font' : 'បន្ថែម និងប្រើពុម្ពអក្សរនេះ'}</span>
                 </button>
               </div>
             )}
@@ -4299,36 +4240,38 @@ export default function AdminTemplateEditPage() {
                 />
 
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                    ឈ្មោះ Font (Font Family Name)
+                  <label htmlFor="studio-upload-font-name" className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    {isEn ? 'Font Family Name' : 'ឈ្មោះ Font (Font Family Name)'}
                   </label>
                   <input
+                    id="studio-upload-font-name"
                     type="text"
                     value={newFontName}
                     onChange={(e) => setNewFontName(e.target.value)}
-                    placeholder="ឧ. My Royal Wedding Font"
+                    placeholder={isEn ? 'e.g. My Royal Wedding Font' : 'ឧ. My Royal Wedding Font'}
                     className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500"
                   />
                 </div>
 
-                <div
+                <button
+                  type="button"
                   onClick={() => fontFileInputRef.current?.click()}
-                  className="rounded-2xl border-2 border-dashed border-zinc-800 hover:border-amber-500/50 bg-zinc-900/50 hover:bg-amber-500/5 p-6 text-center transition cursor-pointer space-y-2"
+                  className="w-full rounded-2xl border-2 border-dashed border-zinc-800 hover:border-amber-500/50 bg-zinc-900/50 hover:bg-amber-500/5 p-6 text-center transition cursor-pointer space-y-2"
                 >
                   <Upload className="h-7 w-7 text-amber-500 mx-auto" />
                   <div>
                     <span className="text-xs font-bold text-zinc-200">
-                      ចុចដើម្បីជ្រើសរើស file Font
+                      {isEn ? 'Choose a font file' : 'ចុចដើម្បីជ្រើសរើស file Font'}
                     </span>
                     <p className="text-[10px] text-zinc-400 mt-0.5">
-                      គាំទ្រប្រភេទ file: .ttf, .otf, .woff, .woff2
+                      {isEn ? 'Supported files: .ttf, .otf, .woff, .woff2' : 'គាំទ្រប្រភេទ file: .ttf, .otf, .woff, .woff2'}
                     </p>
                   </div>
-                </div>
+                </button>
               </div>
             )}
           </div>
-        </div>
+        </AdminDialog>
       )}
 
       <Toast toast={toast} onClose={clear} />

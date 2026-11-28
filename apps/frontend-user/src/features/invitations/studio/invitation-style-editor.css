@@ -183,6 +183,18 @@
 /* Obsidian x Champagne Gold: only the editor chrome text follows the theme.
    .studio-style-mini and .kp-* previews are authored invitation art and keep
    their cream identity. */
+:root[data-color-mode="dark"] .studio-invitation-styles .studio-style-option,
+.dark .studio-invitation-styles .studio-style-option {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] .studio-invitation-styles .studio-style-option:has(input:checked),
+.dark .studio-invitation-styles .studio-style-option:has(input:checked) {
+  background: var(--ui-theme-action-soft);
+  border-color: var(--ui-theme-gold);
+}
+
 :root[data-color-mode="dark"] .studio-invitation-styles :is(.studio-style-picker legend, .studio-style-label, .studio-floral-settings > summary),
 .dark .studio-invitation-styles :is(.studio-style-picker legend, .studio-style-label, .studio-floral-settings > summary) {
   color: var(--ui-theme-ink);

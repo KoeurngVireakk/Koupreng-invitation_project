@@ -100,7 +100,7 @@ export default function AdminUserDetailPage() {
         {!invitations?.length ? (
           <Empty label={t("users.noInvitations", "មិនមានសំបុត្រអញ្ជើញទេ")} />
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-zinc-800/80">
+          <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-zinc-800/80" tabIndex={0} role="region" aria-label={isEn ? "User invitations, scroll horizontally" : "សំបុត្រអញ្ជើញរបស់អ្នកប្រើប្រាស់ អាចរំកិលផ្ដេក"}>
             <table className="w-full text-left text-xs sm:text-sm">
               <thead className="border-b border-slate-100 dark:border-zinc-800 bg-slate-50/80 dark:bg-zinc-900/60">
                 <tr>

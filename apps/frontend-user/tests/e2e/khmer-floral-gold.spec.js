@@ -11,7 +11,14 @@ const code = 'khmer-floral-gold';
 // Synthetic catalog ID is scoped to intercepted browser contracts, never shipped as a renderer ID.
 const catalog = { id: 81, code, name: 'Khmer Floral Gold', status: 'ACTIVE', category: 'TRADITIONAL', premium: false, price: 0, currency: 'USD', supportedEventTypes: ['WEDDING'], supportedLanguages: ['KH','EN','BOTH'], thumbnailUrl: `/templates/${code}/preview.svg`, description: JSON.stringify(demo.design) };
 const json = (route, data, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ data }) });
-const open = async page => { await page.locator('.kfg-open').click(); await expect.poll(async () => await page.locator('.kfg-content, .kfg-welcome-scene').count()).toBeGreaterThan(0); if (await page.locator('.kfg-continue').count()) await page.locator('.kfg-continue').click(); await expect(page.locator('.kfg-content')).toBeVisible(); };
+const open = async page => {
+  await page.locator('.kfg-open').click();
+  await expect(page.locator('.kfg-content, .kfg-welcome-scene')).toBeVisible();
+  if (await page.locator('.kfg-welcome-scene').isVisible()) {
+    await page.locator('.kfg-skip-welcome').click();
+  }
+  await expect(page.locator('.kfg-content')).toBeVisible();
+};
 async function publicFixtures(page, { published = false, failure = false, contentOverrides = {} } = {}) {
   let rsvps = [], attempts = 0;
   const content = { ...demo, couple: { groom: demo.groom, bride: demo.bride }, photos: [], localizedContentV1: demo.localizedContentV1, ...contentOverrides };
@@ -112,6 +119,8 @@ test('owner music starts after a gesture, pauses and stops after navigating away
   await expect(page.locator('audio')).toHaveCount(1);
   expect(await page.locator('audio').evaluate(node => node.paused)).toBe(true);
   await open(page);
+  expect(await page.locator('audio').evaluate(node => node.paused)).toBe(true);
+  await page.getByRole('button', { name: 'Play music' }).click();
   if (await page.locator('.kfg-audio-error').isVisible()) {
     await page.getByRole('button', { name: 'Play music' }).click();
     const failure = await page.locator('audio').evaluate(node => ({ code: node.error?.code, message: node.error?.message }));

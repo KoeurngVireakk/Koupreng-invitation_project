@@ -88,18 +88,17 @@ export default function KhmerFloralGoldLayout({ content = {}, liveData, preview 
   const photos = floralPhotos(vm, en);
   const musicSource = floralMusic(liveData ? { ...liveData, enabledSections: raw.enabledSections } : raw);
   const [audioRef, music] = useTemplateMusicController(musicSource);
-  const { play, pause } = music;
+  const { pause } = music;
   const channel = useMemo(() => previewChannel || readEmbeddedPreviewChannel(), [previewChannel]);
   const open = useCallback((gesture = false) => {
     if (gesture && openRef.current) return;
     openRef.current = true;
     const duration = gesture && !reduced && !environment.saveData && motionPreset !== 'none' ? ({ subtle: 350, romantic: 1000, elegant: 800, cinematic: 1300 })[motionPreset] : 0;
     setPhase(duration ? 'opening' : 'content');
-    if (gesture && musicSource) void play();
     clearTimeout(openingTimer.current);
     if (duration) openingTimer.current = window.setTimeout(() => { setPhase('welcome'); }, duration);
     else { if (gesture) startCinematic(); requestAnimationFrame(() => bodyRef.current?.focus({ preventScroll: true })); }
-  }, [play, musicSource, reduced, environment.saveData, motionPreset, startCinematic]);
+  }, [reduced, environment.saveData, motionPreset, startCinematic]);
   const skipOpening = () => { clearTimeout(openingTimer.current); playback.stop(); setPhase('content'); requestAnimationFrame(() => bodyRef.current?.focus({ preventScroll: true })); };
   useEffect(() => () => clearTimeout(openingTimer.current), []);
   useEffect(() => {
@@ -159,7 +158,7 @@ export default function KhmerFloralGoldLayout({ content = {}, liveData, preview 
     }
   };
   return <InvitationLocaleContext value={locale}><div ref={rootRef} className={`kfg-invitation${preview ? ' kfg-preview' : ''}${opened ? ' is-open' : ''}${phase === 'opening' ? ' is-opening' : ''}`} lang={locale} data-template-renderer="khmer-floral-gold" data-reduced-motion={reduced} data-motion={motionPreset} data-low-power={environment.saveData} data-page-hidden={environment.hidden} data-florals={style.florals} data-portrait-frame={style.portraitFrame} data-map-style={style.map}
-    style={{ '--kfg-welcome-duration': `${welcomeDuration}ms`, '--kfg-open-padding': `${style.openButtonPadding}px`, '--kfg-open-text-size': `${style.openButtonTextSize}px`, '--kfg-guest-text-size': `${style.guestTextSize}px`, '--kfg-gold': floralColor(palette.primary || palette.accent || vm.frontColor || vm.primaryColor), '--kfg-paper': floralColor(palette.background || vm.backgroundColor), '--kfg-ink': floralColor(palette.text), '--kfg-highlight': floralColor(palette.accent || palette.border), '--kfg-frame-color': floralColor(palette.border), '--kfg-body': palette.bodyFont ? `${JSON.stringify(palette.bodyFont)}, KfgBody, sans-serif` : undefined, '--kfg-message-align': ['left', 'center', 'right'].includes(palette.align) ? palette.align : undefined, '--kfg-message-scale': ({ small: .9, normal: 1, large: 1.12 })[palette.messageSize] || 1, '--kfg-portrait-y': `${palette.portraitY ?? 50}%`, '--kfg-heading-font': vm.fontKhmer ? `${JSON.stringify(vm.fontKhmer)}, var(--kfg-display)` : undefined, '--kfg-latin-font': vm.fontLatin ? `${JSON.stringify(vm.fontLatin)}, serif` : undefined }}>
+    style={{ '--kfg-open-padding': `${style.openButtonPadding}px`, '--kfg-open-text-size': `${style.openButtonTextSize}px`, '--kfg-guest-text-size': `${style.guestTextSize}px`, '--kfg-gold': floralColor(palette.primary || palette.accent || vm.frontColor || vm.primaryColor), '--kfg-paper': floralColor(palette.background || vm.backgroundColor), '--kfg-ink': floralColor(palette.text), '--kfg-highlight': floralColor(palette.accent || palette.border), '--kfg-frame-color': floralColor(palette.border), '--kfg-body': palette.bodyFont ? `${JSON.stringify(palette.bodyFont)}, KfgBody, sans-serif` : undefined, '--kfg-message-align': ['left', 'center', 'right'].includes(palette.align) ? palette.align : undefined, '--kfg-message-scale': ({ small: .9, normal: 1, large: 1.12 })[palette.messageSize] || 1, '--kfg-portrait-y': `${palette.portraitY ?? 50}%`, '--kfg-heading-font': vm.fontKhmer ? `${JSON.stringify(vm.fontKhmer)}, var(--kfg-display)` : undefined, '--kfg-latin-font': vm.fontLatin ? `${JSON.stringify(vm.fontLatin)}, serif` : undefined }}>
     <div className="kfg-paper-art" aria-hidden="true" />{(opened || phase === 'welcome') && <FloralSceneBackdrop enabled={style.florals && style.sceneBackground && !environment.saveData} />}<FloralAmbience enabled={style.florals && !reduced && !environment.saveData && !environment.slow && motionPreset !== 'none'} paused={environment.hidden} motion={motionPreset} petalCount={style.petalCount} butterflyCount={style.butterflyCount} />
     {wanted === 'en' && !locales.includes('en') && <p className="kfg-locale-notice" role="status" lang="en">English is not published for this invitation. Showing Khmer.</p>}
     <div className="kfg-toolbar"><label className="kfg-language"><Globe2 size={16} aria-hidden="true" /><span className="kfg-sr-only">{t('ភាសាធៀប', 'Invitation language')}</span><select value={locale} onChange={event => language(event.target.value)}>{locales.includes('km') && <option value="km">ខ្មែរ</option>}{locales.includes('en') && <option value="en">English</option>}</select><ChevronDown size={14} aria-hidden="true" /></label>

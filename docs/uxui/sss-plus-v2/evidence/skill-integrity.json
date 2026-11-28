@@ -1,0 +1,559 @@
+{
+  "method": "Read-only comparison to supplied installation manifest; no installs or upstream writes",
+  "repositories": [
+    {
+      "collection": "gstack",
+      "revision": "306ff23b9d2bd7951b7f6c408c7376f3237520c9",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 5208,
+      "mismatches": []
+    },
+    {
+      "collection": "emilkowalski-skills",
+      "revision": "64eb3deb9a5fbfa041faf783e0bc3fd635872e9c",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 36,
+      "mismatches": []
+    },
+    {
+      "collection": "ui-ux-pro-max-skill",
+      "revision": "11ca2b3bdd555649f278ee348c32a9302b24dcf1",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 758,
+      "mismatches": []
+    },
+    {
+      "collection": "anthropics-skills",
+      "revision": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 448,
+      "mismatches": []
+    },
+    {
+      "collection": "stageshow-skills",
+      "revision": "299140fafd08df55a9c234e610c3f64af3f45531",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 377,
+      "mismatches": []
+    },
+    {
+      "collection": "impeccable",
+      "revision": "2fc5e1459efbbf06d92c7306517c286bf12490cf",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 152,
+      "mismatches": []
+    },
+    {
+      "collection": "dimensional-drawing",
+      "revision": "5c457437c8c83524308aad3b7443e81adcc13153",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 18,
+      "mismatches": []
+    },
+    {
+      "collection": "oil-ui",
+      "revision": "82464b1ef8ff41808497642dba5342852ced70ae",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 56,
+      "mismatches": []
+    },
+    {
+      "collection": "taste-skill",
+      "revision": "952435f63acece7d2fcb4b4d3c1786c1c43603e0",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 1665,
+      "mismatches": []
+    },
+    {
+      "collection": "brand-identity-skill",
+      "revision": "af7ba40fe067b8b4aaeb2af90ed6c8996d014791",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 352,
+      "mismatches": []
+    },
+    {
+      "collection": "awwwards-mcp",
+      "revision": "c1f85fb7d33c2330ae9c16c3362bceca408be01f",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 645,
+      "mismatches": []
+    },
+    {
+      "collection": "awwwards-skills",
+      "revision": "d32273727c6d882b639ec46b669d1e04343ffcf1",
+      "matchesRevision": true,
+      "clean": true,
+      "checkedFiles": 36,
+      "mismatches": []
+    }
+  ],
+  "skills": [
+    {
+      "skill": "animate",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "animate",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "animate-expo",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "animate-expo",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "animation-performance",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "animation-performance",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "animation-vocabulary",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "animation-vocabulary",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "apple-design",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "apple-design",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "ask-emil",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "ask-emil",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "ask-sonner",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "ask-sonner",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "break-ui",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "break-ui",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "choreograph",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "choreograph",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "emil-design-eng",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "emil-design-eng",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "find-animation-opportunities",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "find-animation-opportunities",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "gestures",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "gestures",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "improve-animations",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "improve-animations",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "learn-taste",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "learn-taste",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "mobile-native",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "mobile-native",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "pick-ui-library",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "pick-ui-library",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "prototype",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "prototype",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "remove-animations",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "remove-animations",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "review-animations",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "review-animations",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "write-swift",
+      "host": "codex",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "write-swift",
+      "host": "antigravity",
+      "checkedFiles": 1,
+      "differences": []
+    },
+    {
+      "skill": "frontend-design",
+      "host": "codex",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "frontend-design",
+      "host": "antigravity",
+      "checkedFiles": 2,
+      "differences": []
+    },
+    {
+      "skill": "ui-ux-pro-max",
+      "host": "codex",
+      "checkedFiles": 83,
+      "differences": []
+    },
+    {
+      "skill": "ui-ux-pro-max",
+      "host": "antigravity",
+      "checkedFiles": 83,
+      "differences": []
+    },
+    {
+      "skill": "stageshow",
+      "host": "codex",
+      "checkedFiles": 372,
+      "differences": []
+    },
+    {
+      "skill": "stageshow",
+      "host": "antigravity",
+      "checkedFiles": 372,
+      "differences": []
+    },
+    {
+      "skill": "oil-ui",
+      "host": "codex",
+      "checkedFiles": 56,
+      "differences": []
+    },
+    {
+      "skill": "oil-ui",
+      "host": "antigravity",
+      "checkedFiles": 56,
+      "differences": []
+    },
+    {
+      "skill": "design-taste-frontend",
+      "host": "codex",
+      "checkedFiles": 1631,
+      "differences": []
+    },
+    {
+      "skill": "design-taste-frontend",
+      "host": "antigravity",
+      "checkedFiles": 1631,
+      "differences": []
+    },
+    {
+      "skill": "brand-identity",
+      "host": "codex",
+      "checkedFiles": 91,
+      "differences": []
+    },
+    {
+      "skill": "brand-identity",
+      "host": "antigravity",
+      "checkedFiles": 91,
+      "differences": []
+    },
+    {
+      "skill": "dimensional-drawing",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "dimensional-drawing",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "dimensional-drawing-motion",
+      "host": "codex",
+      "checkedFiles": 8,
+      "differences": []
+    },
+    {
+      "skill": "dimensional-drawing-motion",
+      "host": "antigravity",
+      "checkedFiles": 8,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-atlas",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-atlas",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-design-md",
+      "host": "codex",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-design-md",
+      "host": "antigravity",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-doctor",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-doctor",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-inspiration",
+      "host": "codex",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-inspiration",
+      "host": "antigravity",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-motion-study",
+      "host": "codex",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-motion-study",
+      "host": "antigravity",
+      "checkedFiles": 4,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-section-loop",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-section-loop",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-setup",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "awwwards-setup",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "motion-authoring",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "motion-authoring",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "recreate",
+      "host": "codex",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "recreate",
+      "host": "antigravity",
+      "checkedFiles": 3,
+      "differences": []
+    },
+    {
+      "skill": "impeccable",
+      "host": "codex",
+      "checkedFiles": 69,
+      "differences": []
+    },
+    {
+      "skill": "impeccable",
+      "host": "antigravity",
+      "checkedFiles": 63,
+      "differences": []
+    }
+  ]
+}

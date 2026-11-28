@@ -1432,7 +1432,7 @@
   gap: 6px;
   background: #fdf6ec;
   border: 1px solid #f2d8b3;
-  color: #b0926a;
+  color: #795c38;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -1662,7 +1662,7 @@
 .paid-card-cat {
   font-size: 0.775rem;
   font-weight: 700;
-  color: #b0926a;
+  color: #795c38;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 6px;
@@ -1789,6 +1789,19 @@
   color: var(--ui-theme-muted);
 }
 
+:root[data-color-mode="dark"] .paid-card-item {
+  background: var(--ui-theme-surface);
+  border-color: var(--ui-theme-border);
+}
+
+:root[data-color-mode="dark"] :is(.paid-breadcrumb-active, .paid-card-title) {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] :is(.paid-breadcrumb-link, .paid-card-cat) {
+  color: var(--ui-theme-gold);
+}
+
 :root[data-color-mode="dark"] .checkout-theme-wrapper {
   --kp-dark: var(--ui-theme-ink, #f5f2eb);
   --kp-muted: var(--ui-theme-muted, #b8b2a6);
@@ -1818,6 +1831,14 @@
 :root[data-color-mode="dark"] .payment-qr-box-lux {
   background: #ffffff;
   color: #1f2421;
+}
+
+:root[data-color-mode="dark"] .payment-status-panel h2 {
+  color: var(--ui-theme-ink);
+}
+
+:root[data-color-mode="dark"] .payment-status-panel > p {
+  color: var(--ui-theme-muted);
 }
 
 :root[data-color-mode="dark"] .payment-qr-box-lux .payment-khqr-footer strong,
@@ -1902,7 +1923,7 @@
 }
 
 :root[data-color-mode="dark"] .payment-footer-links a {
-  color: var(--app-gold, #d8b875);
+  color: var(--kp-gold-700);
 }
 
 .payment-tx-type-bar {

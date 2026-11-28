@@ -271,8 +271,8 @@ export function ErrorStateView({ message, onRetry }) {
 
   return (
     <div className="flex flex-col items-center justify-center p-10 text-center rounded-2xl border border-rose-500/20 bg-rose-500/5 dark:bg-rose-950/20">
-      <AlertCircle className="h-8 w-8 text-rose-500 mb-2" />
-      <p className="text-sm font-semibold text-rose-600 dark:text-rose-400">{message || fallbackMsg}</p>
+      <AlertCircle className="h-8 w-8 text-destructive mb-2" aria-hidden="true" />
+      <p role="alert" className="text-sm font-semibold text-destructive">{message || fallbackMsg}</p>
       {onRetry && (
         <ActionButton
           variant="ghost"
