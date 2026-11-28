@@ -90,40 +90,42 @@
 .dash-wrapper .event-workspace .workspace-heading h1, .dash-wrapper .dash-page-header h1,
 .dash-wrapper .workspace-page-heading h1 { font-size: clamp(24px,2.5vw,32px); font-weight: 650; letter-spacing: -.3px; }
 .dash-wrapper .workspace-section { box-shadow: var(--app-shadow); border-radius: 16px; }
-.dash-wrapper :is(.workspace-button,.guest-button,.rsvp-back-btn,.ticket-designer button) { transition: background-color 160ms ease,border-color 160ms ease,color 160ms ease,box-shadow 160ms ease; }
+.dash-wrapper :is(.workspace-button,.guest-button,.rsvp-back-btn,.ticket-designer button) { transition: background-color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)), border-color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)), color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)), box-shadow var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)), transform var(--ui-duration-press, 120ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)); }
+.dash-wrapper :is(.workspace-button,.guest-button,.rsvp-back-btn,.ticket-designer button):active:not(:disabled) { transform: scale(0.97); }
 .dash-wrapper .workspace-button { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); border-radius: 10px; font-size: 14px; }
 .dash-wrapper .workspace-button.primary { background: var(--app-accent); color: var(--app-on-accent); border-color: var(--app-accent); }
 .dash-wrapper .workspace-button:hover:not(:disabled) { background: var(--app-subtle); border-color: var(--app-control-border); }
 .dash-wrapper .workspace-button.primary:hover:not(:disabled) { background: var(--app-accent); filter: brightness(.94); }
-.dash-wrapper .event-workspace-content > main { animation: app-page-enter 180ms cubic-bezier(.2,.7,.3,1) both; }
-@keyframes app-page-enter { from { opacity: .85; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.dash-wrapper .event-workspace-content > main { animation: app-page-enter 180ms var(--ui-ease-out, cubic-bezier(.23,1,.32,1)) both; }
+@keyframes app-page-enter { from { opacity: .88; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 .dash-wrapper .host-nav-divider { display: none; }
-.dash-wrapper .host-nav-link { border-radius: 8px; padding: 8px 11px; transition: transform 150ms ease; }
+.dash-wrapper .host-nav-link { border-radius: 8px; padding: 8px 11px; transition: background-color 150ms var(--ui-ease-out, cubic-bezier(.23,1,.32,1)), color 150ms var(--ui-ease-out, cubic-bezier(.23,1,.32,1)), transform 120ms var(--ui-ease-out, cubic-bezier(.23,1,.32,1)); }
+.dash-wrapper .host-nav-link:active { transform: scale(0.98); }
 .dash-wrapper .host-nav-link.active { background: var(--app-accent-soft); color: var(--app-ink); }
 .dash-wrapper .host-header-container { background: var(--app-surface); border-color: var(--app-border); }
 .dash-wrapper .host-profile-pill { border-radius: 10px; }
 .dash-wrapper .host-profile-name, .dash-wrapper .host-nav-link { color: var(--app-ink); }
 .dash-wrapper .host-profile-avatar { background: var(--app-gold); color: var(--app-canvas); }
 .inv-preview-workspace { background: var(--app-canvas); min-height: 100vh; }
-.inv-preview-header { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); }
-.inv-preview-header .inv-preview-title { color: var(--app-ink); font-weight: 700; }
-.inv-preview-header .inv-preview-back-btn { background: var(--app-subtle); border: 1px solid var(--app-border); color: var(--app-ink); }
-.inv-preview-header .inv-preview-back-btn:hover { background: var(--app-border); color: var(--app-ink); }
-.inv-preview-header .inv-preview-view-toggle { background: var(--app-subtle); border: 1px solid var(--app-border); }
-.inv-preview-header .inv-preview-toggle-btn { color: var(--app-muted); font-weight: 600; }
-.inv-preview-header .inv-preview-toggle-btn:hover { color: var(--app-ink); }
-.inv-preview-header .inv-preview-toggle-btn.is-active { background: #8C6527; color: #ffffff !important; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-.inv-preview-header .inv-preview-btn--gate { background: #FAF5EE; border: 1.5px solid #8C6527; color: #745217 !important; font-weight: 700; }
-.inv-preview-header .inv-preview-btn--gate:hover { background: #8C6527; color: #ffffff !important; }
-.inv-preview-header :is(button,select) { min-height: 40px; }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-title { color: var(--app-ink); }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-back-btn { background: var(--app-subtle); border-color: var(--app-border); color: var(--app-ink); }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-view-toggle { background: var(--app-subtle); border-color: var(--app-border); }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-toggle-btn { color: var(--app-muted); }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-toggle-btn:hover { color: var(--app-ink); }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-toggle-btn.is-active { background: var(--app-accent); color: var(--app-on-accent) !important; }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-btn--gate { background: var(--app-gold-soft); border-color: var(--app-gold); color: var(--ui-theme-gold-bright) !important; }
-:root[data-color-mode=dark] .inv-preview-header .inv-preview-btn--gate:hover { background: var(--app-accent); color: var(--app-on-accent) !important; }
+.inv-preview-workspace .inv-preview-header { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); }
+.inv-preview-workspace .inv-preview-header .inv-preview-title { color: var(--app-ink); font-weight: 700; }
+.inv-preview-workspace .inv-preview-header .inv-preview-back-btn { background: var(--app-subtle); border: 1px solid var(--app-border); color: var(--app-ink); }
+.inv-preview-workspace .inv-preview-header .inv-preview-back-btn:hover { background: var(--app-border); color: var(--app-ink); }
+.inv-preview-workspace .inv-preview-header .inv-preview-view-toggle { background: var(--app-subtle); border: 1px solid var(--app-border); }
+.inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn { color: var(--app-muted); font-weight: 600; }
+.inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn:hover { color: var(--app-ink); }
+.inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn.is-active { background: var(--ui-theme-gold, #8c6527); color: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.16); }
+.inv-preview-workspace .inv-preview-header .inv-preview-btn--gate { background: var(--ui-theme-gold-soft, #faf5ee); border: 1.5px solid var(--ui-theme-gold, #8c6527); color: var(--ui-theme-gold, #745217); font-weight: 700; }
+.inv-preview-workspace .inv-preview-header .inv-preview-btn--gate:hover { background: var(--ui-theme-gold, #8c6527); color: #ffffff; }
+.inv-preview-workspace .inv-preview-header :is(button,select) { min-height: 40px; }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-title { color: var(--app-ink); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-back-btn { background: var(--app-subtle); border-color: var(--app-border); color: var(--app-ink); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-view-toggle { background: var(--app-subtle); border-color: var(--app-border); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn { color: var(--app-muted); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn:hover { color: var(--app-ink); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-toggle-btn.is-active { background: var(--app-accent); color: var(--app-on-accent); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-btn--gate { background: var(--app-gold-soft); border-color: var(--app-gold); color: var(--ui-theme-gold-bright); }
+:root[data-color-mode=dark] .inv-preview-workspace .inv-preview-header .inv-preview-btn--gate:hover { background: var(--app-accent); color: var(--app-on-accent); }
 
 /* These features already publish local tokens; bind those roles to the theme. */
 .dash-wrapper .guest-workspace, .guest-form-modal {

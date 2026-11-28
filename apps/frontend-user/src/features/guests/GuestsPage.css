@@ -1690,20 +1690,20 @@
 
     /* Transform Table into Responsive Cards on Mobile */
     .k-responsive-table-container {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        overflow-x: visible !important;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        overflow-x: visible;
     }
 
     .pe-guest-data-table {
         display: block;
-        background: transparent !important;
+        background: transparent;
     }
 
     .pe-guest-data-table thead,
     .pe-guest-data-table colgroup {
-        display: none !important;
+        display: none;
     }
 
     .pe-guest-data-table tbody {
@@ -1715,11 +1715,11 @@
     .pe-guest-data-table tbody tr {
         display: flex;
         flex-direction: column;
-        background: #ffffff !important;
-        border: 1px solid #eadfce !important;
-        border-radius: 18px !important;
-        padding: 16px !important;
-        box-shadow: 0 4px 16px rgba(42, 31, 16, 0.04) !important;
+        background: var(--guest-paper, var(--ui-theme-surface, #ffffff));
+        border: 1px solid var(--guest-line, var(--ui-theme-border, #eadfce));
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: var(--ui-theme-shadow, 0 4px 16px rgba(42, 31, 16, 0.04));
         gap: 4px;
         margin-bottom: 12px;
     }
@@ -1728,24 +1728,24 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0 !important;
-        border-bottom: 1px solid #f4eee2 !important;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--guest-line, var(--ui-theme-border, #f4eee2));
         font-size: 0.8125rem;
     }
 
     .pe-guest-data-table td:first-child {
-        padding-bottom: 10px !important;
-        border-bottom: 1px solid #eadfce !important;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--guest-line, var(--ui-theme-border, #eadfce));
         margin-bottom: 4px;
     }
 
     .pe-guest-data-table td:first-child::before {
-        display: none !important;
+        display: none;
     }
 
     .pe-guest-data-table td:first-child strong {
         font-size: 1.05rem;
-        color: #1e293b;
+        color: var(--guest-ink, var(--ui-theme-ink, #1e293b));
     }
 
     .pe-guest-data-table td:last-child {

@@ -446,12 +446,12 @@
 /* Row over budget */
 .exp-row-over,
 .ep-row-over {
-    background: #fffcfc !important;
+    background: var(--ui-theme-danger-soft, #fffcfc);
 }
 
 .exp-row-over:hover,
 .ep-row-over:hover {
-    background: #fef2f2 !important;
+    background: color-mix(in srgb, var(--ui-theme-danger, #b91c1c) 12%, var(--app-surface));
 }
 
 /* Item Name Cell */
@@ -1108,11 +1108,12 @@
 
 .exp-payment-desc {
     min-width: 0;
-    font-size: 16px !important;
-    padding: 9px 12px !important;
-    background: #ffffff !important;
-    border: 1.5px solid var(--app-border) !important;
-    border-radius: 10px !important;
+    font-size: 16px;
+    padding: 9px 12px;
+    background: var(--app-surface, #ffffff);
+    color: var(--app-ink, #1e2824);
+    border: 1.5px solid var(--app-control-border, var(--app-border));
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
@@ -1136,11 +1137,12 @@
 .exp-payment-amount-wrap input {
     width: 100%;
     min-width: 0;
-    font-size: 16px !important;
-    padding: 9px 10px 9px 24px !important;
-    background: #ffffff !important;
-    border: 1.5px solid var(--app-border) !important;
-    border-radius: 10px !important;
+    font-size: 16px;
+    padding: 9px 10px 9px 24px;
+    background: var(--app-surface, #ffffff);
+    color: var(--app-ink, #1e2824);
+    border: 1.5px solid var(--app-control-border, var(--app-border));
+    border-radius: 10px;
     box-sizing: border-box;
 }
 

@@ -1,27 +1,28 @@
-/* ─────────────────────────────────────────────────────────────
-   Modern ConfirmDialog matching Image 1 Reference UI
-   ───────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────────────────────────────────────
+   ConfirmDialog.css — Token-native Koupreng confirmation modal (zero !important)
+   ─────────────────────────────────────────────────────────────────────────── */
 
 .k-modal-container.k-confirm-dialog {
-  max-width: 390px;
-  border-radius: 20px;
-  padding: 22px 24px 20px;
+  max-width: 400px;
+  border-radius: var(--ui-radius-panel, 20px);
+  padding: 24px 24px 22px;
   background: var(--ui-theme-surface, #fffefb);
   color: var(--ui-theme-ink, #1e2824);
   border: 1px solid var(--ui-theme-border, #e4dccd);
-  box-shadow: var(--ui-theme-shadow-elevated);
+  box-shadow: var(--ui-theme-shadow-elevated, 0 18px 48px rgba(20, 32, 26, 0.16));
 }
 
-.k-confirm-dialog .k-modal-header {
-  border-bottom: none !important;
-  padding: 0 0 6px 0 !important;
+.k-modal-container.k-confirm-dialog .k-modal-header {
+  border-bottom: none;
+  padding: 0 0 8px 0;
   margin: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
 }
 
-.k-confirm-dialog .k-modal-title {
+.k-modal-container.k-confirm-dialog .k-modal-title {
   font-family: inherit;
   font-size: 1.0625rem;
   font-weight: 700;
@@ -30,7 +31,7 @@
   margin: 0;
 }
 
-.k-confirm-dialog .k-modal-close-btn {
+.k-modal-container.k-confirm-dialog .k-modal-close-btn {
   color: var(--ui-theme-muted, #525f58);
   padding: 4px;
   min-width: 44px;
@@ -39,28 +40,35 @@
   margin-top: -6px;
   margin-right: -6px;
   border-radius: 50%;
-  transition: background var(--ui-duration-feedback, 160ms) ease, color var(--ui-duration-feedback, 160ms) ease;
+  transition:
+    background-color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    transform var(--ui-duration-press, 120ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1));
 }
 
-.k-confirm-dialog .k-modal-close-btn:hover {
+.k-modal-container.k-confirm-dialog .k-modal-close-btn:hover {
   background: var(--ui-theme-subtle, #efebe2);
   color: var(--ui-theme-ink, #1e2824);
 }
 
-.k-confirm-dialog .k-modal-body {
-  padding: 0 !important;
+.k-modal-container.k-confirm-dialog .k-modal-close-btn:active {
+  transform: scale(0.95);
+}
+
+.k-modal-container.k-confirm-dialog .k-modal-body {
+  padding: 0;
   overflow: visible;
 }
 
 .k-confirm-body {
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 1.25rem;
 }
 
 .k-confirm-message {
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--ui-theme-muted, #525f58);
   line-height: 1.65;
   margin: 0;
@@ -68,122 +76,113 @@
 
 .k-confirm-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
-/* Pill buttons matching Image 1 */
 .k-confirm-btn {
   font-family: inherit;
-  font-size: 0.8125rem; /* 13px */
-  font-weight: 600;
-  padding: 0.4375rem 1.125rem; /* ~7px 18px */
-  border-radius: 999px !important;
+  font-size: 0.875rem;
+  font-weight: 650;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 9999px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375rem;
-  transition: all 0.18s ease;
+  gap: 8px;
   line-height: 1.4;
+  transition:
+    background-color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    border-color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    color var(--ui-duration-feedback, 160ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    transform var(--ui-duration-press, 120ms) var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    filter var(--ui-duration-feedback, 160ms) ease;
+}
+
+.k-confirm-btn:focus-visible {
+  outline: 3px solid var(--ui-theme-focus, #176f67);
+  outline-offset: 2px;
+}
+
+.k-confirm-btn:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .k-confirm-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .k-confirm-icon {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
 }
 
-/* Cancel Button - pill with crisp light border */
 .k-confirm-btn-cancel {
-  background: #ffffff !important;
-  color: #1f2937 !important;
-  border: 1.5px solid #cbd5e1 !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background: var(--ui-theme-subtle, #efebe2);
+  color: var(--ui-theme-ink, #1e2824);
+  border: 1px solid var(--ui-theme-control-border, #8e7b62);
 }
 
 .k-confirm-btn-cancel:hover:not(:disabled) {
-  background: #f8fafc !important;
-  border-color: #94a3b8 !important;
-  color: #0f172a !important;
+  background: var(--ui-theme-hover, #f3efe5);
+  border-color: var(--ui-theme-gold, #8c6628);
 }
 
-.k-confirm-btn-cancel:active:not(:disabled) {
-  background: #f1f5f9 !important;
-}
-
-/* Destructive Confirm Button - soft coral/salmon red (#f87171 / #ef4444) */
 .k-confirm-btn-danger {
-  background: #f87171 !important;
-  color: #ffffff !important;
-  border: 1.5px solid #f87171 !important;
-  box-shadow: 0 2px 8px rgba(248, 113, 113, 0.35) !important;
+  background: var(--ui-theme-danger, #b91c1c);
+  color: #ffffff;
+  border: 1px solid var(--ui-theme-danger, #b91c1c);
 }
 
 .k-confirm-btn-danger:hover:not(:disabled) {
-  background: #ef4444 !important;
-  border-color: #ef4444 !important;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4) !important;
-  transform: translateY(-1px);
-}
-
-.k-confirm-btn-danger:active:not(:disabled) {
-  transform: translateY(0);
+  filter: brightness(0.93);
 }
 
 .k-confirm-btn-primary {
-  background: #6366f1 !important;
-  color: #ffffff !important;
-  border: 1.5px solid #6366f1 !important;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important;
+  background: var(--ui-theme-action, #1c3a32);
+  color: var(--ui-theme-on-action, #ffffff);
+  border: 1px solid var(--ui-theme-action, #1c3a32);
 }
 
 .k-confirm-btn-primary:hover:not(:disabled) {
-  background: #4f46e5 !important;
-  border-color: #4f46e5 !important;
-  transform: translateY(-1px);
-}
-
-:root[data-color-mode="dark"] .k-confirm-btn-cancel {
-  background: var(--ui-theme-secondary-action, #262626) !important;
-  color: var(--ui-theme-on-secondary-action, #fafafa) !important;
-  border-color: var(--ui-theme-control-border, #777777) !important;
-  box-shadow: none !important;
-}
-
-:root[data-color-mode="dark"] .k-confirm-btn-cancel:hover:not(:disabled) {
-  background: var(--ui-theme-hover, #262626) !important;
-  border-color: var(--ui-theme-gold, #d8b875) !important;
-  color: var(--ui-theme-ink, #fafafa) !important;
-}
-
-:root[data-color-mode="dark"] .k-confirm-btn-primary {
-  background: var(--ui-theme-action, #d8b875) !important;
-  color: var(--ui-theme-on-action, #141414) !important;
-  border-color: var(--ui-theme-action, #d8b875) !important;
-  box-shadow: none !important;
-}
-
-:root[data-color-mode="dark"] .k-confirm-btn-primary:hover:not(:disabled) {
-  background: var(--ui-theme-action-hover, #e8cc91) !important;
-  border-color: var(--ui-theme-action-hover, #e8cc91) !important;
+  background: var(--ui-theme-action-hover, #142b25);
+  border-color: var(--ui-theme-action-hover, #142b25);
 }
 
 :root[data-color-mode="dark"] .k-confirm-btn-danger {
-  background: var(--ui-theme-danger-action, #ffb4ab) !important;
-  color: var(--ui-theme-on-danger-action, #3e1d1b) !important;
-  border-color: var(--ui-theme-danger-action, #ffb4ab) !important;
-  box-shadow: none !important;
+  background: var(--ui-theme-danger-action, #ffb4ab);
+  color: var(--ui-theme-on-danger-action, #3e1d1b);
+  border-color: var(--ui-theme-danger-action, #ffb4ab);
 }
 
-:root[data-color-mode="dark"] .k-confirm-btn-danger:hover:not(:disabled) {
-  filter: brightness(0.95);
+@media (max-width: 420px) {
+  .k-confirm-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .k-confirm-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-confirm-btn,
+  .k-modal-container.k-confirm-dialog .k-modal-close-btn {
+    transition: none;
+  }
+
+  .k-confirm-btn:active:not(:disabled),
+  .k-modal-container.k-confirm-dialog .k-modal-close-btn:active {
+    transform: none;
+  }
 }
