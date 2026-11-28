@@ -371,18 +371,28 @@ body:has(.guest-workspace) .chat-greeting-bubble { display: none; }
   border-color: var(--guest-gold);
   box-shadow: var(--ui-theme-shadow-elevated);
 }
-.guest-workspace .guest-status-filters { gap: 8px; padding-block: 4px 16px; border: 0; }
+.guest-workspace .guest-status-filters {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 6px;
+  padding: 6px 24px 14px;
+  border: 0;
+}
+.guest-workspace .guest-status-filters::-webkit-scrollbar { display: none; }
 .guest-workspace .guest-status-filters button {
   min-height: 44px;
-  padding: 8px 14px;
+  padding: 6px 10px;
   margin: 0;
   border: 1px solid var(--guest-line);
-  border-radius: 12px;
+  border-radius: 10px;
+  flex-shrink: 0;
   white-space: nowrap;
   background: var(--guest-subtle);
   color: var(--guest-ink);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12.5px;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 .guest-workspace .guest-status-filters button:hover {

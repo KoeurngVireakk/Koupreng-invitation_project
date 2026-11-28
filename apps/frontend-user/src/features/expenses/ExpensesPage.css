@@ -45,15 +45,15 @@
 .exp-hero-tag,
 .ep-hero-tag {
     display: inline-block;
-    padding: 4px 14px;
-    background: rgba(176, 146, 106, 0.16);
-    color: #6e4e1f;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: normal;
-    text-transform: none;
-    border-radius: 999px;
-    margin-bottom: 12px;
+    padding: 0;
+    background: transparent;
+    color: var(--ui-theme-gold, #8c6628);
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 0;
+    margin-bottom: 6px;
 }
 
 .exp-title,
@@ -1498,8 +1498,8 @@
 
 :root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-hero-tag, .ep-hero-tag),
 :root.dark :is(.exp-page, .ep-page) :is(.exp-hero-tag, .ep-hero-tag) {
-  background: rgba(212, 168, 83, 0.18);
-  color: #f3d69b;
+  background: transparent;
+  color: var(--ui-theme-gold, #d8b875);
 }
 
 :root[data-color-mode="dark"] :is(.exp-page, .ep-page) :is(.exp-hero, .ep-hero, .exp-sum-total, .ep-sum-total),

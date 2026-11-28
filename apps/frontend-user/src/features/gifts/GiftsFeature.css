@@ -37,16 +37,16 @@
 
 .wg-hero-tag {
     display: inline-block;
-    padding: 4px 12px;
-    background: var(--app-subtle, rgba(176, 146, 106, 0.15));
-    color: var(--ui-theme-gold-text, #6e4f1d);
-    border: 1px solid var(--app-border);
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: normal;
-    text-transform: none;
-    border-radius: 50px;
-    margin-bottom: 12px;
+    padding: 0;
+    background: transparent;
+    color: var(--ui-theme-gold, #8c6628);
+    border: 0;
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 0;
+    margin-bottom: 6px;
 }
 :root[data-color-mode="dark"] .wg-hero-tag {
     color: var(--app-gold, #d8b875);
@@ -186,9 +186,20 @@
 
 .wg-sum-value {
     display: block;
-    font-size: 22px;
+    font-size: clamp(19px, 1.8vw, 23px);
+    line-height: 1.35;
     font-weight: 800;
+    font-variant-numeric: tabular-nums;
     color: var(--app-ink);
+}
+.wg-sum-value--stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.wg-sum-currency-line {
+    display: block;
+    white-space: nowrap;
 }
 
 .wg-sum-total .wg-sum-value {

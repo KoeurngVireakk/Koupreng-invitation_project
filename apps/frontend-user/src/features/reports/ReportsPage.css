@@ -784,6 +784,24 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+@media (min-width: 1024px) {
+  .owner-report-metrics {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--report-line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .owner-report-metric {
+    border: 0;
+    border-inline-end: 1px solid var(--report-line);
+    border-radius: 0;
+    padding: 14px 16px;
+  }
+  .owner-report-metric:last-child {
+    border-inline-end: 0;
+  }
+}
 
 @media (max-width: 480px) {
   .report-summary-grid {

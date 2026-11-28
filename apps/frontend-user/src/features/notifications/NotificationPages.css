@@ -160,14 +160,16 @@
 }
 
 .notif-stat {
-  padding: 16px;
+  padding: 16px 18px;
+  border-top: 2px solid var(--ui-theme-border);
 }
 
 .notif-stat span {
   display: block;
   color: var(--ui-theme-muted);
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -176,6 +178,7 @@
   margin-top: 6px;
   color: var(--ui-theme-ink);
   font-size: 26px;
+  font-variant-numeric: tabular-nums;
 }
 
 .notif-list {
@@ -188,7 +191,12 @@
   gap: 14px;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 16px;
+  padding: 18px 20px;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.notif-item:hover {
+  border-color: var(--ui-theme-gold);
 }
 
 .notif-item.is-unread {

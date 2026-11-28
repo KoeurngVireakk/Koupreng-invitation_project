@@ -63,16 +63,16 @@
 
 .k-org-header-banner {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  background: var(--ui-theme-surface);
-  border: 1.5px solid var(--ui-theme-border);
-  border-radius: 20px;
-  padding: 32px 36px;
-  box-shadow: 0 10px 30px rgba(125, 100, 67, 0.08);
-  margin-bottom: 28px;
-  backdrop-filter: blur(12px);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ui-theme-border);
+  border-radius: 0;
+  padding: 0 0 22px;
+  box-shadow: none;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -80,22 +80,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--ui-theme-gold-soft);
-  border: 1px solid var(--ui-theme-gold);
-  color: var(--ui-theme-link);
-  padding: 4px 12px;
-  border-radius: 999px;
+  color: var(--ui-theme-gold, #8c6628);
+  padding: 0;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 750;
   letter-spacing: 0.08em;
-  margin-bottom: 12px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
 .k-org-header-title {
   font-family: var(--ui-font-management, 'Kantumruy Pro', sans-serif);
   font-weight: 800;
   letter-spacing: -0.02em;
-  font-size: clamp(1.45rem, 3.2vw, 1.95rem);
+  font-size: clamp(1.5rem, 3vw, 2rem);
   color: var(--ui-theme-ink);
   margin: 0;
   display: flex;
@@ -106,12 +104,14 @@
 
 .k-org-count-badge {
   font-family: 'Kantumruy Pro', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #b0926a 0%, #7d6443 100%);
-  color: #ffffff;
+  background: var(--ui-theme-gold-soft);
+  color: var(--ui-theme-link);
+  border: 1px solid color-mix(in srgb, var(--ui-theme-gold) 35%, transparent);
   padding: 3px 12px;
   border-radius: 999px;
+  letter-spacing: 0.01em;
   vertical-align: middle;
 }
 
@@ -436,8 +436,11 @@
 /* Grid & Cards */
 .k-org-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 24px;
+}
+.k-org-grid:has(> .k-org-card-lux:only-child) {
+  grid-template-columns: minmax(min(100%, 340px), 480px);
 }
 
 .k-org-card-lux {
