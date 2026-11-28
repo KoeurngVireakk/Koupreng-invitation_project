@@ -4,7 +4,7 @@ import { StudioSectionPanel, StudioValidationSummary, StudioTextEditor } from ".
 import { feedback } from "@/shared/feedback/feedback";
 import FeatureAccessCard from "@/shared/access/FeatureAccessCard";
 import { useFeatureAccess } from '@/shared/access/useFeatureAccess';
-import TemplateChooser from "./studio/TemplateChooser";
+const TemplateChooser = lazy(() => import("./studio/TemplateChooser"));
 import { templateService } from "../templates/api/templateService";
 import { isPublicCatalogTemplate, requiresTemplateAccess } from "../templates/model/catalogPolicy";
 import { WORDING_PRESETS, WORDING_PRESET_LABELS, getWordingPresetLabel, wordingPresetId, interpolateWording } from './studio/wordingPresets';
@@ -36,7 +36,7 @@ import PublishReview from "./studio/PublishReview";
 import { publishReadiness } from "./studio/publishReadiness";
 import { createPortal } from "react-dom";
 import StudioAppearance from "./studio/StudioAppearance";
-const InvitationStyleEditor = lazy(() => import('./studio/InvitationStyleEditor'));
+import InvitationStyleEditor from './studio/InvitationStyleEditor';
 import CinematicIntroEditor from './studio/CinematicIntroEditor';
 import { useStudioPersistence } from "./studio/useStudioPersistence";
 import { useStudioAuthority } from "./studio/useStudioAuthority";
@@ -88,7 +88,7 @@ import { templateCatalogService } from "../templates/api/templateCatalogApi";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import LivePhoneSimulator from "./LivePhoneSimulator";
-import SpotifyMusicPicker from "./components/SpotifyMusicPicker";
+const SpotifyMusicPicker = lazy(() => import("./components/SpotifyMusicPicker"));
 import { getLocalizedTemplateFormFlow } from "./config/templateFormFlowConfig";
 import { resolveTemplateRenderer } from "../templates/registry/templateRegistry";
 import { paymentService } from "../payments/paymentService";
@@ -1981,13 +1981,15 @@ export default function InvitationForm({ invitation }) {
                     <span className="pe-label-icon"><Music size={15} /></span>
                     {t("labelMusic") || uiCopy("ជ្រើសរើសបទភ្លេង", "Music track")}
                 </label>
-                <SpotifyMusicPicker
-                    value={form.musicTrackId || "waiting-day"}
-                    onChange={(trackId, trackUrl) => {
-                        update("musicTrackId", trackId);
-                        update("musicUrl", trackUrl || "");
-                    }}
-                />
+                <Suspense fallback={null}>
+                  <SpotifyMusicPicker
+                      value={form.musicTrackId || "waiting-day"}
+                      onChange={(trackId, trackUrl) => {
+                          update("musicTrackId", trackId);
+                          update("musicUrl", trackUrl || "");
+                      }}
+                  />
+                </Suspense>
             </div>
     </section>;
 
@@ -3337,7 +3339,7 @@ export default function InvitationForm({ invitation }) {
     );
 
     const sectionRenderers = {
-        invitationStyles: () => <Suspense fallback={<p role="status">{englishUI ? 'Loading invitation styles…' : 'កំពុងផ្ទុករចនាប័ទ្មសំបុត្រអញ្ជើញ…'}</p>}><InvitationStyleEditor form={form} update={update} capabilities={templateCapabilities(getTemplateById(form.templateId) || { id: form.templateId })} english={englishUI} eventId={invitation?.backendInvitationId || invitationId} /></Suspense>,
+        invitationStyles: () => <InvitationStyleEditor form={form} update={update} capabilities={templateCapabilities(getTemplateById(form.templateId) || { id: form.templateId })} english={englishUI} eventId={invitation?.backendInvitationId || invitationId} />,
         cinematicIntro: () => <CinematicIntroEditor value={form.cinematicIntro} photos={form.photos} english={englishUI} onChange={change => setForm(previous => ({ ...previous, cinematicIntro: change(previous.cinematicIntro) }))} />,
         eventInfo: renderEventInfoSection,
         music: renderMusicSection,
@@ -3531,10 +3533,10 @@ export default function InvitationForm({ invitation }) {
                 </Modal>
             )}
 
-            {isTemplateModalOpen && <TemplateChooser selectionAllowed={canEdit} templates={catalogTemplates} status={catalogStatus}
+            {isTemplateModalOpen && <Suspense fallback={null}><TemplateChooser selectionAllowed={canEdit} templates={catalogTemplates} status={catalogStatus}
                 onRetry={() => setCatalogRetry(value => value + 1)} currentId={form.templateId}
                 eventType={invitation?.eventType || "WEDDING"} language={form.languageMode || "KH"}
-                english={englishUI} onSelect={handleChangeTemplate} onClose={() => setIsTemplateModalOpen(false)} />}
+                english={englishUI} onSelect={handleChangeTemplate} onClose={() => setIsTemplateModalOpen(false)} /></Suspense>}
 
 
         </div>

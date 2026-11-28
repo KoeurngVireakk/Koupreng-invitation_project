@@ -29,14 +29,17 @@ function App() {
   useEffect(() => {
     initTelegramWebApp();
     window.addEventListener(TELEGRAM_WEB_APP_READY_EVENT, initTelegramWebApp);
-    templateCatalogService.list()
-      .then((items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const activeTemplates = items.filter((item) => String(item.status || "ACTIVE").toUpperCase() === "ACTIVE");
-          registerDynamicTemplates(activeTemplates);
-        }
-      })
-      .catch(() => {});
+    const isEmbed = new URLSearchParams(window.location.search).has("embed");
+    if (!isEmbed) {
+      templateCatalogService.list()
+        .then((items) => {
+          if (Array.isArray(items) && items.length > 0) {
+            const activeTemplates = items.filter((item) => String(item.status || "ACTIVE").toUpperCase() === "ACTIVE");
+            registerDynamicTemplates(activeTemplates);
+          }
+        })
+        .catch(() => {});
+    }
     return () => window.removeEventListener(TELEGRAM_WEB_APP_READY_EVENT, initTelegramWebApp);
   }, []);
   return (

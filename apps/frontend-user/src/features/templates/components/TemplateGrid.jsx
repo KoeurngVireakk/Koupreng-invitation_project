@@ -8,7 +8,7 @@ import { usePublicTemplateCatalog } from "../hooks/usePublicTemplateCatalog";
 import { presentTemplate } from "../model/templatePresentation";
 import PublicTemplateCard from "./PublicTemplateCard";
 import { FEATURED_TEMPLATE_CODES as FEATURED, matchesTemplateSearch } from "../model/catalogPolicy";
-import { EmptyState } from "@/shared/ui/vendor";
+import { EmptyState } from "@/shared/ui/vendor/untitledui/EmptyState";
 import "./templates.css";
 
 export default function TemplateGrid({ featured = false }) {
@@ -57,8 +57,9 @@ export default function TemplateGrid({ featured = false }) {
     return 0;
   });
 
+  const featuredMatches = sorted.filter((tpl) => FEATURED.includes(tpl.identity));
   const filtered = featured
-    ? sorted.filter((tpl) => FEATURED.includes(tpl.identity)).slice(0, 3)
+    ? (featuredMatches.length > 0 ? featuredMatches : sorted).slice(0, 3)
     : sortedList;
 
   const hasActiveFilters = category !== "all" || pricePreference !== "all" || Boolean(search.trim()) || sortBy !== "default";
@@ -150,7 +151,7 @@ export default function TemplateGrid({ featured = false }) {
           </div>
 
           <div className="tp-results-bar">
-            <span role="status" className="tp-results-count">
+            <span role={filtered.length > 0 ? "status" : undefined} className="tp-results-count">
               {copy(`បង្ហាញ ${filtered.length} គំរូ`, `Showing ${filtered.length} designs`)}
             </span>
             {hasActiveFilters && (
@@ -255,18 +256,18 @@ export default function TemplateGrid({ featured = false }) {
   return (
     <div className="tp-page kp-public-catalog">
       <div className="tp-container">
-        <header className="tp-header-section">
-          <p className="kp-eyebrow">{copy("គំរូសន្លឹកការប្រណិត", "The invitation collection")}</p>
-          <h1 className="tp-title">{copy("រចនាបទដែលជារបស់អ្នក។", "A design that feels like you.")}</h1>
-          <div className="tp-divider" aria-hidden="true">
-            <span className="tp-line" />
-            <span className="tp-diamond" />
-            <span className="tp-line" />
+        <header className="tp-header-section tp-header-editorial">
+          <div className="tp-header-editorial-main">
+            <p className="kp-hero-kicker">
+              <span className="kp-hero-kicker-rule" aria-hidden="true" />
+              <span>{copy("គំរូសន្លឹកការប្រណិត", "The invitation collection")}</span>
+            </p>
+            <h1 className="tp-title">{copy("រចនាបទដែលជារបស់អ្នក។", "A design that feels like you.")}</h1>
           </div>
-          <p>
+          <p className="tp-header-editorial-lead">
             {copy(
               "មើលគំរូពេញលេញ រួចជ្រើសរើសគំរូសម្រាប់ថ្ងៃពិសេសរបស់អ្នក។",
-              "Preview the complete invitation, then choose a design for your celebration."
+              "Preview the complete invitation before choosing the aesthetic for your celebration."
             )}
           </p>
         </header>

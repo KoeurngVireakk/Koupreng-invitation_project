@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { motion } from "framer-motion";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useLanguageStore } from "../../stores/useLanguageStore";
 import "./MarketingChrome.css";
 import DisplayPreferences from '@/shared/preferences/DisplayPreferences';
 import BrandLogo from '@/shared/branding/BrandLogo';
 
-function LanguageSwitch({ lang, setLang, copy, scope }) {
+function LanguageSwitch({ lang, setLang, copy }) {
   return (
     <div className="kp-language" role="group" aria-label={copy("ជ្រើសរើសភាសា", "Choose language")}>
       {[["km", "ខ្មែរ"], ["en", "EN"]].map(([code, label], index) => {
@@ -18,12 +17,7 @@ function LanguageSwitch({ lang, setLang, copy, scope }) {
             {index > 0 && <span className="kp-language-sep" aria-hidden="true">/</span>}
             <button type="button" lang={code} aria-pressed={active} onClick={() => setLang(code)}>
               {active && (
-                <motion.span
-                  layoutId={`kp-lang-pill-${scope}`}
-                  className="kp-language-pill"
-                  aria-hidden="true"
-                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                />
+                <span className="kp-language-pill" aria-hidden="true" />
               )}
               <span className="kp-language-label">{label}</span>
             </button>
@@ -81,8 +75,8 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const desktopLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} scope="desktop" />;
-  const mobileLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} scope="mobile" />;
+  const desktopLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} />;
+  const mobileLanguageControl = <LanguageSwitch lang={lang} setLang={setLang} copy={copy} />;
   const account = isAuthenticated ? (
     <><button type="button" className="kp-nav-link" onClick={() => { closeMenu(); logout(); navigate("/"); }}>{copy("ចាកចេញ", "Log out")}</button><Link to="/dashboard" className="kp-nav-cta" onClick={closeMenu}>{copy("ផ្ទាំងគ្រប់គ្រង", "Dashboard")}<ArrowUpRight size={16} aria-hidden="true" /></Link></>
   ) : (
@@ -97,7 +91,17 @@ export default function Header() {
             <BrandLogo priority decorative />
           </Link>
           <nav className="kp-desktop-nav" aria-label={copy("ម៉ឺនុយចម្បង", "Main navigation")}>
-            {items.map(([path, label]) => <Link key={path} to={path} className="kp-nav-link" aria-current={active(path) ? "page" : undefined}>{label}</Link>)}
+            {items.map(([path, label]) => {
+              const isCurrent = active(path);
+              return (
+                <Link key={path} to={path} className="kp-nav-link" aria-current={isCurrent ? "page" : undefined}>
+                  <span className="kp-nav-link-text">{label}</span>
+                  {isCurrent && (
+                    <span className="kp-nav-underline" aria-hidden="true" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
           <div className="kp-desktop-actions">{desktopLanguageControl}<DisplayPreferences language={false}/>{account}</div>
           <div className="kp-mobile-preferences"><DisplayPreferences compact /></div>

@@ -145,7 +145,7 @@ const VenuesPage = () => {
                 {t("subtitle") || "FIND YOUR PERFECT VENUE"}
               </motion.span>
               <h1 className="main-title">
-                {t("titleFind") || "ស្វែងរក"}<span className="gold-text">{t("titleVenues") || "ទីកន្លែងមង្គល"}</span>
+                {t("titleFind") || "ស្វែងរក"}{" "}<span className="gold-text">{t("titleVenues") || "ទីកន្លែងមង្គល"}</span>
               </h1>
               <div className="divider-modern">
                 <span></span>

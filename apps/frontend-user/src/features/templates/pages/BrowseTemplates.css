@@ -57,20 +57,30 @@
 .pe-templates-browse-page .pe-summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 0;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
 }
 
 .pe-templates-browse-page .pe-summary-card {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: 6px;
   min-width: 0;
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 14px 18px;
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(42, 31, 16, 0.03);
+  border: 0;
+  border-right: 1px solid var(--card-border);
+  border-radius: 0;
+  padding: 16px 20px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pe-templates-browse-page .pe-summary-card:last-child {
+  border-right: 0;
 }
 
 .pe-templates-browse-page .pe-summary-card span {
@@ -103,11 +113,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 18px;
-  background: #ffffff;
+  padding: 12px 16px;
+  background: var(--ui-theme-surface, #ffffff);
   border: 1px solid var(--card-border);
-  border-radius: 20px;
-  box-shadow: 0 4px 18px rgba(42, 31, 16, 0.04);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 /* Categories container */
@@ -125,13 +135,13 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 15px;
+  padding: 7px 14px;
   border-radius: 999px;
   font-family: 'Kantumruy Pro', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  color: #5c4730;
-  background: #fbf8f2;
+  color: #554839;
+  background: #f8f5ef;
   border: 1px solid rgba(176, 146, 106, 0.25);
   white-space: nowrap;
   cursor: pointer;
@@ -141,18 +151,16 @@
 }
 
 .tb-category-chip:hover {
-  background: #f3e9d8;
-  color: #2a1f13;
+  background: #f1eadc;
+  color: #1f2b24;
   border-color: var(--brand-primary);
-  transform: translateY(-1px);
 }
 
 .tb-category-chip.active {
-  background: linear-gradient(135deg, #c59747 0%, #aa7c30 100%);
+  background: #173128;
   color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 3px 12px rgba(185, 139, 66, 0.35);
-  transform: translateY(-1px);
+  border-color: #173128;
+  box-shadow: none;
 }
 
 .tb-category-chip svg {
@@ -171,7 +179,7 @@
   padding: 0 14px;
   background: #fbf8f2;
   border: 1px solid rgba(176, 146, 106, 0.3);
-  border-radius: 999px;
+  border-radius: 10px;
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
@@ -258,25 +266,25 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
+  background: var(--ui-theme-surface, #ffffff);
   border: 1px solid var(--card-border);
-  border-radius: 20px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 18px rgba(42, 31, 16, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
 }
 
 .tb-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(42, 31, 16, 0.1);
-  border-color: rgba(185, 139, 66, 0.45);
+  transform: translateY(-3px);
+  border-color: var(--brand-primary);
 }
 
 /* Card Media Preview */
 .tb-card-media {
   position: relative;
-  height: 220px;
-  background: #f4ecdf;
+  height: 224px;
+  background: #f3efe6;
+  border-bottom: 1px solid var(--card-border);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -288,6 +296,12 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+}
+
+.tb-card-thumb[src$=".svg"] {
+  object-fit: contain;
+  padding: 14px;
+  background: #faf7f0;
 }
 
 .tb-card:hover .tb-card-thumb {
@@ -414,16 +428,22 @@
 }
 
 .tb-btn--primary {
-  background: linear-gradient(135deg, #c59747 0%, #aa7c30 100%);
+  background: #173128;
   color: #ffffff;
-  border: none;
-  box-shadow: 0 3px 10px rgba(185, 139, 66, 0.28);
+  border: 1px solid #173128;
+  box-shadow: none;
 }
 
 .tb-btn--primary:hover {
-  background: linear-gradient(135deg, #b98b42 0%, #996e27 100%);
-  box-shadow: 0 6px 16px rgba(185, 139, 66, 0.38);
+  background: #224438;
+  border-color: #224438;
   transform: translateY(-1px);
+}
+
+:root[data-color-mode="dark"] .tb-btn--primary {
+  background: var(--ui-theme-action);
+  border-color: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
 }
 
 .tb-btn--preview {

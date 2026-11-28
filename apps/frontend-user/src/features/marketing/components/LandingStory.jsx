@@ -52,19 +52,19 @@ export default function LandingStory({ copy }) {
         <p>{copy("ចាប់ផ្តើមពីរចនាបទដែលអ្នកពេញចិត្ត រួចរៀបចំព័ត៌មានឱ្យភ្ញៀវ។", "Start with a design you love, then bring the details together for your guests.")}</p>
       </div>
 
-      <div className="kp-metrics-ribbon" role="region" aria-label={copy("លក្ខណៈពិសេសចម្បង", "Core features")}>
-        <article className="kp-metric-card">
-          <strong className="kp-metric-value"><PencilLine size={36} aria-hidden="true" /></strong>
-          <span className="kp-metric-label">{copy("គំរូសន្លឹកការ", "Invitation designs")}</span>
-        </article>
-        <article className="kp-metric-card">
-          <strong className="kp-metric-value" lang="en">KM / EN</strong>
-          <span className="kp-metric-label">{copy("ខ្មែរ និងអង់គ្លេស", "Khmer & English")}</span>
-        </article>
-        <article className="kp-metric-card">
-          <strong className="kp-metric-value"><LayoutTemplate size={36} aria-hidden="true" /></strong>
-          <span className="kp-metric-label">{copy("ទម្រង់អេក្រង់ឆ្លើយតប", "Adaptive viewports")}</span>
-        </article>
+      <div className="kp-spec-strip" role="region" aria-label={copy("លក្ខណៈពិសេសចម្បង", "Core features")}>
+        <div className="kp-spec-strip-item">
+          <PencilLine size={18} aria-hidden="true" />
+          <span>{copy("គំរូសន្លឹកការប្រណិត", "Curated invitation stationery")}</span>
+        </div>
+        <div className="kp-spec-strip-item">
+          <strong lang="en">KM / EN</strong>
+          <span>{copy("គាំទ្រភាសាខ្មែរ និងអង់គ្លេស", "Bilingual Khmer & English")}</span>
+        </div>
+        <div className="kp-spec-strip-item">
+          <LayoutTemplate size={18} aria-hidden="true" />
+          <span>{copy("ទម្រង់អេក្រង់ឆ្លើយតបគ្រប់ឧបករណ៍", "Responsive mobile & desktop")}</span>
+        </div>
       </div>
 
       <ol ref={timeline} className="kp-journey">

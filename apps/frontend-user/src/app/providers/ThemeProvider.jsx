@@ -1,5 +1,4 @@
 import { useLayoutEffect } from 'react';
-import { MotionConfig } from 'framer-motion';
 import { useAppearanceStore, COLOR_MODE_KEY } from '@/stores/useAppearanceStore';
 import '@/shared/styles/app-experience.css';
 
@@ -20,5 +19,5 @@ export default function ThemeProvider({ children }) {
     window.addEventListener('storage', sync);
     return () => window.removeEventListener('storage', sync);
   }, []);
-  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
+  return children;
 }

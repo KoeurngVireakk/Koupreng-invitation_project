@@ -21,7 +21,8 @@
 .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,250px),1fr)); gap: 20px; margin-bottom: 32px; }
 .pkg-grid > .k-loading-region { grid-column: 1 / -1; }
 .pkg-grid .k-loading-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
-.pkg-card { background: var(--ws-surface); border: 1px solid var(--ws-border); border-radius: 18px; padding: 26px; display: flex; flex-direction: column; min-width: 0; }
+.pkg-card { background: var(--ws-surface); border: 1px solid var(--ws-border); border-radius: 14px; padding: 26px; display: flex; flex-direction: column; min-width: 0; transition: border-color 0.2s ease, transform 0.25s ease; }
+.pkg-card:hover { border-color: var(--ws-gold); }
 .pkg-card.is-featured, .pkg-card.is-targeted { border-color:var(--ws-gold); box-shadow:inset 0 0 0 1px var(--ws-gold); }
 .pkg-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
 .pkg-card-top > span:last-child:not(:first-child) { font-size: 14px; color: var(--ws-teal); }
