@@ -92,7 +92,7 @@ export default function StudioGuide({ mode, onMode, step, onStep, sections, acti
               <a href={`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}`} target="_blank" rel="noreferrer"><Send size={15} aria-hidden="true" />Telegram</a>
               <a href={`https://wa.me/?text=${encodeURIComponent(publishedUrl)}`} target="_blank" rel="noreferrer"><MessageCircle size={15} aria-hidden="true" />WhatsApp</a>
             </div>
-            <p role="status" className="studio-copy-status">{copyState}</p>
+            {copyState && <p role="status" className="studio-copy-status">{copyState}</p>}
           </div>
         </div>}
         {canPublish && (onPublish || onUnpublish) && (
