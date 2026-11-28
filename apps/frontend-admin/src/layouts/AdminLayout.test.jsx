@@ -19,11 +19,12 @@ function shell() {
 }
 
 describe("admin workspace navigation", () => {
-  it("keeps the closed drawer out of the document and gives every dock destination a name", () => {
+  it("keeps the closed drawer out of the document and exposes every workspace destination", () => {
     shell();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     const nav = screen.getByRole("navigation", { name: "Admin navigation" });
-    expect(within(nav).getAllByRole("link")).toHaveLength(8);
+    expect(within(nav).getAllByRole("link")).toHaveLength(9);
+    expect(within(nav).getByRole("link", { name: "API monitor" })).toHaveAttribute("href", "/dev/api-monitor");
     for (const link of within(nav).getAllByRole("link")) expect(link).toHaveAccessibleName();
     expect(screen.getByRole("button", { name: "Open navigation" })).toHaveAttribute("aria-expanded", "false");
   });
@@ -42,6 +43,8 @@ describe("admin workspace navigation", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(document.body.style.overflow).toBe("");
     expect(trigger).toHaveFocus();
+    fireEvent.click(trigger);
+    expect(within(screen.getByRole("dialog")).getByRole("searchbox")).toHaveValue("");
   });
 
   it("closes a drawer with Escape even when its search query is not empty", () => {
@@ -63,5 +66,15 @@ describe("admin workspace navigation", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(trigger).toHaveAttribute("aria-expanded", "false");
     expect(trigger).toHaveFocus();
+  });
+
+  it("keeps the development monitor out of the production navigation", () => {
+    vi.stubEnv("DEV", false);
+    try {
+      shell();
+      expect(screen.queryByRole("link", { name: "API monitor" })).not.toBeInTheDocument();
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });

@@ -428,7 +428,7 @@ export default function TemplateUnifiedSectionsManager({
                               ? "border-amber-500/90 bg-amber-500/15 ring-2 ring-amber-400/80 shadow-lg shadow-amber-500/10"
                               : isEnabled
                               ? "border-zinc-800 bg-zinc-950/70 hover:border-amber-500/40 hover:bg-zinc-900/60"
-                              : "border-zinc-800/40 bg-zinc-950/30 opacity-60 hover:opacity-85"
+                              : "border-zinc-700 bg-zinc-950/30 hover:bg-zinc-900/60"
                           }`}
                           title={lang === "en" ? "Click to view and scroll on phone preview" : "ចុចដើម្បីរំកិលមើលផ្នែកនេះលើទូរស័ព្ទ"}
                         >
@@ -470,7 +470,7 @@ export default function TemplateUnifiedSectionsManager({
                                     ? "text-amber-300 font-bold"
                                     : isEnabled
                                     ? "text-zinc-100"
-                                    : "text-zinc-400 line-through"
+                                    : "text-zinc-300 line-through"
                                 }`}>
                                   {info.label}
                                 </span>
@@ -486,7 +486,7 @@ export default function TemplateUnifiedSectionsManager({
                                 )}
                               </div>
                               {info.desc && (
-                                <span className="block text-[10px] text-zinc-500 truncate">
+                                <span className="block text-xs text-zinc-300 truncate">
                                   {info.desc}
                                 </span>
                               )}

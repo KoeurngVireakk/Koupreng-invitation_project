@@ -488,7 +488,7 @@ export default function AdminTemplatesPage() {
           <h3 className="text-base font-bold text-slate-800 dark:text-zinc-200">
             រកមិនឃើញគំរូសំបុត្រអញ្ជើញឡើយ
           </h3>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
             មិនមានគំរូដែលត្រូវនឹងការស្វែងរករបស់អ្នកទេ។ សូមសាកល្បងប្ដូរពាក្យគន្លឹះ ឬបង្កើតគំរូថ្មី។
           </p>
           <div className="mt-5">

@@ -1417,7 +1417,7 @@ export default function AdminTemplateEditPage() {
   const handleSave = async () => {
     if (loading || loadError || saving) return;
     if (!form.name.trim()) {
-      show("សូមបញ្ចូលឈ្មោះគំរូសំបុត្រអញ្ជើញ (Template Name)", "error");
+      show(lang === "en" ? "Enter a template name in Catalog settings." : "សូមបញ្ចូលឈ្មោះគំរូសំបុត្រអញ្ជើញ", "error");
       return;
     }
 
@@ -1506,11 +1506,11 @@ export default function AdminTemplateEditPage() {
         ? await adminManagementService.createTemplate(payload)
         : await adminManagementService.updateTemplate(templateId, payload);
 
-      show("បានរក្សាទុក និងផ្សព្វផ្សាយគំរូសំបុត្រអញ្ជើញជោគជ័យ ✓");
+      show(lang === "en" ? "Template saved." : "បានរក្សាទុកគំរូសំបុត្រអញ្ជើញ។");
       setBaseline(editSnapshot);
       navigate(`/templates/${res.id || templateId}`, { replace: true });
     } catch (err) {
-      show(err?.message || "បរាជ័យក្នុងការរក្សាទុកគំរូ", "error");
+      show(err?.message || (lang === "en" ? "Could not save the template." : "បរាជ័យក្នុងការរក្សាទុកគំរូ"), "error");
     } finally {
       setSaving(false);
     }
@@ -1535,8 +1535,8 @@ export default function AdminTemplateEditPage() {
       else if (event.target.closest('#template-studio-preview')) setMobilePanel('preview');
     }}>
       {/* 1. TOP STUDIO TOOLBAR */}
-      <header className="template-studio-toolbar flex min-h-16 shrink-0 flex-wrap gap-3 items-center justify-between border-b border-zinc-800/80 bg-zinc-900/90 px-4 py-3 backdrop-blur-md">
-        <div className="flex flex-1 basis-full xl:basis-auto items-center gap-3 min-w-0">
+      <header className="template-studio-toolbar">
+        <div className="studio-toolbar-heading">
           <Link
             to="/templates"
             onClick={event => { if (dirty && !window.confirm(lang === "en" ? "Discard unsaved template changes?" : "បោះបង់ការកែប្រែគំរូដែលមិនទាន់រក្សាទុក?")) event.preventDefault(); }}
@@ -1546,68 +1546,12 @@ export default function AdminTemplateEditPage() {
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">{t("templateEditor.back", "ត្រឡប់ទៅបញ្ជីគំរូ")}</span>
           </Link>
-          <div className="h-6 w-px bg-zinc-800 shrink-0" />
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-amber-500 shrink-0" />
-              <h1 className="text-sm font-bold text-white tracking-wide truncate max-w-xs md:max-w-md">
-                {isNew
-                  ? (lang === "en" ? "✨ Create New Template (Studio)" : "✨ បង្កើតគំរូថ្មី (Template Visual Studio)")
-                  : (lang === "en" ? `🎨 Edit: ${form.name}` : `🎨 កែសម្រួល: ${form.name}`)}
-              </h1>
-              <span className="hidden sm:inline-flex shrink-0 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-400 border border-amber-500/20">
-                Studio Editor v2
-              </span>
-            </div>
-            <p className="text-[11px] text-zinc-400 truncate">
-              {lang === "en"
-                ? "Configure Themes, Layouts, Couple Info, and Live Realtime Preview"
-                : "រៀបចំ Themes, Layouts, ព័ត៌មានកូនកំលោះ-កូនក្រមុំ និងកម្មវិធី Live Realtime"}
-            </p>
+          <div className="studio-toolbar-title">
+            <h1>{isNew ? (lang === "en" ? "New template" : "គំរូថ្មី") : form.name}</h1>
+            <p role="status">{dirty
+              ? (lang === "en" ? "Unsaved changes" : "ការកែប្រែមិនទាន់រក្សាទុក")
+              : (lang === "en" ? "Template Studio" : "ផ្ទាំងកែសម្រួលគំរូ")}</p>
           </div>
-        </div>
-
-        {/* Device Mode Switcher */}
-        <div className="studio-device-switch items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-950/70 p-1">
-          <button
-            type="button"
-            onClick={() => setDeviceView("mobile")}
-            aria-pressed={deviceView === 'mobile'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "mobile"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Smartphone className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.mobileView", "Mobile (380px)")}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setDeviceView("tablet")}
-            aria-pressed={deviceView === 'tablet'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "tablet"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Tablet className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.tabletView", "Tablet (680px)")}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setDeviceView("desktop")}
-            aria-pressed={deviceView === 'desktop'}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-              deviceView === "desktop"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Monitor className="h-3.5 w-3.5" />
-            <span>{t("templateEditor.desktopView", "Desktop")}</span>
-          </button>
         </div>
 
         {/* Actions */}
@@ -1658,7 +1602,11 @@ export default function AdminTemplateEditPage() {
             className="btn-primary flex h-9 items-center gap-2 rounded-xl px-5 text-xs font-bold transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             <Save className="h-4 w-4" />
-            <span>{saving ? t("templateEditor.saving", "កំពុងរក្សាទុក...") : t("templateEditor.save", "រក្សាទុក & ផ្សព្វផ្សាយ")}</span>
+            <span>{saving
+              ? t("templateEditor.saving", "កំពុងរក្សាទុក...")
+              : form.status === "ACTIVE"
+                ? (lang === "en" ? "Save & publish" : "រក្សាទុក និងផ្សព្វផ្សាយ")
+                : (lang === "en" ? "Save as inactive" : "រក្សាទុកដោយមិនផ្សព្វផ្សាយ")}</span>
           </button>
         </div>
       </header>
@@ -1682,8 +1630,8 @@ export default function AdminTemplateEditPage() {
           className="template-studio-controls"
         >
           {/* Studio Navigation Tabs - Clean 5 Symmetrical Tabs on 1 Single Row */}
-          <div className="border-b border-zinc-800/80 bg-zinc-950/80 p-3">
-            <div className="studio-section-tabs rounded-2xl border border-zinc-800/80 bg-zinc-900/50 p-1.5" role="group" aria-label={lang === 'en' ? 'Authoring sections' : 'ផ្នែកកែសម្រួល'}>
+          <div className="studio-section-bar">
+            <div className="studio-section-tabs" role="group" aria-label={lang === 'en' ? 'Authoring sections' : 'ផ្នែកកែសម្រួល'}>
               {[
                 { id: "theme", label: lang === "en" ? "Theme & Styles" : "រចនាបថ", icon: Palette },
                 { id: "couple", label: lang === "en" ? "Couple Info" : "សាមីខ្លួន", icon: Heart },
@@ -1706,14 +1654,9 @@ export default function AdminTemplateEditPage() {
                         handleSetGate(true);
                       }
                     }}
-                    className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-center transition-all cursor-pointer ${
-                      active
-                        ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
-                        : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/70"
-                    }`}
                   >
-                    <Icon className={`h-4 w-4 shrink-0 ${active ? "text-slate-950" : "text-amber-400/90"}`} />
-                    <span className="text-xs font-semibold leading-none">{tab.label}</span>
+                    <Icon size={16} aria-hidden="true" />
+                    <span>{tab.label}</span>
                   </button>
                 );
               })}
@@ -1867,7 +1810,7 @@ export default function AdminTemplateEditPage() {
                                     <span>កំពុងប្រើ</span>
                                   </span>
                                 ) : (
-                                  <span className="text-[11px] font-medium text-zinc-500 group-hover:text-amber-400 px-2.5 py-1 rounded-lg border border-transparent group-hover:border-zinc-700 group-hover:bg-zinc-800/60 transition">
+                                  <span className="text-xs font-medium text-zinc-300 group-hover:text-amber-400 px-2.5 py-1 rounded-lg border border-transparent group-hover:border-zinc-700 group-hover:bg-zinc-800/60 transition">
                                     ជ្រើសរើស
                                   </span>
                                 )}
@@ -3912,7 +3855,7 @@ export default function AdminTemplateEditPage() {
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="template-catalog-name" className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        ឈ្មោះគំរូសំបុត្រអញ្ជើញ (Template Name) *
+                        {lang === "en" ? "Template name" : "ឈ្មោះគំរូសំបុត្រអញ្ជើញ"} *
                       </label>
                       <input
                         id="template-catalog-name"
@@ -3927,56 +3870,60 @@ export default function AdminTemplateEditPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          ប្រភេទ (Category)
+                        <label htmlFor="template-catalog-category" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Category" : "ប្រភេទ"}
                         </label>
                         <select
+                          id="template-catalog-category"
                           value={form.category}
                           onChange={(e) => setField("category", e.target.value)}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="TRADITIONAL">ប្រពៃណីខ្មែរ (TRADITIONAL)</option>
-                          <option value="LUXURY">ប្រណិតរាជវាំង (LUXURY)</option>
-                          <option value="MODERN">សម័យទំនើប (MODERN)</option>
-                          <option value="FLORAL">ផ្កាស្រស់ (FLORAL)</option>
-                          <option value="MINIMALIST">សាមញ្ញ (MINIMALIST)</option>
-                          <option value="OTHER">ផ្សេងៗ (OTHER)</option>
+                          <option value="TRADITIONAL">{lang === "en" ? "Traditional" : "ប្រពៃណីខ្មែរ"}</option>
+                          <option value="LUXURY">{lang === "en" ? "Luxury" : "ប្រណិតរាជវាំង"}</option>
+                          <option value="MODERN">{lang === "en" ? "Modern" : "សម័យទំនើប"}</option>
+                          <option value="FLORAL">{lang === "en" ? "Floral" : "ផ្កាស្រស់"}</option>
+                          <option value="MINIMALIST">{lang === "en" ? "Minimalist" : "សាមញ្ញ"}</option>
+                          <option value="OTHER">{lang === "en" ? "Other" : "ផ្សេងៗ"}</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          ស្ថានភាព (Status)
+                        <label htmlFor="template-catalog-status" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Status" : "ស្ថានភាព"}
                         </label>
                         <select
+                          id="template-catalog-status"
                           value={form.status}
                           onChange={(e) => setField("status", e.target.value)}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="ACTIVE">ACTIVE (ផ្សព្វផ្សាយ)</option>
-                          <option value="INACTIVE">INACTIVE (ព្រាងទុក)</option>
+                          <option value="ACTIVE">{lang === "en" ? "Active" : "ផ្សព្វផ្សាយ"}</option>
+                          <option value="INACTIVE">{lang === "en" ? "Inactive" : "ព្រាងទុក"}</option>
                         </select>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          កម្រិតសេវាកម្ម (Pricing Tier)
+                        <label htmlFor="template-catalog-tier" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Pricing tier" : "កម្រិតសេវាកម្ម"}
                         </label>
                         <select
+                          id="template-catalog-tier"
                           value={form.premium ? "true" : "false"}
                           onChange={(e) => setField("premium", e.target.value === "true")}
                           className="h-10 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 text-xs text-zinc-100 outline-none focus:border-amber-500 cursor-pointer"
                         >
-                          <option value="false">FREE (ឥតគិតថ្លៃ)</option>
-                          <option value="true">PREMIUM (បង់ប្រាក់)</option>
+                          <option value="false">{lang === "en" ? "Free" : "ឥតគិតថ្លៃ"}</option>
+                          <option value="true">{lang === "en" ? "Premium" : "បង់ប្រាក់"}</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                          តម្លៃ (Price in USD)
+                        <label htmlFor="template-catalog-price" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                          {lang === "en" ? "Price (USD)" : "តម្លៃ (USD)"}
                         </label>
                         <input
+                          id="template-catalog-price"
                           type="number"
                           step="0.01"
                           value={form.price}
@@ -3988,10 +3935,11 @@ export default function AdminTemplateEditPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                        រូប Thumbnail Card (URL)
+                      <label htmlFor="template-catalog-thumbnail" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                        {lang === "en" ? "Thumbnail URL" : "តំណរូបភាពគំរូ"}
                       </label>
                       <input
+                        id="template-catalog-thumbnail"
                         type="text"
                         value={form.thumbnailUrl}
                         onChange={(e) => setField("thumbnailUrl", e.target.value)}
@@ -4010,58 +3958,27 @@ export default function AdminTemplateEditPage() {
           onChange={setLeftWidthPercent} workspaceRef={workspaceRef} onDraggingChange={setIsDraggingDivider} english={lang === 'en'} />
 
         <main id="template-studio-preview" className="studio-preview-panel">
-          {/* Subtle Ambient Glow */}
-          <div
-            aria-hidden="true"
-            className="absolute top-0 right-0 h-96 w-96 max-h-full max-w-full rounded-full blur-[140px] opacity-20 pointer-events-none"
-            style={{ backgroundColor: form.primaryColor }}
-          />
-
-          {/* Single Clean Live Control Bar */}
-          <div
-            className={`studio-preview-toolbar mb-3 flex items-center justify-between w-full px-1 z-10 gap-2 ${
-              deviceView === "mobile"
-                ? "max-w-[380px]"
-                : deviceView === "tablet"
-                ? "max-w-[620px]"
-                : "max-w-4xl"
-            }`}
-          >
-            <div className="flex items-center gap-2 shrink-0">
-              <div className="flex items-center gap-1.5 rounded-xl bg-zinc-900/90 px-2.5 py-1 text-xs font-semibold text-zinc-300 border border-zinc-800 shadow-sm whitespace-nowrap">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="tracking-tight text-zinc-200">Live Simulator</span>
-              </div>
+          <div className="studio-preview-toolbar">
+            <div className="studio-device-switch" role="group" aria-label={lang === "en" ? "Preview device" : "ឧបករណ៍មើលជាមុន"}>
+              {[
+                { id: "mobile", icon: Smartphone, label: lang === "en" ? "Phone" : "ទូរស័ព្ទ" },
+                { id: "tablet", icon: Tablet, label: lang === "en" ? "Tablet" : "ថេប្លេត" },
+                { id: "desktop", icon: Monitor, label: lang === "en" ? "Desktop" : "កុំព្យូទ័រ" },
+              ].map(({ id, icon: Icon, label }) => (
+                <button key={id} type="button" aria-pressed={deviceView === id} onClick={() => setDeviceView(id)}>
+                  <Icon size={15} aria-hidden="true" />
+                  <span>{label}</span>
+                </button>
+              ))}
             </div>
-
-            {/* Fast Gate Toggle Switcher */}
-            <div className="flex items-center gap-1 rounded-xl border border-zinc-800 bg-zinc-900/90 p-1 shadow-lg backdrop-blur-md shrink-0">
-              <button
-                type="button"
-                onClick={() => handleSetGate(false)}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
-                  !previewGateOpen
-                    ? "bg-amber-500 text-slate-950 shadow-sm font-bold"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-              >
-                <Layers className="h-3.5 w-3.5" />
-                <span>ស្រោមសំបុត្រ (Cover)</span>
+            <div className="studio-gate-switch" role="group" aria-label={lang === "en" ? "Invitation preview state" : "ស្ថានភាពមើលសំបុត្រជាមុន"}>
+              <button type="button" aria-pressed={!previewGateOpen} onClick={() => handleSetGate(false)}>
+                <Layers size={15} aria-hidden="true" />
+                <span>{lang === "en" ? "Cover" : "ស្រោមសំបុត្រ"}</span>
               </button>
-              <button
-                type="button"
-                onClick={() => handleSetGate(true)}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
-                  previewGateOpen
-                    ? "bg-amber-500 text-slate-950 shadow-sm font-bold"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-              >
-                <Eye className="h-3.5 w-3.5" />
-                <span>មាតិកាពេញ (Full)</span>
+              <button type="button" aria-pressed={previewGateOpen} onClick={() => handleSetGate(true)}>
+                <Eye size={15} aria-hidden="true" />
+                <span>{lang === "en" ? "Invitation" : "សំបុត្រអញ្ជើញ"}</span>
               </button>
             </div>
           </div>
@@ -4070,18 +3987,7 @@ export default function AdminTemplateEditPage() {
             '--primary-color': form.primaryColor,
             '--secondary-color': form.secondaryColor,
           }}>
-            {/* Mockup Mobile Status Bar */}
-            <div className="flex h-7 shrink-0 items-center justify-between px-6 bg-black/80 text-[10px] text-zinc-300 font-semibold border-b border-black/10 z-20">
-              <span>9:41</span>
-              <div className="h-3.5 w-20 rounded-full bg-black mx-auto" />
-              <div className="flex items-center gap-1.5">
-                <span>5G</span>
-                <span>100%</span>
-              </div>
-            </div>
-
-            {/* REAL-TIME LIVE TEMPLATE SIMULATOR */}
-            <div className="flex-1 w-full h-full relative bg-zinc-950">
+            <div className="studio-preview-content">
               <iframe
                 key={form.code || form.presetId || "template-preview"}
                 ref={iframeRef}

@@ -5,28 +5,82 @@
   --studio-focus: var(--ui-studio-focus);
 }
 .template-studio :is(button, a, input, select, textarea, .studio-resize-handle):focus-visible { outline: 3px solid var(--studio-focus); outline-offset: 2px; }
-.template-studio-toolbar { padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left)); }
+.template-studio-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: var(--ui-space-3);
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+  border-bottom: 1px solid var(--ui-studio-border);
+  background: var(--ui-studio-panel);
+}
 .template-studio-toolbar :is(button,a) { min-height: var(--ui-control-min-height); }
-.studio-device-switch { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(100%, 380px); min-width: 0; }
-.studio-device-switch button { min-width: 0; padding-inline: 8px; justify-content: center; }
-.studio-device-switch span { white-space: normal; line-height: 1.65; }
+.studio-toolbar-heading { display: flex; flex: 1 1 240px; align-items: center; gap: var(--ui-space-3); min-width: 0; }
+.studio-toolbar-heading > a { justify-content: center; min-width: 44px; }
+.studio-toolbar-title { min-width: 0; }
+.studio-toolbar-title h1 { margin: 0; color: var(--ui-studio-ink); font-size: clamp(1rem, .9rem + .5vw, 1.35rem); font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
+.studio-toolbar-title p { margin: 2px 0 0; color: var(--ui-studio-muted); font-size: 13px; line-height: 1.65; }
 .studio-toolbar-actions { min-width: 0; max-width: 100%; flex-wrap: wrap; }
-.studio-panel-switch { position: sticky; top: 0; z-index: 20; background: var(--ui-studio-canvas); display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--ui-studio-border); flex-shrink: 0; }
+.studio-toolbar-actions > :is(button,a) { justify-content: center; min-width: 44px; }
+.studio-toolbar-actions > button:last-child { height: auto; padding-block: 8px; text-align: start; }
+.studio-toolbar-actions button svg { flex-shrink: 0; }
+.studio-panel-switch { background: var(--ui-studio-panel); display: flex; gap: 8px; padding: 8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left)); border-bottom: 1px solid var(--ui-studio-border); flex-shrink: 0; }
 .studio-panel-switch button { flex: 1; min-height: 44px; padding: 8px; border: 1px solid var(--ui-studio-border); border-radius: var(--ui-radius-control); color: var(--ui-studio-muted); }
 .studio-panel-switch button[aria-pressed=true] { color: var(--ui-studio-on-accent); background: var(--ui-studio-accent); border-color: var(--ui-studio-accent); }
 .template-studio-workspace { display: flex; flex: 1; min-height: 0; min-width: 0; position: relative; }
 .template-studio-controls { display: flex; flex-direction: column; width: 100%; min-width: 0; min-height: 0; border-right: 1px solid var(--ui-studio-border); background: var(--ui-studio-panel); }
+.studio-section-bar { padding: 8px 12px; border-bottom: 1px solid var(--ui-studio-border); }
 .studio-section-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
-.studio-section-tabs button { flex: 1 1 88px; min-height: 44px; min-width: 0; padding: 8px; }
-.studio-section-tabs span { line-height: 1.75; overflow-wrap: anywhere; }
+.studio-section-tabs button { flex: 1 1 88px; }
+.studio-section-tabs button,
+.studio-preview-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: var(--ui-control-min-height);
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-compact);
+  color: var(--ui-studio-muted);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: background-color var(--ui-duration-feedback) var(--ui-ease-standard);
+}
+.studio-section-tabs button:hover,
+.studio-preview-toolbar button:hover { background: var(--ui-studio-panel); color: var(--ui-studio-ink); }
+.studio-section-tabs button[aria-pressed=true],
+.studio-preview-toolbar button[aria-pressed=true] {
+  background: var(--ui-studio-accent);
+  color: var(--ui-studio-on-accent);
+  border-color: var(--ui-studio-accent);
+}
+.studio-section-tabs svg, .studio-preview-toolbar svg { flex-shrink: 0; }
 .studio-controls-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 .studio-controls-scroll :is(input:not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea) { font-size: 16px; line-height: 1.75; }
 .studio-controls-scroll input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),.studio-controls-scroll select { min-height: 44px; }
 .studio-controls-scroll :is(button,label,p,h2,h3,h4) { overflow-wrap: anywhere; }
 .studio-controls-scroll > div > div:first-child:has(>button) { flex-wrap: wrap; }
-.studio-preview-panel { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; position: relative; padding: 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(--ui-studio-canvas); }
-.studio-preview-toolbar { flex-shrink: 0; flex-wrap: wrap; max-width: 100%; }
-.studio-preview-toolbar button { min-height: 44px; }
+.studio-preview-panel { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; min-height: 0; position: relative; padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); background: var(--ui-studio-canvas); }
+.studio-preview-toolbar { display: flex; flex-shrink: 0; flex-wrap: wrap; justify-content: center; gap: 6px; width: 100%; margin-block-end: var(--ui-space-3); }
+.studio-device-switch, .studio-gate-switch {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--ui-studio-border);
+  border-radius: var(--ui-radius-control);
+}
+.studio-preview-content { position: relative; flex: 1; min-height: 0; background: var(--ui-studio-canvas); }
 .studio-preview-stage { position: relative; flex: 1; min-height: 0; min-width: 0; width: 100%; display: flex; justify-content: center; }
 .studio-preview-footprint { position: relative; flex-shrink: 0; }
 .studio-preview-frame { display: flex; flex-direction: column; transform-origin: top left; border: 4px solid var(--ui-studio-border); border-radius: 28px; overflow: hidden; background: var(--ui-studio-canvas); }
@@ -48,16 +102,20 @@
 @media (max-width: 1023px) {
   .studio-toolbar-actions > :is(button,a):not(:last-child) > span { display: none; }
 }
+@media (max-width: 430px) {
+  .studio-panel-switch button, .studio-toolbar-actions > button:last-child { font-size: 13px; }
+  .studio-preview-toolbar { justify-content: stretch; }
+  .studio-device-switch, .studio-gate-switch { flex: 1 1 100%; }
+}
 @media (max-height: 500px) {
   .template-studio { overflow-y: auto; }
   .template-studio-toolbar { padding: max(6px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left)); min-height: 48px; }
   .template-studio-toolbar p { display: none; }
-  .template-studio-toolbar .h-6 { display: none; }
   .studio-panel-switch { padding: 4px max(12px, env(safe-area-inset-right)) 4px max(12px, env(safe-area-inset-left)); }
   .studio-panel-switch button { min-height: 44px; padding: 4px 8px; font-size: 13px; }
   .studio-section-tabs { gap: 2px; }
   .studio-section-tabs button { min-height: 44px; padding: 4px 8px; font-size: 12px; }
-  .template-studio-workspace { flex: 1 0 auto; min-height: 280px; }
+  .template-studio-workspace { flex: 0 0 max(280px, calc(100dvh - 124px)); }
   .studio-controls-scroll { padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
 }
 @media (prefers-reduced-motion: reduce) {

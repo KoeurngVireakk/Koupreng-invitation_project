@@ -132,7 +132,7 @@ test('responsive Studio retains edits, preview viewport and all sections across 
   await open(page, 'admin-template-edit');
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('button', { name: 'កំណត់ Catalog & តម្លៃ', exact: true }).click();
-  const name = page.getByLabel(/Template Name/);
+  const name = page.getByLabel(/Template name/i);
   await name.fill('Phone edits remain');
   const widths = [320, 360, 375, 390, 414, 430, 599, 600, 601, 767, 768, 769, 820, 1023, 1024, 1025, 1280, 1440];
   for (const width of widths) {
@@ -161,7 +161,7 @@ test('responsive Studio retains edits, preview viewport and all sections across 
   expect(await page.locator('.template-studio').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('studio-landscape.png') });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  for (const [label, width] of [['Mobile (380px)', 380], ['Tablet (680px)', 680], ['Desktop', 1024]]) {
+  for (const [label, width] of [['Phone', 380], ['Tablet', 680], ['Desktop', 1024]]) {
     await page.getByRole('button', { name: label, exact: true }).click();
     await expect.poll(() => page.frameLocator('iframe').locator('html').evaluate(() => innerWidth)).toBe(width);
     await expect(page.locator('iframe')).toBeInViewport({ ratio: .95 });
