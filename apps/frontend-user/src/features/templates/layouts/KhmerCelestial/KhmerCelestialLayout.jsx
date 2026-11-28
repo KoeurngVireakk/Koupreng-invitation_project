@@ -211,12 +211,6 @@ export default function KhmerCelestialLayout({
   }, [opened, preview]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || opened) return;
-    const img = new Image();
-    img.src = KHMER_CELESTIAL_ASSETS.openButton;
-  }, [opened]);
-
-  useEffect(() => {
     const channel = previewChannel || readEmbeddedPreviewChannel();
     if (!channel) return undefined;
     const onMessage = (event) => {

@@ -24,7 +24,7 @@ test('template save roundtrip preserves authored fields and immutable catalog id
   });
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`${admin}/templates/30`);
-  await expect(page.getByRole('heading', { name: /Edit: Batch12 authored template/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Batch12 authored template', exact: true })).toBeVisible();
   const preview = page.getByRole('button', { name: 'Preview', exact: true });
   if (await preview.isVisible()) await preview.click();
   await expect(page.frameLocator('iframe[title="Live User Template Preview"]').getByRole('heading', { name: 'Batch12 preview heading', exact: true })).toBeVisible();
@@ -32,18 +32,18 @@ test('template save roundtrip preserves authored fields and immutable catalog id
   if (await edit.isVisible()) await edit.click();
   // An existing catalog code selects public registry/offer policy; layout changes require a new record.
   await expect(page.locator('button[disabled]').filter({ hasText: 'Khmer Celestial' })).toHaveCount(1);
-  await page.getByRole('button', { name: /Save.*Publish/ }).click();
+  await page.getByRole('button', { name: 'Save & publish', exact: true }).click();
   await expect.poll(() => saves.length).toBe(1);
   expect(saves[0].code).toBe('event-essential');
   expect(JSON.parse(saves[0].description)).toMatchObject(authored);
   await page.reload();
-  await expect(page.getByRole('heading', { name: /Edit: Batch12 authored template/ })).toBeVisible();
-  await page.getByRole('button', { name: /Save.*Publish/ }).click();
+  await expect(page.getByRole('heading', { name: 'Batch12 authored template', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Save & publish', exact: true }).click();
   await expect.poll(() => saves.length).toBe(2);
   expect(JSON.parse(saves[1].description)).toMatchObject(authored);
   for (const width of widths) {
     await page.setViewportSize({ width, height: 900 });
-    const save = page.getByRole('button', { name: /Save.*Publish/ });
+    const save = page.getByRole('button', { name: 'Save & publish', exact: true });
     await expect(save).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
@@ -54,7 +54,7 @@ test('template save roundtrip preserves authored fields and immutable catalog id
 test('template Back warns before discarding authored changes', async ({ page }) => {
   await installBatch11Admin(page);
   await page.goto(`${admin}/templates/30`);
-  await expect(page.getByRole('heading', { name: /Edit: Batch 11 fixture template/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Batch 11 fixture template', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('button').filter({ hasText: 'Catalog' }).click();
   await page.getByPlaceholder('Royal Khmer Wedding Studio 2026').fill('Unsaved fictional edit');
@@ -75,14 +75,14 @@ test('failed template load blocks overwrite and retry recovers', async ({ page }
   });
   await page.goto(`${admin}/templates/30`);
   await expect(page.getByRole('heading', { name: 'Template could not be loaded' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Save.*Publish/ })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Save & publish', exact: true })).toHaveCount(0);
   expect(writes).toBe(0); failed = false; invalid = true;
   await page.getByRole('button', { name: 'Try again' }).click();
   await expect(page.getByText(/Template design data could not be read/).first()).toBeVisible();
-  await expect(page.getByRole('button', { name: /Save.*Publish/ })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Save & publish', exact: true })).toHaveCount(0);
   expect(writes).toBe(0); invalid = false;
   await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('heading', { name: /Edit: Recovered template/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Recovered template', exact: true })).toBeVisible();
 });
 
 test('package dialog traps and restores focus, switches work by keyboard, bilingual responsive axe', async ({ page }, info) => {

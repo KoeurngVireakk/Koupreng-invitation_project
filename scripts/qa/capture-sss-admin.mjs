@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { chromium, expect } from "../../apps/frontend-user/node_modules/@playwright/test/index.mjs";
 import AxeBuilder from "../../apps/frontend-user/node_modules/@axe-core/playwright/dist/index.mjs";
 
@@ -7,6 +7,8 @@ const stage = process.argv[2];
 if (stage !== "before" && stage !== "after") throw new Error("Use before or after as the first argument.");
 const output = `output/playwright/sss-plus-v2/${stage}/admin`;
 await mkdir(output, { recursive: true });
+const readReportFixture = name => readFile(new URL(`../../output/admin-reporting/${name}.json`, import.meta.url), "utf8").then(JSON.parse);
+const [definitions, executiveReport] = await Promise.all(["definitions", "executive"].map(readReportFixture));
 
 const encoded = value => Buffer.from(JSON.stringify(value)).toString("base64url");
 const token = `${encoded({ alg: "none" })}.${encoded({ sub: "1", exp: Math.floor(Date.now() / 1000) + 3600 })}.fixture`;
@@ -29,7 +31,7 @@ const matrix = [
     .flatMap(path => [{ width: 390, path }, { width: 1440, path }]),
   ...["/", "/admin", "/admin/dashboard", "/admin/users", "/admin/templates", "/admin/payments", "/admin/packages", "/admin/notifications", "/admin/reports", "/admin/system-logs"].map(path => ({ width: 1440, path })),
   { width: 390, path: "/dashboard", mode: "navigation" },
-  { width: 390, path: "/templates/new", mode: "preview" },
+  { width: 390, path: "/templates/38", mode: "preview" },
   { width: 1440, path: "/templates/new", mode: "sections" },
   { width: 390, path: "/users", mode: "denied" },
   { width: 1440, path: "/dashboard", mode: "error" },
@@ -69,6 +71,8 @@ try {
       if (url.origin !== origin && endpoint === "/api/v1/templates") data = [template];
       if (url.origin !== origin && endpoint.startsWith("/api/v1/templates/")) data = template;
       if (endpoint.endsWith("/i18n/messages")) data = { messages: {} };
+      if (endpoint === "/api/v1/admin/reports/management/definitions") data = definitions;
+      if (endpoint === "/api/v1/admin/reports/management/executive") data = executiveReport;
       const status = data === undefined ? 503 : 200;
       responses.push({ endpoint, status });
       return route.fulfill({ status, json: data === undefined ? { message: "Unavailable in this fixture" } : { data } });
@@ -78,6 +82,10 @@ try {
       await page.goto(origin + path, { waitUntil: "domcontentloaded" });
       await page.locator("h1").first().waitFor({ state: "attached", timeout: 10000 }).catch(() => {});
       await page.evaluate(() => document.fonts.ready);
+      if (path.endsWith("/reports")) {
+        await expect.poll(() => responses.some(({ endpoint, status }) => endpoint.endsWith("/management/executive") && status === 200)).toBe(true);
+        await expect(page.locator(".report-overview-kpis")).toBeVisible();
+      }
       if (mode === "navigation") {
         await page.getByRole("button", { name: "Open navigation" }).click();
         await expect(page.getByRole("dialog")).toBeVisible();
@@ -94,8 +102,11 @@ try {
           await expect(device.getByRole("button", { name: "Tablet" })).toHaveAttribute("aria-pressed", "true");
           await device.getByRole("button", { name: "Phone" }).click();
           await scene.getByRole("button", { name: "Invitation" }).click();
-          await expect(frame.locator(".kc-hero")).toBeVisible();
+        } else {
+          await page.getByRole("button", { name: /Full/ }).click();
         }
+        await expect(frame.locator(".kc-opening")).toBeHidden();
+        await expect(frame.locator(".kc-main")).not.toHaveAttribute("inert", "");
       }
       if (mode === "sections") {
         const sections = page.getByRole("group", { name: "Authoring sections" });
@@ -121,7 +132,7 @@ try {
         background: getComputedStyle(document.body).backgroundColor,
         resolvedRoute: location.pathname,
       }));
-      const accessibility = [320, 390, 1440].includes(width) && (path === "/dashboard" || path === "/templates/new")
+      const accessibility = [320, 390, 1440].includes(width) && (path === "/dashboard" || path.startsWith("/templates/"))
         ? (await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze())
           .violations.map(({ id, impact, nodes }) => ({ id, impact, nodes: nodes.map(({ target }) => target) }))
         : null;

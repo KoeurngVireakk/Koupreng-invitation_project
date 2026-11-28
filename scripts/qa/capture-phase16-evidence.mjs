@@ -423,9 +423,14 @@ async function main() {
 
     const results = [];
     for (const c of cases) {
-      const res = await runCase(browser, c);
-      results.push(res);
-      console.log(`[${stageArg}] ${res.name}: overflow=${res.metrics.overflowPx}px axe=${res.axeViolations.length} errors=${res.pageErrorCount}`);
+      try {
+        const res = await runCase(browser, c);
+        results.push(res);
+        console.log(`[${stageArg}] ${res.name}: overflow=${res.metrics.overflowPx}px axe=${res.axeViolations.length} errors=${res.pageErrorCount}`);
+      } catch (error) {
+        console.error(`[${stageArg}] ${c.name}: ${error.message}`);
+        results.push({ name: c.name, renderer: c.renderer, width: c.width, height: c.height, error: error.message });
+      }
     }
 
     await fs.writeFile(
@@ -433,6 +438,7 @@ async function main() {
       JSON.stringify({ stage: stageArg, appDir, capturedAt: new Date().toISOString(), results }, null, 2)
     );
     await browser.close();
+    if (results.some(result => result.error)) process.exitCode = 1;
   } finally {
     server?.kill();
   }

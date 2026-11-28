@@ -20,7 +20,9 @@ function mediaSource(value) {
 export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = true }) {
   const reducedMotion = usePrefersReducedMotion();
   const [videoFailed, setVideoFailed] = useState(false);
-  const english = String(content.languageMode).toLowerCase() === "en";
+  const languageMode = String(content.languageMode).toLowerCase();
+  const english = languageMode === "en";
+  const skipLabel = english ? "Skip opening" : languageMode === "both" ? "រំលង / Skip opening" : "រំលង";
   const openLabel = content.opening?.openButtonText || (english ? "Open invitation" : "បើកសំបុត្រអញ្ជើញ");
   const guestName = content.guestName?.trim() || (english ? "Dear guest" : "ភ្ញៀវកិត្តិយស");
   const guestLabel = english ? "To our guest" : content.isPersonalizedGuest ? "សូមគោរពអញ្ជើញ" : "ជូនចំពោះ";
@@ -84,7 +86,7 @@ export default function CelestialOpening({ content, onOpen, onSkip, autoFocus = 
         transition={{ duration: reducedMotion ? 0 : 1.7, delay: reducedMotion ? 0 : 0.2, ease: EASE }}
       />
       <div className="kc-opening__shade" aria-hidden="true" />
-      <button type="button" className="kc-opening__skip" onClick={onSkip || onOpen}>{english ? 'Skip opening' : 'រំលង'}</button>
+      <button type="button" className="kc-opening__skip" onClick={onSkip || onOpen}>{skipLabel}</button>
       <CelestialHeritage />
       <CelestialLiveGarden className="kc-opening__garden" variant="opening" />
 
