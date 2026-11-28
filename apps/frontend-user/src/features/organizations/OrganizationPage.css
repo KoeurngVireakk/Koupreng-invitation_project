@@ -92,13 +92,15 @@
 }
 
 .k-org-header-title {
-  font-family: 'Moul', serif;
-  font-size: clamp(1.4rem, 3.5vw, 1.85rem);
-  color: var(--ui-theme-link);
-  margin: 0 0 10px;
+  font-family: var(--ui-font-management, 'Kantumruy Pro', sans-serif);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.45rem, 3.2vw, 1.95rem);
+  color: var(--ui-theme-ink);
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -372,36 +374,37 @@
 /* Empty State */
 .k-org-empty-state {
   text-align: center;
-  background: #ffffff;
-  border: 2px dashed rgba(176, 146, 106, 0.35);
+  background: var(--ui-theme-surface);
+  border: 2px dashed color-mix(in srgb, var(--ui-theme-gold) 35%, transparent);
   border-radius: 24px;
   padding: 64px 28px;
-  box-shadow: 0 10px 30px rgba(125, 100, 67, 0.05);
+  box-shadow: var(--ui-theme-shadow);
 }
 
 .k-org-empty-icon {
   width: 72px;
   height: 72px;
   margin: 0 auto 20px;
-  background: #fdf8f0;
-  border: 1px solid #f5e4cc;
+  background: var(--ui-theme-gold-soft);
+  border: 1px solid var(--ui-theme-border);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b0926a;
+  color: var(--ui-theme-gold);
   font-size: 2.2rem;
 }
 
 .k-org-empty-title {
-  font-family: 'Moul', serif;
+  font-family: var(--ui-font-management, 'Kantumruy Pro', sans-serif);
+  font-weight: 800;
   font-size: 1.35rem;
-  color: #7d6443;
+  color: var(--ui-theme-ink);
   margin: 0 0 10px;
 }
 
 .k-org-empty-desc {
-  color: #64748b;
+  color: var(--ui-theme-muted);
   font-size: 0.95rem;
   max-width: 500px;
   margin: 0 auto 28px;
@@ -411,9 +414,10 @@
 .k-org-empty-btn {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   gap: 8px;
-  background: linear-gradient(135deg, #b0926a 0%, #7d6443 100%);
-  color: #ffffff;
+  background: var(--ui-theme-action);
+  color: var(--ui-theme-on-action);
   padding: 13px 28px;
   border-radius: 12px;
   font-weight: 700;
@@ -493,11 +497,35 @@
 }
 
 .k-org-card-title {
-  font-family: 'Moul', 'Kantumruy Pro', serif;
+  font-family: var(--ui-font-management, 'Kantumruy Pro', sans-serif);
+  font-weight: 750;
   font-size: 1.15rem;
-  color: var(--ui-theme-link);
+  color: var(--ui-theme-ink);
   margin: 0;
   line-height: 1.4;
+}
+
+.k-org-invite-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.k-org-invite-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.k-org-invite-form .workspace-field {
+  flex: 1 1 280px;
+  margin: 0;
+}
+
+.k-org-invite-form .workspace-button {
+  min-height: 44px;
+  flex-shrink: 0;
 }
 
 .k-org-card-slug {

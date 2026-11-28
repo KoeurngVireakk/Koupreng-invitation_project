@@ -1,7 +1,7 @@
 .enterprise-page {
     width: min(1180px, calc(100% - 32px));
-    margin: 118px auto 64px;
-    color: #202124;
+    margin: 36px auto 64px;
+    color: var(--ui-theme-ink, #202124);
 }
 
 .enterprise-head {
@@ -14,23 +14,24 @@
 
 .enterprise-eyebrow {
     display: block;
-    color: #52613a;
+    color: var(--ui-theme-gold, #52613a);
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
     margin-bottom: 8px;
 }
 
 .enterprise-head h1 {
     margin: 0;
-    font-size: 30px;
-    line-height: 1.15;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.25;
+    color: var(--ui-theme-ink, #202124);
 }
 
 .enterprise-head p {
     margin: 8px 0 0;
-    color: #697177;
+    color: var(--ui-theme-muted, #697177);
 }
 
 .enterprise-actions,
@@ -55,21 +56,23 @@
 }
 
 .enterprise-panel {
-    background: #fff;
-    border: 1px solid #e3e6df;
-    border-radius: 8px;
-    padding: 18px;
-    box-shadow: 0 10px 28px rgba(31, 35, 29, 0.07);
+    background: var(--ui-theme-surface, #fff);
+    border: 1px solid var(--ui-theme-border, #e3e6df);
+    border-radius: 16px;
+    padding: 20px;
+    color: var(--ui-theme-ink, #202124);
+    box-shadow: var(--ui-theme-shadow, 0 10px 28px rgba(31, 35, 29, 0.07));
 }
 
 .enterprise-panel h2,
 .enterprise-panel h3 {
     margin: 0 0 12px;
     font-size: 18px;
+    color: var(--ui-theme-ink, #202124);
 }
 
 .enterprise-muted {
-    color: #6b7280;
+    color: var(--ui-theme-muted, #6b7280);
     font-size: 14px;
 }
 
@@ -83,18 +86,20 @@
     gap: 6px;
     font-size: 13px;
     font-weight: 700;
-    color: #363b3f;
+    color: var(--ui-theme-ink, #363b3f);
 }
 
 .enterprise-form input,
 .enterprise-form select,
 .enterprise-form textarea {
     width: 100%;
-    border: 1px solid #d5d9d1;
-    border-radius: 8px;
+    min-height: 44px;
+    border: 1px solid var(--ui-theme-control-border, #d5d9d1);
+    border-radius: 10px;
     padding: 10px 12px;
     font: inherit;
-    background: #fff;
+    background: var(--ui-theme-surface, #fff);
+    color: var(--ui-theme-ink, #202124);
 }
 
 .enterprise-form textarea {
@@ -103,22 +108,42 @@
 }
 
 .enterprise-btn {
-    border: 0;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
     cursor: pointer;
-    background: #2f5d50;
-    color: #fff;
+    background: var(--ui-theme-action, #2f5d50);
+    color: var(--ui-theme-on-action, #fff);
+    transition: background-color 0.18s ease, border-color 0.18s ease, filter 0.18s ease;
+}
+
+.enterprise-btn:hover:not(:disabled) {
+    filter: brightness(1.06);
 }
 
 .enterprise-btn.secondary {
-    background: #eef2ee;
-    color: #26332f;
+    background: var(--ui-theme-subtle, #eef2ee);
+    border-color: var(--ui-theme-border, #d5d9d1);
+    color: var(--ui-theme-ink, #26332f);
+}
+
+.enterprise-btn.secondary:hover:not(:disabled) {
+    border-color: var(--ui-theme-gold, #b0926a);
+    background: var(--ui-theme-hover, #e6ece6);
 }
 
 .enterprise-btn.danger {
-    background: #9f342f;
+    background: var(--ui-theme-danger-action, #9f342f);
+    color: var(--ui-theme-on-danger-action, #fff);
 }
 
 .enterprise-btn:disabled {
@@ -131,7 +156,7 @@
 }
 
 .enterprise-table-wrap:focus-visible {
-    outline: 3px solid var(--ring, #0f766e);
+    outline: 3px solid var(--ui-theme-focus, #0f766e);
     outline-offset: 3px;
 }
 
@@ -144,16 +169,17 @@
 .enterprise-table th,
 .enterprise-table td {
     text-align: left;
-    border-bottom: 1px solid #ecefea;
-    padding: 10px;
-    vertical-align: top;
+    border-bottom: 1px solid var(--ui-theme-border, #ecefea);
+    padding: 12px 10px;
+    vertical-align: middle;
+    color: var(--ui-theme-ink, #202124);
 }
 
 .enterprise-table th {
-    color: #697177;
+    color: var(--ui-theme-muted, #697177);
     font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0;
+    letter-spacing: 0.02em;
 }
 
 .enterprise-badge {
@@ -248,7 +274,7 @@
 @media (max-width: 860px) {
     .enterprise-page {
         width: min(100% - 20px, 720px);
-        margin-top: 96px;
+        margin-top: 24px;
     }
 
     .enterprise-head,
