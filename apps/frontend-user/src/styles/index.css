@@ -284,53 +284,58 @@
   --focus-ring-offset: 2px;
 }
 
-/* Public marketing aliases; management and template token values stay intact. */
-/* Public marketing tokens — Silk & Ink Editorial design system.
-   Preserves dashboard and wedding template variables intact. */
+/* Public marketing tokens — Atelier Linen & Forest / Obsidian & Gold.
+   Bound directly to semantic-tokens.css so light/dark and all marketing surfaces share one truth. */
 .kp-marketing-shell {
   --kp-page: var(--ui-theme-canvas);
   --kp-surface-soft: var(--ui-theme-subtle);
   --kp-brand: var(--ui-theme-action);
-  --kp-brand-hover: var(--ui-theme-action);
-  --kp-gold-decorative: #C3A26B;
+  --kp-brand-hover: var(--ui-theme-action-hover);
+  --kp-gold-decorative: var(--ui-theme-gold-bright);
   --kp-gold-text: var(--ui-theme-gold);
   --kp-focus: var(--ui-theme-focus);
-  --kp-motion-silk: cubic-bezier(.22, 1, .36, 1);
+  --kp-motion-silk: var(--ui-ease-out);
   --kp-public-bg: var(--ui-theme-canvas);
   --kp-public-surface: var(--ui-theme-surface);
   --kp-public-surface-warm: var(--ui-theme-subtle);
   --kp-public-ink: var(--ui-theme-ink);
   --kp-public-muted: var(--ui-theme-muted);
-  --kp-public-gold: #C3A26B;
+  --kp-public-gold: var(--ui-theme-gold-bright);
   --kp-public-gold-ink: var(--ui-theme-gold);
   --kp-public-deep: var(--ui-theme-action);
-  --kp-public-deep-hover: var(--ui-theme-action);
+  --kp-public-deep-hover: var(--ui-theme-action-hover);
   --kp-public-border: var(--ui-theme-border);
 
-  --kp-bg: var(--kp-public-bg);
-  --kp-surface: var(--kp-public-surface);
-  --kp-gold: var(--kp-public-gold);
-  --kp-gold-deep: var(--kp-public-gold-ink);
-  --kp-gold-ink: var(--kp-public-gold-ink);
-  --kp-deep: var(--kp-public-deep);
-  --kp-deep-hover: var(--kp-public-deep-hover);
-  --kp-emerald: var(--kp-public-deep);
-  --kp-emerald-deep: var(--kp-public-deep-hover);
-  --kp-ink: var(--kp-public-ink);
-  --kp-muted: var(--kp-public-muted);
-  --kp-border: var(--kp-public-border);
-  --kp-paper: var(--kp-public-surface-warm);
+  --kp-bg: var(--ui-theme-canvas);
+  --kp-surface: var(--ui-theme-surface);
+  --kp-gold: var(--ui-theme-gold-bright);
+  --kp-gold-deep: var(--ui-theme-gold);
+  --kp-gold-ink: var(--ui-theme-gold);
+  --kp-deep: var(--ui-theme-action);
+  --kp-deep-hover: var(--ui-theme-action-hover);
+  --kp-emerald: var(--ui-theme-action);
+  --kp-emerald-deep: var(--ui-theme-action-hover);
+  --kp-ink: var(--ui-theme-ink);
+  --kp-muted: var(--ui-theme-muted);
+  --kp-border: var(--ui-theme-border);
+  --kp-paper: var(--ui-theme-subtle);
   --kp-burgundy: #672C39;
-  --kp-font: 'Kantumruy Pro', sans-serif;
-  --kp-display: 'Koupreng Editorial', Georgia, serif;
-  --kp-ease: cubic-bezier(.22, 1, .36, 1);
-  --site-header-offset: 86px;
+  --kp-font: 'Kantumruy Pro', 'DM Sans', system-ui, sans-serif;
+  --kp-display: 'Koupreng Editorial', 'Noto Serif Khmer', Georgia, serif;
+  --kp-ease: var(--ui-ease-out);
+  --site-header-offset: 72px;
   color: var(--kp-ink);
   background: var(--kp-bg);
   font-family: var(--kp-font);
 }
 
 .kp-marketing-shell:lang(en) { --kp-font: var(--ui-font); }
+
+/* Browser-level craft: themed selection, smooth scrollbar, crisp underlines */
+::selection {
+  background: color-mix(in srgb, var(--ui-theme-gold-bright, #d8b875) 32%, transparent);
+  color: var(--ui-theme-ink, #1e2824);
+}
 
 /* ============================================================
    Reduced motion: zero out transitions for users who request it

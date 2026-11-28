@@ -100,13 +100,17 @@ export default function PricingFeature() {
         <div className="kp-plan-grid">
           {plans.map((plan, index) => {
             const price = packagePrice(plan, lang);
+            const code = String(plan.code || "").toUpperCase();
+            const isFeatured = code === "PRO" || code === "STANDARD" || (plans.length >= 3 && index === 1);
             return (
-              <article key={plan.id || index} className="kp-plan-card">
+              <article key={plan.id || index} className={`kp-plan-card${isFeatured ? " kp-plan-card--featured" : ""}`}>
                 <div>
                   <div className="kp-plan-card-top">
                     <h3>{plan.packageName || plan.code}</h3>
-                    {plan.code === "STANDARD" && (
-                      <span className="kp-plan-badge">{copy("កញ្ចប់ពេញលេញ", "Full-featured tier")}</span>
+                    {isFeatured && (
+                      <span className="kp-plan-badge">
+                        {code === "PRO" ? copy("ពេញនិយម", "Most popular") : copy("កញ្ចប់ពេញលេញ", "Full-featured tier")}
+                      </span>
                     )}
                   </div>
                   <p className={`kp-plan-price${price === null ? " kp-plan-price--missing" : ""}`}>{price ?? copy("តម្លៃមិនទាន់មាន", "Price unavailable")}</p>

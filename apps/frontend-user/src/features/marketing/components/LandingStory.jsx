@@ -25,19 +25,19 @@ export default function LandingStory({ copy }) {
     [
       LayoutTemplate,
       copy("ជ្រើសគំរូ", "Choose a design"),
-      copy("មើលគំរូពេញលេញ ហើយជ្រើសរើសរចនាបទសម្រាប់ពិធីរបស់អ្នក។", "Explore the complete demos and choose a design for your event."),
+      copy("មើលគំរូពេញលេញ ហើយជ្រើសរើសរចនាបទសម្រាប់ពិធីរបស់អ្នក។", "Explore complete interactive demos and choose the design that fits your ceremony."),
       "/templates",
     ],
     [
       PencilLine,
       copy("កែសម្រួលព័ត៌មាន", "Make it yours"),
-      copy("ចូលគណនី រួចបញ្ចូលឈ្មោះ រូបភាព កម្មវិធី និងទីតាំងពិធី។", "Sign in, then add your names, photos, program and venue."),
+      copy("ចូលគណនី រួចបញ្ចូលឈ្មោះ រូបភាព កម្មវិធី និងទីតាំងពិធី។", "Add your couple names, photographs, bilingual schedule, and venue in Invitation Studio."),
       "/templates/browse",
     ],
     [
       Send,
       copy("ចែករំលែក និងទទួលចម្លើយ", "Share & follow replies"),
-      copy("ពិនិត្យសន្លឹកការ រួចផ្សព្វផ្សាយ និងផ្ញើតំណភ្ជាប់ទៅភ្ញៀវ។ តាមដានចម្លើយក្នុងគណនីរបស់អ្នក។", "Review, publish and share your guest links. Follow the replies in your account."),
+      copy("ពិនិត្យសន្លឹកការ រួចផ្សព្វផ្សាយ និងផ្ញើតំណភ្ជាប់ទៅភ្ញៀវ។ តាមដានចម្លើយក្នុងគណនីរបស់អ្នក។", "Publish personal guest links via Telegram or web and track every RSVP in real time."),
       "/templates/browse",
     ],
   ];
@@ -46,37 +46,20 @@ export default function LandingStory({ copy }) {
     <section className="kp-steps kp-section" aria-labelledby="kp-steps-title">
       <div className="kp-section-heading">
         <div>
-          <p className="kp-eyebrow">{copy("ពីគំនិត ទៅកាន់ការអញ្ជើញ", "From an idea to an invitation")}</p>
-          <h2 id="kp-steps-title">{copy("បីជំហាន។\nថ្ងៃពិសេសមួយ។", "Three steps.\nOne special day.")}</h2>
+          <h2 id="kp-steps-title">{copy("ពីការរចនា ទៅកាន់ការអញ្ជើញដ៏កក់ក្តៅ។", "Three calm stages.\nOne unforgettable day.")}</h2>
         </div>
-        <p>{copy("ចាប់ផ្តើមពីរចនាបទដែលអ្នកពេញចិត្ត រួចរៀបចំព័ត៌មានឱ្យភ្ញៀវ។", "Start with a design you love, then bring the details together for your guests.")}</p>
-      </div>
-
-      <div className="kp-spec-strip" role="region" aria-label={copy("លក្ខណៈពិសេសចម្បង", "Core features")}>
-        <div className="kp-spec-strip-item">
-          <PencilLine size={18} aria-hidden="true" />
-          <span>{copy("គំរូសន្លឹកការប្រណិត", "Curated invitation stationery")}</span>
-        </div>
-        <div className="kp-spec-strip-item">
-          <strong lang="en">KM / EN</strong>
-          <span>{copy("គាំទ្រភាសាខ្មែរ និងអង់គ្លេស", "Bilingual Khmer & English")}</span>
-        </div>
-        <div className="kp-spec-strip-item">
-          <LayoutTemplate size={18} aria-hidden="true" />
-          <span>{copy("ទម្រង់អេក្រង់ឆ្លើយតបគ្រប់ឧបករណ៍", "Responsive mobile & desktop")}</span>
-        </div>
+        <p>{copy("ចាប់ផ្តើមពីរចនាបទដែលអ្នកពេញចិត្ត រួចរៀបចំព័ត៌មានឱ្យភ្ញៀវ។", "Start with a curated template, personalize every detail, and welcome your guests with clarity.")}</p>
       </div>
 
       <ol ref={timeline} className="kp-journey">
         {steps.map(([Icon, title, text, path], index) => (
           <li key={title} data-step={index} data-active={!reduced && active === index}>
             <div className="kp-journey-top">
-              <span aria-hidden="true">0{index + 1}</span>
-              <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
+              <Icon size={22} strokeWidth={1.6} aria-hidden="true" />
             </div>
             <h3>
               <Link to={path}>
-                {title}
+                <span>{title}</span>
                 <ArrowUpRight size={17} aria-hidden="true" />
               </Link>
             </h3>

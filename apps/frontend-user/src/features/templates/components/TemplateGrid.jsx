@@ -75,18 +75,20 @@ export default function TemplateGrid({ featured = false }) {
     <>
       {!featured && (
         <div className="tp-catalog-controls" role="group" aria-label={copy("ប្រភេទគំរូ", "Template categories")}>
-          <div className="tp-category-buttons">
-            {[["all", copy("ទាំងអស់", "All")], ...Object.entries(categories).filter(([key]) => presented.some((tpl) => tpl.category === key))].map(([key, label]) => (
-              <button
-                type="button"
-                key={key}
-                aria-pressed={category === key}
-                onClick={() => setCategory(key)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          {Object.keys(categories).some((key) => presented.some((tpl) => tpl.category === key)) && (
+            <div className="tp-category-buttons">
+              {[["all", copy("ទាំងអស់", "All")], ...Object.entries(categories).filter(([key]) => presented.some((tpl) => tpl.category === key))].map(([key, label]) => (
+                <button
+                  type="button"
+                  key={key}
+                  aria-pressed={category === key}
+                  onClick={() => setCategory(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="tp-controls-subrow">
             <div className="tp-price-filter-row" role="group" aria-label={copy("តម្លៃគំរូ", "Price filter")}>
               <span className="tp-filter-label">{copy("តម្លៃ", "Price")}:</span>
@@ -240,7 +242,6 @@ export default function TemplateGrid({ featured = false }) {
       <section className="kp-collection kp-section" aria-labelledby="kp-collection-title">
         <div className="kp-section-heading">
           <div>
-            <p className="kp-eyebrow">{copy("គំរូសន្លឹកការប្រណីត", "Curated invitation designs")}</p>
             <h2 id="kp-collection-title">
               {copy("ជ្រើសរើសគំរូដែលសាកសមនឹងថ្ងៃពិសេស", "Curated designs for your wedding day")}
             </h2>

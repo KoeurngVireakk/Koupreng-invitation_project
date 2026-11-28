@@ -59,6 +59,7 @@ export default function BrowseTemplatesFeature() {
   const [error, setError] = useState("");
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+  const [failedThumbIds, setFailedThumbIds] = useState(() => new Set());
 
   const categories = useMemo(() => [
     { id: "ALL", label: t("catAll") || (lang === "en" ? "All" : "ទាំងអស់") },
@@ -298,8 +299,20 @@ export default function BrowseTemplatesFeature() {
                   )}
                 </div>
 
-                {template.thumbnailUrl ? (
-                  <img className="tb-card-thumb" {...publicTemplateImage(template.thumbnailUrl)} alt={template.name} loading="lazy" />
+                {template.thumbnailUrl && !failedThumbIds.has(template.id) ? (
+                  <img
+                    className="tb-card-thumb"
+                    {...publicTemplateImage(template.thumbnailUrl)}
+                    alt={template.name}
+                    loading="lazy"
+                    onError={() => {
+                      setFailedThumbIds((prev) => {
+                        const next = new Set(prev);
+                        next.add(template.id);
+                        return next;
+                      });
+                    }}
+                  />
                 ) : (
                   <div className="tb-card-empty-thumb">
                     <IoImageOutline style={{ fontSize: "2.4rem" }} />

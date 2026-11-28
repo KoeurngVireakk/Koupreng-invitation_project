@@ -9,7 +9,7 @@ export default function LandingHero({ copy }) {
       <div className="kp-hero-copy">
         <p className="kp-hero-kicker">
           <span className="kp-hero-kicker-rule" aria-hidden="true" />
-          <span>{copy("គូព្រេង · សំបុត្រអញ្ជើញមង្គលការឌីជីថល", "Koupreng · Khmer Wedding Atelier")}</span>
+          <span>{copy("គូព្រេង · សិល្បៈសំបុត្រអញ្ជើញខ្មែរ", "Koupreng · Khmer Wedding Atelier")}</span>
         </p>
         <h1 id="kp-hero-title">
           <span>{copy("សំបុត្រអញ្ជើញដែលបង្ហាញ", "Invitations crafted")}</span>{" "}

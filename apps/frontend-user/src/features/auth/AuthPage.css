@@ -54,7 +54,137 @@
 
 @media (min-width: 768px) {
     .auth-page--centered {
-        padding: 48px 24px;
+        padding: 36px 24px;
+    }
+}
+
+.auth-page--split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.auth-editorial-aside {
+    display: none;
+}
+
+.auth-main-pane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: max(28px, env(safe-area-inset-top)) 16px max(48px, env(safe-area-inset-bottom));
+    min-width: 0;
+}
+
+@media (min-width: 980px) {
+    .auth-page--split {
+        grid-template-columns: minmax(360px, 0.92fr) minmax(0, 1.08fr);
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    .auth-editorial-aside {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 48px clamp(32px, 4vw, 60px);
+        background: linear-gradient(155deg, #17352c 0%, #102620 55%, #0c1d18 100%);
+        color: #f7f4ec;
+        border-inline-end: 1px solid rgba(216, 184, 117, 0.22);
+    }
+
+    .auth-editorial-aside::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 18% 20%, rgba(216, 184, 117, 0.16), transparent 48%),
+            radial-gradient(circle at 82% 80%, rgba(44, 108, 86, 0.24), transparent 52%);
+        pointer-events: none;
+    }
+
+    .auth-editorial-inner {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 460px;
+    }
+
+    .auth-editorial-frame {
+        padding: 36px 32px;
+        border: 1px solid rgba(216, 184, 117, 0.28);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        display: grid;
+        gap: 18px;
+    }
+
+    .auth-editorial-kicker {
+        font-size: 12px;
+        font-weight: 650;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #e4c686;
+    }
+
+    .auth-editorial-heading {
+        margin: 0;
+        font-family: var(--kp-display, "Koupreng Editorial", Georgia, serif);
+        font-size: clamp(26px, 2.5vw, 34px);
+        line-height: 1.25;
+        font-weight: 600;
+        white-space: pre-line;
+        color: #fdfaf3;
+    }
+
+    .auth-page--split:lang(km) .auth-editorial-heading {
+        font-family: "Noto Serif Khmer", "Kantumruy Pro", serif;
+        line-height: 1.55;
+        letter-spacing: normal;
+    }
+
+    .auth-editorial-desc {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.75;
+        color: rgba(247, 244, 236, 0.8);
+    }
+
+    .auth-editorial-pillars {
+        list-style: none;
+        margin: 8px 0 0;
+        padding: 18px 0 0;
+        border-top: 1px solid rgba(216, 184, 117, 0.2);
+        display: grid;
+        gap: 10px;
+        font-size: 13.5px;
+        color: rgba(247, 244, 236, 0.9);
+    }
+
+    .auth-editorial-pillars li {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+    }
+
+    .auth-editorial-pillars li::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #d8b875;
+        flex: none;
+        transform: translateY(-2px);
+    }
+
+    .auth-main-pane {
+        padding: 36px 32px;
     }
 }
 
@@ -68,7 +198,7 @@
     z-index: 1;
 }
 
-.auth-page.auth-page--centered { min-height: 100vh; min-height: 100dvh; padding-block: max(24px, env(safe-area-inset-top)) max(32px, env(safe-area-inset-bottom)); }
+.auth-page.auth-page--centered { min-height: 100vh; min-height: 100dvh; }
 .auth-top-bar { flex-wrap: wrap; gap: 12px; }
 .auth-preferences { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-inline-start: auto; }
 .auth-shell :is(a,button,input):focus-visible { outline: 3px solid var(--ui-theme-focus); outline-offset: 3px; }
@@ -91,36 +221,36 @@
     gap: 6px;
     font-size: 13px;
     font-weight: 500;
-    color: #695D50;
+    color: var(--ui-theme-muted, #695D50);
     text-decoration: none;
     min-height: 44px;
-    padding-inline: 4px;
+    padding-inline: 8px;
     transition: color 0.2s;
 }
 
 .auth-home-link:hover {
-    color: #2E433A;
+    color: var(--ui-theme-ink, #2E433A);
 }
 
 .auth-lang-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
+    gap: 4px;
+    padding: 0 8px;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(229, 222, 210, 0.8);
+    background: var(--ui-theme-surface, rgba(255, 255, 255, 0.92));
+    border: 1px solid var(--ui-theme-border, rgba(229, 222, 210, 0.9));
     font-size: 12px;
 }
 
 .auth-lang-btn {
     background: none;
     border: none;
-    color: #695D50;
-    font-size: 12px;
+    color: var(--ui-theme-muted, #695D50);
+    font-size: 12.5px;
     cursor: pointer;
-    padding: 6px 4px;
-    min-height: 36px;
+    padding: 8px 8px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     font-family: inherit;
@@ -129,7 +259,7 @@
 
 .auth-lang-btn.active {
     font-weight: 700;
-    color: #2E433A;
+    color: var(--ui-theme-ink, #2E433A);
 }
 
 .auth-lang-sep {
@@ -556,31 +686,35 @@
 }
 
 .auth-footer-link {
-    font-size: 12px;
-    color: var(--ui-muted);
+    font-size: 13px;
+    color: var(--ui-theme-muted, var(--ui-muted));
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 4px 8px;
+    min-height: 44px;
+    padding: 8px 12px;
     transition: color 0.2s;
 }
 
 .auth-footer-link:hover {
-    color: #555;
+    color: var(--ui-theme-ink, #262622);
 }
 
 .auth-footer-text {
-    font-size: 11px;
-    color: var(--ui-muted);
-    margin: 6px 0 0;
+    font-size: 12px;
+    color: var(--ui-theme-muted, var(--ui-muted));
+    margin: 4px 0 0;
 }
 
 .auth-footer-text a {
     font-weight: 700;
-    color: #B0926A;
+    color: var(--ui-theme-link, #8c6628);
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 4px 6px;
     transition: color 0.2s;
 }
 

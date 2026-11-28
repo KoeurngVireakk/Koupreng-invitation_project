@@ -9,27 +9,27 @@
 
 .kp-marketing-shell {
   --kp-radius-pill: 9999px;
-  --kp-radius-card: 24px;
-  --kp-radius-input: 16px;
-  --kp-radius-header: 22px;
-  --kp-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --kp-radius-card: 18px;
+  --kp-radius-input: 12px;
+  --kp-radius-header: 16px;
+  --kp-ease: var(--ui-ease-out, cubic-bezier(0.23, 1, 0.32, 1));
   --kp-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --kp-bg: var(--ui-theme-canvas, #fbf6ee);
-  --kp-surface: var(--ui-theme-surface, #ffffff);
-  --kp-ink: var(--ui-theme-ink, #1f2421);
-  --kp-muted: var(--ui-theme-muted, #59615c);
-  --kp-border: var(--ui-theme-border, #e6dccb);
-  --kp-paper: var(--ui-theme-subtle, #f6f1e9);
-  --kp-gold: var(--ui-theme-gold, #c3a26b);
-  --kp-gold-deep: #926c34;
-  --kp-gold-ink: #77572c;
-  --kp-brand: var(--ui-theme-action, #2e433a);
-  --kp-brand-hover: #22332c;
-  --kp-emerald: #2e433a;
-  --kp-emerald-deep: #22332c;
-  --kp-focus: var(--ui-theme-focus, #0f766e);
+  --kp-bg: var(--ui-theme-canvas, #f7f5f0);
+  --kp-surface: var(--ui-theme-surface, #fffefb);
+  --kp-ink: var(--ui-theme-ink, #1e2824);
+  --kp-muted: var(--ui-theme-muted, #525f58);
+  --kp-border: var(--ui-theme-border, #e4dccd);
+  --kp-paper: var(--ui-theme-subtle, #efebe2);
+  --kp-gold: var(--ui-theme-gold-bright, #d8b875);
+  --kp-gold-deep: var(--ui-theme-gold, #8c6628);
+  --kp-gold-ink: var(--ui-theme-gold, #8c6628);
+  --kp-brand: var(--ui-theme-action, #1c3a32);
+  --kp-brand-hover: var(--ui-theme-action-hover, #142b25);
+  --kp-emerald: var(--ui-theme-action, #1c3a32);
+  --kp-emerald-deep: var(--ui-theme-action-hover, #142b25);
+  --kp-focus: var(--ui-theme-focus, #176f67);
   --kp-font: 'DM Sans', 'Kantumruy Pro', system-ui, sans-serif;
-  --kp-display: 'Koupreng Editorial', Georgia, serif;
+  --kp-display: 'Koupreng Editorial', 'Noto Serif Khmer', Georgia, serif;
 }
 
 .kp-marketing-shell:lang(km),
