@@ -345,9 +345,26 @@
     flex-direction: column;
   }
   .public-demo-caption {
-    order: -1;
-    margin-top: 0;
-    margin-bottom: 12px;
+    order: 0;
+    margin-top: 14px;
+    margin-bottom: 0;
+    gap: 8px;
+  }
+  .public-demo-dots {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px;
+  }
+  .public-demo-dots::-webkit-scrollbar {
+    display: none;
+  }
+  .public-demo-dot {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 7px 12px;
+    font-size: 12px;
   }
   .public-demo-viewport {
     height: min(520px, 72dvh);

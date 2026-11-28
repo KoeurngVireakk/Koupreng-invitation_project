@@ -54,14 +54,14 @@ export default function PublicTemplateCard({ template, lang, isAuthenticated, ca
                 {copy("រូបភាពគំរូមិនមាន", "Preview image unavailable")}
               </span>
             )}
-          </div>{" "}
-          <span className="kp-design-preview">
-            <span className="kp-design-preview-label">
-              <Eye size={15} aria-hidden="true" />
-              <span>{copy("មើលគំរូ", "Preview design")}</span>
+            <span className="kp-design-preview">
+              <span className="kp-design-preview-label">
+                <Eye size={14} aria-hidden="true" />
+                <span>{copy("មើលគំរូ", "Preview design")}</span>
+              </span>
+              <ArrowUpRight size={14} aria-hidden="true" />
             </span>
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </span>
+          </div>
         </Link>
       </div>
       <div className="kp-design-body">

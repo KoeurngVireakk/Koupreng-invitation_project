@@ -10,7 +10,7 @@ import { eventPath } from "@/features/events/workspace/eventRoutes";
 import { eventStatus } from "@/features/events/workspace/eventNavigationModel";
 import { EVENT_TYPES } from "@/features/events/onboarding/eventFields";
 import EventCover from '@/features/events/components/EventCover';
-import { CheckCircle2, Circle, ArrowRight, Eye, Palette, Users, ScanLine, Wallet, ChartColumn, CalendarDays, MapPin, Clock3, Send, QrCode, Heart, Sparkles } from "lucide-react";
+import { CheckCircle2, Circle, ArrowRight, Eye, Palette, Users, ScanLine, Wallet, ChartColumn, CalendarDays, MapPin, Clock3, Send, QrCode, Heart, Sparkles, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { formatLocalDate } from "@/shared/utils/localDate";
 import { loadServerDashboard, groupAmounts } from "./dashboardData";
 import { currencyAmounts } from "@/features/budget/currencyTotals";
@@ -350,7 +350,11 @@ export default function DashboardFeature() {
           )}
         </div>
         <details className="overview-publication-controls">
-          <summary>{label("Publication settings", "ការកំណត់ការផ្សព្វផ្សាយ")}</summary>
+          <summary>
+            <SlidersHorizontal size={14} aria-hidden="true" />
+            <span>{label("Publication settings", "ការកំណត់ការផ្សព្វផ្សាយ")}</span>
+            <ChevronDown size={14} className="overview-pub-chevron" aria-hidden="true" />
+          </summary>
           <div className="overview-publication">
             {stats.status === "PUBLISHED" ? (
               <button type="button" className="workspace-button" onClick={handlePublishToggle} disabled={publishing}>

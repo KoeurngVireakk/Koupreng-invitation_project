@@ -50,199 +50,29 @@
     line-height: 1.7;
 }
 
-/* ── Shell (same sidebar pattern as dashboard) ── */
-.events-shell {
-    display: flex;
-    min-height: 100vh;
-    background: #fdf0f0;
-}
-
-/* ── Top bar ── */
-.events-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 28px;
-    background: #fff;
-    border-bottom: 1px solid #f3e8f0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.events-topbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.events-topbar-logo {
-    font-size: 18px;
-    font-weight: 800;
-    color: #e11d48;
-    letter-spacing: -0.5px;
-}
-
-.events-topbar-logo span {
-    font-size: 22px;
-}
-
-.events-topbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: #888;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 8px;
-    transition: background 0.15s;
-}
-
-.events-topbar-nav:hover {
-    background: #fdf0f0;
-}
-
-.events-topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.events-topbar-lang {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    color: #666;
-    cursor: pointer;
-}
-
-.events-topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #333;
-    cursor: pointer;
-}
-
-.events-topbar-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f43f5e, #e11d48);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-/* ── Sidebar icons ── */
-.events-sidebar {
-    width: 52px;
-    background: #fff;
-    border-left: 1px solid #f3e8f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16px 0;
-    gap: 8px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 20;
-}
-
-.events-sidebar-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #aaa;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-}
-
-.events-sidebar-icon:hover {
-    background: #fdf0f0;
-    color: #e11d48;
-}
-
-.events-sidebar-icon.active {
-    background: #fdf0f0;
-    color: #e11d48;
-}
-
-/* ── Main content ── */
-.events-main {
-    flex: 1;
-    margin-right: 52px;
-    display: flex;
-    flex-direction: column;
-}
-
-.events-content {
-    flex: 1;
-    padding: 28px 32px;
-}
-
-/* ── Welcome header ── */
-.events-welcome {
-    margin-bottom: 24px;
-}
-
-.events-welcome h1 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #e11d48;
-    margin: 0 0 4px;
-}
-
-.events-welcome p {
-    font-size: 13px;
-    color: #888;
-    margin: 0;
-}
-
-/* ── Create button ── */
+/* ── Primary Event Creation CTA ── */
 .events-create-btn {
     min-height: var(--ui-control-min-height, 44px);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    background: #e11d48;
-    color: #fff;
-    border: none;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--ui-theme-action, #1c3a32);
+    color: var(--ui-theme-on-action, #ffffff);
+    border: 1px solid transparent;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition: background var(--ui-duration-feedback, 180ms) var(--ui-ease-out, cubic-bezier(0.22, 1, 0.36, 1)), transform var(--ui-duration-press, 140ms) var(--ui-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
     font-family: inherit;
     text-decoration: none;
-}
-
-.events-create-btn:hover {
-    background: #be123c;
-}
-
-.events-page .events-create-btn,
-.events-page-header .events-create-btn {
-    background: #7d6443;
     flex-shrink: 0;
     white-space: nowrap;
 }
 
-.events-page .events-create-btn:hover,
-.events-page-header .events-create-btn:hover {
-    background: #6a5436;
+.events-create-btn:hover {
+    background: var(--ui-theme-action-hover, #142b25);
 }
 
 .events-create-btn:active {

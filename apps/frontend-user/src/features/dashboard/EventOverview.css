@@ -30,8 +30,27 @@
 .event-overview .overview-actions { gap: 8px; margin-top: 20px; }
 .event-overview .overview-actions .workspace-button { min-height: 44px; padding: 8px 14px; border-radius: 9px; font-size: 12px; box-shadow: none; }
 .event-overview .overview-actions .primary { background: #2d5a40; border-color: #2d5a40; color: #fff; }
-.event-overview .overview-publication-controls { margin-top: 6px; }
-.event-overview .overview-publication-controls summary { font-size: 11px; color: #6a7767; }
+.event-overview .overview-publication-controls { margin-top: 12px; }
+.event-overview .overview-publication-controls summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(248, 245, 238, 0.92);
+  font-size: 12.5px;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+  transition: border-color var(--ui-duration-feedback, 180ms) var(--ui-ease-out, ease), background-color var(--ui-duration-feedback, 180ms) var(--ui-ease-out, ease);
+}
+.event-overview .overview-publication-controls summary::-webkit-details-marker { display: none; }
+.event-overview .overview-publication-controls summary:hover { border-color: rgba(216, 184, 117, 0.55); background: rgba(255, 255, 255, 0.14); }
+.event-overview .overview-publication-controls summary .overview-pub-chevron { transition: transform var(--ui-duration-feedback, 180ms) var(--ui-ease-out, ease); }
+.event-overview .overview-publication-controls[open] summary .overview-pub-chevron { transform: rotate(180deg); }
 .event-overview .overview-columns { display: contents; }
 .event-overview .overview-preparation { grid-area: preparation; }
 .event-overview .overview-shortcuts { grid-area: tools; }
@@ -50,8 +69,8 @@
 .event-overview .overview-metrics { grid-area: metrics; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin: 0; }
 .event-overview .overview-metrics:has(>a:nth-child(5)) { grid-template-columns: repeat(3,minmax(0,1fr)); }
 .event-overview .overview-metrics:has(>a:nth-child(5)):not(:has(>a:nth-child(6))) { grid-template-columns: repeat(5,minmax(0,1fr)); }
-.event-overview .overview-metrics > a { position: relative; padding: 21px 22px; border-color: var(--overview-border); border-radius: 15px; background: #fff; min-height: 132px; transition: border-color 150ms ease, box-shadow 150ms ease; display: flex; flex-direction: column; }
-.event-overview .overview-metrics > a:hover { border-color: #aebfa6; box-shadow: 0 3px 16px rgb(39 65 36 / 5%); }
+.event-overview .overview-metrics > a { position: relative; padding: 21px 22px; border-color: var(--overview-border); border-radius: 15px; background: #fff; min-height: 132px; transition: border-color 180ms var(--ui-ease-out, ease), box-shadow 180ms var(--ui-ease-out, ease), transform 180ms var(--ui-ease-out, ease); display: flex; flex-direction: column; }
+.event-overview .overview-metrics > a:hover { border-color: #aebfa6; box-shadow: 0 8px 22px rgb(39 65 36 / 7%); transform: translateY(-2px); }
 .event-overview .overview-metrics span { display: inline-block; max-width: calc(100% - 32px); color: #657560; font-size: 12px; line-height: 1.8; }
 .event-overview .overview-metrics strong { margin-top: 10px; color: #23482f; font-size: 30px; line-height: 1.2; font-weight: 600; letter-spacing: -.7px; }
 .event-overview .overview-metric-sub { font-size: 11.5px; color: #7d8c78; font-weight: 500; margin-top: 4px; display: block; }
@@ -160,6 +179,20 @@
   background: var(--ui-theme-gold-soft);
   color: var(--ui-theme-gold);
   border-color: color-mix(in srgb, var(--ui-theme-gold) 35%, transparent);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-publication-controls summary,
+:root.dark .event-overview .overview-publication-controls summary {
+  background: var(--ui-theme-subtle);
+  border-color: var(--ui-theme-border);
+  color: var(--ui-theme-muted);
+}
+
+:root[data-color-mode="dark"] .event-overview .overview-publication-controls summary:hover,
+:root.dark .event-overview .overview-publication-controls summary:hover {
+  background: var(--ui-theme-hover);
+  border-color: var(--ui-theme-control-border);
+  color: var(--ui-theme-ink);
 }
 
 :root[data-color-mode="dark"] .event-overview :where(a, button, summary):focus-visible,

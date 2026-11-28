@@ -630,6 +630,12 @@
 
 /* Museum Plate Gallery Cards */
 .kp-design-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; }
+@media (min-width: 901px) {
+  .kp-design-grid:has(> .kp-design-card:nth-child(2):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 900px;
+  }
+}
 .kp-design-card.tp-card {
   padding: 0;
   background: transparent;
@@ -684,18 +690,40 @@
 }
 .kp-design-card[data-template="khmer-celestial"] .kp-design-mat > img { object-fit: cover; object-position: 50% 40%; }
 .kp-design-preview {
-  display: flex;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 18px;
-  min-height: 46px;
-  background: var(--kp-surface);
-  color: var(--kp-ink);
-  font-size: 13.5px;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 13px;
+  min-height: 36px;
+  border-radius: 9999px;
+  background: rgba(25, 29, 27, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f8f5ee;
+  font-size: 12.5px;
   font-weight: 600;
-  line-height: 1.5;
-  border-top: 1px solid var(--kp-border);
+  line-height: 1.4;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s var(--kp-ease), transform 0.22s var(--kp-ease);
+  pointer-events: none;
+  z-index: 4;
+}
+.kp-design-media:hover .kp-design-preview,
+.kp-design-media:focus-visible .kp-design-preview {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (hover: none) {
+  .kp-design-preview {
+    opacity: 0.92;
+    transform: none;
+  }
 }
 .kp-design-preview-label {
   display: inline-flex;

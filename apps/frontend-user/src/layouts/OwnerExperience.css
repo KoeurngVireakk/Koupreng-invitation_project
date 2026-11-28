@@ -135,6 +135,12 @@
 .dash-wrapper .events-applied-filters button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; max-width: 100%; padding: 8px 12px; border: 1px solid var(--ui-theme-border); border-radius: 8px; background: var(--ui-theme-subtle); color: var(--ui-theme-ink); font: inherit; font-size: 13px; cursor: pointer; }
 .dash-wrapper .events-applied-filters span { overflow-wrap: anywhere; }
 .dash-wrapper .events-grid { max-width: none; gap: 24px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+@media (min-width: 901px) {
+  .dash-wrapper .events-grid:has(> .event-card:nth-child(2):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 980px;
+  }
+}
 .dash-wrapper .event-card { border-radius: 16px; box-shadow: var(--ui-theme-shadow); background: var(--ui-theme-surface); border-color: var(--ui-theme-border); transition: transform var(--ui-duration-feedback) var(--ui-ease-standard), box-shadow var(--ui-duration-feedback) var(--ui-ease-standard), border-color var(--ui-duration-feedback) var(--ui-ease-standard); }
 .dash-wrapper .event-card:hover { transform: translateY(-2px); border-color: var(--ui-theme-gold, #c3a26b); box-shadow: var(--ui-theme-shadow-elevated); }
 .dash-wrapper .event-card-img-wrap { border-radius: 15px 15px 0 0; aspect-ratio: 16/8; background: var(--ui-theme-subtle); border-bottom: 1px solid var(--ui-theme-border); }
