@@ -1122,9 +1122,28 @@ function EventCreateSession({ user }) {
           </section>
         </fieldset>
 
-        {/* Desktop Sticky Summary Sidebar */}
+        {/* Desktop Sticky Live Specimen & Summary Sidebar */}
         <aside className="event-create-summary workspace-section" aria-label={copy("សង្ខេបកម្មវិធី", "Event summary")}>
           <h2>{copy("កម្មវិធីរបស់អ្នក", "Your event")}</h2>
+          <div className="event-create-specimen" aria-hidden="true">
+            <div className="event-specimen-media">
+              {photoPreviewUrl ? (
+                <img
+                  src={safeIntroMedia(photoPreviewUrl) || undefined}
+                  alt=""
+                  style={{ objectPosition: photoFocalPoint }}
+                />
+              ) : (
+                <div className="event-specimen-monogram">
+                  <span>{EVENT_TYPES.find(row => row[0] === type)?.[en ? 2 : 1]}</span>
+                </div>
+              )}
+            </div>
+            <div className="event-specimen-caption">
+              <strong>{form.title || copy("ចំណងជើងសំបុត្រអញ្ជើញ", "Your invitation title")}</strong>
+              <span>{form.eventDate ? `${form.eventDate}${form.venueName ? ` · ${form.venueName}` : ""}` : (form.venueName || selectedTemplate?.name || copy("ជំហានរចនាផ្ទាល់ខ្លួន", "Live design folio"))}</span>
+            </div>
+          </div>
           <dl>
             <div>
               <dt>{copy("ប្រភេទ", "Type")}</dt>
