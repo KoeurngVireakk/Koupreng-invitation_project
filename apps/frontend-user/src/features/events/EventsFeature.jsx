@@ -7,7 +7,7 @@ import { EventCard } from "./components/EventCard";
 import { EventCalendar } from "./components/EventCalendar";
 import { EventDeleteModal } from "./components/EventDeleteModal";
 import { toast } from "../../shared/ui/toast";
-import { CalendarHeart, Search, X, FilterX, LayoutList, CalendarDays, Plus, Sparkles, ArrowRight } from "lucide-react";
+import { CalendarHeart, Search, X, FilterX, LayoutList, CalendarDays, Plus, Sparkles, ArrowRight, SlidersHorizontal, ChevronDown } from "lucide-react";
 import "./EventsFeature.css";
 import "./workspace/EventWorkspace.css";
 import { backendEventId, eventPath, EVENT_MODULES } from "./workspace/eventRoutes";
@@ -140,6 +140,7 @@ export function EventsFeature() {
     const visible = filtered.slice(currentPage * 12, (currentPage + 1) * 12);
 
     const hasActiveFilters = Boolean(search || status || eventType || sort !== "newest" || period !== "all");
+    const refinementCount = Number(Boolean(status)) + Number(Boolean(eventType)) + Number(sort !== "newest");
     const createBtnText = (t("createBtn") || (en ? "Create Event" : "បង្កើតកម្មវិធី")).replace(/^\+*\s*/, "");
     const emptyActionText = (t("goToCreate") || t("createBtn") || (en ? "Create First Event" : "បង្កើតកម្មវិធីថ្មី")).replace(/^\+*\s*/, "");
 
@@ -258,12 +259,13 @@ export function EventsFeature() {
                     </button>
                 </div>
 
-                <div className="events-filters">
-                    <label className="events-filter-search-label">
-                        {en ? "Search events" : "ស្វែងរកកម្មវិធី"}
+                <div className="events-filter-bar">
+                    <div className="events-filter-search">
+                        <label htmlFor="event-list-search">{en ? "Search events" : "ស្វែងរកកម្មវិធី"}</label>
                         <div className="events-search-input-wrap">
                             <Search size={16} className="events-search-icon" aria-hidden="true" />
                             <input
+                                id="event-list-search"
                                 ref={searchInputRef}
                                 type="search"
                                 placeholder={en ? "Filter by name or venue…" : "ស្វែងរកតាមឈ្មោះ ឬទីតាំង…"}
@@ -281,56 +283,68 @@ export function EventsFeature() {
                                 </button>
                             )}
                         </div>
-                    </label>
+                    </div>
 
-                    <label>
-                        {en ? "Status" : "ស្ថានភាព"}
-                        <select value={status} onChange={e => updateFilter("status", e.target.value)}>
-                            <option value="">{en ? "All statuses" : "គ្រប់ស្ថានភាព"}</option>
-                            <option value="DRAFT">{en ? "Draft" : "ព្រាង"}</option>
-                            <option value="PUBLISHED">{en ? "Published" : "បានផ្សាយ"}</option>
-                            <option value="UNPUBLISHED">{en ? "Unpublished" : "ផ្អាកផ្សាយ"}</option>
-                        </select>
-                    </label>
+                    <div className="events-filter-options">
+                        <details className="events-filter-disclosure">
+                            <summary>
+                                <SlidersHorizontal size={17} aria-hidden="true" />
+                                {en ? "Filters & sort" : "ចម្រោះ និងតម្រៀប"}
+                                {refinementCount > 0 && <span className="events-filter-count">{refinementCount}</span>}
+                                <ChevronDown size={16} aria-hidden="true" className="events-filter-chevron" />
+                            </summary>
+                            <div className="events-filters">
+                                <label>
+                                    {en ? "Status" : "ស្ថានភាព"}
+                                    <select value={status} onChange={e => updateFilter("status", e.target.value)}>
+                                        <option value="">{en ? "All statuses" : "គ្រប់ស្ថានភាព"}</option>
+                                        <option value="DRAFT">{en ? "Draft" : "ព្រាង"}</option>
+                                        <option value="PUBLISHED">{en ? "Published" : "បានផ្សាយ"}</option>
+                                        <option value="UNPUBLISHED">{en ? "Unpublished" : "ផ្អាកផ្សាយ"}</option>
+                                    </select>
+                                </label>
 
-                    <label>
-                        {en ? "Event type" : "ប្រភេទកម្មវិធី"}
-                        <select
-                            aria-label={en ? "Event type" : "ប្រភេទកម្មវិធី"}
-                            value={eventType}
-                            onChange={e => updateFilter("type", e.target.value)}
-                        >
-                            <option value="">{en ? "All event types" : "គ្រប់ប្រភេទកម្មវិធី"}</option>
-                            {eventTypes.map(type => (
-                                <option key={type} value={type}>
-                                    {EVENT_TYPES.find(item => item[0] === type)?.[en ? 2 : 1] || type}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                                <label>
+                                    {en ? "Event type" : "ប្រភេទកម្មវិធី"}
+                                    <select
+                                        aria-label={en ? "Event type" : "ប្រភេទកម្មវិធី"}
+                                        value={eventType}
+                                        onChange={e => updateFilter("type", e.target.value)}
+                                    >
+                                        <option value="">{en ? "All event types" : "គ្រប់ប្រភេទកម្មវិធី"}</option>
+                                        {eventTypes.map(type => (
+                                            <option key={type} value={type}>
+                                                {EVENT_TYPES.find(item => item[0] === type)?.[en ? 2 : 1] || type}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
 
-                    <label>
-                        {en ? "Sort" : "តម្រៀប"}
-                        <select value={sort} onChange={e => updateFilter("sort", e.target.value)}>
-                            <option value="newest">{en ? "Newest" : "ថ្មីបំផុត"}</option>
-                            <option value="date">{en ? "Event date" : "កាលបរិច្ឆេទ"}</option>
-                            <option value="title">{en ? "Title" : "ឈ្មោះ"}</option>
-                        </select>
-                    </label>
+                                <label>
+                                    {en ? "Sort" : "តម្រៀប"}
+                                    <select value={sort} onChange={e => updateFilter("sort", e.target.value)}>
+                                        <option value="newest">{en ? "Newest" : "ថ្មីបំផុត"}</option>
+                                        <option value="date">{en ? "Event date" : "កាលបរិច្ឆេទ"}</option>
+                                        <option value="title">{en ? "Title" : "ឈ្មោះ"}</option>
+                                    </select>
+                                </label>
 
-                    {hasActiveFilters && (
-                        <div className="events-filter-reset-wrap">
-                            <button
-                                type="button"
-                                className="events-filter-reset-btn"
-                                onClick={resetAllFilters}
-                                title={en ? "Reset all filters" : "សម្អាតការចម្រោះ"}
-                            >
-                                <FilterX size={15} aria-hidden="true" />
-                                <span>{en ? "Clear filters" : "សម្អាតការចម្រោះ"}</span>
-                            </button>
-                        </div>
-                    )}
+                            </div>
+                        </details>
+                        {hasActiveFilters && (
+                            <div className="events-filter-reset-wrap">
+                                <button
+                                    type="button"
+                                    className="events-filter-reset-btn"
+                                    onClick={resetAllFilters}
+                                    title={en ? "Reset all filters" : "សម្អាតការចម្រោះ"}
+                                >
+                                    <FilterX size={15} aria-hidden="true" />
+                                    <span>{en ? "Clear filters" : "សម្អាតការចម្រោះ"}</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
