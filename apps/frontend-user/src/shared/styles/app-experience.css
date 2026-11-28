@@ -198,6 +198,8 @@
 :root[data-color-mode=dark] #invitation-studio-toolbar :is(.studio-action,.studio-more summary,.studio-more-panel) { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); }
 :root[data-color-mode=dark] #invitation-studio-toolbar .studio-document h1 { color: var(--app-ink); }
 :root[data-color-mode=dark] #invitation-studio-toolbar .studio-action--save { background: var(--app-accent); color: var(--app-on-accent); }
+:root[data-color-mode=dark] .invitation-studio :is(.studio-action,.studio-toolbar-actions) { background: var(--app-surface); color: var(--app-ink); border-color: var(--app-border); }
+:root[data-color-mode=dark] .invitation-studio .studio-action--save { background: var(--app-accent); color: var(--app-on-accent); }
 :root[data-color-mode=dark] .invitation-studio :is(.pe-main-editor-card,.pe-editor-column,.pe-editor-scroll-body,.studio-workflow-bar,.studio-subsection,.studio-subsection-body,.pe-section-card,.pe-lang-sub-banner) { background: var(--app-surface); border-color: var(--app-border); color: var(--app-ink); }
 :root[data-color-mode=dark] .invitation-studio :is(.studio-sections,.pe-preview-column,.studio-guide-modes,.pe-lang-switch-pills,.studio-message-presets,.pe-sim-gate-switcher) { background: var(--app-subtle); border-color: var(--app-border); }
 :root[data-color-mode=dark] .invitation-studio :is(.studio-tab-heading,.studio-subsection>summary,.pe-label,.studio-section-list button,.studio-field-help,.studio-field-state,.studio-authoring-options,.studio-character-count) { color: var(--app-ink); }
@@ -336,7 +338,8 @@
 
 /* Shared date/time controls and catalog dialogs also render in portals. */
 :root[data-color-mode=dark] :is(.dash-wrapper,.k-modal-container) :is(.dp-trigger,.tp-trigger,.dp-dropdown,.tp-dropdown,.dp-nav-btn,.dp-cell,.dp-btn-today,.dp-btn-cancel,.tp-preset-card,.tp-btn-cancel,.tp-tab) { background: var(--app-subtle); color: var(--app-ink); border-color: var(--app-control-border); }
-:root[data-color-mode=dark] :is(.dash-wrapper,.k-modal-container) :is(.dp-value,.tp-value,.dp-month-year,.tp-label,.tp-section-label,.tp-preset-time,.tp-preset-desc) { color: var(--app-ink); }
+:root[data-color-mode=dark] :is(.dash-wrapper,.k-modal-container) :is(.dp-value,.tp-value,.dp-month-year,.tp-label,.tp-section-label,.tp-preset-time,.tp-preset-desc,.dp-placeholder,.tp-placeholder) { color: var(--app-ink); }
+:root[data-color-mode=dark] .invitation-studio .studio-section-select { color: var(--app-muted); }
 :root[data-color-mode=dark] :is(.dash-wrapper,.k-modal-container) :is(.dp-day.selected,.dp-btn-today,.tp-btn-confirm) { background: var(--app-accent); color: var(--app-on-accent); border-color: var(--app-accent); }
 :root[data-color-mode=dark] .tc-modal { --brand-text: var(--app-ink); --brand-text-muted: var(--app-muted); --brand-surface: var(--app-surface); --brand-border: var(--app-border); }
 :root[data-color-mode=dark] .tc-modal :is(.tc-filters button[aria-pressed=true],.tc-actions button) { background: var(--app-accent-soft); color: var(--app-ink); border-color: var(--app-control-border); }

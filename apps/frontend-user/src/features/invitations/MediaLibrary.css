@@ -173,7 +173,7 @@
 
 .workspace-tabs.atelier-tabs button[aria-pressed="true"] {
   background: var(--atelier-forest-light);
-  color: #ffffff;
+  color: var(--ui-theme-on-action, #ffffff);
   border-color: var(--atelier-forest-light);
   box-shadow: var(--atelier-shadow-sm);
   font-weight: 600;
@@ -195,7 +195,7 @@
 
 .workspace-tabs.atelier-tabs button[aria-pressed="true"] .atelier-tab-count {
   background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  color: inherit;
 }
 
 /* Main Section Card */

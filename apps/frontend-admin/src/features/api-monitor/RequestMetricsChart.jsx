@@ -60,7 +60,7 @@ export function RequestMetricsChart({ events, stats, lang }) {
               {lang === "km" ? "ល្បឿនសំណើ (Request Rate / RPM)" : "Live Traffic Rate"}
             </span>
           </div>
-          <span className="font-mono text-sm font-bold text-amber-600 dark:text-amber-400">
+          <span className="font-mono text-sm font-bold text-amber-800 dark:text-amber-300">
             {rpmPoints.currentRpm || 0} req/m
           </span>
         </div>
@@ -116,17 +116,17 @@ export function RequestMetricsChart({ events, stats, lang }) {
 
         <div className="mt-3 flex items-end justify-between gap-4">
           <div>
-            <div className="text-[11px] text-slate-400 dark:text-zinc-500">
+            <div className="text-[11px] text-slate-600 dark:text-zinc-300">
               {lang === "km" ? "ថេរវេលាទី ៩៥% (p95 SLA)" : "95th Percentile"}
             </div>
             <div className="font-mono text-xl font-bold text-sky-600 dark:text-sky-400">
               {stats?.p95DurationMs || 0}
-              <span className="text-xs font-normal text-slate-400">ms</span>
+              <span className="text-xs font-normal text-slate-700 dark:text-zinc-300">ms</span>
             </div>
           </div>
 
           <div className="text-right">
-            <div className="text-[11px] text-slate-400 dark:text-zinc-500">
+            <div className="text-[11px] text-slate-600 dark:text-zinc-300">
               {lang === "km" ? "សំណើយឺត (Slow > 500ms)" : "Slow Requests"}
             </div>
             <div className="font-mono text-lg font-bold text-amber-600 dark:text-amber-400">
@@ -155,7 +155,7 @@ export function RequestMetricsChart({ events, stats, lang }) {
               {lang === "km" ? "លទ្ធផល HTTP Status" : "Status Distribution"}
             </span>
           </div>
-          <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          <span className="font-mono text-xs font-semibold text-emerald-800 dark:text-emerald-300">
             {total > 0 ? Math.round(successPct) : 100}% OK
           </span>
         </div>

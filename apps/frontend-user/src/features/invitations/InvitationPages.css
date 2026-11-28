@@ -495,6 +495,15 @@
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
 
+/* This route is lazy loaded after the global theme bridge. Keep the header's
+   surface and text paired regardless of stylesheet insertion order. */
+.inv-preview-workspace .inv-preview-header {
+    background: var(--app-surface);
+    color: var(--app-ink);
+    border-color: var(--app-border);
+    box-shadow: var(--app-shadow);
+}
+
 .inv-preview-header__left {
     display: flex;
     align-items: center;
@@ -566,6 +575,16 @@
     background: rgba(210, 153, 34, 0.16);
     color: #e3b341;
     border: 1px solid rgba(210, 153, 34, 0.32);
+}
+
+.inv-preview-workspace .inv-preview-badge--draft {
+    background: var(--ui-theme-warning-soft);
+    color: var(--ui-theme-warning);
+}
+
+.inv-preview-workspace .inv-preview-badge--live {
+    background: var(--ui-theme-success-soft);
+    color: var(--ui-theme-success);
 }
 
 /* Right Action Buttons */
@@ -2356,6 +2375,20 @@
     border-bottom: 1px solid #f5efe5;
     vertical-align: middle;
     font-size: 13.5px;
+}
+
+/* Keep attendance actions reachable while the guest details scroll independently. */
+.checkin-roster-table :is(th, td):last-child {
+    position: sticky;
+    inset-inline-end: 0;
+    width: 1%;
+    white-space: nowrap;
+    border-inline-start: 1px solid var(--app-border);
+    background: var(--app-surface);
+}
+
+.checkin-roster-table th:last-child {
+    background: var(--app-subtle);
 }
 
 .checkin-guest-table tr:last-child td {

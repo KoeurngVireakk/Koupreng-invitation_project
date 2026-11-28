@@ -56,3 +56,12 @@ for (const [lang, width] of [["km", 390], ["en", 1440]]) {
 }
 await fs.writeFile(`${out}/rendered-route-audit.json`, JSON.stringify([...previous.filter(row => !selectedRoutes.includes(row.path)), ...results], null, 2));
 await browser.close();
+// Child geometry is diagnostic: scrollable tables and hidden panels may extend
+// beyond the viewport. Document overflow and runtime errors are candidate failures.
+if (process.env.UX_AUDIT_GATE === '1') {
+  const gateFailures = results.filter(row => row.errors.length || row.metrics.documentWidth > row.metrics.width + 1);
+  if (gateFailures.length) {
+    console.error('Route gate failed:', gateFailures.map(row => `${row.lang}:${row.path}`).join(', '));
+    process.exitCode = 1;
+  }
+}

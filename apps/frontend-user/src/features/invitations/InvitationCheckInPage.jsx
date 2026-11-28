@@ -529,7 +529,7 @@ export default function InvitationCheckInPage() {
                     </div>
 
                     <div className="guest-table-wrap" tabIndex={0} role="region" aria-label={copy("បញ្ជីភ្ញៀវកត់ត្រាវត្តមាន", "Guest roster")}>
-                        <table className="checkin-guest-table guest-table" aria-label={copy("បញ្ជីភ្ញៀវកត់ត្រាវត្តមាន", "Guest roster")} data-testid="guest-roster-table">
+                        <table className="checkin-guest-table guest-table checkin-roster-table" aria-label={copy("បញ្ជីភ្ញៀវកត់ត្រាវត្តមាន", "Guest roster")} data-testid="guest-roster-table">
                             <thead>
                                 <tr>
                                     <th>{uiCopy("ភ្ញៀវ", "Guest")}</th>

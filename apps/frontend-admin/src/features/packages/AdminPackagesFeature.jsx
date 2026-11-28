@@ -667,7 +667,7 @@ export default function AdminPackagesPage() {
         <Empty label={t("packages.empty", lang === "en" ? "No packages found" : "រកមិនឃើញកញ្ចប់សេវាកម្មទេ")} />
       ) : viewMode === "cards" ? (
         /* Cards / Grid View */
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-4">
           {filteredPackages.map((plan) => {
             const isFree = Number(plan.price) === 0;
             const checkoutStatus = getPlanCheckoutStatus(plan);
@@ -700,7 +700,7 @@ export default function AdminPackagesPage() {
                 <div className="space-y-3.5">
                   {/* Tier Header with Icon, Name & Status Pills */}
                   <div>
-                    <div className="flex items-start justify-between gap-2.5 mb-2.5">
+                    <div className="flex flex-col items-start gap-3 mb-2.5">
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
                           className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
@@ -714,7 +714,7 @@ export default function AdminPackagesPage() {
                           {isPremiumTier ? <Crown className="h-5 w-5" /> : isProTier ? <Sparkles className="h-5 w-5" /> : <Layers className="h-5 w-5" />}
                         </div>
                         <div className="min-w-0">
-                          <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100 truncate group-hover:text-amber-800 dark:group-hover:text-amber-400 transition-colors">
+                          <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100 break-words group-hover:text-amber-800 dark:group-hover:text-amber-400 transition-colors">
                             {plan.packageName}
                           </h3>
                           <span className="font-mono text-xs font-bold text-slate-600 dark:text-zinc-400 block truncate">
@@ -724,7 +724,7 @@ export default function AdminPackagesPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 flex-wrap justify-end shrink-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <span
                           className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-extrabold uppercase tracking-wider ${
                             plan.publicVisible
@@ -841,7 +841,7 @@ export default function AdminPackagesPage() {
                             className={`flex items-center gap-2 ${
                               enabled
                                 ? "text-slate-700 dark:text-zinc-300 font-medium"
-                                : "text-slate-600 dark:text-zinc-600"
+                                : "text-slate-700 dark:text-zinc-300"
                             }`}
                           >
                             {enabled ? (
@@ -853,7 +853,7 @@ export default function AdminPackagesPage() {
                                 <X className="h-2.5 w-2.5" />
                               </div>
                             )}
-                            <span className={`truncate ${!enabled ? "opacity-60" : ""}`}>{featLabel}</span>
+                            <span className="truncate">{featLabel}</span>
                           </div>
                         );
                       })}

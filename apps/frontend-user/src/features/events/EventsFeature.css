@@ -212,6 +212,7 @@
 
 /* ── Create button ── */
 .events-create-btn {
+    min-height: var(--ui-control-min-height, 44px);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -1594,10 +1595,10 @@
 }
 
 .events-view-btn {
+    min-height: var(--ui-control-min-height, 44px);
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    min-height: 38px;
     padding: 6px 14px;
     border-radius: 9px;
     border: none;

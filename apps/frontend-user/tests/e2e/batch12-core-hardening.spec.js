@@ -12,6 +12,40 @@ async function axe(page, info, name) {
   expect(result.violations.filter(v => ['critical', 'serious'].includes(v.impact))).toEqual([]);
 }
 
+test('custom font dialog supports keyboard, labels and short viewport recovery', async ({ page }, info) => {
+  await installBatch11Admin(page);
+  await page.route('**/api/v1/admin/templates/30', route => route.fulfill({ json: { data: {
+    id: 30, code: 'khmer-celestial', name: 'Fictional ceremonial template', status: 'ACTIVE',
+    category: 'TRADITIONAL', premium: false,
+    description: JSON.stringify({ presetId: 'KHMER_CELESTIAL' }),
+  } } }));
+  await page.setViewportSize({ width: 390, height: 600 });
+  await page.goto(`${admin}/templates/30`);
+  await page.getByRole('button', { name: /Colors & Fonts/ }).click();
+  const trigger = page.getByRole('button', { name: '+ Add Custom Font', exact: true });
+  await trigger.click();
+  const dialog = page.getByRole('dialog', { name: 'Add Custom Font', exact: true });
+  await expect(dialog).toBeVisible();
+  const close = dialog.getByRole('button', { name: 'Close', exact: true });
+  await expect(close).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(dialog.locator('button:enabled').last()).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(close).toBeFocused();
+  await expect(dialog.getByRole('textbox')).toHaveAccessibleName(/Google Font/);
+  await dialog.getByRole('button', { name: 'Upload File Font', exact: true }).click();
+  await expect(dialog.getByRole('textbox')).toHaveAccessibleName(/Font Family Name/);
+  await axe(page, info, 'custom-font-dialog');
+  await page.screenshot({ path: info.outputPath('font-dialog-390.png') });
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await expect(dialog.getByRole('button', { name: 'Upload File Font', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await close.click();
+  await expect(trigger).toBeFocused();
+});
+
 test('template save roundtrip preserves authored fields and immutable catalog identity', async ({ page }, info) => {
   await installBatch11Admin(page);
   const authored = { invitationTitle: 'Batch12 preview heading', galleryImages: ['/fixture-gallery.jpg'], elementFonts: { title: 'serif' }, storyText: 'Fictional authored story', scheduleLayout: 'timeline', backgroundImage: '/fixture-background.jpg', showCoverVideo: true, guestLabel: 'Dear guest', guestName: 'Fictional guest', extension: { retained: true } };

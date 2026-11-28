@@ -24,8 +24,8 @@ export default function EventEssentialLayout({ tpl = {}, preview = false, backLi
   const cover = details.couplePhoto || details.coverImage || tpl.coverImage || "";
   const focal = details.coverFocalPoint || tpl.coverFocalPoint || "center";
   const objectPosition = focal === "top" ? "50% 15%" : focal === "bottom" ? "50% 85%" : "50% 50%";
-  return <main className="event-wizard" style={{ minHeight: "100vh", background: "#faf6ee", textAlign: "center", paddingTop: "clamp(32px,8vw,100px)" }}>
-    {!preview && showBreadcrumb && <Link to={backLink}>← {copy("ត្រឡប់", "Back")}</Link>}
+  return <main className="event-wizard" style={{ "--app-ink": "#33291f", "--app-surface": "#fffdf9", "--app-border": "#e4d7c3", color: "#33291f", minHeight: "100vh", background: "#faf6ee", textAlign: "center", paddingTop: "clamp(32px,8vw,100px)" }}>
+    {!preview && showBreadcrumb && <Link to={backLink} style={{ color: "#725321", display: "inline-flex", alignItems: "center", minHeight: 44 }}>← {copy("ត្រឡប់", "Back")}</Link>}
     <article className="event-wizard-card" style={{ padding: "clamp(24px,6vw,64px)", overflowWrap: "anywhere" }}>
       {cover && !String(cover).endsWith('.svg') && (
         <div style={{ maxWidth: "440px", margin: "0 auto 1.5rem", borderRadius: "16px", overflow: "hidden", aspectRatio: "16/9", border: "1px solid rgba(195, 162, 107, 0.4)", boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}>

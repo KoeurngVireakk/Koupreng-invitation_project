@@ -64,7 +64,8 @@
 }
 
 .k-loading-region { min-width: 0; width: 100%; }
-.k-loading-label { color: var(--app-muted, var(--brand-text-muted, #626270)); font-size: .875rem; line-height: 1.8; margin: 0 0 1rem; }
+.k-loading-region[data-loading-layout="public"] { --app-muted: #525f58; background: #fbf6ee; }
+.k-loading-label { color: var(--app-muted, var(--brand-text-muted, #3f4b44)); font-size: .875rem; line-height: 1.8; margin: 0 0 1rem; }
 .k-loading-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1.25rem; margin-block: 1rem; }
 .k-loading-grid--stat { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .k-loading-grid--pricing .k-skeleton-card { min-height: 36rem; }

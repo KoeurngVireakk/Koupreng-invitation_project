@@ -210,13 +210,13 @@ export default function BrowseTemplatesFeature() {
           <span>{t("statTotal")}</span>
           <strong>{stats.total}</strong>
         </article>
-        <article className="pe-summary-card">
-          <span style={{ color: "#0f766e" }}>{t("statFree")}</span>
-          <strong style={{ color: "#0f766e" }}>{stats.free}</strong>
+        <article className="pe-summary-card pe-summary-card--free">
+          <span>{t("statFree")}</span>
+          <strong>{stats.free}</strong>
         </article>
-        <article className="pe-summary-card">
-          <span style={{ color: "var(--brand-primary)" }}>{t("statPremium")}</span>
-          <strong style={{ color: "var(--brand-primary)" }}>{stats.premium}</strong>
+        <article className="pe-summary-card pe-summary-card--premium">
+          <span>{t("statPremium")}</span>
+          <strong>{stats.premium}</strong>
         </article>
         <article className="pe-summary-card">
           <span>{t("statResults")}</span>

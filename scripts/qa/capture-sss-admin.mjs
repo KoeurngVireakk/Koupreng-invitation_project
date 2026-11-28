@@ -149,4 +149,12 @@ try {
   await browser.close();
 }
 await writeFile(`${output}/results${process.env.SSS_ADMIN_ROUTES ? "-focused" : ""}.json`, JSON.stringify({ engine: browser.version(), results }, null, 2));
-if (results.some(row => row.failure || row.errors.length)) process.exitCode = 1;
+// Baselines retain observed defects. Candidate captures enforce the measured gates.
+const gateFailures = results.filter(row => row.failure || row.errors.length || (stage === 'after' && (
+  row.geometry?.documentWidth > row.geometry?.viewport + 1 ||
+  row.accessibility?.some(violation => ['critical', 'serious'].includes(violation.impact))
+)));
+if (gateFailures.length) {
+  console.error('Capture gate failed:', gateFailures.map(row => row.name).join(', '));
+  process.exitCode = 1;
+}

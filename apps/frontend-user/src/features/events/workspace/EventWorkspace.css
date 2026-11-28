@@ -159,7 +159,6 @@
 .event-wizard button:disabled { opacity: 0.6; cursor: wait; }
 .event-wizard-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin: 24px 0; }
 .event-wizard-card { border: 1px solid var(--brand-border, #d5c5ad); border-radius: 16px; padding: 16px; background: var(--brand-surface, #fffcf6); }
-.event-wizard-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
 .event-wizard [role=alert] { color: #8a3434; }
 .events-filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding: 16px; border: 1px solid var(--ws-border); border-radius: 14px; background: var(--ws-surface); font-size: 14px; }
 .events-filters label { flex: 1 1 180px; display: grid; gap: 6px; }

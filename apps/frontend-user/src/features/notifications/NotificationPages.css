@@ -1,5 +1,7 @@
-.notif-page {
+.dash-main.notif-page {
+  width: calc(100% - 2 * max(var(--ui-page-gutter, 16px), 16px));
   max-width: 1180px;
+  margin: 24px auto 48px;
 }
 
 .notif-header {

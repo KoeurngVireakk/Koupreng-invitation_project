@@ -80,7 +80,7 @@ export default function PaymentHistoryPage() {
 
             <section className="enterprise-panel">
                 {visiblePayments.length ? (
-                    <div className="enterprise-table-wrap">
+                    <div className="enterprise-table-wrap" tabIndex={0} role="region" aria-label={uiCopy("ប្រវត្តិការទូទាត់", "Payment history")}>
                         <table className="enterprise-table">
                             <thead>
                                 <tr><th>{uiCopy("ការបញ្ជាទិញ", "Order")}</th><th>{uiCopy("មុខទំនិញ", "Item")}</th><th>{uiCopy("ស្ថានភាព", "Status")}</th><th>{uiCopy("ចំនួនទឹកប្រាក់", "Amount")}</th><th>{uiCopy("បានបង្កើត", "Created")}</th><th></th></tr>
