@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useState } from 'react';
 import { IoCameraOutline } from 'react-icons/io5';
 import InvitationLightbox from './InvitationLightbox';
@@ -14,7 +15,7 @@ export default function GalleryGrid({ images = [], className = '', itemClassName
         const src = typeof image === 'string' ? image : image.src || image.url;
         const alt = image.alt || `Photo ${index + 1}`;
         return <button type="button" key={`${src}-${index}`} className={`gallery-item ${itemClassName}`} aria-label={`មើលរូបថត / View ${alt}`} onClick={() => onImageClick ? onImageClick(index, image) : setLightboxIndex(index)} style={{ cursor: 'pointer', padding: 0, border: 0, background: 'transparent', minHeight: 44 }}>
-          <img src={src} alt={alt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <img src={safeIntroMedia(src) || undefined} alt={alt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </button>;
       })}
     </div>

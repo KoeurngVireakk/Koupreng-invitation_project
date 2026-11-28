@@ -91,7 +91,7 @@ test('hosted: authorized protected film completes, errors recover, and guest tex
     await video.evaluate(node => { node.currentTime = node.duration - .3; return node.play(); });
   }
   await expect(page.locator('[data-stage=CONTENT]')).toBeVisible(); await expect(page.locator('.public-ticket-button')).toBeVisible();
-  await expect(page.locator('#rg-invitation')).toContainText('Fictional groom'); await expect(page.locator('#rg-venue a')).toHaveAttribute('href', /maps.google.com/);
+  await expect(page.locator('#rg-invitation')).toContainText('Fictional groom'); await expect(page.locator('#rg-venue a')).toHaveAttribute('href', /^https:\/\/maps\.google\.com(?:\/|$)/);
   await page.goto('/i/review-celestial');
   if (windowsWebKit(info)) await page.locator('.rg-open').click();
   else { await openVideo(page); await page.locator('.cinematic-inline-stage video').evaluate(node => node.dispatchEvent(new Event('error'))); }

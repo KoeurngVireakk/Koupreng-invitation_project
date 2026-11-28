@@ -56,6 +56,8 @@ class PublicRsvpRateLimitFilterTests {
                 });
 
         assertEquals(429, replay.getStatus());
+        assertTrue(replay.getContentAsString().contains("/api/v1/public/invitations/{slug}/rsvp"));
+        assertFalse(replay.getContentAsString().contains("token-two"));
     }
 
     @Test

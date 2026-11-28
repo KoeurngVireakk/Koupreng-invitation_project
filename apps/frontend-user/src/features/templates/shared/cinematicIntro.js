@@ -16,10 +16,30 @@ export async function normalizeIntroUpload(file) {
 }
 const bounded = (value, min, max, fallback) => Number.isFinite(Number(value)) ? Math.min(max, Math.max(min, Number(value))) : fallback;
 export function safeIntroMedia(value) {
-  if (typeof value !== 'string' || !value.trim()) return '';
-  if (/^\/(?![\\/])/.test(value) && !value.includes('\\') && ![...value].some(char => char.charCodeAt(0) < 32)) return value;
-  if (/^(blob:|data:image\/(?:png|jpeg|webp);base64,)/.test(value)) return value;
-  try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password ? url.href : ''; } catch { return ''; }
+  if (typeof value !== 'string') return '';
+  const source = value.trim();
+  if (!source || source.includes('\\') || [...source].some(char => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return '';
+  const image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,([A-Za-z0-9+/]+={0,2})$/i.exec(source);
+  if (image) return `data:image/${image[1].toLowerCase()};base64,${image[2]}`;
+
+  try {
+    if (source.startsWith('/')) {
+      const base = 'https://koupreng.invalid';
+      const url = new URL(source, base);
+      if (url.origin !== base || url.pathname.startsWith('//')) return '';
+      return url.pathname + url.search + url.hash;
+    }
+
+    const url = new URL(source);
+    if (url.username || url.password) return '';
+    if (url.protocol === 'blob:') {
+      return typeof window !== 'undefined' && /^blob:https?:\/\//.test(source)
+        && url.origin === window.location.origin ? url.href : '';
+    }
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : '';
+  } catch {
+    return '';
+  }
 }
 export function normalizeIntro(value = {}) {
   const input = value && typeof value === 'object' ? value : {};

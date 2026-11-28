@@ -37,7 +37,7 @@ public class WafFilter extends OncePerRequestFilter {
             new NamedPattern("sql-boolean-tautology", Pattern.compile("(?i)(?:'|%27|\"|%22|`)\\s*(?:or|and)\\s+['\"]?[\\w.-]+['\"]?\\s*=\\s*['\"]?[\\w.-]+")),
             new NamedPattern("sql-time-delay", Pattern.compile("(?i)\\b(?:sleep|benchmark)\\s*\\(")),
             new NamedPattern("sql-stacked-statement", Pattern.compile("(?i);\\s*(?:drop|alter|truncate|delete|insert|update)\\b")),
-            new NamedPattern("xss-script", Pattern.compile("(?i)(?:<\\s*/?\\s*script\\b|%3c\\s*/?\\s*script\\b)")),
+            new NamedPattern("xss-script", Pattern.compile("(?i)(?:<|%3c)\\s*+(?:/\\s*+)?script\\b")),
             new NamedPattern("xss-event-handler", Pattern.compile("(?i)\\bon[a-z]{3,30}\\s*=")),
             new NamedPattern("xss-active-uri", Pattern.compile("(?i)\\b(?:javascript|data\\s*:\\s*text/html)\\s*:")),
             new NamedPattern("command-chain", Pattern.compile("(?i)(?:\\|\\||&&|;)\\s*(?:cmd(?:\\.exe)?|powershell|pwsh|bash|sh|curl|wget|nc|netcat)\\b")),

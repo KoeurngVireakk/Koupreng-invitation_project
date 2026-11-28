@@ -99,7 +99,6 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/v3/api-docs.yaml"
                 )
-                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers

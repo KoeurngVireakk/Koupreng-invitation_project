@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { Pause, Play, SkipForward } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import CoverBackground from '../../../shared/Openings/CoverBackground';
@@ -48,7 +49,7 @@ export default function RoyalGardenIntro({ sequence, intro, slides, content, tit
       <div className="rg-montage-portraits">{slides.map((slide, i) => i <= portraitIndex + 1 && i >= portraitIndex - 1 ? <Portrait key={`${slide.id}-${slide.src}`} slide={slide} index={i} active={portraitIndex} transition={intro.transition} duration={intro.duration} /> : null)}</div>
       <div className="rg-montage-shade" style={{ '--rg-overlay': intro.overlay }} />
       <RoyalGardenMonogram settings={presentation.monogram} initials={monogram} scene="video" />
-      <div className="rg-montage-lettering">{presentation.video.artworkEnabled && presentation.video.artwork && <img src={presentation.video.artwork} alt="" width="960" height="328" onError={event => { event.currentTarget.hidden = true; }} />}<h1 className="rg-sr-only">{names}</h1><p>{names}</p>{presentation.video.dateEnabled && <p>{date}</p>}</div>
+      <div className="rg-montage-lettering">{presentation.video.artworkEnabled && presentation.video.artwork && <img src={safeIntroMedia(presentation.video.artwork) || undefined} alt="" width="960" height="328" onError={event => { event.currentTarget.hidden = true; }} />}<h1 className="rg-sr-only">{names}</h1><p>{names}</p>{presentation.video.dateEnabled && <p>{date}</p>}</div>
       {presentation.entrance.curtainEnabled && <RoyalGardenCurtainReveal stage={sequence.stage} speed={presentation.entrance.curtainSpeed} paused={sequence.paused || sequence.hidden} />}
       <RoyalGardenArtworkFrame source={presentation.theme === 'burgundy-heritage' ? ROYAL_ASSETS.heritageFrame : ROYAL_ASSETS.information} smallSource={presentation.theme === 'burgundy-heritage' ? ROYAL_ASSETS.heritageFrameSmall : ROYAL_ASSETS.informationSmall} fill={false} className="rg-montage-frame" />
       <div className="rg-intro-controls">{slideshow && <button type="button" aria-label={sequence.paused ? (english ? 'Resume slideshow' : 'បន្តបង្ហាញរូបភាព') : (english ? 'Pause slideshow' : 'ផ្អាកបង្ហាញរូបភាព')} aria-pressed={sequence.paused} onClick={() => sequence.setPaused(!sequence.paused)}>{sequence.paused ? <Play size={18} /> : <Pause size={18} />}</button>}<button type="button" onClick={sequence.finish}>{english ? 'Skip intro' : 'រំលង'}<SkipForward size={16} aria-hidden="true" /></button></div>
@@ -60,7 +61,7 @@ export default function RoyalGardenIntro({ sequence, intro, slides, content, tit
     {intro.style !== 'royal-arch' && <div className="rg-particles" aria-hidden="true">{Array.from({ length: 14 }, (_, i) => <i key={i} style={{ '--i': i }} />)}</div>}
     {!portraitScene && golden && <div className="rg-calligraphy-scene" data-position={intro.artworkPosition} style={{ '--rg-artwork-scale': intro.artworkScale }}>
       {hasArtwork && <div className="rg-golden-artwork" style={{ '--rg-calligraphy-image': artworkMask.source === artwork ? `url(${JSON.stringify(artworkMask.url)})` : 'none' }}>
-        <img className="rg-calligraphy-image" src={artwork} srcSet={artwork === DEFAULT_INTRO_ARTWORK ? `${manifest.openingArtwork.smallSrc} 960w, ${artwork} 1600w` : undefined} sizes="(max-width: 767px) 88vw, 600px" width="1600" height="900" alt={intro.artworkAlt || (english ? 'Golden wedding calligraphy with flowers and a butterfly: Save the Date' : 'អក្សរផ្ចង់មង្គលការពណ៌មាស មានផ្កា និងមេអំបៅ')} fetchPriority="high" decoding="async" onLoad={event => setArtworkMask({ source: artwork, url: event.currentTarget.currentSrc || artwork })} onError={() => setFailedArtwork(artwork)} />
+        <img className="rg-calligraphy-image" src={safeIntroMedia(artwork) || undefined} srcSet={artwork === DEFAULT_INTRO_ARTWORK ? `${manifest.openingArtwork.smallSrc} 960w, ${artwork} 1600w` : undefined} sizes="(max-width: 767px) 88vw, 600px" width="1600" height="900" alt={intro.artworkAlt || (english ? 'Golden wedding calligraphy with flowers and a butterfly: Save the Date' : 'អក្សរផ្ចង់មង្គលការពណ៌មាស មានផ្កា និងមេអំបៅ')} fetchPriority="high" decoding="async" onLoad={event => setArtworkMask({ source: artwork, url: event.currentTarget.currentSrc || artwork })} onError={() => setFailedArtwork(artwork)} />
         <span className="rg-calligraphy-light" aria-hidden="true" />
       </div>}
       <div className="rg-calligraphy-copy">

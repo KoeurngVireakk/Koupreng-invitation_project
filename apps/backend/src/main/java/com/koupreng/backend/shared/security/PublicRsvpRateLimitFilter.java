@@ -19,6 +19,7 @@ import java.util.Locale;
 public class PublicRsvpRateLimitFilter extends OncePerRequestFilter {
 
     private static final String PATH_PREFIX = "/api/v1/public/invitations/";
+    private static final String RSVP_ROUTE = PATH_PREFIX + "{slug}/rsvp";
     private static final Duration WINDOW = Duration.ofMinutes(1);
 
     private final AppProperties.Invitation properties;
@@ -62,7 +63,6 @@ public class PublicRsvpRateLimitFilter extends OncePerRequestFilter {
             if (exception.getStatus() == HttpStatus.TOO_MANY_REQUESTS) {
                 writeFailure(
                         response,
-                        request,
                         HttpStatus.TOO_MANY_REQUESTS,
                         "RSVP_RATE_LIMITED",
                         "Too many RSVP submissions. Try again later."
@@ -70,7 +70,6 @@ public class PublicRsvpRateLimitFilter extends OncePerRequestFilter {
             } else {
                 writeFailure(
                         response,
-                        request,
                         HttpStatus.SERVICE_UNAVAILABLE,
                         "RATE_LIMIT_UNAVAILABLE",
                         "RSVP service is temporarily unavailable."
@@ -108,7 +107,6 @@ public class PublicRsvpRateLimitFilter extends OncePerRequestFilter {
 
     private void writeFailure(
             HttpServletResponse response,
-            HttpServletRequest request,
             HttpStatus status,
             String code,
             String message
@@ -124,14 +122,7 @@ public class PublicRsvpRateLimitFilter extends OncePerRequestFilter {
                         status.getReasonPhrase(),
                         code,
                         message,
-                        jsonString(applicationPath(request))
+                        RSVP_ROUTE
                 ));
-    }
-
-    private String jsonString(String value) {
-        return value.replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\r", "\\r")
-                .replace("\n", "\\n");
     }
 }

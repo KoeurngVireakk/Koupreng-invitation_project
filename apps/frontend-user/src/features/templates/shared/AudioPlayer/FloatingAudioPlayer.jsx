@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useEffect, useId } from "react";
 import { LoaderCircle, Music, Pause } from "lucide-react";
 import { useTemplateMusicController } from "../../experience/hooks/useTemplateMusicController";
@@ -33,7 +34,7 @@ export default function FloatingAudioPlayer({
 
   return (
     <div className="floating-audio-player" style={position}>
-      <audio ref={audioRef} src={src} loop preload="none" />
+      <audio ref={audioRef} src={safeIntroMedia(src) || undefined} loop preload="none" />
       <p id={statusId} className="floating-audio-status" role="status" aria-atomic="true" hidden={!message}>
         {message}
       </p>

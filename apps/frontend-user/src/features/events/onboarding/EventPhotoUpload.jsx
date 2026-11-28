@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useLayoutEffect, useRef, useState } from "react";
 import { Camera, Image as ImageIcon, Trash2, Upload, AlertCircle, RefreshCw } from "lucide-react";
 import "./EventPhotoUpload.css";
@@ -201,7 +202,7 @@ export default function EventPhotoUpload({
         <div className="event-photo-preview-card">
           <div className="event-photo-preview-media">
             <img
-              src={previewUrl}
+              src={safeIntroMedia(previewUrl) || undefined}
               alt={en ? "Event photo preview" : "គំរូរូបថតកម្មវិធី"}
               className="event-photo-img"
               style={{ objectPosition: focalPoint }}

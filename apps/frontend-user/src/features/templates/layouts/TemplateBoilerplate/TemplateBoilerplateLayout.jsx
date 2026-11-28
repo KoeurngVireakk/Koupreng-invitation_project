@@ -1,3 +1,5 @@
+import { safeDirections } from '@/features/templates/shared/invitationFeatures';
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import InvitationLightbox from "../../shared/Gallery/InvitationLightbox";
 import DemoRsvpNotice from "../../shared/RSVP/DemoRsvpNotice";
 import InvitationLabel from '@/features/templates/shared/InvitationLabel';
@@ -208,7 +210,7 @@ export default function TemplateBoilerplateLayout({
       {effectiveContent.musicUrl && (
         <audio
           ref={audioRef}
-          src={effectiveContent.musicUrl}
+          src={safeIntroMedia(effectiveContent.musicUrl) || undefined}
           loop
           preload="none"
           aria-hidden="true"
@@ -284,7 +286,7 @@ export default function TemplateBoilerplateLayout({
             <div className="my-auto py-6 relative z-10">
               <div className="relative mx-auto w-64 h-80 rounded-3xl overflow-hidden border-2 border-amber-500/40 shadow-2xl shadow-amber-500/10">
                 <img
-                  src={effectiveContent.coverImage}
+                  src={safeIntroMedia(effectiveContent.coverImage) || undefined}
                   alt="Cover"
                   className="w-full h-full object-cover"
                   loading="eager"
@@ -486,7 +488,7 @@ export default function TemplateBoilerplateLayout({
                               aria-label={`មើលរូបថតធំទី ${i + 1}`}
                             >
                               <img
-                                src={img}
+                                src={safeIntroMedia(img) || undefined}
                                 alt={`Gallery ${i + 1}`}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 loading="lazy"
@@ -532,7 +534,7 @@ export default function TemplateBoilerplateLayout({
                           </p>
                         )}
                         <a
-                          href={effectiveContent.venue?.mapLink || effectiveContent.googleMapUrl || "https://maps.google.com"}
+                          href={safeDirections(effectiveContent.venue?.mapLink || effectiveContent.googleMapUrl) || "https://maps.google.com"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="tpl-btn-primary inline-flex items-center gap-2 min-h-[44px] px-4"
@@ -554,7 +556,7 @@ export default function TemplateBoilerplateLayout({
                         {effectiveContent.qrGiftUrl && (
                           <div className="mx-auto w-40 h-40 bg-white p-2 rounded-2xl shadow-xl border border-amber-500/40">
                             <img
-                              src={effectiveContent.qrGiftUrl}
+                              src={safeIntroMedia(effectiveContent.qrGiftUrl) || undefined}
                               alt="Gift QR"
                               className="w-full h-full object-contain"
                             />

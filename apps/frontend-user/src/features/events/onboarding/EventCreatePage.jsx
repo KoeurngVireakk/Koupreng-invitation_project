@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { feedback } from "@/shared/feedback/feedback";
 import QuotaProgress from '@/shared/access/QuotaProgress';
 import { useAccountEntitlements } from '@/shared/access/entitlementContext';
@@ -1011,7 +1012,7 @@ function EventCreateSession({ user }) {
                 {photoPreviewUrl ? (
                   <div className="event-review-photo-preview">
                     <img
-                      src={photoPreviewUrl}
+                      src={safeIntroMedia(photoPreviewUrl) || undefined}
                       alt={copy("រូបថតកម្មវិធី", "Event photo")}
                       className="event-review-photo-thumb"
                       style={{ objectPosition: photoFocalPoint }}

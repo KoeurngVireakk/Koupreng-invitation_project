@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import Modal from '@/shared/ui/Modal';
 import './invitation-lightbox.css';
@@ -15,7 +16,7 @@ export default function InvitationLightbox({ images, index, onIndexChange, onClo
       event.preventDefault(); event.stopPropagation(); move(event.key === 'ArrowLeft' ? -1 : 1);
     }}>
       <button type="button" className="invitation-lightbox-close" onClick={onClose} aria-label="បិទ / Close lightbox"><X aria-hidden="true" /></button>
-      {active && <img src={src(active)} alt={active.alt || `រូបថត / Photo ${activeIndex + 1}`} />}
+      {active && <img src={safeIntroMedia(src(active)) || undefined} alt={active.alt || `រូបថត / Photo ${activeIndex + 1}`} />}
       {items.length > 1 && <div className="invitation-lightbox-controls">
         <button type="button" onClick={() => move(-1)} aria-label="រូបមុន / Previous photo"><ChevronLeft aria-hidden="true" /></button>
         <span aria-live="polite">{activeIndex + 1} / {items.length}</span>

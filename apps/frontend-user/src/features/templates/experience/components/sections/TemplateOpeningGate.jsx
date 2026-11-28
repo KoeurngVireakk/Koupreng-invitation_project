@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -388,7 +389,7 @@ function KhmerRoyalGate({
                 <video
                     ref={videoRef}
                     className="tx-gate__media"
-                    src={effectiveOpeningVideo}
+                    src={safeIntroMedia(effectiveOpeningVideo) || undefined}
                     poster={effectiveCoverImage || undefined}
                     muted
                     loop

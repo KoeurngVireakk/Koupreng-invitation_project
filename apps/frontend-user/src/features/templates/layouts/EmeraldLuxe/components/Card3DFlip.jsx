@@ -1,3 +1,5 @@
+import { safeDirections } from '@/features/templates/shared/invitationFeatures';
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import IllustratedMap from '@/features/templates/shared/IllustratedMap';
 import ProgramTimeline from '../../../shared/ProgramTimeline';
 import { authoredHeadingStyle } from '../../../shared/templateTypography';
@@ -63,7 +65,7 @@ export default function Card3DFlip({
           {(tpl.couplePhoto || (tpl.coverImage && !String(tpl.coverImage).endsWith('.svg') && !String(tpl.coverImage).includes('cover-card.jpg'))) && (
             <div style={{ margin: "1rem auto 1.25rem", width: "150px", height: "190px", borderRadius: "75px 75px 16px 16px", overflow: "hidden", border: "2px solid var(--el-gold-primary)", boxShadow: "0 8px 24px rgba(0,0,0,0.6)" }}>
               <img
-                src={tpl.couplePhoto || tpl.coverImage}
+                src={safeIntroMedia(tpl.couplePhoto || tpl.coverImage) || undefined}
                 alt={`${tpl.groom} & ${tpl.bride}`}
                 style={{
                   width: "100%",
@@ -129,7 +131,7 @@ export default function Card3DFlip({
             {tpl.googleMapsUrl && (
               <div style={{ marginTop: "0.75rem" }}>
                 <a
-                  href={tpl.googleMapsUrl}
+                  href={safeDirections(tpl.googleMapsUrl) || "https://maps.google.com"}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -159,7 +161,7 @@ export default function Card3DFlip({
                   គំនូសប្លង់ទីតាំង (Sketch Map)
                 </p>
                 <img
-                  src={tpl.sketchMapImage}
+                  src={safeIntroMedia(tpl.sketchMapImage) || undefined}
                   alt="Sketch Map"
                   style={{
                     maxWidth: "100%",

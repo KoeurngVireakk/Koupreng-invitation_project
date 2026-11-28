@@ -18,7 +18,8 @@ export default class BlockErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     if (import.meta.env?.DEV) {
       console.error(
-        `[BlockErrorBoundary] Crash caught in block "${this.props.blockId || "unknown"}":`,
+        '[BlockErrorBoundary] Crash caught in block "%s":',
+        this.props.blockId || "unknown",
         error,
         errorInfo
       );

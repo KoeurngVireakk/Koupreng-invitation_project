@@ -59,6 +59,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger("koupreng.telegram_bot")
 
 MAX_PROCESSED_UPDATES = 4096
+MAX_PAYMENT_ALERT_LENGTH = 4096
 PROCESSED_UPDATE_IDS: OrderedDict[str, None] = OrderedDict()
 PROCESSING_UPDATE_IDS: set[str] = set()
 DELIVERED_NOTIFICATION_IDS: OrderedDict[str, None] = OrderedDict()
@@ -66,21 +67,29 @@ PROCESSING_NOTIFICATION_IDS: set[str] = set()
 
 ORDER_CODE_RE = re.compile(r"\b(?:EVT[0-9]{9,10}|SUB[0-9]{10})\b", re.IGNORECASE)
 PAYWAY_TRX_RE = re.compile(
-    r"\b(?:Transaction|Txn|Trx)\.?\s*(?:ID|No\.?|Number)\s*[:#=]\s*([A-Za-z0-9_-]+)\b",
+    r"\b(?:Transaction|Txn|Trx)\.?[\t ]{0,16}(?:ID|No\.?|Number)[\t ]{0,16}[:#=][\t ]{0,16}"
+    r"([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
     re.IGNORECASE,
 )
 PAYWAY_APV_RE = re.compile(
-    r"\b(?:APV|Approval\s*(?:Code|No\.?|Number)?)\s*[:#=]?\s*([A-Za-z0-9_-]+)\b",
+    r"\b(?:APV|Approval(?:[\t ]{0,16}(?:Code|No\.?|Number))?)\b"
+    r"(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([A-Za-z0-9_-]{1,100})\b(?![A-Za-z0-9_-])",
     re.IGNORECASE,
 )
 PAYER_WITH_SUFFIX_RE = re.compile(
-    r"\bpaid by\s+(?P<name>.+?)\s*\(\s*\*(?P<last3>[0-9]{3})\s*\)"
-    r"(?=\s+on\b|\s+via\b|[.,]|$)",
+    r"\bpaid by[\t ]{1,16}(?P<name>.{1,120}?)[\t ]{0,16}\([\t ]{0,16}\*(?P<last3>[0-9]{3})[\t ]{0,16}\)"
+    r"(?=[\t ]{1,16}(?:on|via)\b|[.,]|$)",
     re.IGNORECASE,
 )
-PAYER_RE = re.compile(r"\bpaid by\s+(.+?)(?:\s+via\b|\s+on\b|[.,]|$)", re.IGNORECASE)
-REMARK_RE = re.compile(r"\bRemark\s*[:#=]?\s*([^\s,.]+)", re.IGNORECASE)
-TRANSACTION_DATE_RE = re.compile(r"\bon\s+(.+?)(?=\s+via\b|\.\s*(?:Trx|Remark)\b|$)", re.IGNORECASE)
+PAYER_RE = re.compile(r"\bpaid by[\t ]{1,16}(.{1,120}?)(?:[\t ]{1,16}(?:via|on)\b|[.,]|$)", re.IGNORECASE)
+REMARK_RE = re.compile(
+    r"\bRemark\b(?:[\t ]{0,16}[:#=][\t ]{0,16}|[\t ]{1,16})([^\s,.]{1,120})(?=[\s,.]|$)",
+    re.IGNORECASE,
+)
+TRANSACTION_DATE_RE = re.compile(
+    r"\bon[\t ]{1,16}(.{1,120}?)(?=[\t ]{1,16}via\b|\.[\t ]{0,16}(?:Trx|Remark)\b|$)",
+    re.IGNORECASE,
+)
 AMOUNT_PATTERNS = [
     re.compile(
         r"\b(?P<currency>USD|KHR)\s*(?P<amount>[0-9]+(?:\.[0-9]{1,2})?)(?![0-9.])\b",
@@ -399,7 +408,7 @@ async def process_telegram_update(update: dict):
 
     logger.info(
         "Received Telegram update is_bot=%s trusted_payment_bot=%s callback=%s",
-        sender.get("is_bot"),
+        sender.get("is_bot") is True,
         trusted_payment_sender,
         bool(callback_query_id),
     )
@@ -633,6 +642,9 @@ def detect_amount(text: str) -> str | None:
 
 
 def parse_payment_alert(text: str) -> dict | None:
+    if len(text) > MAX_PAYMENT_ALERT_LENGTH:
+        return None
+
     order_match = ORDER_CODE_RE.search(text)
     amount_match = None
     for pattern in AMOUNT_PATTERNS:

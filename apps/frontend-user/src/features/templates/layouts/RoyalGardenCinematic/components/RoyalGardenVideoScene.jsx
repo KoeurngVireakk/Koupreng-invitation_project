@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { useEffect, useRef, useState } from 'react';
 import { useCinematicPlayback } from '../../../shared/Openings/cinematicOpeningContext';
 import { ROYAL_ASSETS } from '../model/royalGardenPresentation';
@@ -19,10 +20,10 @@ export default function RoyalGardenVideoScene({ english, names, monogram, monogr
     <h2 className="rg-sr-only">{names}</h2>
     {active && <RoyalGardenMonogram settings={monogramSettings} initials={monogram} scene="video" />}
     {active && <div className="rg-video-lettering" data-date-font={presentation.dateFont}>
-      {presentation.artworkEnabled && presentation.artwork && presentation.artwork !== failedArtwork && <div className="rg-video-artwork" style={{ '--rg-film-artwork': `url(${JSON.stringify(presentation.artwork)})` }}><img className="rg-video-calligraphy" src={presentation.artwork} srcSet={presentation.artwork === ROYAL_ASSETS.videoCalligraphy ? `${presentation.artwork} 480w, ${ROYAL_ASSETS.videoCalligraphyLarge} 960w` : undefined} sizes="(max-width: 639px) 82vw, 460px" alt="" width="3840" height="1313" onError={() => setFailedArtwork(presentation.artwork)} /></div>}
+      {presentation.artworkEnabled && presentation.artwork && presentation.artwork !== failedArtwork && <div className="rg-video-artwork" style={{ '--rg-film-artwork': `url(${JSON.stringify(presentation.artwork)})` }}><img className="rg-video-calligraphy" src={safeIntroMedia(presentation.artwork) || undefined} srcSet={presentation.artwork === ROYAL_ASSETS.videoCalligraphy ? `${presentation.artwork} 480w, ${ROYAL_ASSETS.videoCalligraphyLarge} 960w` : undefined} sizes="(max-width: 639px) 82vw, 460px" alt="" width="3840" height="1313" onError={() => setFailedArtwork(presentation.artwork)} /></div>}
       {presentation.dateEnabled && date && <time className="rg-video-date" dateTime={dateTime}>{date}</time>}
     </div>}
-    {active ? stage : <div className="rg-video-keepsake">{poster && <img src={poster} alt={english ? 'Our pre-wedding film' : 'វីដេអូមុនអាពាហ៍ពិពាហ៍'} loading="lazy" />}{presentation.replay && <button type="button" className="rg-button" onClick={onReplay}>{english ? 'Replay video' : 'ចាក់វីដេអូឡើងវិញ'}</button>}</div>}
+    {active ? stage : <div className="rg-video-keepsake">{poster && <img src={safeIntroMedia(poster) || undefined} alt={english ? 'Our pre-wedding film' : 'វីដេអូមុនអាពាហ៍ពិពាហ៍'} loading="lazy" />}{presentation.replay && <button type="button" className="rg-button" onClick={onReplay}>{english ? 'Replay video' : 'ចាក់វីដេអូឡើងវិញ'}</button>}</div>}
     {active && !gated && curtain?.curtainEnabled && <RoyalGardenCurtainReveal stage="OPEN" settled />}
     {active && !gated && motion && <RoyalGardenMotionLayer settings={motion} reduced={reduced} />}
   </section>;

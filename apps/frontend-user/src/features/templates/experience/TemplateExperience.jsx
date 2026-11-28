@@ -1,3 +1,4 @@
+import { safeIntroMedia } from '@/features/templates/shared/cinematicIntro';
 import { PageSkeleton } from '@/shared/ui/LoadingState';
 import { InvitationLocaleContext } from '../shared/invitationLocaleContext';
 import { invitationFeatureFields } from '../shared/invitationFeatures';
@@ -771,7 +772,7 @@ function WeddingTemplateExperience({
                 </div>
             )}
 
-            {content.music && <audio ref={musicAudioRef} src={content.music} loop preload="none" />}
+            {content.music && <audio ref={musicAudioRef} src={safeIntroMedia(content.music) || undefined} loop preload="none" />}
             {gateOpen && <TemplateMusicControl controller={musicController} />}
             {gateOpen && showStickyCta && heroOpened && (
                 <TemplateQuickNav

@@ -52,8 +52,8 @@ public class AdminReportingService {
         } else {
             summary = repository.summary(definition, filter);
             rows = repository.rows(definition, filter, (long) filter.page() * filter.size(), filter.size());
-            if (code.equals("invitations") || code.equals("users")) series.add(new Series("creation", "createdAt", repository.monthly(definition, filter, "createdAt", null)));
-            if (code.equals("payments")) series.add(new Series("verifiedReceipts", filter.dimension(), suppressSmallGroups(repository.monthly(definition, filter, filter.dimension().equals("activity") ? "activityAt" : filter.dimension(), "confirmedReceipt"))));
+            if (code.equals("invitations") || code.equals("users")) series.add(new Series("creation", "createdAt", repository.monthly(definition, filter, "createdAt", false)));
+            if (code.equals("payments")) series.add(new Series("verifiedReceipts", filter.dimension(), suppressSmallGroups(repository.monthly(definition, filter, filter.dimension().equals("activity") ? "activityAt" : filter.dimension(), true))));
         }
         long total = List.of("executive", "dictionary").contains(code) ? rows.size() : ((Number) summary.get("totalRecords")).longValue();
         if (List.of("executive", "dictionary").contains(code)) {
@@ -115,8 +115,8 @@ public class AdminReportingService {
         summary.put("pendingValueByCurrency", createdPayments.get("pendingValueByCurrency"));
         summary.put("failedValueByCurrency", createdPayments.get("failedValueByCurrency"));
         summary.put("orderStatuses", createdPayments.get("statuses"));
-        series.add(new Series("eventCreation", "createdAt", repository.monthly(inviteDefinition, invitations, "createdAt", null)));
-        series.add(new Series("verifiedReceipts", "paidAt", suppressSmallGroups(repository.monthly(paymentDefinition, payments, "paidAt", "confirmedReceipt"))));
+        series.add(new Series("eventCreation", "createdAt", repository.monthly(inviteDefinition, invitations, "createdAt", false)));
+        series.add(new Series("verifiedReceipts", "paidAt", suppressSmallGroups(repository.monthly(paymentDefinition, payments, "paidAt", true))));
         if (filter.from() != null && filter.from().minusDays(ChronoUnit.DAYS.between(filter.from(),filter.to())).getYear() >= 1970) {
             long days = ChronoUnit.DAYS.between(filter.from(), filter.to());
             var query = new AdminReportQuery(); query.setFrom(filter.from().minusDays(days)); query.setTo(filter.from());
