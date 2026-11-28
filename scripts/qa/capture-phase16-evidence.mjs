@@ -8,13 +8,16 @@ import process from 'node:process';
 const stageArg = process.argv.find((arg) => arg.startsWith('--stage='))?.split('=')[1] || 'after';
 const rootArg = process.argv.find((arg) => arg.startsWith('--app-dir='))?.split('=')[1] || 'apps/frontend-user';
 const portArg = Number(process.argv.find((arg) => arg.startsWith('--port='))?.split('=')[1] || '4319');
+const baseArg = process.argv.find((arg) => arg.startsWith('--base-url='))?.slice('--base-url='.length);
+const extended = process.argv.includes('--extended');
+const recordMotion = process.argv.includes('--record-motion');
 const outDirArg =
   process.argv.find((arg) => arg.startsWith('--out-dir='))?.split('=')[1] ||
   `docs/uxui/phase16-guest-experience/evidence/${stageArg}`;
 
 const outDir = path.resolve(outDirArg);
 const appDir = path.resolve(rootArg);
-const baseURL = `http://127.0.0.1:${portArg}`;
+const baseURL = baseArg || `http://127.0.0.1:${portArg}`;
 
 const RENDERER_SLUGS = [
   { key: 'khmer-floral-gold', code: 'khmer-floral-gold', id: 1 },
@@ -146,6 +149,7 @@ async function openInvitationContext(browser, c) {
     reducedMotion: c.reducedMotion || 'no-preference',
   };
   if (c.userAgent) contextOptions.userAgent = c.userAgent;
+  if (c.record) contextOptions.recordVideo = { dir: path.join(outDir, 'video'), size: contextOptions.viewport };
 
   const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
@@ -158,7 +162,7 @@ async function openInvitationContext(browser, c) {
     window.localStorage.removeItem('koupreng.auth');
   }, { lang: c.lang || 'km', colorMode: c.dashboardTheme || 'light' });
 
-  await page.route('**/api/**', async (route) => {
+  await page.route(url => url.pathname.startsWith('/api/'), async (route) => {
     const reqUrl = new URL(route.request().url());
     const p = reqUrl.pathname;
     const method = route.request().method();
@@ -235,6 +239,15 @@ async function runCase(browser, c) {
   const { context, page } = await openInvitationContext(browser, c);
   const consoleErrors = [];
   const pageErrors = [];
+  const scriptFailures = [];
+  await page.exposeFunction('recordFixtureScriptFailure', failure => scriptFailures.push(failure));
+  await page.addInitScript(() => {
+    window.addEventListener('error', event => {
+      if (!event.filename) return;
+      const source = new URL(event.filename, location.href);
+      window.recordFixtureScriptFailure({ file: source.origin + source.pathname, line: event.lineno, message: event.message });
+    });
+  });
   page.on('console', (msg) => {
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
@@ -247,7 +260,16 @@ async function runCase(browser, c) {
     }
     await page.waitForTimeout(c.extraWaitMs ?? 600);
 
-    if (c.clickOpener) {
+    if (c.record) {
+      const cover = page.locator(c.renderer === 'khmer-celestial' ? '.kc-opening' : '.kfg-opening');
+      await cover.waitFor();
+      const start = c.renderer === 'khmer-celestial' ? '.kc-opening__button' : '.kfg-open';
+      await page.locator(start).click();
+      if (c.renderer === 'khmer-floral-gold' && await page.locator('.kfg-skip-welcome').isVisible()) {
+        await page.locator('.kfg-skip-welcome').click();
+      }
+      await page.locator(c.renderer === 'khmer-celestial' ? '.kc-hero' : '.kfg-content').waitFor({ timeout: 12000 });
+    } else if (c.clickOpener) {
       if (c.renderer === 'khmer-floral-gold') {
         const kfgBtn = page.locator('.kfg-open').first();
         if (await kfgBtn.isVisible().catch(() => false)) await kfgBtn.click();
@@ -294,7 +316,8 @@ async function runCase(browser, c) {
       const html = document.documentElement;
       const body = document.body;
       const cs = getComputedStyle(body);
-      const rendererNode = document.querySelector('[data-variant], [data-template-code], .kfg-root, .bliss-root, .wj-root, .em-root, .dy-root, .sh-root, .kc-root, .tx-root');
+      const rendererNode = document.querySelector('[data-template-renderer], [data-variant], [data-template-code], .kfg-root, .bliss-root, .wj-root, .em-root, .dy-root, .sh-root, .kc-root, .tx-root');
+      const navigation = performance.getEntriesByType('navigation')[0];
       return {
         url: location.pathname + location.search,
         innerWidth: window.innerWidth,
@@ -306,7 +329,8 @@ async function runCase(browser, c) {
         lang: html.lang || null,
         h1Text: document.querySelector('h1')?.textContent?.trim()?.slice(0, 80) || null,
         hasHorizontalScroll: html.scrollWidth > window.innerWidth,
-        rendererMarker: rendererNode ? (rendererNode.getAttribute('data-variant') || rendererNode.className.split(' ')[0]) : null,
+        rendererMarker: rendererNode ? (rendererNode.getAttribute('data-template-renderer') || rendererNode.getAttribute('data-variant') || rendererNode.className.split(' ')[0]) : null,
+        domContentLoadedMs: Math.round(navigation?.domContentLoadedEventEnd ?? 0),
       };
     });
 
@@ -342,15 +366,17 @@ async function runCase(browser, c) {
       consoleErrorCount: consoleErrors.length,
       pageErrorCount: pageErrors.length,
       pageErrors,
+      scriptFailures,
     };
   } finally {
     await context.close();
+    if (c.record) await page.video()?.saveAs(path.join(outDir, 'video', c.name.replace('.png', '.webm')));
   }
 }
 
 async function main() {
   await fs.mkdir(outDir, { recursive: true });
-  const server = spawn(
+  const server = baseArg ? null : spawn(
     'node',
     ['./node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(portArg), '--strictPort'],
     { cwd: appDir, stdio: 'ignore' }
@@ -384,6 +410,15 @@ async function main() {
       { name: '23-state-network-error-390.png', route: '/i/network-error-sample', renderer: 'state-offline', width: 390, height: 844, lang: 'en', waitForSelector: '#root > div' },
       { name: '24-state-rsvp-and-ticket-success-390.png', route: '/i/guest-personalized?token=gtok_demo_88', renderer: 'rsvp-ticket', width: 390, height: 844, lang: 'en', submitRsvp: true, fullPage: true, waitForSelector: '#root > div' },
       { name: '25-state-telegram-inapp-ua-390.png', route: '/i/guest-the-digital-yes-wedding', renderer: 'inapp-telegram', width: 390, height: 844, lang: 'en', userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Telegram-iOS/10.0', clickOpener: true, waitForSelector: '#root > div' },
+      ...(extended ? RENDERER_SLUGS.map(r => ({
+        name: `desktop-${r.key}-en-1440.png`, route: `/i/guest-${r.key}`, renderer: r.key,
+        width: 1440, height: 900, lang: 'en', clickOpener: true, waitForSelector: '#root > div',
+      })) : []),
+      ...(recordMotion ? ['khmer-floral-gold', 'khmer-celestial'].flatMap(renderer =>
+        ['no-preference', 'reduce'].map(reducedMotion => ({
+          name: `motion-${renderer}-${reducedMotion}.png`, route: `/i/guest-${renderer}`, renderer,
+          width: 390, height: 844, lang: 'km', reducedMotion, record: true,
+        }))) : []),
     ];
 
     const results = [];
@@ -399,7 +434,7 @@ async function main() {
     );
     await browser.close();
   } finally {
-    server.kill();
+    server?.kill();
   }
 }
 
