@@ -44,14 +44,14 @@ export function GiftTable({
 
     return (
         <div className="wg-table-wrap">
-            <table className="wg-table wg-table-fixed w-full table-fixed">
+            <table className="wg-table wg-table-fixed w-full">
                 <colgroup>
-                    <col className="w-[22%]" />
-                    <col className="w-[17%]" />
-                    <col className="w-[16%]" />
+                    <col className="w-[21%]" />
+                    <col className="w-[20%]" />
+                    <col className="w-[13%]" />
                     <col className="w-[15%]" />
                     <col className="w-[18%]" />
-                    <col className="w-[12%]" />
+                    <col className="w-[13%]" />
                 </colgroup>
                 <thead>
                     <tr>

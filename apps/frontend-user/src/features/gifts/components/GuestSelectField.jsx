@@ -58,34 +58,34 @@ export function GuestSelectField({ value, guestId, onChange, options = [], place
                 data-gift-name-input="true"
                 onClick={() => setOpen(!open)}
                 style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    width: "100%", padding: "10px 14px", border: existingGiftForSelected ? "1.5px solid #FB7185" : "1.5px solid #eadfce",
-                    borderRadius: "10px", background: "var(--app-subtle)", fontSize: "14px",
+                    display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px",
+                    width: "100%", padding: "8px 12px", border: existingGiftForSelected ? "1.5px solid var(--ui-theme-danger, #e11d48)" : "1px solid var(--app-border)",
+                    borderRadius: "10px", background: "var(--app-surface)", fontSize: "13.5px",
                     cursor: "pointer", color: value ? "var(--app-ink)" : "var(--app-muted)", textAlign: "left",
-                    fontFamily: "inherit", minHeight: "44px", transition: "border-color 0.2s"
+                    fontFamily: "inherit", minHeight: "44px", minWidth: 0, transition: "border-color 0.2s"
                 }}
             >
                 {selectedOption ? (
-                    <span style={{ fontWeight: 600, color: "var(--app-ink)", fontSize: "14px" }}>
+                    <span style={{ fontWeight: 600, color: "var(--app-ink)", fontSize: "13.5px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
                         {selectedLabel}
                     </span>
                 ) : (
-                    <span style={{ color: "var(--app-muted)" }}>{placeholder}</span>
+                    <span style={{ color: "var(--app-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{placeholder}</span>
                 )}
                 <IoChevronDownOutline style={{ 
-                    fontSize: "15px", color: "var(--app-muted)",
+                    fontSize: "15px", color: "var(--app-muted)", flexShrink: 0,
                     transform: open ? "rotate(180deg)" : "none", 
                     transition: "transform 0.2s ease" 
                 }} />
             </button>
 
             {existingGiftForSelected && !open && (
-                <div style={{ marginTop: "12px" }}>
-                    <div style={{ color: "#E11D48", fontSize: "13px", marginBottom: "8px" }}>
+                <div style={{ marginTop: "10px" }}>
+                    <div style={{ color: "var(--ui-theme-danger, #e11d48)", fontSize: "12.5px", marginBottom: "6px" }}>
                         {t ? t("alreadyGiven") || "This guest has already given a gift." : "This guest has already given a gift."}
                     </div>
                     <div style={{ 
-                        display: "inline-block", background: "#DBEAFE", color: "#1D4ED8", 
+                        display: "inline-block", background: "var(--ui-theme-info-soft, #dbeafe)", color: "var(--ui-theme-info, #1d4ed8)", 
                         padding: "4px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "500"
                     }}>
                         {existingGiftForSelected.method?.toUpperCase() || '—'}: {budgetMoney(existingGiftForSelected.amount, existingGiftForSelected.currency || 'USD')}
@@ -95,13 +95,13 @@ export function GuestSelectField({ value, guestId, onChange, options = [], place
 
             {open && (
                 <div style={{
-                    position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0,
-                    background: "var(--app-surface)", border: "1px solid #eadfce", borderRadius: "10px",
-                    boxShadow: "0 10px 24px rgba(80,55,20,0.12)", zIndex: 10,
+                    position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, minWidth: "240px",
+                    background: "var(--app-surface)", border: "1px solid var(--app-border)", borderRadius: "12px",
+                    boxShadow: "var(--ui-theme-shadow-elevated, 0 10px 24px rgba(80,55,20,0.12))", zIndex: 20,
                     padding: "8px", display: "flex", flexDirection: "column", gap: "8px"
                 }}>
                     <div style={{ position: "relative" }}>
-                        <IoSearchOutline style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "#999", fontSize: "18px" }} />
+                        <IoSearchOutline style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--app-muted)", fontSize: "18px" }} />
                         <input 
                             aria-label={placeholder}
                             type="text" 

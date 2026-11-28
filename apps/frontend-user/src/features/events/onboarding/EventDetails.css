@@ -75,13 +75,18 @@
 
 .event-settings .event-settings-section {
   scroll-margin-top: 100px;
-  margin: 0 0 28px;
-  padding: clamp(18px, 3vw, 28px);
-  border: 1px solid var(--ws-border);
-  border-radius: 16px;
-  background: #fafcfb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  margin: 0 0 12px;
+  padding: 24px 0 12px;
+  border: 0;
+  border-top: 1px solid var(--ws-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   min-width: 0;
+}
+.event-settings form > .event-settings-section:first-of-type {
+  border-top: 0;
+  padding-top: 4px;
 }
 
 .event-settings .event-settings-section legend {

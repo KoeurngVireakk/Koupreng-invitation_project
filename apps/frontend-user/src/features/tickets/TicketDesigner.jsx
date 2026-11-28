@@ -38,6 +38,13 @@ function Designer({ eventId }) {
   const serial = JSON.stringify(design);
   const dirty = design !== null && serial !== baseline;
   const items = useMemo(() => [...new Map([...(state.media?.all || []), state.media?.coverImage, ...(state.media?.gallery || state.media?.galleryImages || [])].filter(item => item?.id && item?.mimeType?.startsWith("image/")).map(item => [item.id, item])).values()], [state.media]);
+  const guestOptions = useMemo(() => {
+    const raw = state.guests;
+    if (Array.isArray(raw)) return raw;
+    if (Array.isArray(raw?.items)) return raw.items;
+    if (Array.isArray(raw?.content)) return raw.content;
+    return [];
+  }, [state.guests]);
   const preview = useMemo(() => {
     if (!ticket || !design) return null;
     const mediaUrl = id => items.find(item => String(item.id) === String(id))?.fileUrl || null;
@@ -50,6 +57,9 @@ function Designer({ eventId }) {
     Promise.all([ticketService.design(eventId), ticketService.ticket(eventId), guestService.listByInvitation(eventId), mediaService.list(eventId)])
       .then(([appearance, initial, guests, media]) => {
         if (!active) return;
+        if (!appearance?.design || !initial) {
+          throw new Error("The ticket designer is unavailable for this event or package.");
+        }
         setBaseline(JSON.stringify(appearance.design));
         setDesign(appearance.design); setTicket(initial); setState({ guests, media, appearance });
       }).catch(err => { if (active) setState({ error: err.message || "The ticket designer is unavailable for this event or package.", failure: err }); });
@@ -142,7 +152,7 @@ function Designer({ eventId }) {
       {[["showTable", text("Table & seat", "តុ និងកៅអី")], ["showSeatCount", text("Guest count", "ចំនួនភ្ញៀវ")], ["showGroup", text("Guest group", "ក្រុមភ្ញៀវ")]].map(([key, label]) => <label className="ticket-checkbox" key={key}><input type="checkbox" checked={design[key]} onChange={e => update(key, e.target.checked)} />{label}</label>)}
       </section><button type="button" className="ticket-reset-button" disabled={!dirty} onClick={async () => { if (await feedback.confirm({ message: text("Discard unsaved ticket design changes?", "បោះបង់ការកែប្រែរចនាកាតដែលមិនទាន់រក្សាទុកឬ?"), destructive: true })) setDesign(JSON.parse(baseline)); }}>{text("Reset changes", "កំណត់ឡើងវិញ")}</button>
     </fieldset><div className="ticket-preview-panel"><h2><Eye size={20} aria-hidden="true" />{text("Live preview", "មើលជាមុន")}</h2><label className="ticket-guest-select">{text("Preview recipient", "ភ្ញៀវសម្រាប់មើលជាមុន")}<select value={guestId} onChange={e => setGuestId(e.target.value)}><option value="">{text("General invitation · no guest check-in", "សំបុត្រអញ្ជើញទូទៅ · គ្មានការកត់ត្រាវត្តមានភ្ញៀវ")}</option>
-      {state.guests.map(guest => <option key={guest.id} value={guest.id}>{guest.guestName}</option>)}</select></label>
+      {guestOptions.map(guest => <option key={guest.id} value={guest.id}>{guest.guestName}</option>)}</select></label>
       {preview && <><div className="ticket-preview-stage"><TicketPreview ticket={preview} onReady={setReady} /></div><TicketActions ticket={preview} ready={ready && !dirty} />{dirty && <p className="workspace-notice">{text("Save the design before downloading or sharing.", "រក្សាទុករចនាមុនទាញយក ឬចែករំលែក។")}</p>}<p className="ticket-print-note">{text("Print-ready 2:3 ratio (1200×1800px / 1800×2700px) with white QR quiet zone. QR identity tokens are server-issued and unchanged by design edits.", "ខ្នាតបោះពុម្ពស្តង់ដារ 2:3 (1200×1800px / 1800×2700px) និងមានគម្លាតស្កេន QR។ លេខសម្គាល់ QR គ្រប់គ្រងដោយម៉ាស៊ីនមេ មិនផ្លាស់ប្តូរតាមការរចនាទេ។")}</p></>}
     </div></div>
   </section>;

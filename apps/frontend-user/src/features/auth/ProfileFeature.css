@@ -82,16 +82,46 @@
 
 .profile-avatar-overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.72);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 20, 0.68);
     color: #ffffff;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-align: center;
-    padding: 4px 2px;
+    padding: 6px;
     line-height: 1.3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-avatar:hover .profile-avatar-overlay,
+.profile-avatar:focus-within .profile-avatar-overlay {
+    opacity: 1;
+}
+
+.profile-photo-trigger {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 5px 12px;
+    min-height: 36px;
+    border: 1px solid var(--ui-theme-border);
+    border-radius: 9999px;
+    background: var(--ui-theme-surface);
+    color: var(--ui-theme-ink);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.profile-photo-trigger:hover {
+    border-color: var(--ui-theme-gold);
+    background: var(--ui-theme-hover, var(--ui-theme-subtle));
 }
 
 .profile-avatar input[type="file"] {
@@ -106,6 +136,14 @@
 .profile-avatar:focus-within {
     outline: 3px solid var(--ui-theme-focus);
     outline-offset: 3px;
+}
+
+.profile-info-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
 }
 
 .profile-info-text strong {

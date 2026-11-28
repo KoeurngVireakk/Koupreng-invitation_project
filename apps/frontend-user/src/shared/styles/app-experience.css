@@ -216,8 +216,10 @@
 :root[data-color-mode=dark] .dash-wrapper .event-settings .studio-guide-modes button[aria-pressed=true] { background: var(--app-accent-soft); color: var(--app-ink); }
 :root[data-color-mode=dark] .dash-wrapper .event-card-countdown-tag { background: var(--app-gold-soft); color: var(--ui-theme-gold-bright); border: 1px solid color-mix(in srgb, var(--app-gold) 38%, transparent); }
 :root[data-color-mode=dark] .dash-wrapper .event-card-countdown-tag span { color: var(--ui-theme-gold-bright); }
-:root[data-color-mode=dark] .dash-wrapper :is(.guest-status-filters button,.guest-tabs button) { color: var(--app-muted); border-color: var(--app-border); }
-:root[data-color-mode=dark] .dash-wrapper :is(.guest-status-filters button.active,.guest-status-filters button[aria-pressed=true],.guest-tabs button.active) { background: var(--app-accent-soft); color: var(--ui-theme-gold-bright); border-color: var(--app-accent); font-weight: 700; }
+:root[data-color-mode=dark] .dash-wrapper .guest-status-filters button { color: var(--app-muted); border-color: transparent; background: transparent; }
+:root[data-color-mode=dark] .dash-wrapper .guest-status-filters button:is(.active,[aria-pressed=true]) { background: transparent; color: var(--ui-theme-gold-bright); border-bottom-color: var(--app-accent); font-weight: 700; }
+:root[data-color-mode=dark] .dash-wrapper .guest-tabs button { color: var(--app-muted); border-color: var(--app-border); }
+:root[data-color-mode=dark] .dash-wrapper .guest-tabs button.active { background: var(--app-accent-soft); color: var(--ui-theme-gold-bright); border-color: var(--app-accent); font-weight: 700; }
 :root[data-color-mode=dark] .dash-wrapper .rsvp-count-context { color: var(--app-muted); }
 :root[data-color-mode=dark] .dash-wrapper .workspace-section-heading :is(h1,h2,h3) { color: var(--app-ink); }
 :root[data-color-mode=dark] .dash-wrapper .checkin-table td small { color: var(--app-muted); }

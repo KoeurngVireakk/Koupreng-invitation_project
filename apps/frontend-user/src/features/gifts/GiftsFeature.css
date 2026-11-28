@@ -795,11 +795,13 @@
 }
 
 .wg-table-fixed {
-    table-layout: fixed;
+    table-layout: auto;
+    min-width: 980px;
 }
 
 .wg-table-wrap {
-    overflow: visible;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .wg-table-fixed th,
@@ -840,7 +842,7 @@
 
 .wg-inline-amount {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 84px;
+    grid-template-columns: minmax(56px, 1fr) 74px;
     gap: 5px;
 }
 
@@ -854,21 +856,22 @@
 .wg-inline-save,
 .wg-inline-cancel {
     display: inline-flex;
-    min-height: 40px;
+    min-height: 44px;
+    white-space: nowrap;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 7px 10px;
+    gap: 6px;
+    padding: 8px 14px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 9999px;
     font: inherit;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 650;
     cursor: pointer;
 }
 
 .wg-inline-save {
-    background: var(--ws-gold, #926c34);
+    background: var(--ui-theme-action, #1c3a32);
     color: var(--ui-theme-on-action, #fff);
 }
 
@@ -927,7 +930,7 @@
 }
 
 .wg-table thead {
-    background: linear-gradient(135deg, #fdf6ec, #f5efe5);
+    background: var(--app-subtle, #f7f4ec);
     border-bottom: 2px solid var(--app-border);
 }
 

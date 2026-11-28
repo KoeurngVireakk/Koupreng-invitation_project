@@ -24,13 +24,15 @@
 .ticket-studio :where(input,select,textarea) { box-sizing: border-box; min-width: 0; max-width: 100%; font: inherit; color: var(--app-ink); }
 .ticket-design-controls input:not([type=checkbox]), .ticket-design-controls select, .ticket-design-controls textarea, .ticket-guest-select select { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--app-control-border); border-radius: 10px; background: var(--app-surface); font-size: 14px; line-height: 1.8; }
 .ticket-design-controls textarea { min-height: 86px; resize: vertical; }
-.ticket-design-controls input[type=color] { padding: 5px; cursor: pointer; }
+.ticket-design-controls input[type=color] { height: 46px; padding: 5px; cursor: pointer; border-radius: 10px; }
+.ticket-design-controls input[type=color]::-webkit-color-swatch-wrapper { padding: 2px; }
+.ticket-design-controls input[type=color]::-webkit-color-swatch { border: 1px solid var(--app-border); border-radius: 6px; }
 .ticket-design-controls input[type=range] { padding: 0; border: 0; accent-color: var(--app-accent); }
 .ticket-design-controls input[type=file] { padding: 6px; font-size: 12px; }
 .ticket-design-controls input[type=file]::file-selector-button { padding: 7px 10px; margin-right: 10px; border: 0; border-radius: 6px; background: var(--app-accent-soft); color: var(--app-ink); font: inherit; cursor: pointer; }
 .ticket-media-control { padding: 16px; margin-bottom: 16px; border: 1px dashed var(--app-control-border); border-radius: 12px; background: var(--app-subtle); }
 .ticket-media-control label { margin-bottom: 12px; }
-.ticket-media-control > button { min-height: 36px; padding: 4px 10px; font-size: 12px; }
+.ticket-media-control > button { min-height: 44px; padding: 8px 14px; font-size: 13px; }
 .ticket-unused-asset { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; overflow-wrap: anywhere; }
 .ticket-design-controls .ticket-checkbox { flex-direction: row; align-items: center; justify-content: space-between; gap: 14px; min-height: 44px; margin: 0; padding-block: 8px; border-bottom: 1px solid var(--app-border); }
 .ticket-design-controls .ticket-checkbox:last-child { border: 0; }

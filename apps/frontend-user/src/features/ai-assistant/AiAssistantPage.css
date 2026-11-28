@@ -85,6 +85,8 @@
 .pe-ai-back-link {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  padding-inline: 4px;
   gap: var(--space-2, 8px);
   color: var(--brand-text-muted);
   text-decoration: none;

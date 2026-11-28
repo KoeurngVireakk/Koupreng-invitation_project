@@ -2572,10 +2572,10 @@
 .checkin-modal-x,
 .checkin-modal-close {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 36px;
-    height: 36px;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2761,7 +2761,12 @@
 .checkin-currency-btn {
     border: none;
     background: transparent;
-    padding: 6px 14px;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
     border-radius: 999px;
     font-weight: 800;
     font-size: 13px;
@@ -2891,13 +2896,13 @@
 .checkin-banner-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .checkin-banner-retry {
     display: inline-flex; align-items: center; gap: 6px;
-    min-height: 36px; padding: 6px 12px; border-radius: 10px;
+    min-height: 44px; padding: 8px 14px; border-radius: 10px;
     border: 1px solid var(--app-border); background: var(--app-surface);
     color: var(--app-ink); font: 700 0.82rem inherit; cursor: pointer;
 }
 .checkin-banner-close {
     display: inline-flex; align-items: center; justify-content: center;
-    min-width: 36px; min-height: 36px; border: 1px solid var(--app-border);
+    min-width: 44px; min-height: 44px; border: 1px solid var(--app-border);
     border-radius: 999px; background: var(--app-surface); color: var(--app-ink); cursor: pointer;
 }
 .checkin-readonly-banner {
@@ -2911,14 +2916,14 @@
     color: var(--app-muted); font-size: 13px; line-height: 1.5;
 }
 .checkin-search-clear {
-    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    min-width: 28px; min-height: 28px; display: inline-flex; align-items: center; justify-content: center;
+    position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+    min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center;
     border: none; background: transparent; color: var(--app-muted); cursor: pointer; border-radius: 999px;
 }
 .checkin-undo-btn {
     border: 1px solid color-mix(in srgb, var(--ui-theme-warning, #c2410c) 35%, transparent);
     background: var(--ui-theme-warning-soft, #fff7ed); color: var(--ui-theme-warning, #c2410c);
-    border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; font-weight: 600;
+    border-radius: 10px; min-height: 44px; padding: 8px 14px; font-size: 0.82rem; font-weight: 600;
     cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
 }
 .checkin-celebration-guest { font-size: 1.45rem; font-weight: 800; color: var(--app-ink); }

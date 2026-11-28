@@ -49,10 +49,10 @@
 .pkg-history th { background: var(--app-subtle, #faf6ee); font-weight: 650; color: var(--app-muted, #5c4f3d); }
 .pkg-history :is(th, td) { padding: 18px 12px; border-bottom: 1px solid var(--ws-border); vertical-align: middle; }
 .pkg-order-code { overflow-wrap: anywhere; }
-.pkg-status { display: inline-block; padding: 4px 10px; border-radius: 8px; background: #f4f0e8; color: #6b4d1d; font-size: 14px; line-height: 1.8; }
-.pkg-status.success { background: #e6f4ee; color: #176348; }
-.pkg-status.failed { background: #fff0f0; color: #a52838; }
-.pkg-status.expired { background: #f0f1f2; color: #515861; }
+.pkg-status { display: inline-block; padding: 4px 10px; border-radius: 8px; background: var(--ws-surface-subtle, #f4f0e8); color: var(--ws-gold, #6b4d1d); font-size: 13px; font-weight: 600; line-height: 1.8; }
+.pkg-status.success { background: var(--ui-theme-success-soft, #e6f4ee); color: var(--ui-theme-success, #176348); }
+.pkg-status.failed { background: var(--ui-theme-danger-soft, #fff0f0); color: var(--ui-theme-danger, #a52838); }
+.pkg-status.expired { background: var(--ws-surface-subtle, #f0f1f2); color: var(--ws-muted, #515861); }
 .pkg-text-button { border: 0; background: transparent; color: var(--ws-teal); text-decoration: underline; text-underline-offset: 4px; min-height: 44px; cursor: pointer; white-space: nowrap; }
 .pkg-history-mobile { display: none; }
 .pkg-history-mobile article + article { border-top: 1px solid var(--ws-border); padding-top: 20px; margin-top: 24px; }
@@ -61,8 +61,8 @@
 .pkg-history-mobile dd, .pkg-checkout dd { text-align: right; overflow-wrap: anywhere; min-width: 0; }
 .pkg-history-mobile dt, .pkg-checkout dt { color: var(--ws-muted); }
 .pkg-faq h2 { margin-bottom: 16px; }
-.pkg-faq details { border-top: 1px solid var(--ws-border); padding-block: 18px; }
-.pkg-faq summary { font-weight: 650; cursor: pointer; }
+.pkg-faq details { border-top: 1px solid var(--ws-border); padding-block: 14px; }
+.pkg-faq summary { display: flex; align-items: center; min-height: 44px; font-weight: 650; cursor: pointer; }
 .pkg-faq details p { margin-top: 12px; max-width: 900px; color: var(--ws-muted); }
 @media (max-width: 1023px) {
   .pkg-grid, .pkg-grid .k-loading-grid { grid-template-columns: 1fr; gap: 20px; }

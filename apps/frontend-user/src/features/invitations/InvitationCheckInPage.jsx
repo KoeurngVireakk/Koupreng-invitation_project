@@ -344,7 +344,7 @@ export default function InvitationCheckInPage() {
                     <SummaryCard
                         label={copy("អត្រាវត្តមាន", "Attendance rate")}
                         value={`${turnoutPercentage}%`}
-                        subtitle={`${summary.checkedIn} / ${summary.totalGuests} នាក់`}
+                        subtitle={`${summary.checkedIn} / ${summary.totalGuests} ${copy("នាក់", "guests")}`}
                         icon={TrendingUp}
                         theme="emerald"
                     />

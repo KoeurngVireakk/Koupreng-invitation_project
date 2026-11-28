@@ -60,6 +60,7 @@
   .seating-page .workspace-summary article:nth-last-child(-n+2) { border-bottom: 0; }
   .seating-layout { grid-template-columns: minmax(0, 1fr); }
   .seating-mobile-tabs { display: flex; }
+  .seating-table-workspace > .workspace-section-heading .workspace-tabs { display: none; }
   .seating-layout .mobile-hidden { display: none; }
   .seating-unassigned-list { max-height: none; }
 }

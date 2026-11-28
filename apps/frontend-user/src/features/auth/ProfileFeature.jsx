@@ -231,8 +231,9 @@ export default function ProfilePage() {
             ) : (
               displayInitial
             )}
-            <div className="profile-avatar-overlay">{t("changePhoto")}</div>
+            <div className="profile-avatar-overlay" aria-hidden="true">{t("changePhoto")}</div>
             <input
+              id={`${fieldId}-avatar`}
               type="file"
               accept="image/jpeg,image/png,image/webp"
               disabled={saving || loadFailed}
@@ -244,6 +245,9 @@ export default function ProfilePage() {
           <div className="profile-info-text">
             <strong>{fullName || t("newUser")}</strong>
             <span>{user?.email || ""}</span>
+            <label htmlFor={`${fieldId}-avatar`} className="profile-photo-trigger">
+              {t("changePhoto")}
+            </label>
           </div>
         </div>
 

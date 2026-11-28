@@ -68,7 +68,7 @@ export default function InvitationSeatingPage() {
     {error && <AccessFailureState error={seating.failure || error} feature="SEATING" permission="MANAGE_SEATING" onRetry={refresh} />}
     <section className="workspace-summary" aria-label={t('summary')}>{stats.map(([key, value]) => <article key={key}><span>{t(key)}</span><strong>{value}</strong></article>)}</section>
     <div className="seating-mobile-tabs workspace-tabs" role="group" aria-label={t('workspace')}>
-      <button type="button" aria-pressed={mobilePanel === 'tables'} onClick={() => setMobilePanel('tables')}>{t('tables')}</button>
+      <button type="button" aria-pressed={mobilePanel === 'tables'} onClick={() => { setMobilePanel('tables'); setView('list'); }}>{t('tables')}</button>
       <button type="button" aria-pressed={mobilePanel === 'guests'} onClick={() => setMobilePanel('guests')}>{t('assignment')}</button>
       <button type="button" aria-pressed={mobilePanel === 'plan'} onClick={() => { setMobilePanel('plan'); setView('plan'); }}>{t('plan')}</button>
     </div>
