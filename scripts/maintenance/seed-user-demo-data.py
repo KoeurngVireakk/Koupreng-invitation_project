@@ -485,8 +485,6 @@ def main():
             {
                 "type": "WEDDING",
                 "template": "silk-heritage",
-                "slug": SLUG_WEDDING,
-                "title": "មង្គលការ វិបុល & ចរិយា (Vibul & Chariya Wedding)",
                 "guestsCount": 14,
                 "rsvpsCount": 5,
                 "wishesCount": 3,
@@ -499,8 +497,6 @@ def main():
             {
                 "type": "ENGAGEMENT",
                 "template": "khmer-celestial",
-                "slug": SLUG_ENGAGEMENT,
-                "title": "ពិធីភ្ជាប់ពាក្យ រតនា & គន្ធា (Rattana & Kunthea Engagement)",
                 "guestsCount": 7,
                 "rsvpsCount": 2,
                 "giftsCount": 1,
@@ -508,8 +504,6 @@ def main():
             {
                 "type": "BIRTHDAY",
                 "template": "event-essential",
-                "slug": SLUG_BIRTHDAY,
-                "title": "ខួបកំណើត គម្រប់ ២៨ ឆ្នាំ វីរៈ (Vireak 28th Birthday Bash)",
                 "guestsCount": 4,
                 "rsvpsCount": 1,
                 "wishesCount": 1,

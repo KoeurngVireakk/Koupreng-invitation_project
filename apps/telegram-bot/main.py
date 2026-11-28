@@ -406,13 +406,6 @@ async def process_telegram_update(update: dict):
         logger.info("Ignoring Telegram update from a disallowed group")
         return {"ok": True}
 
-    logger.info(
-        "Received Telegram update is_bot=%s trusted_payment_bot=%s callback=%s",
-        sender.get("is_bot") is True,
-        trusted_payment_sender,
-        bool(callback_query_id),
-    )
-
     if ADMIN_BOT_ENABLED and (command_name(text) in {"/start", "/help", "/status", "/payments",
                                                    "/pending", "/review", "/stats"}):
         if sender_id in TELEGRAM_ALLOWED_ADMIN_IDS and not sender.get("is_bot"):
