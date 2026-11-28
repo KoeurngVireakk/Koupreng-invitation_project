@@ -22,8 +22,10 @@ export default function PublicTemplateCard({ template, lang, isAuthenticated, ca
       ? copy("ប្រណីត", "Premium")
       : copy("ឥតគិតថ្លៃ", "Free");
 
+  const isSpecimenSvg = typeof template.image === "string" && template.image.endsWith(".svg");
+
   return (
-    <article className="kp-design-card tp-card" data-template={template.identity}>
+    <article className="kp-design-card tp-card" data-template={template.identity} data-specimen={isSpecimenSvg || undefined}>
       <div className="kp-design-media-wrap">
         <span className={`tp-card-badge tp-card-badge--${badgeClass}`} aria-hidden="true">
           {template.isPremium && <Sparkles size={12} aria-hidden="true" />}
@@ -34,27 +36,31 @@ export default function PublicTemplateCard({ template, lang, isAuthenticated, ca
           className="kp-design-media"
           aria-label={`${broken || !template.image ? copy("រូបភាពគំរូមិនមាន ", "Preview image unavailable ") : ""}${copy("មើលគំរូ", "Preview design")} ${template.name}`}
         >
-          {template.image && !broken ? (
-            <img
-              loading={priority ? "eager" : "lazy"}
-              fetchPriority={priority ? "high" : undefined}
-              decoding="async"
-              {...publicTemplateImage(template.image, compact)}
-              width="720"
-              height="1080"
-              alt={template.name}
-              onError={() => setBroken(true)}
-            />
-          ) : (
-            <span className="kp-design-placeholder">
-              <ImageOff size={32} aria-hidden="true" />
-              {copy("រូបភាពគំរូមិនមាន", "Preview image unavailable")}
-            </span>
-          )}{" "}
+          <div className="kp-design-mat">
+            {template.image && !broken ? (
+              <img
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : undefined}
+                decoding="async"
+                {...publicTemplateImage(template.image, compact)}
+                width="720"
+                height="1080"
+                alt={template.name}
+                onError={() => setBroken(true)}
+              />
+            ) : (
+              <span className="kp-design-placeholder">
+                <ImageOff size={32} aria-hidden="true" />
+                {copy("រូបភាពគំរូមិនមាន", "Preview image unavailable")}
+              </span>
+            )}
+          </div>{" "}
           <span className="kp-design-preview">
-            <Eye size={16} aria-hidden="true" />
-            <span>{copy("មើលគំរូ", "Preview design")}</span>
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <span className="kp-design-preview-label">
+              <Eye size={15} aria-hidden="true" />
+              <span>{copy("មើលគំរូ", "Preview design")}</span>
+            </span>
+            <ArrowUpRight size={15} aria-hidden="true" />
           </span>
         </Link>
       </div>

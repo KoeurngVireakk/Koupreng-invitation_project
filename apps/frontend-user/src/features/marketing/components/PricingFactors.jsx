@@ -1,5 +1,5 @@
 import { LayoutTemplate, Sparkles } from "lucide-react";
-import { BentoCard } from "@/shared/ui/vendor";
+import { BentoCard } from "@/shared/ui/vendor/kokonutui/BentoCard";
 
 // Public plan discovery, with no amounts or package entitlements implied.
 export default function PricingFactors({ copy, compact = false }) {

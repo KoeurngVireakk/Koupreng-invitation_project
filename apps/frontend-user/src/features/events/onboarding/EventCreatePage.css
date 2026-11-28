@@ -128,12 +128,12 @@
    Modern Accessible Multi-Step Progress Stepper
    ========================================================================== */
 .event-wizard-stepper-wrap {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   background: var(--ws-surface);
   border: 1px solid var(--ws-border);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 16px 20px;
-  box-shadow: 0 2px 10px rgba(31, 43, 36, 0.03);
+  box-shadow: none;
 }
 
 .event-wizard-stepper-inner {

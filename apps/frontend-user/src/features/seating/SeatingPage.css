@@ -24,8 +24,8 @@
 .seating-layout--plan .seating-assignment-panel.mobile-hidden { display: none; }
 .seating-table-workspace > .workspace-section-heading h2 { font-size: 20px; font-weight: 750; color: #2a1f10; }
 .seating-tables-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
-.seating-table-card { padding: 22px; border: 1px solid #eadfce; border-radius: 18px; background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%); display: grid; gap: 16px; box-shadow: 0 2px 10px rgba(93, 67, 32, 0.04); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease; }
-.seating-table-card:hover { transform: translateY(-2px); border-color: #d4af37; box-shadow: 0 8px 24px rgba(93, 67, 32, 0.08); }
+.seating-table-card { padding: 22px; border: 1px solid #eadfce; border-radius: 14px; background: #ffffff; display: grid; gap: 16px; box-shadow: none; transition: border-color 0.2s ease, transform 0.2s ease; }
+.seating-table-card:hover { transform: translateY(-2px); border-color: #c3a26b; }
 .seating-table-head, .seating-table-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
 .seating-table-head h3, .seating-assignment-panel h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 750; line-height: 1.6; color: #2a1f10; overflow-wrap: anywhere; }
 .seating-table-head h3 svg { color: #b98b42; }

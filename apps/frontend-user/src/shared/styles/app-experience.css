@@ -294,7 +294,7 @@
 :root[data-color-mode=dark] .kp-marketing-shell .kp-landing { --kp-deep: var(--app-accent); --kp-deep-hover: var(--app-accent-hover); --kp-emerald: var(--app-accent); --kp-emerald-deep: var(--app-accent-hover); --kp-gold-ink: var(--app-gold); }
 :root[data-color-mode=dark] .kp-marketing-shell .kp-landing { --kp-gold-text: var(--app-gold); }
 :root[data-color-mode=dark] .kp-marketing-shell .kp-mini-names { color: var(--app-gold); }
-:root[data-color-mode=dark] .kp-marketing-shell .public-demo-caption :is(a,button) { color: var(--app-gold); }
+:root[data-color-mode=dark] .kp-marketing-shell .public-demo-caption :is(a,button):not(.public-demo-launch-btn) { color: var(--app-gold); }
 :root[data-color-mode=dark] .kp-marketing-shell .kp-final { --kp-bg: var(--app-ink); color: var(--app-ink); }
 :root[data-color-mode=dark] .kp-marketing-shell .kp-button { background: var(--app-accent); color: var(--app-on-accent); border-color: var(--app-accent); }
 :root[data-color-mode=dark] .kp-marketing-shell :is(.kp-header-inner,.kp-header--scrolled .kp-header-inner,.kp-mobile-dialog,.kp-mobile-inner,.kp-footer,.kp-price-card,.kp-design-card,.kp-trust-card,.kp-contact-card) { background: var(--app-surface); color: var(--app-ink); border-color: var(--app-border); }

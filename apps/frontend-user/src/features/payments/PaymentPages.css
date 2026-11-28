@@ -133,31 +133,20 @@
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #b0926a 0%, #7d6443 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--kp-gold-700);
 }
 
 .checkout-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 14px auto 16px;
-}
-
-.checkout-divider span {
-  width: 48px;
-  height: 1px;
+  width: 56px;
+  height: 2px;
   background: var(--kp-gold-400);
-  opacity: 0.6;
+  margin: 14px auto 16px;
+  opacity: 0.7;
 }
 
+.checkout-divider span,
 .checkout-divider .diamond {
-  width: 8px;
-  height: 8px;
-  background: var(--kp-gold-500);
-  transform: rotate(45deg);
+  display: none;
 }
 
 .checkout-subtitle {
@@ -190,17 +179,15 @@
 
 /* Generic Card Base */
 .checkout-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(16px);
+  background: var(--kp-surface);
   border: 1px solid var(--kp-border);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: var(--kp-shadow-sm);
-  transition: all 0.3s ease;
+  box-shadow: none;
+  transition: border-color 0.25s ease;
 }
 
 .checkout-card:hover {
-  box-shadow: var(--kp-shadow-md);
   border-color: var(--kp-gold-400);
 }
 

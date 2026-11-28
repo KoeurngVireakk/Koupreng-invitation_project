@@ -1,15 +1,16 @@
 import { useUiCopy } from "@/shared/i18n/useUiCopy";
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { Eye, Layers, Signal, Wifi, BatteryFull, Minus, Plus } from "lucide-react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { Eye, Layers, Signal, Wifi, BatteryFull, Minus, Plus, Smartphone, Monitor, Maximize2, RotateCcw, MousePointerClick } from "lucide-react";
 import "./LivePhoneSimulator.css";
 import { useBackendMessages } from "@/shared/i18n/useBackendMessages";
 import { formatTime24toKhmer } from "@/shared/ui/TimePicker";
-import { TemplateExperience } from "@/features/templates";
 import { draftToTemplate } from "../wedding-builder/utils/draftToTemplate";
 import { buildPreviewUrl, createPreviewSession, iframePreviewChannel, isTrustedPreviewMessage, postPreviewMessage } from "@/shared/preview/previewMessaging";
 import { usePreviewSyncRetries } from "@/shared/hooks/usePreviewSyncRetries";
 import { PHONE_PREVIEW } from "@/shared/preview/previewDevices";
 import { useEventWorkspace } from '@/features/events/workspace/EventContext';
+
+const LazyTemplateExperience = lazy(() => import("@/features/templates/experience/TemplateExperience"));
 
 function displayKhmerDate(dateStr, languageMode) {
     if (!dateStr) return "";
@@ -225,20 +226,8 @@ export default function LivePhoneSimulator({ data = {}, eventId, catalogVersion 
                 <p>{slowPreview === previewKey ? uiCopy("មើលជាមុនមិនទាន់ឆ្លើយតប។ ពង្រាងរបស់អ្នកនៅក្នុងផ្ទាំងកែសម្រួល។", "Preview has not responded. Your draft is still in the editor.") : uiCopy("កំពុងបើកពង្រាងមើលជាមុន…", "Loading draft preview…")}</p>
                 {slowPreview === previewKey && <button type="button" onClick={() => setPreviewAttempt(value => value + 1)}>{uiCopy("ផ្ទុកមើលជាមុនម្ដងទៀត", "Reload preview")}</button>}
             </div>}
-            {/* Clean Studio Preview Top Bar */}
+            {/* Compact Atelier Preview Control Bar */}
             <div className="pe-preview-top-bar">
-                <div className="pe-preview-status-row">
-                    <div className="pe-preview-status-left">
-                        <span className="pe-live-dot">
-                            <span className="pe-live-dot-ping"></span>
-                            <span className="pe-live-dot-solid"></span>
-                        </span>
-                        <span className="pe-preview-live-title">{t("previewTitle") || uiCopy("មើលគំរូជាមុន", "Preview template")}</span>
-                    </div>
-                    <span className="pe-preview-tag" title={uiCopy("គំរូបច្ចុប្បន្ន", "Current template")}>{templateName}</span>
-                </div>
-
-                {/* Clean, Full-Width Segmented Control - Easy to click */}
                 <div className="pe-sim-gate-switcher" role="tablist" aria-label={uiCopy("ទិដ្ឋភាពសំបុត្រអញ្ជើញ", "Invitation view")}>
                     <button
                         type="button"
@@ -248,7 +237,7 @@ export default function LivePhoneSimulator({ data = {}, eventId, catalogVersion 
                         className={`pe-sim-gate-btn ${!isGateOpen ? "is-active" : ""}`}
                         title={uiCopy("មើលស្រោមសំបុត្រ ឬក្របទំព័រដើម", "View envelope / cover")}
                     >
-                        <Layers size={16} />
+                        <Layers size={15} />
                         <span>{en ? "Cover" : "ស្រោមសំបុត្រ"}</span>
                     </button>
                     <button
@@ -259,10 +248,47 @@ export default function LivePhoneSimulator({ data = {}, eventId, catalogVersion 
                         className={`pe-sim-gate-btn ${isGateOpen ? "is-active" : ""}`}
                         title={uiCopy("មើលមាតិកាសំបុត្រអញ្ជើញពេញ", "View full invitation")}
                     >
-                        <Eye size={16} />
+                        <Eye size={15} />
                         <span>{en ? "Full invitation" : "មាតិកាពេញ"}</span>
                     </button>
                 </div>
+
+                <div className="studio-preview-tools" hidden={!showTools} aria-label={uiCopy("ជម្រើសមើលជាមុន", "Preview controls")}>
+                    {onEditSection && (
+                        <button type="button" className="studio-tool-icon-btn" aria-pressed={clickEditing} title={en ? "Click to edit" : "ចុចដើម្បីកែសម្រួល"} onClick={() => { const next = !clickEditing; setClickEditing(next); sendPreview({ type: 'PREVIEW_EDIT_MODE', open: next }); }}>
+                            <MousePointerClick size={15} />
+                            <span>{en ? "Edit" : "ចុចកែ"}</span>
+                        </button>
+                    )}
+                    <div className="studio-device-switch" role="group" aria-label={uiCopy("ឧបករណ៍មើលជាមុន", "Preview device")}>
+                        <button type="button" aria-pressed={device === "mobile"} title={deviceName || (en ? PHONE_PREVIEW.name : "ទូរស័ព្ទ")} aria-label={deviceName || (en ? PHONE_PREVIEW.name : "មើលតាមទូរស័ព្ទ")} onClick={() => setDevice("mobile")}>
+                            <Smartphone size={15} />
+                        </button>
+                        <button type="button" aria-pressed={device === "desktop"} title={en ? "Desktop" : "កុំព្យូទ័រ"} aria-label={en ? "Desktop" : "កុំព្យូទ័រ"} onClick={() => setDevice("desktop")}>
+                            <Monitor size={15} />
+                        </button>
+                    </div>
+                    <div className="studio-zoom-cluster">
+                        <button type="button" aria-label={uiCopy("បង្រួម", "Zoom out")} onClick={() => setZoom(String(Math.max(35, (zoom === "fit" ? Math.round(fitScale * 100) : Number(zoom)) - 10)))}><Minus size={14} /></button>
+                        <select aria-label={uiCopy("ទំហំមើលជាមុន", "Preview zoom")} value={zoom} onChange={event => setZoom(event.target.value)}>
+                            <option value="fit">{en ? "Fit" : "សម"} ({Math.round(fitScale * 100)}%)</option>
+                            {[...new Set([35, 50, 75, 100, 125, ...(zoom === "fit" ? [] : [Number(zoom)])])].sort((a,b)=>a-b).map(value => <option key={value} value={value}>{value}%</option>)}
+                        </select>
+                        <button type="button" aria-label={uiCopy("ពង្រីក", "Zoom in")} onClick={() => setZoom(String(Math.min(125, (zoom === "fit" ? Math.round(fitScale * 100) : Number(zoom)) + 10)))}><Plus size={14} /></button>
+                    </div>
+                    <button type="button" className="studio-tool-icon-btn" title={en ? "Reset view" : "កំណត់ទិដ្ឋភាពដើម"} aria-label={en ? "Reset view" : "កំណត់ទិដ្ឋភាពដើម"} onClick={() => { setZoom("fit"); setDevice("mobile"); handleSetGate(false); }}>
+                        <RotateCcw size={14} />
+                    </button>
+                    {typeof document !== "undefined" && document.fullscreenEnabled && (
+                        <button type="button" className="studio-tool-icon-btn" title={en ? "Fullscreen" : "ពេញអេក្រង់"} aria-label={en ? "Fullscreen" : "ពេញអេក្រង់"} onClick={() => {
+                            if (document.fullscreenElement) document.exitFullscreen();
+                            else previewRef.current?.requestFullscreen();
+                        }}>
+                            <Maximize2 size={14} />
+                        </button>
+                    )}
+                </div>
+                <button type="button" className="studio-preview-toggle" aria-expanded={showTools} onClick={() => setShowTools(value => !value)}>{en ? "Controls" : "ឧបករណ៍"}</button>
             </div>
 
             {templateSlug === 'royal-garden-cinematic' && <div className="studio-scene-preview" aria-label={en ? 'Royal scene preview' : 'មើលទិដ្ឋភាពរាជជាមុន'}>
@@ -271,24 +297,7 @@ export default function LivePhoneSimulator({ data = {}, eventId, catalogVersion 
                 <button type="button" onClick={() => handleSetGate(false)}>{en ? 'Restart animation' : 'ចាប់ផ្ដើមចលនាឡើងវិញ'}</button></div>
                 {(!videoEntitled || !data.preWeddingVideo?.videoMediaId) && <small>{en ? (!videoEntitled ? 'Video preview requires the owner’s Premium package.' : 'Choose a video in Media & Opening to preview it.') : 'សូមជ្រើសរើសវីដេអូ និងមានកញ្ចប់ Premium ដើម្បីមើលវីដេអូជាមុន។'}</small>}
             </div>}
-            <button type="button" className="studio-preview-toggle" aria-expanded={showTools} onClick={() => setShowTools(value => !value)}>{en ? "Device and zoom controls" : "ជម្រើសឧបករណ៍ និងទំហំ"}</button>
-            <div className="studio-preview-tools" hidden={!showTools} aria-label={uiCopy("ជម្រើសមើលជាមុន", "Preview controls")}>
-                {onEditSection && <button type="button" aria-pressed={clickEditing} onClick={() => { const next = !clickEditing; setClickEditing(next); sendPreview({ type: 'PREVIEW_EDIT_MODE', open: next }); }}>{en ? 'Click to edit' : 'ចុចដើម្បីកែសម្រួល'}</button>}
-                <button type="button" aria-pressed={device === "mobile"} onClick={() => setDevice("mobile")}>{deviceName || (en ? PHONE_PREVIEW.name : "មើលតាមទូរស័ព្ទ")}</button>
-                <button type="button" aria-pressed={device === "desktop"} onClick={() => setDevice("desktop")}>{en ? "Desktop" : "កុំព្យូទ័រ"}</button>
-                <label>{en ? "Zoom" : "ទំហំ"} <select aria-label={uiCopy("ទំហំមើលជាមុន", "Preview zoom")} value={zoom} onChange={event => setZoom(event.target.value)}>
-                    <option value="fit">{en ? "Fit" : "សមនឹងផ្ទៃ"}</option>
-                    {[...new Set([35, 50, 75, 100, 125, ...(zoom === "fit" ? [] : [Number(zoom)])])].sort((a,b)=>a-b).map(value => <option key={value} value={value}>{value}%</option>)}
-                </select></label>
-                <button type="button" aria-label={uiCopy("បង្រួម", "Zoom out")} onClick={() => setZoom(String(Math.max(35, (zoom === "fit" ? Math.round(fitScale * 100) : Number(zoom)) - 10)))}><Minus size={16} /></button>
-                <button type="button" aria-label={uiCopy("ពង្រីក", "Zoom in")} onClick={() => setZoom(String(Math.min(125, (zoom === "fit" ? Math.round(fitScale * 100) : Number(zoom)) + 10)))}><Plus size={16} /></button>
-                <button type="button" onClick={() => { setZoom("fit"); setDevice("mobile"); handleSetGate(false); }}>{en ? "Reset view" : "កំណត់ទិដ្ឋភាពដើម"}</button>
-                {typeof document !== "undefined" && document.fullscreenEnabled && <button type="button" onClick={() => {
-                    if (document.fullscreenElement) document.exitFullscreen();
-                    else previewRef.current?.requestFullscreen();
-                }}>{en ? "Fullscreen" : uiCopy("ពេញអេក្រង់", "Full screen")}</button>}
-            </div>
-            <div className="studio-device-caption">{device === "mobile" ? `${en ? "Phone frame" : "ស៊ុមទូរស័ព្ទ"} · 440 × 860` : uiCopy("កុំព្យូទ័រ · 1200 × 800", "Desktop · 1200 × 800")} · {Math.round(scale * 100)}%</div>
+            <div className="studio-device-caption">{templateName} · {device === "mobile" ? "440 × 860" : "1200 × 800"} · {Math.round(scale * 100)}%</div>
             {/* Keep scroll focus stable as the iframe becomes interactive. Firefox's
                 implicit scroll-container tab stop can disappear during that load. */}
             <div ref={viewportRef} className="studio-preview-viewport" tabIndex={0} role="region" aria-label={uiCopy("ផ្ទៃរំកិលមើលជាមុន", "Preview scroll area")}>
@@ -300,16 +309,18 @@ export default function LivePhoneSimulator({ data = {}, eventId, catalogVersion 
                 <div className="pe-canvas-wrapper flex-1 w-full h-full relative bg-zinc-950 overflow-hidden">
                     {isTest ? (
                         merged?.tpl ? (
-                            <TemplateExperience
-                                key={merged.tpl.id || merged.tpl.code}
-                                tpl={merged.tpl}
-                                variant={merged.variant}
-                                preview={true}
-                                previewStartClosed={!isGateOpen}
-                                showBreadcrumb={false}
-                                showActions={false}
-                                showStickyCta={true}
-                            />
+                            <Suspense fallback={null}>
+                                <LazyTemplateExperience
+                                    key={merged.tpl.id || merged.tpl.code}
+                                    tpl={merged.tpl}
+                                    variant={merged.variant}
+                                    preview={true}
+                                    previewStartClosed={!isGateOpen}
+                                    showBreadcrumb={false}
+                                    showActions={false}
+                                    showStickyCta={true}
+                                />
+                            </Suspense>
                         ) : null
                     ) : (
                         <iframe
